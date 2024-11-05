@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/tilda-sans_black.ttf",
+      "sha1": "8c7cff65bf50121fd451fbfb143aacfe8c3e38fc"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_bold.ttf",
+      "sha1": "df33ab0a507dceb1d0326fea1534b4e94dbcdde8"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_extra-bold.ttf",
+      "sha1": "f66e29521b2b9cd68460cd14051128db7cde8b7d"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_light.ttf",
+      "sha1": "3303b1b87fbb951338e6fe1d0f1840f8f59cb4fa"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_medium.ttf",
+      "sha1": "68bfecdd59a3824b9cc0940d0f7cd5d8b733cdc6"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_regular.ttf",
+      "sha1": "21ed6602de125dcd86a28e5d19d9df08a6427908"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_semibold.ttf",
+      "sha1": "7e2376cde533e48e007d5b8b3d6bb9570fef1b85"
+    },
+    {
+      "path": "assets/fonts/tilda-sans_vf.ttf",
+      "sha1": "9d8f56ea0e191043ed2ad63529f42d16e7f8c3c4"
+    }
+  ]
+}
