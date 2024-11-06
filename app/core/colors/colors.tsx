@@ -4,4 +4,5 @@ export default {
     SECONDARY_COLOR: '#8a929d',
     OLIVE_COLOR: '#C3E154',
     GREEN_COLOR: '#54B676',
+    GREEN_LIGHT_COLOR: '#5CC280',
   };
