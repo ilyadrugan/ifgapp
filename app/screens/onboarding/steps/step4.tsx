@@ -24,7 +24,7 @@ export const Step4:FC = () => {
     </View>
       <Image
           resizeMode="contain"
-          style={{ width: '100%', bottom: 120}}
+          style={{ width: '100%', bottom: 100}}
           source={require('../../../../assets/backgrounds/girl.png')}/>
     </View>
     </>;
