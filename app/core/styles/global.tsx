@@ -12,6 +12,9 @@ const gs = StyleSheet.create({
   semiBold: {
     fontFamily: 'tilda-sans_semibold',
   },
+  underline: {
+    textDecorationLine: 'underline',
+  },
   link: {
     color: 'green',
   },
@@ -48,6 +51,11 @@ const gs = StyleSheet.create({
     fontFamily: 'tilda-sans_regular',
     fontSize: 18,
     lineHeight: 21,
+  },
+  fontCaption2: {
+    fontFamily: 'tilda-sans_regular',
+    fontSize: 16,
+    lineHeight: 18,
   },
   h3: {
     fontFamily: 'tilda-sans_semibold',

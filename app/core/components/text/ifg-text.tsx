@@ -1,22 +1,23 @@
 import { FC, ReactNode } from 'react';
 import { GestureResponderEvent, StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
+import colors from '../../colors/colors';
 
 export const IfgText: FC<{
   children: ReactNode,
   style?: StyleProp<TextStyle>,
+  color?: string,
   numberOfLines?: number,
   wrap?: boolean,
   onPress?: ((event: GestureResponderEvent) => void) | undefined;
-}> = ({ children, style, numberOfLines, wrap, onPress }) => {
+}> = ({ children, style, color, numberOfLines, wrap, onPress }) => {
 
   return (<>
-    <Text numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style]}>{children}</Text>
+    <Text numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.WHITE_COLOR }]}>{children}</Text>
   </>);
 };
 
 const s = StyleSheet.create({
   text: {
-    color: 'white',
     fontSize: 16,
     lineHeight: 24,
     fontFamily: 'tilda-sans_medium',

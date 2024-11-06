@@ -5,4 +5,6 @@ export default {
     OLIVE_COLOR: '#C3E154',
     GREEN_COLOR: '#54B676',
     GREEN_LIGHT_COLOR: '#5CC280',
+    BORDER_COLOR: '#E1E1E1',
+    PLACEHOLDER_COLOR: '#373737',
   };

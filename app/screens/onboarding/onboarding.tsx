@@ -13,20 +13,21 @@ import colors from '../../core/colors/colors';
 import { Dot } from '../../core/components/dot/dot';
 import LinearGradient from 'react-native-linear-gradient';
 import { Step4 } from './steps/step4';
+import { useNavigation } from '@react-navigation/native';
 
 
 export const Onboarding = () => {
-    // const navigation = useNavigation<any>();
+    const navigation = useNavigation<any>();
     const [step, setStep] = useState<number>(0);
 
     // const renderItem = (children: ReactNode) => {
     //     return<>{children}</>
     // }
     const nextStep = () => setStep(step + 1);
-    const toLogin = () => {};
+    const toLogin = () => navigation.navigate('Login');
     const toRegistration = () => {};
     return (  <>
-        <StatusBar hidden={true} />
+
         <ImageBackground
             source={require('../../../assets/backgrounds/imageShort.png')}
             style={[s.container]} >
@@ -101,7 +102,7 @@ const s = StyleSheet.create({
       },
     footer: {
         position: 'absolute',
-        bottom: 50,
+        bottom: 40,
         left: 0,
         right: 0,
         alignItems: 'center',
