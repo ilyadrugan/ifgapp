@@ -1,5 +1,5 @@
 // import { useNavigation } from "@react-navigation/native";
-import { ImageBackground, StatusBar, StyleSheet, View} from 'react-native';
+import { ImageBackground, StyleSheet, View} from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { Step1 } from './steps/step1';
@@ -20,12 +20,10 @@ export const Onboarding = () => {
     const navigation = useNavigation<any>();
     const [step, setStep] = useState<number>(0);
 
-    // const renderItem = (children: ReactNode) => {
-    //     return<>{children}</>
-    // }
     const nextStep = () => setStep(step + 1);
     const toLogin = () => navigation.navigate('Login');
     const toRegistration = () => {};
+
     return (  <>
 
         <ImageBackground
@@ -102,7 +100,7 @@ const s = StyleSheet.create({
       },
     footer: {
         position: 'absolute',
-        bottom: 40,
+        bottom: 55,
         left: 0,
         right: 0,
         alignItems: 'center',

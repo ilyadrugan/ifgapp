@@ -1,4 +1,4 @@
-import { ImageBackground, Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -6,15 +6,15 @@ import { Input } from '../../core/components/input/input';
 import { Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import Apple from '../../../assets/icons/apple.svg';
-
-
-
-
-
+import { useNavigation } from '@react-navigation/native';
 
 export const Login = () => {
-    // const navigation = useNavigation<any>();
+    const navigation = useNavigation<any>();
+    const toRegistraition = () => navigation.replace('Registration');
     return (  <>
+     {/* <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}> */}
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
     <ImageBackground
@@ -24,7 +24,7 @@ export const Login = () => {
               Начните прямо сейчас
         </IfgText>
         <IfgText style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
-            Еще не зарегистрированы? Перейдите на <IfgText style={[gs.semiBold, gs.underline]}>страницу регистрации</IfgText> для доступа в личный кабинет платформы
+            Еще не зарегистрированы? Перейдите на <IfgText onPress={toRegistraition} style={[gs.semiBold, gs.underline]}>страницу регистрации</IfgText> для доступа в личный кабинет платформы
         </IfgText>
         <View style={gs.mt32}/>
         <View style={s.formCard}>
@@ -61,7 +61,7 @@ export const Login = () => {
                 </View>
 
             </Button>
-            <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
+            {/* <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
                 // onPress={}
                 >
                     <View style={s.appleButton}>
@@ -70,15 +70,15 @@ export const Login = () => {
                         </View>
                         <IfgText style={[gs.fontBody1, { fontSize: 21, textAlign: 'center'}]}>Войти с Apple</IfgText>
                     </View>
-            </Button>
+            </Button> */}
             <View style={{flexDirection:'row', justifyContent: 'center', gap: 16}}>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Регистрация</IfgText>
+                <IfgText onPress={toRegistraition} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Регистрация</IfgText>
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Забыли пароль?</IfgText>
             </View>
         </View>
     </ImageBackground>
     </TouchableWithoutFeedback>
-
+    {/* </KeyboardAvoidingView> */}
     </>
     );
   };
@@ -91,7 +91,7 @@ const s = StyleSheet.create({
         alignItems: 'center',
       },
       formCard: {
-        borderRadius: 16,
+        borderRadius: 22,
         flexDirection: 'column',
         alignItems: 'center',
         width: '90%',

@@ -4,6 +4,7 @@ import { Onboarding } from './onboarding/onboarding';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { Login } from './login/login';
+import { Registration } from './registration/registration';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,11 @@ export const MainNavigation: FC = () => {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Registration"
+        component={Registration}
         options={{ headerShown: false }}
       />
   </Stack.Navigator>

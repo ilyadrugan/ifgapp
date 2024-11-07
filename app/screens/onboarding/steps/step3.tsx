@@ -46,7 +46,7 @@ export const Step3:FC = () => {
                 >
                     <View style={s.line}>
                         <View style={s.dottedLine} />
-                        {data.map(({title, text, index})=> <View key={index.toString()} style={[s.circle, { left: 290 * index   + 16  + 80 * index }]} />)
+                        {data.map(({index})=> <View key={index.toString()} style={[s.circle, { left: 290 * index   + 16  + 80 * index }]} />)
                         }
                     </View>
                     <View style={{flexDirection: 'row', gap:80, left: 16}} >

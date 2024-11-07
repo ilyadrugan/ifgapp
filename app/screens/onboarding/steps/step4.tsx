@@ -15,12 +15,10 @@ export const Step4:FC = () => {
       <IfgText style={[gs.h1Intro,  {textAlign: 'center', top: 44}]}>
               Начните прямо сейчас
       </IfgText>
-      {/* <BlurView style={s.blurContainer} blurType="light" blurAmount={1} reducedTransparencyFallbackColor="white"> */}
       <View style={s.bubble}>
         <IfgText style={[gs.fontBody1,  {textAlign: 'center'}]}>Правильное вложение – это вклад в здоровье</IfgText>
       </View>
       <View style={s.tail} />
-      {/* </BlurView> */}
     </View>
       <Image
           resizeMode="contain"
@@ -47,19 +45,18 @@ const s = StyleSheet.create({
     tail: {
       position: 'absolute',
       bottom: 0,
-      left: 26, // Позиция хвостика; можно изменить для другого расположения
+      left: 26,
       width: 0,
       height: 0,
-      // borderLeftWidth: 15,
       borderRightWidth: 25,
       borderTopWidth: 25,
       borderLeftColor: 'transparent',
       borderRightColor: 'transparent',
-      borderTopColor: 'rgba(255, 255, 255, 0.12)', // Цвет, совпадающий с цветом фона облака
-      transform: [{ translateY: 25 + 64 }], // Смещение хвостика для точного позиционирования
+      borderTopColor: 'rgba(255, 255, 255, 0.12)',
+      transform: [{ translateY: 25 + 64 }],
     },
     blurContainer: {
-      borderRadius: 10, // Радиус для сглаживания углов
-      overflow: 'hidden', // Обрезка, чтобы эффект размытия не выходил за границы
+      borderRadius: 10,
+      overflow: 'hidden',
     },
   });

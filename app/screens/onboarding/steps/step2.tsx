@@ -91,9 +91,14 @@ export const Step2:FC = () => {
                 renderItem={({ item }) => <Card item={item} />}
                 sliderWidth={width * 0.9}
                 itemWidth={width * 0.9}
-                loop={false} // Зацикливание слайдера
+                loop={false}
+                // useScrollView={false}
+                // autoplayDelay={1}
+                // autoplay={true} // Зацикливание слайдера
                 layout={'default'} // Расположение карточек
                 onSnapToItem={(index) => setActiveSlide(index) }
+                // enableMomentum={false}
+                // lockScrollWhileSnapping={true}
                 />
 
 
