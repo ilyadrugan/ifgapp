@@ -15,6 +15,9 @@ const gs = StyleSheet.create({
   underline: {
     textDecorationLine: 'underline',
   },
+  lineThrough: {
+    textDecorationLine: 'line-through',
+  },
   link: {
     color: 'green',
   },
@@ -56,6 +59,26 @@ const gs = StyleSheet.create({
     fontFamily: 'tilda-sans_regular',
     fontSize: 16,
     lineHeight: 18,
+  },
+  fontCaption3: {
+    fontFamily: 'tilda-sans_regular',
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  fontCaptionSmall: {
+    fontFamily: 'tilda-sans_regular',
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  fontLight: {
+    fontFamily: 'tilda-sans_light',
+    fontSize: 24,
+    lineHeight: 24,
+  },
+  fontLightSmall: {
+    fontFamily: 'tilda-sans_light',
+    fontSize: 14,
+    lineHeight: 14,
   },
   h3: {
     fontFamily: 'tilda-sans_semibold',
@@ -149,6 +172,15 @@ const gs = StyleSheet.create({
 
   flex1: {
     flex: 1,
+  },
+  flexRow: {
+    flexDirection: 'row',
+  },
+  flexColumn: {
+    flexDirection: 'column',
+  },
+  alignCenter: {
+    alignItems: 'center',
   },
 });
 

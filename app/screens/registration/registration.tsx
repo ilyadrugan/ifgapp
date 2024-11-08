@@ -8,30 +8,29 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import Apple from '../../../assets/icons/apple.svg';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from '../../core/components/checkbox/checkbox';
-import { useState } from 'react';
-import { TabInterface } from '../../core/components/tabs/tab';
-
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { TabInterface, Tabs } from './components/tabs';
+import { SubscribeReg } from './components/subscribeReg/subscribeReg';
+const tabss: TabInterface[] = [
+    {
+        id: 0,
+        name: 'По договору',
+    },
+    {
+        id: 1,
+        name: 'По промокоду',
+    },
+    {
+        id: 2,
+        name: 'По подписке',
+    },
+];
 export const Registration = () => {
     const [personalChecked, setPersonalChecked] = useState(true);
     const [infoChecked, setInfoChecked] = useState(false);
-    const tabss: TabInterface[] = [
-        {
-            id: 0,
-            active: false,
-            name: 'По договору',
-        },
-        {
-            id: 1,
-            active: true,
-            name: 'По промокоду',
-        },
-        {
-            id: 2,
-            active: false,
-            name: 'По подписке',
-        },
-    ];
-    const [tabs, setTabs] = useState<TabInterface[]>(tabss);
+    const [activeTab, setActiveTab] = useState(1);
+
     const navigation = useNavigation<any>();
 
     const toLogin = () => navigation.replace('Login');
@@ -43,16 +42,24 @@ export const Registration = () => {
                 break;
         }
     };
+    const onTabClick = (id: number) => {
+
+        setActiveTab(id);
+    };
+    useEffect(() => {
+        onTabClick(1);
+    }, []);
+
+
     return (  <>
      <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{flex: 1}}>
+      style={gs.flex1}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <ScrollView>
-
     <ImageBackground
         source={require('../../../assets/backgrounds/imageLong.png')}
-        style={[s.container]}  >
+        style={[s.container]}>
         <IfgText style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
               Регистрация
         </IfgText>
@@ -60,7 +67,10 @@ export const Registration = () => {
             Зарегистрируйтесь, чтобы сохранить результаты тестирования и начать следовать рекомендациям!
         </IfgText>
         <View style={gs.mt32}/>
-        <View style={s.formCard}>
+        <Tabs activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
+        <View style={gs.mt32}/>
+       {(activeTab === 1 || activeTab === 0) &&
+       <View style={s.formCard}>
             <Input
                 fullWidth
                 placeholder="Фамилия"
@@ -155,7 +165,12 @@ export const Registration = () => {
                 Перейдите на <IfgText onPress={toLogin} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>страницу входа</IfgText> в личный кабинет
                 </IfgText>
             </View>
-        </View>    </ImageBackground>
+        </View>}
+        {activeTab === 2 &&
+       <View style={[s.formCard, {backgroundColor: colors.WHITE_DIRTY_COLOR}]}>
+            <SubscribeReg />
+        </View>}
+        </ImageBackground>
 
         </ScrollView>
     </TouchableWithoutFeedback>
@@ -167,9 +182,10 @@ const s = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '100%',
+        // height: '100%',
         flexDirection:'column',
         alignItems: 'center',
+
       },
       formCard: {
         borderRadius: 22,
@@ -180,6 +196,7 @@ const s = StyleSheet.create({
         paddingVertical:20,
         paddingHorizontal: 18,
         gap: 18,
+        marginBottom: 56,
       },
       buttonLogin: {
         backgroundColor: colors.GREEN_COLOR,
@@ -207,4 +224,5 @@ const s = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
       },
+
   });

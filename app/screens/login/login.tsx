@@ -7,6 +7,7 @@ import { Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import Apple from '../../../assets/icons/apple.svg';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 
 export const Login = () => {
     const navigation = useNavigation<any>();

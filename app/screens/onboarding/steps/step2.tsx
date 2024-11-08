@@ -100,8 +100,6 @@ export const Step2:FC = () => {
                 // enableMomentum={false}
                 // lockScrollWhileSnapping={true}
                 />
-
-
       </View>
 
         </View>
