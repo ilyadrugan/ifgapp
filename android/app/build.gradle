@@ -111,7 +111,8 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-
+    implementation ('ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.10.0')
+    implementation files("libs/yookassa-android-sdk-master.jar")
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
