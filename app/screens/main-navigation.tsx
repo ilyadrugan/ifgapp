@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { Login } from './login/login';
 import { Registration } from './registration/registration';
+import { SuccessfulReg } from './successfullReg/successfullReg';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Registration">
+    <Stack.Navigator initialRouteName="SuccessfulReg">
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}
@@ -27,6 +28,11 @@ export const MainNavigation: FC = () => {
       <Stack.Screen
         name="Registration"
         component={Registration}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SuccessfulReg"
+        component={SuccessfulReg}
         options={{ headerShown: false }}
       />
   </Stack.Navigator>

@@ -1,12 +1,13 @@
 import { FC, ReactNode } from 'react';
-import { Keyboard, KeyboardTypeOptions, StyleProp, StyleSheet, TextInput, TouchableWithoutFeedback, ViewStyle } from 'react-native';
+import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInput, TextStyle, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
+import React from 'react';
 
 
 export const Input: FC<{
     editable?: boolean,
     onChange?: () => void,
-    style?: StyleProp<ViewStyle>,
+    style?: StyleProp<ViewStyle | TextStyle>,
     fullWidth?: boolean,
     children?: ReactNode,
     maxLength?: number,

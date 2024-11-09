@@ -1,11 +1,10 @@
-import { ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ImageBackground, Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
 import { Input } from '../../core/components/input/input';
 import { Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
-import Apple from '../../../assets/icons/apple.svg';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 

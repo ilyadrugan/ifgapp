@@ -50,6 +50,11 @@ const gs = StyleSheet.create({
     fontSize: 24,
     lineHeight: 24,
   },
+  fontBodyMedium: {
+    fontFamily: 'tilda-sans_medium',
+    fontSize: 21,
+    lineHeight: 21,
+  },
   fontCaption: {
     fontFamily: 'tilda-sans_regular',
     fontSize: 18,

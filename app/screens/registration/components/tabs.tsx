@@ -28,7 +28,7 @@ export const Tabs: FC<{
       <View style={s.tabsContainer}>
         {/* <View style={[s.tabName, tab.active && s.tabNameActive]} /> */}
         {tabs && tabs.map((tab, index, arr)=>
-            <TouchableOpacity onPress={()=>onTabClicked(tab.id)} style={[s.tab, index === 0 && s.firstTab, index === arr.length - 1 && s.lastTab]}>
+            <TouchableOpacity key={index.toString()} onPress={()=>onTabClicked(tab.id)} style={[s.tab, index === 0 && s.firstTab, index === arr.length - 1 && s.lastTab]}>
                 <IfgText color={tab.id === activeTab ? colors.WHITE_COLOR : colors.LIGHT_BORDER_COLOR}
                 style={[gs.fontCaption2, {fontSize: 14}]}>
                 {tab.name}

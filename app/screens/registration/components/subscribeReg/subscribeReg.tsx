@@ -27,7 +27,7 @@ export const SubscribeReg: FC = () => {
     const onChange = (id: number) => setActiveDiscount(id);
     const onSubscribe = () => setOnPayment(true);
 
-    return <View >
+    return <View>
       {!onPayment && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChange(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
           <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{discounts[0].name}</IfgText>
@@ -112,7 +112,7 @@ export const SubscribeReg: FC = () => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                    <IfgText style={[gs.fontBody1, { fontSize: 21}]}>Подписаться</IfgText>
+                    <IfgText style={gs.fontBodyMedium}>Подписаться</IfgText>
                         <ArrowRight />
                     </View>
                     <View />
@@ -121,8 +121,9 @@ export const SubscribeReg: FC = () => {
       </Button>
       </>
       }
-      {onPayment && <>
-      </>}
+      {onPayment && <View
+      style={{height: 400, marginBottom: 100}}
+    />}
     </View>;
   };
 
