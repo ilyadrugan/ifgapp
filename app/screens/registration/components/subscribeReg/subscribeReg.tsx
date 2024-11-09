@@ -7,8 +7,11 @@ import React from 'react';
 import { Button } from '../../../../core/components/button/button';
 import ArrowRight from '../../../../../assets/icons/arrow-right.svg';
 import Benefit from '../../../../../assets/icons/benefit.svg';
+import { useNavigation } from '@react-navigation/native';
 
 export const SubscribeReg: FC = () => {
+  const navigation = useNavigation<any>();
+
   const discounts = [
     {
       id: 0,
@@ -121,9 +124,26 @@ export const SubscribeReg: FC = () => {
       </Button>
       </>
       }
-      {onPayment && <View
+      {onPayment && <>
+        <View
       style={{height: 400, marginBottom: 100}}
-    />}
+    />
+        <Button style={s.buttonLogin}
+                onPress={()=>navigation.replace('SuccessfulReg')}
+                >
+                <View style={s.buttonContent}>
+                    <View style={s.buttonContentRow}>
+                    <View style={[gs.flexRow, gs.alignCenter]}>
+                         <IfgText style={gs.fontBodyMedium}>Далее</IfgText>
+                    </View>
+                        <ArrowRight />
+                    </View>
+
+                    <View />
+                </View>
+
+            </Button>
+      </> }
     </View>;
   };
 
@@ -192,4 +212,22 @@ export const SubscribeReg: FC = () => {
         paddingHorizontal: 24,
         height: 78,
       },
+      buttonNext: {
+        backgroundColor: colors.GREEN_COLOR,
+        borderRadius: 16,
+        paddingHorizontal: 24,
+        height: 78,
+        width: '86%',
+      },
+      buttonContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      buttonContentRow: {
+        width:'100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
   });
