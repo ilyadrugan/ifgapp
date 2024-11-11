@@ -12,7 +12,6 @@ import Testing from '../../../../assets/icons/regulartesting.svg';
 import Content from '../../../../assets/icons/trustedcontent.svg';
 import Motivation from '../../../../assets/icons/mymotivation.svg';
 import PersonalPlan from '../../../../assets/icons/personalplan.svg';
-
 const { width } = Dimensions.get('screen');
 export const Step2:FC = () => {
     const [activeSlide, setActiveSlide] = useState(0);
@@ -93,8 +92,9 @@ export const Step2:FC = () => {
                 itemWidth={width * 0.9}
                 loop={false}
                 // useScrollView={false}
-                // autoplayDelay={1}
-                // autoplay={true} // Зацикливание слайдера
+                autoplayDelay={0.2}
+                // autoplayInterval={0.5}
+                autoplay={true} // Зацикливание слайдера
                 layout={'default'} // Расположение карточек
                 onSnapToItem={(index) => setActiveSlide(index) }
                 // enableMomentum={false}
