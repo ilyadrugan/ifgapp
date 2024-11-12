@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import { FC } from 'react';
 import gs from '../../../core/styles/global';
-
+import React from 'react';
 
 export const Step3:FC = () => {
 
@@ -50,10 +50,10 @@ export const Step3:FC = () => {
                         }
                     </View>
                     <View style={{flexDirection: 'row', gap:80, left: 16}} >
-                    {data.map(({title, text, index})=><View key={index.toString()} style={{width: 290,height: 200}}>
-                    <IfgText style={[gs.h2Intro, gs.mt72]}>{title}</IfgText>
-                    <IfgText style={[gs.fontCaption, gs.mt16]}>{text}</IfgText>
-                    </View>)}
+                        {data.map(({title, text, index})=><View key={index.toString()} style={{width: 290,height: 200}}>
+                        <IfgText style={[gs.h2Intro, gs.mt72]}>{title}</IfgText>
+                        <IfgText style={[gs.fontCaption, gs.mt16]}>{text}</IfgText>
+                        </View>)}
                     </View>
                 </ScrollView>
 

@@ -32,8 +32,8 @@ const gs = StyleSheet.create({
   },
   h2: {
     fontFamily: 'tilda-sans_semibold',
-    fontSize: 21,
-    lineHeight: 28,
+    fontSize: 24,
+    lineHeight: 30,
   },
   h2Intro: {
     fontFamily: 'tilda-sans_medium',
@@ -60,6 +60,11 @@ const gs = StyleSheet.create({
     fontSize: 18,
     lineHeight: 21,
   },
+  fontCaptionMedium: {
+    fontFamily: 'tilda-sans_medium',
+    fontSize: 21,
+    lineHeight: 21,
+  },
   fontCaption2: {
     fontFamily: 'tilda-sans_regular',
     fontSize: 16,
@@ -73,7 +78,7 @@ const gs = StyleSheet.create({
   fontCaptionSmall: {
     fontFamily: 'tilda-sans_regular',
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 16,
   },
   fontLight: {
     fontFamily: 'tilda-sans_light',
@@ -87,8 +92,8 @@ const gs = StyleSheet.create({
   },
   h3: {
     fontFamily: 'tilda-sans_semibold',
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 21,
+    lineHeight: 21,
   },
   h4: {
     fontFamily: 'tilda-sans_semibold',

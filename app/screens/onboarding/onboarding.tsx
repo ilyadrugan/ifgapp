@@ -22,7 +22,7 @@ export const Onboarding = () => {
 
     const nextStep = () => setStep(step + 1);
     const toLogin = () => navigation.navigate('Login');
-    const toRegistration = () => {};
+    const toTest = () => navigation.navigate('AboutTest');
 
     return (  <>
 
@@ -41,7 +41,7 @@ export const Onboarding = () => {
         />
         <View style={s.footer}>
          <Button style={s.buttonNext}
-                onPress={step === 3 ? toRegistration : nextStep}
+                onPress={step === 3 ? toTest : nextStep}
                 >
                 <View style={{
                     flexDirection: 'row',
