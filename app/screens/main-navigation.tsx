@@ -17,7 +17,7 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Onboarding">
+    <Stack.Navigator initialRouteName="AboutTest">
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}

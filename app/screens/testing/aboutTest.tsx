@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -14,7 +14,7 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-// import VideoPlayer from 'react-native-video-player';
+import { VideoPlayer } from '../../core/components/videoplayer/videoplayer';
 
 const width = Dimensions.get('screen').width;
 const dataSteps = [
@@ -67,11 +67,10 @@ const carouselItems = [
     },
   ];
 export const AboutTest = () => {
-    // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
+    const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [activeSlide, setActiveSlide] = useState(0);
-
 
       const Card = ({ item }) => {
         return (
@@ -126,12 +125,8 @@ export const AboutTest = () => {
             style={s.imageStyle}
             source={require('../../../assets/backgrounds/smallPhone0.5.png')}/>
          </ImageBackground>
-         {/* <VideoPlayer
-    video={{ uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }}
-    videoWidth={1600}
-    videoHeight={900}
-    thumbnail={{ uri: 'https://i.picsum.photos/id/866/1600/900.jpg' }}
-/> */}
+         <View style={gs.mt16} />
+        <VideoPlayer source={url} title={'О платформе ifeelgood'}/>
     <View style={gs.mt16} />
     <CardContainer>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>
@@ -280,10 +275,7 @@ const s = StyleSheet.create({
         width: 84,
         height: 26,
       },
-      video: {
-        width: '100%',
-        height: (Dimensions.get('window').width) / 16 * 9,
-      },
+
       line: {
         position: 'relative',
         width: '100%',
