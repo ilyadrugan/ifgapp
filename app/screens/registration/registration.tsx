@@ -71,7 +71,12 @@ export const Registration = () => {
         <View style={gs.mt32}/>
        {(activeTab === 1 || activeTab === 0) &&
        <View style={s.formCard}>
-            <Input
+            {activeTab === 0 && <Input
+                fullWidth
+                placeholder="Номер договора"
+                style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+            />}
+            {activeTab === 1 && <><Input
                 fullWidth
                 placeholder="Фамилия"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
@@ -81,16 +86,18 @@ export const Registration = () => {
                 placeholder="Имя"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
             />
+            </>
+            }
             <Input
                 fullWidth
                 placeholder="Дата рождения"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
             />
-            <Input
+            {activeTab === 1 && <Input
                 fullWidth
                 placeholder="Телефон"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-            />
+            />}
             <Input
                 fullWidth
                 placeholder="Электронная почта"
@@ -109,12 +116,11 @@ export const Registration = () => {
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
             />
-            <Input
+            {activeTab === 1 && <Input
                 fullWidth
                 placeholder="Промокод"
                 style={[gs.fontCaption, s.promocodeForm]}
-                secureTextEntry={true}
-            />
+            />}
             <View style={s.acceptsBlock}>
                 <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
                 <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
@@ -128,7 +134,7 @@ export const Registration = () => {
                 </IfgText>
             </View>
             <Button style={s.buttonLogin}
-                // onPress={}
+                onPress={()=>navigation.replace('SuccessfulReg')}
                 >
                 <View style={{
                     flexDirection: 'row',
@@ -148,7 +154,7 @@ export const Registration = () => {
                 </View>
 
             </Button>
-            <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
+            {/* <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
                 // onPress={}
                 >
                     <View style={s.appleButton}>
@@ -157,7 +163,7 @@ export const Registration = () => {
                         </View>
                         <IfgText style={[gs.fontBody1, { fontSize: 21, textAlign: 'center'}]}>Войти с Apple</IfgText>
                     </View>
-            </Button>
+            </Button> */}
 
             <View style={{flexDirection:'column', alignItems: 'center' }}>
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>Уже зарегистрированы?</IfgText>

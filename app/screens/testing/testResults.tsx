@@ -80,7 +80,7 @@ export const ResultTest = () => {
         </IfgText>
         <View style={gs.mt16} />
         {individualProgramm.map(item=>
-        <><CardContainer key={item.number}>
+        <><CardContainer key={item.number.toString()}>
             <View style={[gs.alignCenter, gs.flexRow]}>
                 <View style={{width: 40, height: 40, borderRadius: 40, backgroundColor: item.color, justifyContent: 'center', alignItems: 'center'}}>
                     <IfgText style={gs.fontCaption}>{item.number}</IfgText>

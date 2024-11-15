@@ -6,9 +6,10 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 export const SuccessfulReg = () => {
-    // const toRegistration = () => {};
-    const abilities = [
+  const navigation = useNavigation<any>();
+  const abilities = [
         {
             id: '01',
             text: 'Эксклюзивные материалы, благодаря которым вы сможете улучшать своё самочувствие каждый день',
@@ -68,7 +69,7 @@ export const SuccessfulReg = () => {
         <View style={s.footer}>
 
          <Button style={s.buttonNext}
-                // onPress={}
+                onPress={()=>navigation.replace('Main')}
                 >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>

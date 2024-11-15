@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Ref } from 'react';
 import { FC, ReactNode } from 'react';
 import { StyleProp, StyleSheet, TouchableHighlight, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
@@ -8,7 +8,8 @@ import colors from '../../colors/colors';
 export const CardContainer: FC<{
     children?: ReactNode,
     style?: StyleProp<ViewStyle>,
-}> = ({children, style }) => {
+    ref?: React.Ref<string>
+}> = ({children, style, ref }) => {
 
 
 

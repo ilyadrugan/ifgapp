@@ -41,7 +41,7 @@ export const Login = () => {
                 secureTextEntry={true}
             />
             <Button style={s.buttonLogin}
-                // onPress={}
+                onPress={()=>navigation.replace('Main')}
                 >
                 <View style={{
                     flexDirection: 'row',

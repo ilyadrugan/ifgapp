@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TouchableHighlight, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableHighlight, TouchableOpacity, ViewStyle } from 'react-native';
 
 
 export const Button: FC<{
@@ -8,6 +8,7 @@ export const Button: FC<{
     onPress?: () => void,
     style?: StyleProp<ViewStyle>,
     fullWidth?: boolean
+    outlined?: boolean
   }> = (
     {
       children,
@@ -15,13 +16,15 @@ export const Button: FC<{
       style,
       disabled,
       fullWidth,
+      outlined,
     }) => {
     return <>
-    <TouchableHighlight
+    <TouchableOpacity
       style={[
         s.button,
         style,
         fullWidth && s.fullWidth,
+        outlined && s.outline,
       ]}
       disabled={disabled}
       onPress={onPress}
@@ -29,7 +32,7 @@ export const Button: FC<{
 
           {children ? children : null }
 
-    </TouchableHighlight>
+    </TouchableOpacity>
     </>;
 };
 
@@ -51,20 +54,10 @@ const s = StyleSheet.create({
       top: 0,
       bottom: 0,
     },
-    text: {
-      color: 'white',
-      fontFamily: 'tilda-sans_semibold',
-      fontSize: 16,
-      textAlign: 'center',
-    },
-    caption: {
-      color: 'white',
-    },
-    secondLine: {
-      textAlign: 'center',
-      marginTop: -4,
-    },
     fullWidth: {
       width: '100%',
+    },
+    outline: {
+      backgroundColor: 'transparent',
     },
   });

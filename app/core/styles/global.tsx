@@ -2,15 +2,24 @@ import { StyleSheet } from 'react-native';
 
 const gs = StyleSheet.create({
   h1: {
-    fontFamily: 'tilda-sans_semibold',
-    fontSize: 44,
-    lineHeight: 32,
+    fontFamily: 'tilda-sans_medium',
+    fontSize: 48,
+    lineHeight: 48,
   },
   bold: {
     fontFamily: 'tilda-sans_extra-bold',
   },
   semiBold: {
     fontFamily: 'tilda-sans_semibold',
+  },
+  medium: {
+    fontFamily: 'tilda-sans_medium',
+  },
+  regular: {
+    fontFamily: 'tilda-sans_regular',
+  },
+  light: {
+    fontFamily: 'tilda-sans_light',
   },
   underline: {
     textDecorationLine: 'underline',
@@ -80,6 +89,11 @@ const gs = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16,
   },
+  fontCaptionSmallMedium: {
+    fontFamily: 'tilda-sans_medium',
+    fontSize: 13,
+    lineHeight: 14,
+  },
   fontLight: {
     fontFamily: 'tilda-sans_light',
     fontSize: 24,
@@ -127,6 +141,7 @@ const gs = StyleSheet.create({
 
   mt4: { marginTop: 4 },
   mt8: { marginTop: 8 },
+  mt6: { marginTop: 6 },
   mt12: { marginTop: 12 },
   mt16: { marginTop: 16 },
   mt20: { marginTop: 20 },

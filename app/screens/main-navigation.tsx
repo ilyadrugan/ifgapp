@@ -9,6 +9,7 @@ import { AboutTest } from './testing/aboutTest';
 import { Testing } from './testing/testing';
 import { ResultTest } from './testing/testResults';
 import { SuccessfulReg } from './successfullReg/successfullReg';
+import { Main } from './main/main';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +18,12 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="AboutTest">
+    <Stack.Navigator initialRouteName="Main">
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}
