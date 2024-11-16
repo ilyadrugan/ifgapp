@@ -1,12 +1,31 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {Animated, ScrollView, StyleSheet, View } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
-import { FC } from 'react';
+import { FC, useRef, useEffect, useState } from 'react';
 import gs from '../../../core/styles/global';
 import React from 'react';
 
 export const Step3:FC = () => {
+    const scrollX = useRef(new Animated.Value(0)).current;
+    const [scrollable, setScrollable] = useState(false);
+    useEffect(() => {
+        const scrollAnimation = Animated.timing(scrollX, {
+          toValue: 1500, // Конечная позиция прокрутки
+          duration: 8000, // Длительность анимации (в миллисекундах)
+          useNativeDriver: true,
+        });
+        // const scrollAnimationBack = Animated.timing(scrollX, {
+        //     toValue: 0, // Конечная позиция прокрутки
+        //     duration: 8000, // Длительность анимации (в миллисекундах)
+        //     useNativeDriver: true,
+        //   });
+        scrollAnimation.start();
+        scrollAnimation.start(() => {
+            // scrollAnimationBack.start();
+            setScrollable(true);
+        });
+      }, [scrollX]);
 
-    const data = [
+      const data = [
         {
             index: 0,
             title: 'Регулярно',
@@ -39,10 +58,14 @@ export const Step3:FC = () => {
                 Принципы платформы
             </IfgText>
             <View style={gs.mt48} />
-            <ScrollView
+            <Animated.ScrollView
+                scrollEventThrottle={16}
+                contentOffset={{ x: scrollX }}
+                scrollEnabled={scrollable}
                 horizontal
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'column', justifyContent: 'center'}}
                 showsHorizontalScrollIndicator={false}
+
                 >
                     <View style={s.line}>
                         <View style={s.dottedLine} />
@@ -55,7 +78,7 @@ export const Step3:FC = () => {
                         <IfgText style={[gs.fontCaption, gs.mt16]}>{text}</IfgText>
                         </View>)}
                     </View>
-                </ScrollView>
+                </Animated.ScrollView>
 
         </View>
     ;

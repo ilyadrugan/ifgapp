@@ -10,6 +10,7 @@ import { Testing } from './testing/testing';
 import { ResultTest } from './testing/testResults';
 import { SuccessfulReg } from './successfullReg/successfullReg';
 import { Main } from './main/main';
+import { IndividualProgramm } from './individualProgramm/individualProgramm';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,7 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator initialRouteName="IndividualProgramm">
       <Stack.Screen
         name="Main"
         component={Main}
@@ -59,7 +60,11 @@ export const MainNavigation: FC = () => {
         component={SuccessfulReg}
         options={{ headerShown: false }}
       />
-
+      <Stack.Screen
+        name="IndividualProgramm"
+        component={IndividualProgramm}
+        options={{ headerShown: false }}
+      />
   </Stack.Navigator>
   </NavigationContainer>
   </>);

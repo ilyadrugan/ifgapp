@@ -13,7 +13,6 @@ import Benefit from '../../../assets/icons/benefit.svg';
 import Email from '../../../assets/icons/email.svg';
 import Delete from '../../../assets/icons/delete.svg';
 import { Questions } from './testData/data';
-import { ProgressBar } from '../../core/components/progressBar/progressBar';
 
 const data = [
     {

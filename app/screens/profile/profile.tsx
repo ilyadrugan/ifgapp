@@ -121,7 +121,7 @@ return <>
               </Button> */}
             </View>
           </CardContainer>
-          <CardContainer style={[s.bankCardContainer,s.bankCardAddContainer]}>
+          <CardContainer  onPress={()=>console.log('add card')} style={[s.bankCardContainer,s.bankCardAddContainer]}>
           <View style={gs.mt4}>
               <View style={s.container}>
                 <View style={s.horizontal} />

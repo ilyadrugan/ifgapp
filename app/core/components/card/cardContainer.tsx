@@ -1,6 +1,6 @@
 import React, { Ref } from 'react';
 import { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TouchableHighlight, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableHighlight, TouchableOpacity, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 
 
@@ -9,19 +9,21 @@ export const CardContainer: FC<{
     children?: ReactNode,
     style?: StyleProp<ViewStyle>,
     ref?: React.Ref<string>
-}> = ({children, style, ref }) => {
+    onPress?: () => void
+}> = ({children, style, ref , onPress}) => {
 
 
 
     return <>
-    <View
+    <TouchableOpacity
       style={[
         s.container,
         style,
       ]}
+      disabled={onPress ? false : true}
     >
       {children}
-    </View>
+    </TouchableOpacity>
     </>;
 };
 

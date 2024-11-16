@@ -13,7 +13,7 @@ import Play from '../../../assets/icons/play.svg';
 
 import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
-import { individualProgramm } from './testData/individualProgramm';
+import { individualProgramm, IndividualProgrammData } from './testData/individualProgramm';
 // import VideoPlayer from 'react-native-video-player';
 
 export const ResultTest = () => {
@@ -79,30 +79,16 @@ export const ResultTest = () => {
          Индивидуальная ifeelgood программа
         </IfgText>
         <View style={gs.mt16} />
-        {individualProgramm.map(item=>
-        <><CardContainer key={item.number.toString()}>
-            <View style={[gs.alignCenter, gs.flexRow]}>
-                <View style={{width: 40, height: 40, borderRadius: 40, backgroundColor: item.color, justifyContent: 'center', alignItems: 'center'}}>
-                    <IfgText style={gs.fontCaption}>{item.number}</IfgText>
-                </View>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold, gs.ml8]}>{item.title}</IfgText>
-            </View>
-            <View style={{padding: 16}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>{item.text}</IfgText>
-            </View>
+        <IndividualProgrammData />
+        <View style={{height: 180}}/>
 
-        </CardContainer>
-        <View style={gs.mt16} />
-        </>)}
-    <View style={{height: 180}}/>
-
-    <LinearGradient
+        <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
             style={s.shadowGradient}
         />
-    </ScrollView>
-    <View style={s.footer}>
-    <Button style={s.buttonNext}
+        </ScrollView>
+        <View style={s.footer}>
+        <Button style={s.buttonNext}
            onPress={()=>navigation.navigate('Registration')}
            >
            <View style={{
@@ -123,7 +109,7 @@ export const ResultTest = () => {
 
                <View />
            </View>
-    </Button>
+        </Button>
     </View>
 </>
     );

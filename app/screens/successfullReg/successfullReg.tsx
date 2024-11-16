@@ -69,7 +69,7 @@ export const SuccessfulReg = () => {
         <View style={s.footer}>
 
          <Button style={s.buttonNext}
-                onPress={()=>navigation.replace('Main')}
+                onPress={()=>navigation.navigate('IndividualProgramm')}
                 >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
