@@ -93,7 +93,7 @@ export const Testing = () => {
         </IfgText>
     </CardContainer>)}
     <View style={gs.mt4} />
-    <Button style={s.buttonNext} onPress={inTest ? ()=> nextQuestion() : ()=>setInTest(true)}>
+    <Button disabled={inTest && currentAnswer === -1 } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion() : ()=>setInTest(true)}>
            <View style={{
                flexDirection: 'row',
                justifyContent: 'space-between',

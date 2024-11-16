@@ -94,6 +94,11 @@ const gs = StyleSheet.create({
     fontSize: 13,
     lineHeight: 14,
   },
+  fontCaptionSmallSmall: {
+    fontFamily: 'tilda-sans_regular',
+    fontSize: 12,
+    lineHeight: 18,
+  },
   fontLight: {
     fontFamily: 'tilda-sans_light',
     fontSize: 24,

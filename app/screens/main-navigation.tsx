@@ -19,7 +19,7 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="IndividualProgramm">
+    <Stack.Navigator initialRouteName="Onboarding">
       <Stack.Screen
         name="Main"
         component={Main}

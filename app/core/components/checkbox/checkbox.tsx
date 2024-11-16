@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import colors from '../../colors/colors';
 import CheckedIcon from '../../../../assets/icons/checked.svg';
+import React from 'react';
 
 
 export const CheckBox: FC<{

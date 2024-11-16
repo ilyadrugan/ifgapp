@@ -8,15 +8,20 @@ import { Button } from '../../core/components/button/button';
 
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
+import ArrowTo from '../../../assets/icons/arrow-to.svg';
+
 import Delete from '../../../assets/icons/delete.svg';
 import Fish from '../../../assets/icons/fish.svg';
+import Moon from '../../../assets/icons/moon.svg';
+import Antistress from '../../../assets/icons/antistress.svg';
 
 import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
 import { VideoPlayer } from '../../core/components/videoplayer/videoplayer';
 import { IndividualProgrammData } from '../testing/testData/individualProgramm';
-import { CircularProgress } from '../../core/components/circle/circle';
-
+import { CircularProgress } from '../../core/components/circularProgress/circularProgress';
+import { Materials, Plan } from './recomendationData/recomendationData';
+import {CheckBox} from '../../core/components/checkbox/checkbox';
 export const IndividualProgramm = () => {
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
@@ -71,15 +76,105 @@ export const IndividualProgramm = () => {
         <View style={gs.mt16} />
 
         <CardContainer>
-          <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR}} >
+          <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
               <IfgText style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            {/* <CircularProgress value={15} maxValue={30} /> */}
+            <CircularProgress value={10} maxValue={30} />
           </CardContainer>
+          <View style={[gs.flexRow]}>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
+          </View>
+          {Plan[0].activities.map((activity, index)=><View style={s.row}>
+          <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
+            <CheckBox checked={true}/>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
+          </View>
+          <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{Plan[0].goals[index]}</IfgText>
+          </View>
+          </View>)}
         </CardContainer>
+        <View style={gs.mt16} />
+        <CardContainer>
+          <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.ORANGE_COLOR, flexDirection: 'row'}} >
+            <View style={{justifyContent: 'space-between', height: '100%'}}>
+              <IfgText style={gs.fontCaptionMedium}>Сон</IfgText>
+              <Moon />
+            </View>
+            <CircularProgress value={10} maxValue={30} />
+          </CardContainer>
+          <View style={[gs.flexRow]}>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
+          </View>
+          {Plan[1].activities.map((activity, index)=><View style={s.row}>
+          <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
+            <CheckBox checked={true}/>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
+          </View>
+          <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{Plan[1].goals[index]}</IfgText>
+          </View>
+          </View>)}
+        </CardContainer>
+        <View style={gs.mt16} />
+        <CardContainer>
+          <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.OLIVE_COLOR, flexDirection: 'row'}} >
+            <View style={{justifyContent: 'space-between', height: '100%'}}>
+              <IfgText style={gs.fontCaptionMedium}>Антистресс</IfgText>
+              <Antistress />
+            </View>
+            <CircularProgress value={10} maxValue={30} />
+          </CardContainer>
+          <View style={[gs.flexRow]}>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
+          </View>
+          {Plan[2].activities.map((activity, index)=><View style={s.row}>
+          <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
+            <CheckBox checked={true}/>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
+          </View>
+          <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{Plan[1].goals[index]}</IfgText>
+          </View>
+          </View>)}
+        </CardContainer>
+        <View style={gs.mt24} />
+          <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>А также читайте:</IfgText>
+            <Button style={s.buttonToMAterials} onPress={()=>console.log('all materials')}>
+            <>
+            <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Все материалы</IfgText>
 
+                <ArrowTo />
+                </>
+        </Button>
+          </View>
+          <View style={gs.mt16} />
+          <ScrollView
+                style={{marginHorizontal: -16, paddingHorizontal: 16  }}
+                horizontal
+                contentContainerStyle={{flexGrow: 1, flexDirection: 'column'}}
+                showsHorizontalScrollIndicator={false}
+                >
+
+        <View style={{flexDirection: 'row'}} >
+              {Materials.map(({title, img, text, id})=>
+              <CardContainer key={id.toString()} style={[{width: 200, padding:0 , overflow: 'hidden' }, gs.mr16]} >
+                <Image resizeMode="cover"  source={img}
+                style={{ height: 114, width: '100%' }}
+                />
+                <View style={{padding: 14}}>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
+                </View>
+            </CardContainer>)}
+        </View>
+    </ScrollView>
     <View style={{height: 180}}/>
     <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
@@ -88,7 +183,7 @@ export const IndividualProgramm = () => {
     </ScrollView>
     <View style={s.footer}>
     <Button style={s.buttonNext}
-           onPress={()=>navigation.navigate('Registration')}
+           onPress={()=>navigation.navigate('Main')}
            >
            <View style={{
                flexDirection: 'row',
@@ -123,6 +218,16 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
 
   },
+  row:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderTopWidth: 0.79,
+    paddingTop: 16,
+    paddingBottom: 10,
+    borderTopColor: '#D1D1D1',
+    borderStyle: 'dashed',
+  },
   cardContainer:{
     padding: 16,
     flexDirection: 'row',
@@ -153,10 +258,22 @@ const s = StyleSheet.create({
     gap: 6,
     backgroundColor: 'transparent',
     borderColor: colors.BORDER_COLOR2,
-    borderWidth: 1,
+    borderWidth: 0.75,
     borderRadius: 8,
     width: 84,
     height: 26,
+  },
+  buttonToMAterials: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    borderColor: colors.BORDER_COLOR2,
+    borderWidth: 0.75,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    height: 26,
+    width: 137,
   },
    footer: {
     position:'absolute',
