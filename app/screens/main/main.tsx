@@ -28,7 +28,7 @@ export const Main: FC = () => {
   return (
     <View style={{ height: deviceHeight}}>
       <Tab.Navigator initialRouteName="Profile"
-        headerShown={false}
+        // headerShown={false}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           switch (route.name) {

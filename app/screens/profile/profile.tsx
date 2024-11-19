@@ -1,6 +1,6 @@
 
 
-import { Text, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing} from 'react-native';
+import { Text, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
 import React, {useRef, useState} from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +9,7 @@ import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import ProfileHolder from '../../../assets/icons/profileHolder.svg';
-import KebabMenu from '../../../assets/icons/kebab-menu.svg';
+import BurgerMenu from '../../../assets/icons/burger-menu.svg';
 import Plus from '../../../assets/icons/plus.svg';
 import Trash16 from '../../../assets/icons/trash16.svg';
 import Trash18 from '../../../assets/icons/trash18.svg';
@@ -17,7 +17,11 @@ import Visa from '../../../assets/icons/visa.svg';
 
 import { Button } from '../../core/components/button/button';
 import { menuOptions } from './data/menuOptions';
-
+import { Subscription } from './subscription/subscription';
+import { MyTests } from './myTests/myTests';
+import { MyMaterials } from './myMaterials/myMaterials';
+import { MyEvents } from './myEvents/myEvents';
+import { Settings } from './settings/settings';
 const backCardHeight = 180;
 
 export const ProfileScreen = () => {
@@ -26,9 +30,10 @@ export const ProfileScreen = () => {
     const [currentMenu, setCurrentMenu] = useState(4);
 
     const animation = useRef(new Animated.Value(0)).current;
-
+    const exit = () => navigation.replace('Login');
     const toggleMenu = () => {
       if (isOpen) {
+
         Animated.timing(animation, {
           toValue: 0,
           duration: 200,
@@ -45,11 +50,20 @@ export const ProfileScreen = () => {
         }).start();
       }
     };
+    const chooseMenu = (id: number) => {
+      if (id === 5) {exit();}
+      setCurrentMenu(id);
+      toggleMenu();
+    };
     const menuHeight = animation.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, 62 * 6], // высота меню
+      outputRange: [0, 52], // высота меню
     });
 return <>
+<KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={gs.flex1}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={s.container}>
         <View style={gs.mt16} />
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]} >{menuOptions[currentMenu].name}</IfgText>
@@ -70,70 +84,34 @@ return <>
                 </View>
             </View>
             <TouchableOpacity onPress={toggleMenu}>
-              <KebabMenu />
+              <BurgerMenu />
             </TouchableOpacity>
           </View>
-          {isOpen && <Animated.View style={{gap: 6,  height: menuHeight}}>
-            {menuOptions.map((option)=>
-            <Button key={option.id.toString()} onPress={()=>setCurrentMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
+          {isOpen &&
+            menuOptions.map((option)=>
+            <Animated.View style={{gap: 0,  height: menuHeight}}>
+              <Button key={option.id.toString()} onPress={()=>chooseMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
               <View style={[gs.flexRow, gs.alignCenter]}>
                 <View style={s.iconButtonContainer}>
                 {currentMenu === option.id ? option.iconActive : option.icon}
                 </View>
                 <IfgText color={currentMenu === option.id ? colors.WHITE_COLOR : colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.regular, gs.ml16]}>{option.name}</IfgText>
               </View>
-            </Button>)}
-          </Animated.View>}
+            </Button></Animated.View>)}
+
         </CardContainer>
 
         <View style={gs.mt16} />
-        <CardContainer style={{ gap: 16 }}>
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Подписка действует до 24 мая</IfgText>
-
-          <CardContainer style={s.subsriptionCard}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка IFeelGood Pro</IfgText>
-            <View style={gs.mt6} />
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>299 ₽</IfgText>
-            <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>Спишется 24 мая</IfgText>
-            <View style={gs.mt6} />
-            <Button outlined style={s.unsubscribeButton}>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.medium]}>Отписаться</IfgText>
-            </Button>
-          </CardContainer>
-          <View style={gs.mt4}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>
-            <IfgText color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline]}>Изменить метод оплаты</IfgText>
-          </View>
-          <CardContainer style={s.bankCardContainer}>
-            <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
-              <Visa/>
-              <Button outlined style={s.deleteCardButton}>
-                <View style={gs.flexRow}>
-                <Trash16/>
-                <IfgText style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>
-                </View>
-              </Button>
-            </View>
-            <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
-              <IfgText style={gs.fontCaption}>1817 • основной</IfgText>
-              {/* <Button outlined style={s.deleteButton}>
-                <Trash18/>
-              </Button> */}
-            </View>
-          </CardContainer>
-          <CardContainer  onPress={()=>console.log('add card')} style={[s.bankCardContainer,s.bankCardAddContainer]}>
-          <View style={gs.mt4}>
-              <View style={s.container}>
-                <View style={s.horizontal} />
-                <View style={s.vertical} />
-              </View>
-            </View>
-            <IfgText color={colors.GRAY_COLOR5} style={gs.fontCaption}>Добавить карту</IfgText>
-          </CardContainer>
-        </CardContainer>
+        {currentMenu === 0 && <MyEvents />}
+        {currentMenu === 1 && <MyTests />}
+        {currentMenu === 2 && <MyMaterials />}
+        {currentMenu === 3 && <Settings />}
+        {currentMenu === 4 && <Subscription />}
 
         <View style={{height: 70}}/>
       </ScrollView>
+      </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </>;
 
   };

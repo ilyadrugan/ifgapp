@@ -41,6 +41,7 @@ export const Input: FC<{
       placeholderTextColor={colors.PLACEHOLDER_COLOR}
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
+      
     >
 
           {children ? children : null }

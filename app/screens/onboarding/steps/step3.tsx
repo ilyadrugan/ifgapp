@@ -9,8 +9,8 @@ export const Step3:FC = () => {
     const [scrollable, setScrollable] = useState(false);
     useEffect(() => {
         const scrollAnimation = Animated.timing(scrollX, {
-          toValue: 1500, // Конечная позиция прокрутки
-          duration: 8000, // Длительность анимации (в миллисекундах)
+          toValue: 1400, // Конечная позиция прокрутки
+          duration: 6000, // Длительность анимации (в миллисекундах)
           useNativeDriver: true,
         });
         // const scrollAnimationBack = Animated.timing(scrollX, {

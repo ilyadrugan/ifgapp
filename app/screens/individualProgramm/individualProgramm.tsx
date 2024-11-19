@@ -87,7 +87,7 @@ export const IndividualProgramm = () => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {Plan[0].activities.map((activity, index)=><View style={s.row}>
+          {Plan[0].activities.map((activity, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
             <CheckBox checked={true}/>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
@@ -110,7 +110,7 @@ export const IndividualProgramm = () => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {Plan[1].activities.map((activity, index)=><View style={s.row}>
+          {Plan[1].activities.map((activity, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
             <CheckBox checked={true}/>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
@@ -133,7 +133,7 @@ export const IndividualProgramm = () => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {Plan[2].activities.map((activity, index)=><View style={s.row}>
+          {Plan[2].activities.map((activity, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
             <CheckBox checked={true}/>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
