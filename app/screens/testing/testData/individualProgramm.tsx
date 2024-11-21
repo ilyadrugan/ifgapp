@@ -37,7 +37,7 @@ export const IndividualProgrammData = () =>{
         <><CardContainer key={item.number}>
             <View style={[gs.alignCenter, gs.flexRow]}>
                 <View style={{width: 40, height: 40, borderRadius: 40, backgroundColor: item.color, justifyContent: 'center', alignItems: 'center'}}>
-                    <IfgText style={gs.fontCaption}>{item.number}</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>{item.number}</IfgText>
                 </View>
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold, gs.ml8]}>{item.title}</IfgText>
             </View>

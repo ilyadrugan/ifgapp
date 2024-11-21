@@ -60,10 +60,10 @@ export const Registration = () => {
     <ImageBackground
         source={require('../../../assets/backgrounds/imageLong.png')}
         style={[s.container]}>
-        <IfgText style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
               Регистрация
         </IfgText>
-        <IfgText style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
             Зарегистрируйтесь, чтобы сохранить результаты тестирования и начать следовать рекомендациям!
         </IfgText>
         <View style={gs.mt32}/>
@@ -147,7 +147,7 @@ export const Registration = () => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                    <IfgText style={[gs.fontBody1, { fontSize: 21}]}>Зарегистрироваться</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Зарегистрироваться</IfgText>
                         <ArrowRight />
                     </View>
                     <View />
@@ -161,7 +161,7 @@ export const Registration = () => {
                         <View style={{bottom: 2}}>
                             <Apple />
                         </View>
-                        <IfgText style={[gs.fontBody1, { fontSize: 21, textAlign: 'center'}]}>Войти с Apple</IfgText>
+                        <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21, textAlign: 'center'}]}>Войти с Apple</IfgText>
                     </View>
             </Button> */}
 

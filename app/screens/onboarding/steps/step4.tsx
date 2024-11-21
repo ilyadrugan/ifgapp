@@ -4,6 +4,7 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import React from 'react';
 import { FC}  from 'react';
 import gs from '../../../core/styles/global';
+import colors from '../../../core/colors/colors';
 
 export const Step4:FC = () => {
 
@@ -12,11 +13,11 @@ export const Step4:FC = () => {
     return <>
     <View style={[s.container,{ zIndex: 99, elevation: 10}]}>
     <View>
-      <IfgText style={[gs.h1Intro,  {textAlign: 'center', top: 44}]}>
+      <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', top: 44}]}>
               Начните прямо сейчас
       </IfgText>
       <View style={s.bubble}>
-        <IfgText style={[gs.fontBody1,  {textAlign: 'center'}]}>Правильное вложение – это вклад в здоровье</IfgText>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1,  {textAlign: 'center'}]}>Правильное вложение – это вклад в здоровье</IfgText>
       </View>
       <View style={s.tail} />
     </View>

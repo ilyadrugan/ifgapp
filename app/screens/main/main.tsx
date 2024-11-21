@@ -16,6 +16,7 @@ import gs from '../../core/styles/global';
 import { IfgText } from '../../core/components/text/ifg-text';
 import colors from '../../core/colors/colors';
 import { ProfileScreen } from '../profile/profile';
+import { IFGHome } from '../ifg-home/ifg-home';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +28,7 @@ export const Main: FC = () => {
 
   return (
     <View style={{ height: deviceHeight}}>
-      <Tab.Navigator initialRouteName="Profile"
+      <Tab.Navigator initialRouteName="Дом"
         // headerShown={false}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
@@ -51,6 +52,7 @@ export const Main: FC = () => {
             borderTopWidth: 1,
             elevation: 0,
             borderTopColor: '#F2F2F2',
+            // backgroundColor:'transparent',
         },
         tabBarLabelStyle: {
             ...gs.fontCaptionSmallMedium,
@@ -62,29 +64,10 @@ export const Main: FC = () => {
     >
       <Tab.Screen name="Профиль" component={ProfileScreen} />
       <Tab.Screen name="Календарь" component={ProfileScreen} />
-      <Tab.Screen name="Дом" component={ProfileScreen}  />
+      <Tab.Screen name="Дом" component={IFGHome}  />
       <Tab.Screen name="Материалы" component={ProfileScreen} />
       <Tab.Screen name="Конкурсы" component={ProfileScreen}   />
     </Tab.Navigator>
     </View>
   );
 };
-const s = StyleSheet.create({
-    center: {
-      alignItems: 'center',
-      gap: 0,
-    },
-    tabBar: {
-      height: 60,
-      paddingBottom: 5,
-      borderTopWidth: 1,
-      borderTopColor: '#E6E6E6',
-    },
-    tabLabel: {
-      fontSize: 12,
-      paddingBottom: 2,
-    },
-    icon: {
-        tintColor: '#100', // Изменяет цвет иконки
-      },
-  });

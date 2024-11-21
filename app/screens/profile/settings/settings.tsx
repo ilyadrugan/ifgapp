@@ -77,7 +77,7 @@ export const Settings: FC = () =>{
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                    <IfgText style={[gs.fontBody1, { fontSize: 21}]}>Сохранить</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Сохранить</IfgText>
                         <ArrowRight />
                     </View>
                     <View />

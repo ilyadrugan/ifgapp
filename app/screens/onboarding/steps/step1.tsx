@@ -1,6 +1,6 @@
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import { IfgText } from '../../../core/components/text/ifg-text';
 import { FC } from 'react';
+import React from 'react';
 
 const height = Dimensions.get('screen').height;
 

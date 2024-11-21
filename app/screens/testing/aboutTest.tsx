@@ -117,7 +117,7 @@ export const AboutTest = () => {
          source={require('../../../assets/backgrounds/gradientCard.png')}
         style={[s.cardGradientContainer]}
          >
-            <IfgText style={[gs.fontCaption2, {maxWidth: '62%'}]}>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, {maxWidth: '62%'}]}>
             Пройдите тестирование и получите персональные рекомендации по питанию, сну, физическим активностям и снижению стресса!
             </IfgText>
             <Image
@@ -228,7 +228,7 @@ export const AboutTest = () => {
                    justifyContent: 'space-between',
                    alignItems: 'center',
                }}>
-                <IfgText style={gs.fontBodyMedium}>{'Пройти тестирование'}</IfgText>
+                <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Пройти тестирование'}</IfgText>
                    <ArrowRight />
                </View>
 

@@ -3,6 +3,7 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import { FC, useRef, useEffect, useState } from 'react';
 import gs from '../../../core/styles/global';
 import React from 'react';
+import colors from '../../../core/colors/colors';
 
 export const Step3:FC = () => {
     const scrollX = useRef(new Animated.Value(0)).current;
@@ -54,7 +55,7 @@ export const Step3:FC = () => {
     ];
 
     return <View style={[s.container, gs.mt44]}>
-            <IfgText style={[gs.h1Intro, gs.ml16]}>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro, gs.ml16]}>
                 Принципы платформы
             </IfgText>
             <View style={gs.mt48} />
@@ -74,8 +75,8 @@ export const Step3:FC = () => {
                     </View>
                     <View style={{flexDirection: 'row', gap:80, left: 16}} >
                         {data.map(({title, text, index})=><View key={index.toString()} style={{width: 290,height: 200}}>
-                        <IfgText style={[gs.h2Intro, gs.mt72]}>{title}</IfgText>
-                        <IfgText style={[gs.fontCaption, gs.mt16]}>{text}</IfgText>
+                        <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt72]}>{title}</IfgText>
+                        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.mt16]}>{text}</IfgText>
                         </View>)}
                     </View>
                 </Animated.ScrollView>

@@ -5,7 +5,6 @@ import gs from '../../../core/styles/global';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import colors from '../../../core/colors/colors';
 import { Button } from '../../../core/components/button/button';
-import Time from '../../../../assets/icons/time.svg';
 import Star from '../../../../assets/icons/star.svg';
 import { Materials } from '../../individualProgramm/recomendationData/recomendationData';
 

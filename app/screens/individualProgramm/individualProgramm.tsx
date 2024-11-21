@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -49,11 +49,11 @@ export const IndividualProgramm = () => {
          source={require('../../../assets/backgrounds/gradient3.png')}
         style={[s.cardGradientContainer]}
          >
-            <IfgText style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
-            <IfgText style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
+            <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
             <Button style={s.howItWorksButton}>
                 <>
-                    <IfgText style={gs.fontBodyMedium}>Начать заниматься</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Начать заниматься</IfgText>
                     <ArrowRight />
                 </>
             </Button>
@@ -78,7 +78,7 @@ export const IndividualProgramm = () => {
         <CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
-              <IfgText style={gs.fontCaptionMedium}>Питание</IfgText>
+              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
             <CircularProgress value={10} maxValue={30} />
@@ -101,7 +101,7 @@ export const IndividualProgramm = () => {
         <CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.ORANGE_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
-              <IfgText style={gs.fontCaptionMedium}>Сон</IfgText>
+              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
             <CircularProgress value={10} maxValue={30} />
@@ -124,7 +124,7 @@ export const IndividualProgramm = () => {
         <CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.OLIVE_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
-              <IfgText style={gs.fontCaptionMedium}>Антистресс</IfgText>
+              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
             <CircularProgress value={10} maxValue={30} />
@@ -152,8 +152,8 @@ export const IndividualProgramm = () => {
 
                 <ArrowTo />
                 </>
-        </Button>
-          </View>
+            </Button>
+        </View>
           <View style={gs.mt16} />
           <ScrollView
                 style={{marginHorizontal: -16, paddingHorizontal: 16  }}
@@ -169,8 +169,8 @@ export const IndividualProgramm = () => {
                 style={{ height: 114, width: '100%' }}
                 />
                 <View style={{padding: 14}}>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
+                <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
+                <IfgText style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
                 </View>
             </CardContainer>)}
         </View>
@@ -197,7 +197,7 @@ export const IndividualProgramm = () => {
                    justifyContent: 'space-between',
                    alignItems: 'center',
                }}>
-                <IfgText style={gs.fontBodyMedium}>{'Начать следовать'}</IfgText>
+                <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Начать следовать'}</IfgText>
                    <ArrowRight />
                </View>
 

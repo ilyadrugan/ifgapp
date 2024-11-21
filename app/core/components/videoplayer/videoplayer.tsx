@@ -59,7 +59,7 @@ export const VideoPlayer: FC<{
               <View style={s.pauseLine} />
               <View style={s.pauseLine} />
           </View>}
-          {title && <IfgText style={[gs.fontCaption2, gs.mt16]}>{title}</IfgText>}
+          {title && <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.mt16]}>{title}</IfgText>}
 
             </TouchableOpacity>
         </ImageBackground>

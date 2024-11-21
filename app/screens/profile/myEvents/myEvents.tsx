@@ -26,7 +26,7 @@ const CardEvent: FC<{
     return <CardContainer style={{borderRadius: 22, gap: 0}}>
         <View style={gs.flexRow}>
             <Button disabled style={s.dateContainer}>
-            <IfgText style={[gs.fontCaption3, gs.medium]}>{date}</IfgText>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.medium]}>{date}</IfgText>
             </Button>
             <View style={gs.ml12} />
             <Button disabled style={s.timeContainer}>

@@ -1,6 +1,52 @@
 import React, { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TouchableHighlight, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import colors from '../../colors/colors';
+import gs from '../../styles/global';
+import { IfgText } from '../text/ifg-text';
+import ArrowRight from '../../../../assets/icons/arrow-right.svg';
+import ArrowTo from '../../../../assets/icons/arrow-to.svg';
 
+
+export const ButtonNext:FC<{
+  onPress?: ()=>void,
+  title?: string,
+  oliveTitle?: string,
+}> = ({onPress, title, oliveTitle}) => <Button style={s.buttonNext}
+                onPress={onPress}
+                >
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    }}>
+                    <View style={{
+                        width:'100%',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems:'center'}}>
+                         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>{title}</IfgText>
+                         <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>
+                    </View>
+                        <ArrowRight />
+                    </View>
+
+                    <View />
+                </View>
+
+        </Button>;
+
+export const ButtonTo:FC<{
+  onPress?: ()=>void,
+  title?: string,
+}> = ({onPress, title}) => <Button style={s.buttonTo} onPress={onPress}>
+<>
+<IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>{title}</IfgText>
+
+    <ArrowTo />
+    </>
+</Button>;
 
 export const Button: FC<{
     children?: ReactNode,
@@ -60,4 +106,22 @@ const s = StyleSheet.create({
     outline: {
       backgroundColor: 'transparent',
     },
+    buttonNext: {
+      backgroundColor: colors.GREEN_COLOR,
+      borderRadius: 16,
+      paddingHorizontal: 24,
+      height: 60,
+    },
+    buttonTo: {
+      flexDirection: 'row',
+      gap: 6,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderColor: colors.BORDER_COLOR3,
+      borderWidth: 0.75,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      // paddingVertical: 8,
+      height: 30,
+      },
   });

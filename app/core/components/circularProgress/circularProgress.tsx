@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import { View, StyleSheet, Animated, Easing } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import colors from '../../colors/colors';
 import { IfgText } from '../text/ifg-text';
@@ -74,7 +74,7 @@ export const CircularProgress: FC<{
       </Svg>
       {/* Текст внутри круга */}
       <View style={styles.textContainer}>
-        <IfgText style={[gs.fontBody1, gs.medium, {lineHeight: 30}]}>{value}</IfgText>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, gs.medium, {lineHeight: 30}]}>{value}</IfgText>
         <IfgText color="rgba(255, 255, 255, 0.55)" style={gs.fontCaptionSmallSmall}>из {maxValue}</IfgText>
       </View>
     </View>

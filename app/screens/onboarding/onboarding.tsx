@@ -55,8 +55,8 @@ export const Onboarding = () => {
                         alignItems: 'center',
                     }}>
                     <View style={{flexDirection: 'row', alignItems:'center'}}>
-                         <IfgText style={[gs.fontBody1, { fontSize: 21}]}>{step < 3 ? 'Далее' : 'Начать знакомство'}</IfgText>
-                         {step < 3 && <IfgText style={[gs.fontBody1, gs.ml12, { fontSize: 16, color: colors.OLIVE_COLOR } ]}>Шаг {step + 1} из 4</IfgText>}
+                         <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{step < 3 ? 'Далее' : 'Начать знакомство'}</IfgText>
+                         {step < 3 && <IfgText color={colors.OLIVE_COLOR} style={[gs.fontBody1, gs.ml12, { fontSize: 16 } ]}>Шаг {step + 1} из 4</IfgText>}
                     </View>
                         <ArrowRight />
                     </View>
@@ -73,7 +73,7 @@ export const Onboarding = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     }}>
-                    <IfgText style={[gs.fontBody1, { fontSize: 21}]}>Уже есть аккаунт</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Уже есть аккаунт</IfgText>
                 </View>
 
             </Button>}

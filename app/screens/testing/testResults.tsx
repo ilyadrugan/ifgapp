@@ -65,11 +65,11 @@ export const ResultTest = () => {
          source={require('../../../assets/backgrounds/gradientCard2.png')}
         style={[s.cardGradientContainer]}
          >
-            <IfgText  style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
-            <IfgText  style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
+            <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
             <Button style={s.howItWorksButton}>
                 <>
-                    <IfgText style={gs.fontBodyMedium}>Как это работает?</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Как это работает?</IfgText>
                     <Play />
                 </>
             </Button>
@@ -103,7 +103,7 @@ export const ResultTest = () => {
                    justifyContent: 'space-between',
                    alignItems: 'center',
                }}>
-                <IfgText style={gs.fontBodyMedium}>{'Продолжить'}</IfgText>
+                <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Продолжить'}</IfgText>
                    <ArrowRight />
                </View>
 

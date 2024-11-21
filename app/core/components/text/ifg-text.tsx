@@ -12,7 +12,7 @@ export const IfgText: FC<{
 }> = ({ children, style, color, numberOfLines, wrap, onPress }) => {
 
   return (<>
-    <Text numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.WHITE_COLOR }]}>{children}</Text>
+    <Text numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.PLACEHOLDER_COLOR }]}>{children}</Text>
   </>);
 };
 

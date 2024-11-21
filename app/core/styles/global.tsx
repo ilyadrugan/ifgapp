@@ -99,6 +99,11 @@ const gs = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
   },
+  fontTiny: {
+    fontFamily: 'tilda-sans_regular',
+    fontSize: 8,
+    lineHeight: 8,
+  },
   fontLight: {
     fontFamily: 'tilda-sans_light',
     fontSize: 24,
@@ -161,6 +166,7 @@ const gs = StyleSheet.create({
   mt128: { marginTop: 128 },
 
   mr4: { marginRight: 4 },
+  mr6: { marginRight: 6 },
   mr8: { marginRight: 8 },
   mr12: { marginRight: 12 },
   mr16: { marginRight: 16 },

@@ -74,7 +74,7 @@ export const SuccessfulReg = () => {
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
                     <View style={[gs.flexRow, gs.alignCenter]}>
-                         <IfgText style={gs.fontBodyMedium}>Быть здоровым</IfgText>
+                         <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Быть здоровым</IfgText>
                     </View>
                         <ArrowRight />
                     </View>

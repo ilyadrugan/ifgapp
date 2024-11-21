@@ -134,7 +134,7 @@ export const SubscribeReg: FC = () => {
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
                     <View style={[gs.flexRow, gs.alignCenter]}>
-                         <IfgText style={gs.fontBodyMedium}>Далее</IfgText>
+                         <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Далее</IfgText>
                     </View>
                         <ArrowRight />
                     </View>

@@ -20,11 +20,11 @@ export const Login = () => {
     <ImageBackground
         source={require('../../../assets/backgrounds/imageShort.png')}
         style={[s.container]}  >
-        <IfgText style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
               Начните прямо сейчас
         </IfgText>
-        <IfgText style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
-            Еще не зарегистрированы? Перейдите на <IfgText onPress={toRegistraition} style={[gs.semiBold, gs.underline]}>страницу регистрации</IfgText> для доступа в личный кабинет платформы
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
+            Еще не зарегистрированы? Перейдите на <IfgText color={colors.WHITE_COLOR} onPress={toRegistraition} style={[gs.semiBold, gs.underline]}>страницу регистрации</IfgText> для доступа в личный кабинет платформы
         </IfgText>
         <View style={gs.mt32}/>
         <View style={s.formCard}>
@@ -54,7 +54,7 @@ export const Login = () => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                    <IfgText style={[gs.fontBody1, { fontSize: 21}]}>Войти</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Войти</IfgText>
                         <ArrowRight />
                     </View>
                     <View />

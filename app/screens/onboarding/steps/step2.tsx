@@ -52,23 +52,23 @@ export const Step2:FC = () => {
     const Card = ({ item }) => {
         return (
           <View style={s.card}>
-            <IfgText style={[gs.fontCaption,  {textAlign: 'center', alignSelf:'center'}]}>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption,  {textAlign: 'center', alignSelf:'center'}]}>
                 {item.number}
             </IfgText>
-            <IfgText style={[gs.h2Intro, gs.mt36,  {textAlign: 'center', maxWidth: 220, alignSelf:'center' }]}>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt36,  {textAlign: 'center', maxWidth: 220, alignSelf:'center' }]}>
                 {item.title}
             </IfgText>
             <View />
             <View style={s.icon}>
             {item.icon}
             </View>
-            <IfgText style={[gs.fontCaption, {textAlign: 'center',maxWidth: width * 0.6, alignSelf:'center'}]}>{item.description}</IfgText>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, {textAlign: 'center',maxWidth: width * 0.6, alignSelf:'center'}]}>{item.description}</IfgText>
           </View>
         );
       };
     return <>
         <View style={[s.container, gs.mt44]}>
-            <IfgText style={[gs.h1Intro,  {textAlign: 'center'}]}>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center'}]}>
                 Зачем мне нужен ifeelgood?
             </IfgText>
 

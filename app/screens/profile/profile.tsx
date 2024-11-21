@@ -1,6 +1,6 @@
 
 
-import { Text, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
+import { Text, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation} from 'react-native';
 import React, {useRef, useState} from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -23,44 +23,83 @@ import { MyMaterials } from './myMaterials/myMaterials';
 import { MyEvents } from './myEvents/myEvents';
 import { Settings } from './settings/settings';
 const backCardHeight = 180;
-
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 export const ProfileScreen = () => {
     const navigation = useNavigation<any>();
-    const [isOpen, setIsOpen] = useState(false);
+    const [expanded, setExpanded] = useState(false); // Состояние раскрытия
     const [currentMenu, setCurrentMenu] = useState(4);
 
     const animation = useRef(new Animated.Value(0)).current;
     const exit = () => navigation.replace('Login');
-    const toggleMenu = () => {
-      if (isOpen) {
+    const height = useRef(new Animated.Value(0)).current; // Высота анимации
+    const [contentVisible, setContentVisible] = useState(false); // Контроль видимости контента
+    const opacity = useRef(new Animated.Value(0)).current;
+    const toggleExpand = () => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
-        Animated.timing(animation, {
-          toValue: 0,
-          duration: 200,
-          easing: Easing.ease,
-          useNativeDriver: false,
-        }).start(() => setIsOpen(false));
-      } else {
-        setIsOpen(true);
-        Animated.timing(animation, {
+      // Запускаем анимацию прозрачности
+      if (!expanded) {
+         setExpanded(!expanded);
+        Animated.parallel([
+          Animated.timing(opacity, {
           toValue: 1,
-          duration: 200,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(height, {
+          toValue: 64 * 6,
+          duration: 300,
           easing: Easing.ease,
           useNativeDriver: false,
-        }).start();
+        }),
+      ]).start();
+      } else {
+        Animated.parallel([
+          Animated.timing(opacity, {
+          toValue: 0,
+          duration: 300, // Время появления
+          useNativeDriver: false,
+        }),
+        Animated.timing(height, {
+          toValue: 0, // Высота раскрытого контейнера
+          duration: 300,
+          easing: Easing.ease,
+          useNativeDriver: false,
+        }),
+      ]).start(()=>setExpanded(!expanded));
       }
+
+
     };
+    // const toggleMenu = () => {
+    //   if (isOpen) {
+
+    //     Animated.timing(animation, {
+    //       toValue: 0,
+    //       duration: 200,
+    //       easing: Easing.ease,
+    //       useNativeDriver: false,
+    //     }).start(() => setIsOpen(false));
+    //   } else {
+    //     setIsOpen(true);
+    //     Animated.timing(animation, {
+    //       toValue: 1,
+    //       duration: 200,
+    //       easing: Easing.ease,
+    //       useNativeDriver: false,
+    //     }).start();
+    //   }
+    // };
     const chooseMenu = (id: number) => {
       if (id === 5) {exit();}
       setCurrentMenu(id);
-      toggleMenu();
+      toggleExpand();
     };
-    const menuHeight = animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 52], // высота меню
-    });
 return <>
-<KeyboardAvoidingView
+  <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={gs.flex1}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -69,7 +108,7 @@ return <>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]} >{menuOptions[currentMenu].name}</IfgText>
         <View style={gs.mt16} />
 
-        <CardContainer >
+        <CardContainer style={{gap: 0}}>
           <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
             <View style={[gs.flexRow, gs.alignCenter]}>
                 <View style={s.photo}>
@@ -83,13 +122,16 @@ return <>
                   <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption3}>vanek1109@gmail.com</IfgText>
                 </View>
             </View>
-            <TouchableOpacity onPress={toggleMenu}>
+            <TouchableOpacity onPress={toggleExpand}>
               <BurgerMenu />
             </TouchableOpacity>
           </View>
-          {isOpen &&
-            menuOptions.map((option)=>
-            <Animated.View style={{gap: 0,  height: menuHeight}}>
+          <Animated.View style={{ opacity: opacity,  height: height}}>
+
+          {expanded &&
+          <><View style={gs.mt12} />
+            {menuOptions.map((option)=>
+
               <Button key={option.id.toString()} onPress={()=>chooseMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
               <View style={[gs.flexRow, gs.alignCenter]}>
                 <View style={s.iconButtonContainer}>
@@ -97,8 +139,9 @@ return <>
                 </View>
                 <IfgText color={currentMenu === option.id ? colors.WHITE_COLOR : colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.regular, gs.ml16]}>{option.name}</IfgText>
               </View>
-            </Button></Animated.View>)}
-
+            </Button>)}
+            </>}
+          </Animated.View>
         </CardContainer>
 
         <View style={gs.mt16} />
@@ -199,11 +242,13 @@ const s = StyleSheet.create({
       backgroundColor: colors.GRAY_COLOR5,
       left: 5,
       top: -5,
+      marginTop: 6,
     },
     menuButton:{
       padding: 16,
       backgroundColor: '#EFFCF4',
       borderRadius: 12,
+      marginTop: 6,
     },
     menuButtonActive: {
       backgroundColor: colors.GREEN_COLOR,

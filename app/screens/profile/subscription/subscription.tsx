@@ -37,12 +37,12 @@ export const Subscription: FC = () =>{
               <Button outlined style={s.deleteCardButton}>
                 <View style={gs.flexRow}>
                 <Trash16/>
-                <IfgText style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>
+                <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>
                 </View>
               </Button>
             </View>
             <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
-              <IfgText style={gs.fontCaption}>1817 • основной</IfgText>
+              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>1817 • основной</IfgText>
               {/* <Button outlined style={s.deleteButton}>
                 <Trash18/>
               </Button> */}

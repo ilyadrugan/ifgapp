@@ -105,7 +105,7 @@ export const Testing = () => {
                    justifyContent: 'space-between',
                    alignItems: 'center',
                }}>
-                <IfgText style={gs.fontBodyMedium}>{inTest ? 'Далее' : 'Пройти тестирование'}</IfgText>
+                <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{inTest ? 'Далее' : 'Пройти тестирование'}</IfgText>
                    <ArrowRight />
                </View>
 
