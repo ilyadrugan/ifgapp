@@ -17,6 +17,7 @@ import { IfgText } from '../../core/components/text/ifg-text';
 import colors from '../../core/colors/colors';
 import { ProfileScreen } from '../profile/profile';
 import { IFGHome } from '../ifg-home/ifg-home';
+import { MaterialsScreen } from '../materials/materials';
 
 const Tab = createBottomTabNavigator();
 
@@ -65,7 +66,7 @@ export const Main: FC = () => {
       <Tab.Screen name="Профиль" component={ProfileScreen} />
       <Tab.Screen name="Календарь" component={ProfileScreen} />
       <Tab.Screen name="Дом" component={IFGHome}  />
-      <Tab.Screen name="Материалы" component={ProfileScreen} />
+      <Tab.Screen name="Материалы" component={MaterialsScreen} />
       <Tab.Screen name="Конкурсы" component={ProfileScreen}   />
     </Tab.Navigator>
     </View>

@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import colors from '../../../core/colors/colors';
 import { ShadowGradient } from '../../../core/components/gradient/shadow-gradient';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import DeleteWhite from '../../../../assets/icons/delete-white.svg';
 
-
 export const ChatFooter = () =>{
     const [show, setShow] = useState(true);
     return <View style={s.footer}>
-        <ShadowGradient style={{height: 100}} opacity={0.30}/>
+        <ShadowGradient opacity={0.30}/>
         {show && <><View style={s.bubble}>
          <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.bold]}>Остались вопросы?</IfgText>

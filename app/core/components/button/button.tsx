@@ -40,7 +40,8 @@ export const ButtonNext:FC<{
 export const ButtonTo:FC<{
   onPress?: ()=>void,
   title?: string,
-}> = ({onPress, title}) => <Button style={s.buttonTo} onPress={onPress}>
+  style?: StyleProp<ViewStyle>,
+}> = ({onPress, title, style}) => <Button style={[s.buttonTo, style]} onPress={onPress}>
 <>
 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>{title}</IfgText>
 

@@ -13,7 +13,14 @@ export const Plan = [
     },
 ];
 
-export const Materials = [
+export interface MaterialType {
+    id: number;
+    img: NodeRequire;
+    title: string;
+    text: string;
+}
+
+export const Materials: MaterialType[] = [
     {
        id: 0,
        img: require('../../../../assets/backgrounds/material1.png'),

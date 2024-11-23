@@ -159,9 +159,6 @@ return <>
 
 
         </ScrollView>
-        {/* <View style={{position: 'absolute', bottom:0}}>
-        <ShadowGradient />
-        </View> */}
         <View style={gs.mt24} />
           <ImageBackground
         resizeMode="stretch"

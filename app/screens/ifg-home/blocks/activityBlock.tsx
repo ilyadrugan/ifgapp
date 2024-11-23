@@ -13,6 +13,7 @@ import Question from '../../../../assets/icons/question.svg';
 import Open from '../../../../assets/icons/open-up.svg';
 import Separator from '../../../../assets/icons/separator.svg';
 import { Button } from '../../../core/components/button/button';
+import { useNavigation } from '@react-navigation/native';
 
 
 if (Platform.OS === 'android') {
@@ -21,10 +22,12 @@ if (Platform.OS === 'android') {
   }
 
 export const ActivityBlock = () => {
+    const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
     const height = useRef(new Animated.Value(0)).current; // Высота анимации
-    const scaleY = useRef(new Animated.Value(1)).current; // Начальное значение без зеркалирования
     const opacity = useRef(new Animated.Value(0)).current;
+    const scaleY = useRef(new Animated.Value(1)).current; // Начальное значение без зеркалирования
+
     const toggleExpand = () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
@@ -87,7 +90,7 @@ return <CardContainer >
       <IfgText style={[gs.fontCaption,gs.bold]}>Иван Иванов</IfgText>
       </View>
   </View>
-  <Button style={s.buttonBack} onPress={()=> console.log('TO')}>
+  <Button style={s.buttonBack} onPress={()=> navigation.navigate('Профиль')}>
     <>
       <IfgText color={colors.GRAY_COLOR3} style={[gs.fontBody2]}>В профиль</IfgText>
       <View style={{marginTop: 2}}>
