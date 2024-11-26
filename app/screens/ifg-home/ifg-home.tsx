@@ -11,6 +11,7 @@ import { CardContainer } from '../../core/components/card/cardContainer';
 import ArrowTo from '../../../assets/icons/arrow-to.svg';
 import ArrowRightBlack from '../../../assets/icons/arrow-right-black.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
+import Eye from '../../../assets/icons/eye.svg';
 
 import { Button, ButtonNext, ButtonTo } from '../../core/components/button/button';
 import { ActivityBlock } from './blocks/activityBlock';
@@ -24,6 +25,8 @@ import { ChatFooter } from './blocks/chat-footer';
 import { observer } from 'mobx-react';
 import { dataContests } from '../contests/contests';
 import { ContestType } from '../contests/models/models';
+import { Stories } from './data/data';
+import { hexToRgba } from '../../core/utils/hexToRGBA';
 
 const backCardHeight = 180;
 export const IFGHome = observer(() => {
@@ -43,12 +46,26 @@ export const IFGHome = observer(() => {
         <IfgText style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
         </View>
     </CardContainer>;
+    const StoryCard = ({title, borderColor, bgColor, id})=>
+          <CardContainer  style={[{width: 124, height: 166, padding:12, borderRadius: 16, borderWidth: 1, borderColor:  borderColor, backgroundColor: bgColor, justifyContent: 'space-between' }, gs.mr12, id === 0 && gs.ml16]} >
+            <Eye />
+            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontLightSmall, gs.regular]}>{title}</IfgText>
+      </CardContainer>;
 return <>
 
       <ScrollView style={s.container}>
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
         <View style={gs.mt16} />
+        <FlatList
+          data={Stories}
+          horizontal
+          style={{marginHorizontal: -16}}
+          contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item})=>StoryCard(item)}
+        />
+        <View style={gs.mt24} />
         <ActivityBlock />
         <View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>

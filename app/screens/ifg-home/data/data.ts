@@ -37,3 +37,24 @@ export const ActivityStats = {
         'color': colors.ORANGE_COLOR,
     },
 };
+
+export const Stories = [
+    {
+        id: 0,
+        borderColor: '#835CC2',
+        bgColor: '#f0e8f3',
+        title: 'Хочу правильно питаться',
+    },
+    {
+        id: 1,
+        borderColor: '#FFAC44',
+        bgColor: '#f3eee8',
+        title: 'Хочу больше двигаться',
+    },
+    {
+        id: 2,
+        borderColor: '#5C9DC2',
+        bgColor: '#e9eef4',
+        title: 'Хочу высыпаться',
+    },
+];
