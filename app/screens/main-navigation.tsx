@@ -11,15 +11,17 @@ import { ResultTest } from './testing/testResults';
 import { SuccessfulReg } from './successfullReg/successfullReg';
 import { Main } from './main/main';
 import { IndividualProgramm } from './individualProgramm/individualProgramm';
+import authStore from '../../store/state/authStore/authStore';
+import { ContestView } from './contests/contest';
 
 const Stack = createNativeStackNavigator();
 
 export const MainNavigation: FC = () => {
-
+  console.log(authStore.isAuthenticated);
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : 'Onboarding'}>
       <Stack.Screen
         name="Main"
         component={Main}
@@ -63,6 +65,11 @@ export const MainNavigation: FC = () => {
       <Stack.Screen
         name="IndividualProgramm"
         component={IndividualProgramm}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ContestView"
+        component={ContestView}
         options={{ headerShown: false }}
       />
   </Stack.Navigator>

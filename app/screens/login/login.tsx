@@ -1,4 +1,4 @@
-import { ImageBackground, Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -6,15 +6,47 @@ import { Input } from '../../core/components/input/input';
 import { Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import authStore from '../../../store/state/authStore/authStore';
+import { LoginByUserPasswordModel } from '../../../store/state/authStore/models/models';
+import { observer } from 'mobx-react';
 
-export const Login = () => {
+export const Login = observer(() => {
     const navigation = useNavigation<any>();
     const toRegistraition = () => navigation.replace('Registration');
-    return (  <>
-     {/* <KeyboardAvoidingView
+
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+      } = useForm<LoginByUserPasswordModel>();
+
+      useEffect(()=>{
+        control._reset();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [authStore.access_token]);
+
+      const onSubmit = handleSubmit(async (data) => {
+        console.log(data);
+        if (!data.email) {authStore.fillEmailError('Заполните поле');}
+        if (!data.password) {authStore.fillPasswordError('Заполните поле');}
+        if (data.email && data.password) {authStore.login(data, ()=>navigation.replace('Main'));}
+      });
+
+      const clearLogin = () => {
+        setValue('email', '');
+      };
+
+      const clearPassword = () => {
+        setValue('password', '');
+      };
+
+    return (
+     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{flex: 1}}> */}
+      style={{flex: 1}}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
     <ImageBackground
@@ -28,20 +60,37 @@ export const Login = () => {
         </IfgText>
         <View style={gs.mt32}/>
         <View style={s.formCard}>
-            <Input
+        <Controller control={control} name={'email'}
+            render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                onFocus={authStore.clearEmailError}
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Электронная почта"
                 keyboardType="email-address"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                error={authStore.loginByUserPassword.loginInputError}
             />
+        )}/>
+        <Controller control={control} name={'password'}
+            render={({ field: { onChange, onBlur, value } }) => (
             <Input
+                onFocus={authStore.clearPasswordError}
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Пароль"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
+                error={authStore.loginByUserPassword.passwordInputError}
             />
+            )}/>
+          {authStore.errorMessage && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+          {authStore.errorMessage || 'Что-то пошло не так'}</IfgText>}
             <Button style={s.buttonLogin}
-                onPress={()=>navigation.replace('Main')}
+            disabled={authStore.isLoading}
+                onPress={onSubmit}
                 >
                 <View style={{
                     flexDirection: 'row',
@@ -78,10 +127,9 @@ export const Login = () => {
         </View>
     </ImageBackground>
     </TouchableWithoutFeedback>
-    {/* </KeyboardAvoidingView> */}
-    </>
+    </KeyboardAvoidingView>
     );
-  };
+  });
 const s = StyleSheet.create({
     container: {
         flex: 1,

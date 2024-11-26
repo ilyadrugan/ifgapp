@@ -99,7 +99,7 @@ return <>
         {activeTab === 0 &&
         <>
         <View style={s.hashtagsContainer}>
-            {hashTags.map(item => <TouchableOpacity onPress={()=>onHashTag(item.id)} style={[s.hashtag, activeHashTags.includes(item.id) && {backgroundColor: colors.GREEN_COLOR}]}>
+            {hashTags.map(item => <TouchableOpacity key={item.id.toString()} onPress={()=>onHashTag(item.id)} style={[s.hashtag, activeHashTags.includes(item.id) && {backgroundColor: colors.GREEN_COLOR}]}>
                 <IfgText color={activeHashTags.includes(item.id) ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>{item.name}</IfgText>
             </TouchableOpacity>)}
         </View>
@@ -110,7 +110,7 @@ return <>
         {activeTab === 1 &&
         <>
         <View style={s.hashtagsContainer}>
-            {switchs.map(item => <TouchableOpacity onPress={()=>onSwitch(item.id)} style={[s.interview, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
+            {switchs.map(item => <TouchableOpacity key={item.id.toString()} onPress={()=>onSwitch(item.id)} style={[s.interview, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
                 <IfgText color={activeSwitch === item.id ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>{item.name}</IfgText>
             </TouchableOpacity>)}
         </View>

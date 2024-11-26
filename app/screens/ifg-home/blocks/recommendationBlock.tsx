@@ -17,8 +17,10 @@ export const RecommendationBlock = () => {
         <IfgText style={[gs.fontCaption3, {maxWidth: '80%'}]} >
             Отмечайте выполнение рекомендаций и получайте ifg баллы
         </IfgText>
-        <TouchableOpacity onPress={()=>setRecommends1(false)} style={s.circle}>
-               <Delete />
+        <TouchableOpacity onPress={()=>setRecommends1(false)} style={gs.tapArea}>
+        <View style={[s.circle]}>
+            <Delete />
+        </View>
         </TouchableOpacity>
 
     </CardContainer>}
@@ -34,8 +36,10 @@ export const RecommendationBlock = () => {
         Сегодня мы расскажем вам о простых, но полезных практиках физической активности
         </IfgText>
         </View>
-        <TouchableOpacity onPress={()=>setRecommends2(false)} style={s.circle}>
-               <Delete />
+        <TouchableOpacity onPress={()=>setRecommends2(false)} style={gs.tapArea}>
+               <View style={[s.circle]}>
+                <Delete />
+               </View>
         </TouchableOpacity>
         </ImageBackground>}
 

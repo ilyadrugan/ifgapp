@@ -118,8 +118,10 @@ export const Testing = () => {
             <Email />
             <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12, {maxWidth: '80%'}]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
         </View>
-        <TouchableOpacity onPress={()=>setShowEmail(false)} style={s.circle}>
+        <TouchableOpacity onPress={()=>setShowEmail(false)} style={gs.tapArea}>
+              <View style={s.circle}>
                <Delete />
+              </View>
         </TouchableOpacity>
     </CardContainer>}
     </ScrollView>

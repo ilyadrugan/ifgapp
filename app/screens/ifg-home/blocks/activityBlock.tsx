@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Animated, Easing, LayoutAnimation, Platform, UIManager } from 'react-native';
+
+import React, { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Animated, Easing, LayoutAnimation, Platform, UIManager, Image, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import colors from '../../../core/colors/colors';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
@@ -14,6 +15,8 @@ import Open from '../../../../assets/icons/open-up.svg';
 import Separator from '../../../../assets/icons/separator.svg';
 import { Button } from '../../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
+import userStore from '../../../../store/state/userStore/userStore';
+import { observer } from 'mobx-react';
 
 
 if (Platform.OS === 'android') {
@@ -21,7 +24,7 @@ if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
-export const ActivityBlock = () => {
+export const ActivityBlock = observer(() => {
     const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
     const height = useRef(new Animated.Value(0)).current; // Высота анимации
@@ -75,19 +78,26 @@ export const ActivityBlock = () => {
       }
     };
 
+  useEffect(() => {
+    console.log('userStore.userInfo', userStore.userInfo, userStore.isLoading);
+  }, []);
+
 return <CardContainer >
 <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
   <View style={[gs.flexRow, gs.alignCenter]}>
       <View style={s.photo}>
-        <ProfileHolder />
-        <TouchableOpacity style={s.pin}>
+        {userStore.userInfo?.profile_photo_url ?
+        <Image style={{width: '100%', height: '100%'}} source={{uri: userStore.userInfo?.profile_photo_url}}/>
+        :
+        <ProfileHolder />}
+
+      </View>
+      <TouchableOpacity onPress={userStore.getProfile} style={s.pin}>
           <Plus />
         </TouchableOpacity>
-      </View>
-
       <View style={gs.ml12}>
 
-      <IfgText style={[gs.fontCaption,gs.bold]}>Иван Иванов</IfgText>
+      <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name} {userStore.userInfo?.last_name}</IfgText>
       </View>
   </View>
   <Button style={s.buttonBack} onPress={()=> navigation.navigate('Профиль')}>
@@ -107,14 +117,14 @@ return <CardContainer >
         </IfgText>
         <Question />
       </View>
-      <View style={[gs.flexRow, gs.alignCenter]}>
+      <TouchableOpacity activeOpacity={1}  onPress={toggleExpand} style={[gs.flexRow, gs.alignCenter]}>
         <IfgText style={[gs.fontCaption2, gs.bold, gs.mr6]}>
           Начальный
         </IfgText>
-        <TouchableOpacity style={{ transform: [{ scaleY: scaleY }] }} onPress={toggleExpand}>
+        <TouchableOpacity disabled style={{ transform: [{ scaleY: scaleY }] }}>
           <Open />
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
   </View>
 
   <Animated.View style={{ height: height, opacity: opacity, gap: 6  }}>
@@ -165,7 +175,7 @@ return <CardContainer >
   </View>
 
 
-</CardContainer>;};
+</CardContainer>;});
 
 
 const s = StyleSheet.create({
@@ -182,6 +192,7 @@ const s = StyleSheet.create({
       borderRadius: 26,
       alignItems: 'center',
       justifyContent: 'center',
+      overflow: 'hidden',
     },
     pin: {
       backgroundColor: colors.ORANGE_COLOR,
@@ -203,7 +214,7 @@ const s = StyleSheet.create({
         borderColor: colors.BORDER_COLOR2,
         borderWidth: 0.75,
         borderRadius: 8,
-        width: 109,
+        width: 102,
         height: 24,
       },
       buttonToCalendar: {

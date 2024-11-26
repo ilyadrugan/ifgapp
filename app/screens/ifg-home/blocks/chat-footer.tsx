@@ -13,7 +13,7 @@ export const ChatFooter = () =>{
         {show && <><View style={s.bubble}>
          <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.bold]}>Остались вопросы?</IfgText>
-            <TouchableOpacity onPress={()=>setShow(false)}>
+            <TouchableOpacity style={gs.tapArea} onPress={()=>setShow(false)}>
             <DeleteWhite />
             </TouchableOpacity>
         </View>

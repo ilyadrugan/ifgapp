@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export const Plan = [
     {
         activities: ['Пейте воду', 'Начните завтракать', 'Употребляйте фрукты и овощи!' ],
@@ -15,7 +17,7 @@ export const Plan = [
 
 export interface MaterialType {
     id: number;
-    img: NodeRequire;
+    img: ImageSourcePropType;
     title: string;
     text: string;
 }

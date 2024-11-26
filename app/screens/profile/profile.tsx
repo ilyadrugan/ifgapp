@@ -1,6 +1,6 @@
 
 
-import { Text, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation} from 'react-native';
+import { Image, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation} from 'react-native';
 import React, {useRef, useState} from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import { MyTests } from './myTests/myTests';
 import { MyMaterials } from './myMaterials/myMaterials';
 import { MyEvents } from './myEvents/myEvents';
 import { Settings } from './settings/settings';
+import userStore from '../../../store/state/userStore/userStore';
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -111,18 +112,22 @@ return <>
         <CardContainer style={{gap: 0}}>
           <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
             <View style={[gs.flexRow, gs.alignCenter]}>
-                <View style={s.photo}>
-                  <ProfileHolder />
+            <View style={s.photo}>
+        {userStore.userInfo?.profile_photo_url ?
+        <Image style={{width: '100%', height: '100%'}} source={{uri: userStore.userInfo?.profile_photo_url}}/>
+        :
+        <ProfileHolder />}
+
+                </View>
                   <TouchableOpacity style={s.pin}>
                     <Plus />
                   </TouchableOpacity>
-                </View>
                 <View style={gs.ml12}>
-                  <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption,gs.bold]}>Иван Иванов</IfgText>
-                  <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption3}>vanek1109@gmail.com</IfgText>
+                  <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name} {userStore.userInfo?.last_name}</IfgText>
+                  <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption3}>{userStore.userInfo?.email}</IfgText>
                 </View>
             </View>
-            <TouchableOpacity onPress={toggleExpand}>
+            <TouchableOpacity style={gs.tapArea} onPress={toggleExpand}>
               <BurgerMenu />
             </TouchableOpacity>
           </View>
@@ -172,6 +177,7 @@ const s = StyleSheet.create({
       borderRadius: 26,
       alignItems: 'center',
       justifyContent: 'center',
+      overflow: 'hidden',
     },
     pin: {
       backgroundColor: colors.ORANGE_COLOR,

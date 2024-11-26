@@ -218,6 +218,10 @@ const gs = StyleSheet.create({
   alignCenter: {
     alignItems: 'center',
   },
+  tapArea: {
+    padding: 16,
+    margin: -16,
+  },
 });
 
 export default gs;

@@ -18,10 +18,12 @@ import colors from '../../core/colors/colors';
 import { ProfileScreen } from '../profile/profile';
 import { IFGHome } from '../ifg-home/ifg-home';
 import { MaterialsScreen } from '../materials/materials';
+import { observer } from 'mobx-react';
+import { ContestsScreen } from '../contests/contests';
 
 const Tab = createBottomTabNavigator();
 
-export const Main: FC = () => {
+export const Main: FC = observer(() => {
   const insets = useSafeAreaInsets();
 
   const frame = useSafeAreaFrame();
@@ -67,8 +69,8 @@ export const Main: FC = () => {
       <Tab.Screen name="Календарь" component={ProfileScreen} />
       <Tab.Screen name="Дом" component={IFGHome}  />
       <Tab.Screen name="Материалы" component={MaterialsScreen} />
-      <Tab.Screen name="Конкурсы" component={ProfileScreen}   />
+      <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
     </Tab.Navigator>
     </View>
   );
-};
+});

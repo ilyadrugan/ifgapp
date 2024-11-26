@@ -1,6 +1,6 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity} from 'react-native';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList} from 'react-native';
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -21,15 +21,28 @@ import { Materials } from '../individualProgramm/recomendationData/recomendation
 import {ShadowGradient} from '../../core/components/gradient/shadow-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatFooter } from './blocks/chat-footer';
+import { observer } from 'mobx-react';
+import { dataContests } from '../contests/contests';
+import { ContestType } from '../contests/models/models';
 
 const backCardHeight = 180;
-export const IFGHome = () => {
+export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
 
     // const rotateInterpolation = rotation.interpolate({
     //   inputRange: [0, 1],
     //   outputRange: ['0deg', '-180deg'],
     // });
+    const MaterialCard = ({title, img, text, id})=>
+      <CardContainer key={id.toString()} style={[{width: 200, height: 236, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, id === 0 && gs.ml16]} >
+        <Image resizeMode="cover"  source={img}
+        style={{ height: 114, width: '100%' }}
+        />
+        <View  style={{paddingLeft: 14}}>
+        <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
+        <IfgText style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
+        </View>
+    </CardContainer>;
 return <>
 
       <ScrollView style={s.container}>
@@ -100,65 +113,47 @@ return <>
         <View style={gs.mt24} />
           <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Полезное</IfgText>
-            <ButtonTo title="Все материалы" />
+            <ButtonTo onPress={()=>navigation.navigate('Материалы')} title="Все материалы" />
           </View>
           <View style={gs.mt16} />
-          <ScrollView
-                style={{marginHorizontal: -16, paddingHorizontal: 16  }}
+          <FlatList
                 horizontal
-                contentContainerStyle={{flexGrow: 1, flexDirection: 'column'}}
+                style={{marginHorizontal: -16}}
+                contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                >
-
-          <View style={{flexDirection: 'row'}} >
-              {Materials.map(({title, img, text, id})=>
-              <CardContainer key={id.toString()} style={[{width: 200, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12]} >
-                <Image resizeMode="cover"  source={img}
-                style={{ height: 114, width: '100%' }}
-                />
-                <View style={{padding: 14}}>
-                <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
-                <IfgText style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
-                </View>
-            </CardContainer>)}
+                data={Materials}
+                renderItem={({item})=>MaterialCard(item)}
+        />
+        <View style={gs.mt24}/>
+        <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Конкурсы</IfgText>
+            <ButtonTo onPress={()=>navigation.navigate('Конкурсы')} title="Все конкурсы" />
           </View>
-        </ScrollView>
-
-        <View style={gs.mt24} />
-          <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Полезное</IfgText>
-            <ButtonTo title="Все конкурсы" />
-          </View>
-          <View style={gs.mt16} />
-          <ScrollView
-                style={{marginHorizontal: -16, paddingHorizontal: 16  }}
+        <View style={gs.mt16}/>
+        <FlatList
                 horizontal
-                contentContainerStyle={{flexGrow: 1, flexDirection: 'column'}}
+                style={{marginHorizontal: -16}}
+                contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                >
+                data={dataContests}
+                renderItem={({item}: ContestType)=>
+                <CardContainer style={[{width: 190, height: 236, padding:14, borderWidth: 1, borderColor: '#E7E7E7', justifyContent: 'space-between' }, gs.mr12, item.id === 0 && gs.ml16 ]} >
+                    <IfgText style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
+                    <Image resizeMode="contain"  source={item.img}
+                    style={{ height: 114, width: '100%' }}
+                    />
+                  <Button onPress={()=>navigation.replace('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
+                    <>
+                    <IfgText style={gs.fontBody2}>Как получить приз</IfgText>
+                    <View style={{marginTop:2}}>
+                      <ArrowRightBlack width={12} />
+                    </View>
+                    </>
 
-          <View style={{flexDirection: 'row'}} >
-              {[0,1,2].map((val, index)=>
-              <CardContainer key={index.toString()} style={[{width: 190, padding:14, borderWidth: 1, borderColor: '#E7E7E7' }, gs.mr12]} >
-                <IfgText style={[gs.fontCaption2, gs.bold]}>{'3 коврика для йоги и занятий спортом'}</IfgText>
-
-                <Image resizeMode="contain"  source={require('../../../assets/backgrounds/carpet.png')}
-                style={{ height: 114, width: '100%' }}
-                />
-                <Button fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
-                  <>
-                  <IfgText style={gs.fontBody2}>Как получить приз</IfgText>
-                  <View style={{marginTop:2}}>
-                    <ArrowRightBlack width={12} />
-                  </View>
-                  </>
-
-                </Button>
-            </CardContainer>)}
-          </View>
-
-
-        </ScrollView>
+                  </Button>
+                </CardContainer>
+                }
+        />
         <View style={gs.mt24} />
           <ImageBackground
         resizeMode="stretch"
@@ -180,7 +175,7 @@ return <>
       <ChatFooter />
     </>;
 
-  };
+  });
 const s = StyleSheet.create({
     container: {
         flex: 1,

@@ -1,9 +1,10 @@
 import React, { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 import gs from '../../styles/global';
 import { IfgText } from '../text/ifg-text';
 import ArrowRight from '../../../../assets/icons/arrow-right.svg';
+import ArrowRight12 from '../../../../assets/icons/arrow-right12.svg';
 import ArrowTo from '../../../../assets/icons/arrow-to.svg';
 
 
@@ -11,7 +12,9 @@ export const ButtonNext:FC<{
   onPress?: ()=>void,
   title?: string,
   oliveTitle?: string,
-}> = ({onPress, title, oliveTitle}) => <Button style={s.buttonNext}
+  style?: StyleProp<ViewStyle>,
+  textStyle?: StyleProp<TextStyle>,
+}> = ({onPress, title, oliveTitle, style, textStyle}) => <Button style={[s.buttonNext, style && style]}
                 onPress={onPress}
                 >
                 <View style={{
@@ -26,7 +29,7 @@ export const ButtonNext:FC<{
                         alignItems: 'center',
                     }}>
                     <View style={{flexDirection: 'row', alignItems:'center'}}>
-                         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>{title}</IfgText>
+                         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium, textStyle && textStyle]}>{title}</IfgText>
                          <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>
                     </View>
                         <ArrowRight />
@@ -41,11 +44,13 @@ export const ButtonTo:FC<{
   onPress?: ()=>void,
   title?: string,
   style?: StyleProp<ViewStyle>,
-}> = ({onPress, title, style}) => <Button style={[s.buttonTo, style]} onPress={onPress}>
+  textColor?: string,
+  whiteIcon?: boolean
+}> = ({onPress, title, style, textColor, whiteIcon}) => <Button style={[s.buttonTo, style]} onPress={onPress}>
 <>
-<IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>{title}</IfgText>
+<IfgText color={textColor || colors.GRAY_COLOR3} style={gs.fontBody2}>{title}</IfgText>
 
-    <ArrowTo />
+    {whiteIcon ? <ArrowRight12 /> : <ArrowTo />}
     </>
 </Button>;
 

@@ -1,12 +1,15 @@
 import { FC, ReactNode } from 'react';
-import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInput, TextStyle, ViewStyle } from 'react-native';
+import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInput, TextStyle, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 import React from 'react';
+import { IfgText } from '../text/ifg-text';
+import gs from '../../styles/global';
 
 
 export const Input: FC<{
     editable?: boolean,
     onChange?: () => void,
+    onFocus?: () => void,
     style?: StyleProp<ViewStyle | TextStyle>,
     fullWidth?: boolean,
     children?: ReactNode,
@@ -14,9 +17,13 @@ export const Input: FC<{
     placeholder?: string,
     keyboardType?:KeyboardTypeOptions | undefined,
     secureTextEntry?: boolean
+    value?: string,
+    error?: string,
+    required?: boolean,
   }> = (
     {
-        onChange,
+      onChange,
+      onFocus,
       style,
       editable,
       fullWidth,
@@ -25,8 +32,10 @@ export const Input: FC<{
       placeholder,
       keyboardType,
       secureTextEntry,
+      value,
+      error,
     }) => {
-    return <>
+    return <View style={s.container}>
 
     <TextInput
       style={[
@@ -41,13 +50,16 @@ export const Input: FC<{
       placeholderTextColor={colors.PLACEHOLDER_COLOR}
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
-      
+      value={value}
+      onFocus={onFocus}
     >
 
           {children ? children : null }
 
     </TextInput>
-    </>;
+    {error && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+    {error || 'Что-то пошло не так'}</IfgText>}
+    </View>;
 };
 
 
@@ -61,8 +73,14 @@ const s = StyleSheet.create({
       borderColor: colors.BORDER_COLOR,
       padding: 24,
     },
-
+    container: {
+      width: '100%',
+      justifyContent: 'center',
+    },
     fullWidth: {
       width: '100%',
+    },
+    required: {
+      borderColor: colors.RED_COLOR,
     },
   });

@@ -7,12 +7,21 @@ import colors from '../../../core/colors/colors';
 import { Input } from '../../../core/components/input/input';
 import { Button } from '../../../core/components/button/button';
 import ArrowRight from '../../../../assets/icons/arrow-right.svg';
+import { useForm } from 'react-hook-form';
+import { UserChangeInfo } from '../../../../store/state/userStore/models/models';
 
 export const Settings: FC = () =>{
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+      } = useForm<UserChangeInfo>();
     return <CardContainer style={{gap: 18}}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>
         Личные данные
         </IfgText>
+
         <Input
                 fullWidth
                 placeholder="Фамилия"
