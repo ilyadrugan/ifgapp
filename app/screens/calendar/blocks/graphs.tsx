@@ -5,7 +5,7 @@ import gs from '../../../core/styles/global';
 import { TabInterface, TabsMaterials } from '../../materials/components/tabs';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import colors from '../../../core/colors/colors';
-import CustomChart from './customGraph';
+import VictoryGraph from './victoryGraph';
 
 const tabss: TabInterface[] = [
     {
@@ -44,7 +44,7 @@ export const Graphs = () =>{
         <IfgText style={[gs.fontBodyMedium, gs.bold]}>График активности</IfgText>
         <IfgText style={gs.fontCaptionSmall}>Мои результаты за последнюю:</IfgText>
         <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
-        <CustomChart />
+        <VictoryGraph monthly={activeTab === 1} />
         <IfgText style={gs.fontCaptionSmall}>Активность по:</IfgText>
         <View style={gs.flexRow}>
             {switchs.map(item => <TouchableOpacity key={item.id.toString()} onPress={()=>onSwitch(item.id)} style={[s.switch, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
