@@ -28,7 +28,9 @@ export const MaterialsScreen = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [activeHashTags, setActiveHashTags] = useState<number[]>([]);
-
+    const onSwitch = (id: number) => {
+        setSwitch(id);
+    };
     const onTabClick = (id: number) => {
         setActiveTab(id);
     };
@@ -82,9 +84,7 @@ export const MaterialsScreen = () => {
             setActiveHashTags([...activeHashTags, id]);
         }
     };
-    const onSwitch = (id: number) => {
-        setSwitch(id);
-    };
+
 return <>
       <ScrollView style={s.container}>
         <View style={gs.mt16} />

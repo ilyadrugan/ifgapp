@@ -20,6 +20,7 @@ import { IFGHome } from '../ifg-home/ifg-home';
 import { MaterialsScreen } from '../materials/materials';
 import { observer } from 'mobx-react';
 import { ContestsScreen } from '../contests/contests';
+import { CalendarScreen } from '../calendar/calendar';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +32,7 @@ export const Main: FC = observer(() => {
 
   return (
     <View style={{ height: deviceHeight}}>
-      <Tab.Navigator initialRouteName="Дом"
+      <Tab.Navigator initialRouteName="Календарь"
         // headerShown={false}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
@@ -66,7 +67,7 @@ export const Main: FC = observer(() => {
       })}
     >
       <Tab.Screen name="Профиль" component={ProfileScreen} />
-      <Tab.Screen name="Календарь" component={ProfileScreen} />
+      <Tab.Screen name="Календарь" component={CalendarScreen} />
       <Tab.Screen name="Дом" component={IFGHome}  />
       <Tab.Screen name="Материалы" component={MaterialsScreen} />
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
