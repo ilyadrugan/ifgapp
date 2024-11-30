@@ -63,6 +63,8 @@ export const ActivityBlock = observer(() => {
     useEffect(()=>{
       requestHealthKitAuthorization();
       fetchHealthData();
+    console.log('userStore.userInfo', userStore.userInfo, userStore.isLoading);
+
     },[])
     const toggleExpand = () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -111,9 +113,7 @@ export const ActivityBlock = observer(() => {
       }
     };
 
-  useEffect(() => {
-    console.log('userStore.userInfo', userStore.userInfo, userStore.isLoading);
-  }, []);
+
 
 return <CardContainer >
 <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
@@ -192,15 +192,17 @@ return <CardContainer >
   </View>
   <View>
   <View style={[gs.flexRow]}>
-  {healthData && Object.keys(ActivityStats).map((name, index, arr)=>
-      <View style={gs.flexRow} key={index.toString()} >
+  { Object.keys(ActivityStats).map((name, index, arr)=>{
+    return  <View style={gs.flexRow} key={index.toString()} >
       <View style={[index !== 0 && gs.ml12, {gap: 6}]}>
         <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{name}</IfgText>
-        <IfgText color={ActivityStats[name].color} style={[gs.fontCaptionMedium, gs.bold]}>{healthData?.steps}</IfgText>
+        <IfgText color={ActivityStats[name].color} style={[gs.fontCaptionMedium, gs.bold]}>
+          {(healthData && name === "Шаги")? healthData?.steps : name === "Калории"? healthData?.caloriesBurned : healthData?.flightsClimbed}
+          </IfgText>
       </View>
       {index !== arr.length - 1 &&   <View style={gs.ml12} />}
         <Separator />
-      </View>)
+      </View>})
   }
   </View>
 

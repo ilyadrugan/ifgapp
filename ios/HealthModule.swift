@@ -45,7 +45,12 @@ class HealthModule: NSObject {
             group.enter()
             let query = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, statistics, _ in
                 if let quantity = statistics?.sumQuantity() {
+                  if (key != "caloriesBurned"){
                     results[key] = quantity.doubleValue(for: HKUnit.count())
+                  }
+                      else {
+                    results[key] = quantity.doubleValue(for: .kilocalorie())
+                  }
                 } else {
                     results[key] = 0.0
                 }
