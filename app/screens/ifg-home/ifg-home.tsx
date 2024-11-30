@@ -1,7 +1,7 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList} from 'react-native';
-import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert} from 'react-native';
+import React, { useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -29,10 +29,11 @@ import { Stories } from './data/data';
 import { hexToRgba } from '../../core/utils/hexToRGBA';
 import { NativeModules } from 'react-native';
 
-const { HealthKitManager } = NativeModules;
+const { HealthModule} = NativeModules;
 const backCardHeight = 180;
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
+    const [activeTab, setHealthData] = useState();
 
     // const rotateInterpolation = rotation.interpolate({
     //   inputRange: [0, 1],
@@ -40,7 +41,7 @@ export const IFGHome = observer(() => {
     // });
     const requestHealthKitAuthorization = async () => {
       try {
-        const result = await HealthKitManager.requestAuthorization();
+        const result = await HealthModule.requestAuthorization();
         console.log('Authorization granted:', result);
       } catch (error) {
         console.error('Authorization error:', error);
@@ -49,15 +50,16 @@ export const IFGHome = observer(() => {
     
     const fetchHealthData = async () => {
       try {
-        const data = await HealthKitManager.fetchHealthData();
+        const data = await HealthModule.fetchHealthData();
         console.log('Health data:', data);
       } catch (error) {
         console.error('Fetch error:', error);
       }
     };
+
     useEffect(()=>{
       requestHealthKitAuthorization();
-      fetchHealthData();
+      // fetchHealthData();
     },[])
     const MaterialCard = ({title, img, text, id})=>
       <CardContainer key={id.toString()} style={[{width: 200, height: 236, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, id === 0 && gs.ml16]} >

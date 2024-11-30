@@ -21,7 +21,7 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : 'Onboarding'}>
+    <Stack.Navigator initialRouteName={'Main'}>
       <Stack.Screen
         name="Main"
         component={Main}

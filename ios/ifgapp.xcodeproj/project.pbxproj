@@ -19,6 +19,9 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AC0A2A353024486BABC242D5 /* tilda-sans_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BDE315202FB4760B6706330 /* tilda-sans_regular.ttf */; };
 		BE19C72D387D4315ABCC7BE7 /* tilda-sans_black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7A0830D58EC4581BAF0F693 /* tilda-sans_black.ttf */; };
+		C9BD91642CFB6AA400C4C351 /* HealthModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BD91632CFB6AA400C4C351 /* HealthModule.swift */; };
+		C9BD91662CFB6AE900C4C351 /* HealthModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = C9BD91652CFB6AE900C4C351 /* HealthModuleBridge.m */; };
+		C9BD91672CFB6B3200C4C351 /* ifgapp-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = C9BD91602CFB625100C4C351 /* ifgapp-Bridging-Header.h */; };
 		E671AC1924C14E7AA0C429E3 /* tilda-sans_extra-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95E19F7B3D3F428F80A68A11 /* tilda-sans_extra-bold.ttf */; };
 		E77F02DE3DF5136913FF4919 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		FD1AECF935D648BA8BA51C90 /* tilda-sans_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3D1ABD79EB0482CBBC627CC /* tilda-sans_medium.ttf */; };
@@ -54,6 +57,9 @@
 		884D972B2FE949D4B74E6FA4 /* tilda-sans_bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "tilda-sans_bold.ttf"; path = "../assets/fonts/tilda-sans_bold.ttf"; sourceTree = "<group>"; };
 		95E19F7B3D3F428F80A68A11 /* tilda-sans_extra-bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "tilda-sans_extra-bold.ttf"; path = "../assets/fonts/tilda-sans_extra-bold.ttf"; sourceTree = "<group>"; };
 		BA9E139B5CBE4A3F9FE02FDA /* tilda-sans_semibold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "tilda-sans_semibold.ttf"; path = "../assets/fonts/tilda-sans_semibold.ttf"; sourceTree = "<group>"; };
+		C9BD91602CFB625100C4C351 /* ifgapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ifgapp-Bridging-Header.h"; sourceTree = "<group>"; };
+		C9BD91632CFB6AA400C4C351 /* HealthModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthModule.swift; sourceTree = "<group>"; };
+		C9BD91652CFB6AE900C4C351 /* HealthModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HealthModuleBridge.m; sourceTree = "<group>"; };
 		C9C503822CFA50E40028CDFD /* ifgapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ifgapp.entitlements; path = ifgapp/ifgapp.entitlements; sourceTree = "<group>"; };
 		D3D1ABD79EB0482CBBC627CC /* tilda-sans_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "tilda-sans_medium.ttf"; path = "../assets/fonts/tilda-sans_medium.ttf"; sourceTree = "<group>"; };
 		E14BA759A6564A48AB401988 /* tilda-sans_light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "tilda-sans_light.ttf"; path = "../assets/fonts/tilda-sans_light.ttf"; sourceTree = "<group>"; };
@@ -104,6 +110,9 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				C9BD91602CFB625100C4C351 /* ifgapp-Bridging-Header.h */,
+				C9BD91632CFB6AA400C4C351 /* HealthModule.swift */,
+				C9BD91652CFB6AE900C4C351 /* HealthModuleBridge.m */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -372,6 +381,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9BD91672CFB6B3200C4C351 /* ifgapp-Bridging-Header.h in Sources */,
+				C9BD91662CFB6AE900C4C351 /* HealthModuleBridge.m in Sources */,
+				C9BD91642CFB6AA400C4C351 /* HealthModule.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -446,6 +458,7 @@
 				CODE_SIGN_ENTITLEMENTS = ifgapp/ifgapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ifgapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -475,6 +488,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ifgapp/ifgapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ifgapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -529,7 +543,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -566,10 +580,14 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OBJC_BRIDGING_HEADER = "ifgapp/ifgapp-Bridging-Header.h";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -608,7 +626,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -637,9 +655,13 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "ifgapp/ifgapp-Bridging-Header.h";
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
