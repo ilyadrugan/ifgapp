@@ -17,7 +17,15 @@ import { Button } from '../../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
 import userStore from '../../../../store/state/userStore/userStore';
 import { observer } from 'mobx-react';
+import { NativeModules } from 'react-native';
 
+type HelthData = {
+  caloriesBurned: number;
+  flightsClimbed: number;
+  steps: number;
+}
+
+const { HealthModule} = NativeModules;
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -30,7 +38,32 @@ export const ActivityBlock = observer(() => {
     const height = useRef(new Animated.Value(0)).current; // Высота анимации
     const opacity = useRef(new Animated.Value(0)).current;
     const scaleY = useRef(new Animated.Value(1)).current; // Начальное значение без зеркалирования
+    const [healthData, setHealthData] = useState<HelthData>();
 
+
+    const requestHealthKitAuthorization = async () => {
+      try {
+        const result = await HealthModule.requestAuthorization();
+        console.log('Authorization granted:', result);
+      } catch (error) {
+        console.error('Authorization error:', error);
+      }
+    };
+    
+    const fetchHealthData = async () => {
+      try {
+        const data = await HealthModule.fetchHealthData();
+        console.log('Health data:', data);
+        setHealthData(data)
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+
+    useEffect(()=>{
+      requestHealthKitAuthorization();
+      fetchHealthData();
+    },[])
     const toggleExpand = () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
@@ -159,11 +192,11 @@ return <CardContainer >
   </View>
   <View>
   <View style={[gs.flexRow]}>
-  {Object.keys(ActivityStats).map((name, index, arr)=>
+  {healthData && Object.keys(ActivityStats).map((name, index, arr)=>
       <View style={gs.flexRow} key={index.toString()} >
       <View style={[index !== 0 && gs.ml12, {gap: 6}]}>
         <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{name}</IfgText>
-        <IfgText color={ActivityStats[name].color} style={[gs.fontCaptionMedium, gs.bold]}>{ActivityStats[name].value}</IfgText>
+        <IfgText color={ActivityStats[name].color} style={[gs.fontCaptionMedium, gs.bold]}>{healthData?.steps}</IfgText>
       </View>
       {index !== arr.length - 1 &&   <View style={gs.ml12} />}
         <Separator />

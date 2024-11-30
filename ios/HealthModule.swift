@@ -19,6 +19,7 @@ class HealthModule: NSObject {
               if success {
                   resolve("Authorization granted")
               } else {
+                print("error")
                   // Если ошибка есть, передаем её в reject
                   if let error = error {
                       reject("E_AUTHORIZATION_DENIED", "Authorization denied", error)

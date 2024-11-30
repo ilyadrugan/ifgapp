@@ -27,40 +27,15 @@ import { dataContests } from '../contests/contests';
 import { ContestType } from '../contests/models/models';
 import { Stories } from './data/data';
 import { hexToRgba } from '../../core/utils/hexToRGBA';
-import { NativeModules } from 'react-native';
 
-const { HealthModule} = NativeModules;
 const backCardHeight = 180;
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
-    const [activeTab, setHealthData] = useState();
 
-    // const rotateInterpolation = rotation.interpolate({
+        // const rotateInterpolation = rotation.interpolate({
     //   inputRange: [0, 1],
     //   outputRange: ['0deg', '-180deg'],
     // });
-    const requestHealthKitAuthorization = async () => {
-      try {
-        const result = await HealthModule.requestAuthorization();
-        console.log('Authorization granted:', result);
-      } catch (error) {
-        console.error('Authorization error:', error);
-      }
-    };
-    
-    const fetchHealthData = async () => {
-      try {
-        const data = await HealthModule.fetchHealthData();
-        console.log('Health data:', data);
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-    };
-
-    useEffect(()=>{
-      requestHealthKitAuthorization();
-      // fetchHealthData();
-    },[])
     const MaterialCard = ({title, img, text, id})=>
       <CardContainer key={id.toString()} style={[{width: 200, height: 236, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, id === 0 && gs.ml16]} >
         <Image resizeMode="cover"  source={img}
