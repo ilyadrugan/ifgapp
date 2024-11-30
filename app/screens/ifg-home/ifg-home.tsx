@@ -1,7 +1,7 @@
 
 
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -27,7 +27,9 @@ import { dataContests } from '../contests/contests';
 import { ContestType } from '../contests/models/models';
 import { Stories } from './data/data';
 import { hexToRgba } from '../../core/utils/hexToRGBA';
+import { NativeModules } from 'react-native';
 
+const { HealthKitManager } = NativeModules;
 const backCardHeight = 180;
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -36,6 +38,27 @@ export const IFGHome = observer(() => {
     //   inputRange: [0, 1],
     //   outputRange: ['0deg', '-180deg'],
     // });
+    const requestHealthKitAuthorization = async () => {
+      try {
+        const result = await HealthKitManager.requestAuthorization();
+        console.log('Authorization granted:', result);
+      } catch (error) {
+        console.error('Authorization error:', error);
+      }
+    };
+    
+    const fetchHealthData = async () => {
+      try {
+        const data = await HealthKitManager.fetchHealthData();
+        console.log('Health data:', data);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+    useEffect(()=>{
+      requestHealthKitAuthorization();
+      fetchHealthData();
+    },[])
     const MaterialCard = ({title, img, text, id})=>
       <CardContainer key={id.toString()} style={[{width: 200, height: 236, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, id === 0 && gs.ml16]} >
         <Image resizeMode="cover"  source={img}

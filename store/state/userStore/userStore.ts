@@ -23,7 +23,7 @@ class UserStore {
    getProfile = async () => {
     this.isLoading = true;
         try {
-          const response = await axios('https://xsaht.100qrs.ru/api/lk', {
+          const response = await axios(`${BASE_URL}}lk`, {
             headers: {
               Authorization: 'Bearer ' + authStore.access_token,
               'Cache-Control': 'no-cache',
