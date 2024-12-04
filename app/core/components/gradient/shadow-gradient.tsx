@@ -12,7 +12,7 @@ export const ShadowGradient:FC<{opacity: number, style?: StyleProp<ViewStyle>,}>
 const s = StyleSheet.create({
   shadowGradient: {
       position: 'absolute',
-      bottom: 16,
+      bottom: 0,
       left: 0,
       right: 0,
       zIndex: 99,

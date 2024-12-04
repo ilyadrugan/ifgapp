@@ -33,8 +33,8 @@ const individualProgramm = [
 ];
 
 export const IndividualProgrammData = () =>{
-    return         individualProgramm.map(item=>
-        <><CardContainer key={item.number}>
+    return  individualProgramm.map(item=>
+        <><CardContainer key={item.number.toString()}>
             <View style={[gs.alignCenter, gs.flexRow]}>
                 <View style={{width: 40, height: 40, borderRadius: 40, backgroundColor: item.color, justifyContent: 'center', alignItems: 'center'}}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>{item.number}</IfgText>

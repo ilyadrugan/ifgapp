@@ -12,12 +12,6 @@ class AuthStore {
   userInfo: UserInfo | null = null;
   errorMessage: string = '';
   loginByUserPassword: LoginByUserPasswordState = {loginInputError: '', passwordInputError: ''};
-
-  constructor() {
-    makeAutoObservable(this); // Делаем объект реактивным
-    this.checkAuthUser();
-  }
-
   checkAuthUser = async () => {
     const token = await getAuthTokenFromStorage();
     if (token) {
@@ -28,12 +22,18 @@ class AuthStore {
       console.log('getProfile');
     }
   };
+  constructor() {
+    makeAutoObservable(this); // Делаем объект реактивным
+    this.checkAuthUser();
+  }
+
+
 
   setToken = async (token) => {
     this.access_token = token;
     await saveAuthTokenToStorage(token);
   };
-  
+
   clearEmailError = () => {
     this.loginByUserPassword.loginInputError = '';
   };

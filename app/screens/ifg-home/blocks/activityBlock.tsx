@@ -18,6 +18,8 @@ import { useNavigation } from '@react-navigation/native';
 import userStore from '../../../../store/state/userStore/userStore';
 import { observer } from 'mobx-react';
 import { NativeModules } from 'react-native';
+import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
+import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
 
 type HelthData = {
   caloriesBurned: number;
@@ -38,34 +40,7 @@ export const ActivityBlock = observer(() => {
     const height = useRef(new Animated.Value(0)).current; // Высота анимации
     const opacity = useRef(new Animated.Value(0)).current;
     const scaleY = useRef(new Animated.Value(1)).current; // Начальное значение без зеркалирования
-    const [healthData, setHealthData] = useState<HelthData>();
 
-
-    const requestHealthKitAuthorization = async () => {
-      try {
-        const result = await HealthModule.requestAuthorization();
-        console.log('Authorization granted:', result);
-      } catch (error) {
-        console.error('Authorization error:', error);
-      }
-    };
-    
-    const fetchHealthData = async () => {
-      try {
-        const data = await HealthModule.fetchHealthData();
-        console.log('Health data:', data);
-        setHealthData(data)
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-    };
-
-    useEffect(()=>{
-      requestHealthKitAuthorization();
-      fetchHealthData();
-    console.log('userStore.userInfo', userStore.userInfo, userStore.isLoading);
-
-    },[])
     const toggleExpand = () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
@@ -174,40 +149,8 @@ return <CardContainer >
   </Animated.View>
 
   </CardContainer>
-  <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
-    <IfgText style={[gs.fontCaption2, gs.bold]}>IFG-баллы за сегодня</IfgText>
-    <IfgText color={colors.GREEN_COLOR} style={[gs.fontCaption, gs.bold]}>{86}</IfgText>
-  </View>
-  <ProgressBar color={colors.GREEN_LIGHT_COLOR} width={60} unfilledColor="#EDEDED" />
-  <IfgText style={[gs.fontCaption2, gs.bold]}>Активность</IfgText>
-  <View  style={[gs.flexRow, gs.alignCenter, {gap: 2, justifyContent: 'space-between'}]}>
-  <View style={[gs.flexRow, {gap: 2}]}>
-  {Object.keys(ActivityStats).map((name, index)=>
-
-    <ColumnarProgressBar
-    key={index.toString()}
-      height={ActivityStats[name].value / ActivityStats[name].standart_value * 100}
-      color={ActivityStats[name].color}/>
-  )}
-  </View>
-  <View>
-  <View style={[gs.flexRow]}>
-  { Object.keys(ActivityStats).map((name, index, arr)=>{
-    return  <View style={gs.flexRow} key={index.toString()} >
-      <View style={[index !== 0 && gs.ml12, {gap: 6}]}>
-        <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{name}</IfgText>
-        <IfgText color={ActivityStats[name].color} style={[gs.fontCaptionMedium, gs.bold]}>
-          {(healthData && name === "Шаги")? healthData?.steps : name === "Калории"? healthData?.caloriesBurned : healthData?.flightsClimbed}
-          </IfgText>
-      </View>
-      {index !== arr.length - 1 &&   <View style={gs.ml12} />}
-        <Separator />
-      </View>})
-  }
-  </View>
-
-  </View>
-  </View>
+  <IFGScoreLine score={86} title={'IFG-баллы за сегодня'} />
+  <IFGActivity/>
 
 
 </CardContainer>;});

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import {VictoryChart, VictoryArea, VictoryLine, VictoryScatter, VictoryTooltip, VictoryAxis} from 'victory-native';
 import colors from '../../../core/colors/colors';
@@ -51,7 +51,7 @@ type DotType = {
     _y: number,
     x: string,
     xName: string,
-    y: string,
+    y: number | string,
 }
 const CustomDoubleCircle = ({ x, y }) => {
     return (
@@ -70,8 +70,22 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
   const [data, setData] = useState(monthly ? dataMonths : dataWeeks);
 
   const handlePress = (datum) => {
+    console.log(datum);
     setSelectedPoint(datum); // Устанавливаем выбранную точку
   };
+
+  useEffect(() => {
+    // const today = new Date().getDay() === 0 ? 8 : new Date().getDay();
+    const today = new Date().getDay();
+    const todayDot: DotType = {
+        _x: today === 0 ? 7 : today,
+        _y: dataWeeks[today - 1].y,
+        x:  dataWeeks[today - 1].x,
+        xName: dataWeeks[today - 1].x,
+        y: dataWeeks[today - 1].y,
+    };
+    setSelectedPoint(todayDot);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -130,9 +144,9 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
           }}
         />
 
-<VictoryScatter
+    <VictoryScatter
         data={selectedPoint ? [selectedPoint] : []} // Показывать только выбранную точку
-        size={4}
+        size={8}
         style={{
           data: {
             fill: '#ECFFF2',

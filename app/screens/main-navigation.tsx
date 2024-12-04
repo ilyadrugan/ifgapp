@@ -21,14 +21,14 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName={'Main'}>
+    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : 'OnBoarding'}>
       <Stack.Screen
         name="Main"
         component={Main}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Onboarding"
+        name="OnBoarding"
         component={Onboarding}
         options={{ headerShown: false }}
       />

@@ -28,7 +28,6 @@ import { ContestType } from '../contests/models/models';
 import { Stories } from './data/data';
 import { hexToRgba } from '../../core/utils/hexToRGBA';
 
-const backCardHeight = 180;
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
 
@@ -79,7 +78,7 @@ return <>
             </Button>
         </View>
         <RecommendationBlock />
-        <TimeToDrinkBlock />
+        <TimeToDrinkBlock isNew={true}/>
 
         <View style={gs.mt16} />
         <CardContainer  >

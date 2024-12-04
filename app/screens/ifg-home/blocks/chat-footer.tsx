@@ -35,7 +35,6 @@ const s = StyleSheet.create({
         flexDirection: 'row',
         bottom: -30,
         right: 0,
-
         width: '100%',
     },
     bubble:{

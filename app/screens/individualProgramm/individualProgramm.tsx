@@ -4,7 +4,7 @@ import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity 
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { Button } from '../../core/components/button/button';
+import { Button, ButtonNext } from '../../core/components/button/button';
 
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
@@ -182,28 +182,11 @@ export const IndividualProgramm = () => {
         />
     </ScrollView>
     <View style={s.footer}>
-    <Button style={s.buttonNext}
-           onPress={()=>navigation.navigate('Main')}
-           >
-           <View style={{
-               flexDirection: 'row',
-               justifyContent: 'space-between',
-               alignItems: 'center',
-
-               }}>
-               <View style={{
-                   width:'100%',
-                   flexDirection: 'row',
-                   justifyContent: 'space-between',
-                   alignItems: 'center',
-               }}>
-                <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Начать следовать'}</IfgText>
-                   <ArrowRight />
-               </View>
-
-               <View />
-           </View>
-    </Button>
+    <ButtonNext style={s.buttonNext}
+          textStyle={gs.fontBodyMedium}
+          onPress={()=>navigation.navigate('Main')}
+          title={'Начать следовать'}
+           />
     </View>
 </>
     );
@@ -296,9 +279,6 @@ shadowGradient: {
     marginHorizontal: -16,
   },
   buttonNext: {
-    backgroundColor: colors.GREEN_COLOR,
-    borderRadius: 16,
-    paddingHorizontal: 24,
     height: 78,
     width: '86%',
   },

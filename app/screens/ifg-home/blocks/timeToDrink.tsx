@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { CardContainer } from '../../../core/components/card/cardContainer';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
 import { IfgText } from '../../../core/components/text/ifg-text';
@@ -14,7 +14,7 @@ import { ArticleHeader } from '../components/articleHeader';
 
 const width = Dimensions.get('screen').width;
 
-export const TimeToDrinkBlock = () => {
+export const TimeToDrinkBlock: FC<{isNew?: boolean}> = ({isNew}) => {
     const [cupsData, setCupsData] = useState<CupsType[]>(CupsData);
 
     const onCupTap = (id: number, status: CupStatus) =>{
@@ -42,7 +42,7 @@ export const TimeToDrinkBlock = () => {
     return <>
     <CardContainer style={gs.mt16}>
         <ArticleHeader
-            isCicleBadge
+            isCicleBadge={isNew}
             hashTagColor={colors.GREEN_COLOR}
             hashTagText="#Питание"
             time="10:00"

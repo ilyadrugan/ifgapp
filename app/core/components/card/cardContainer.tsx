@@ -1,6 +1,6 @@
 import React from 'react';
 import { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewProps, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 
 export const HashtagContainer: FC<{
@@ -22,15 +22,14 @@ export const HashtagContainer: FC<{
   </>;
 };
 
-export const CardContainer: FC<{
-    children?: ReactNode,
-    style?: StyleProp<ViewStyle>,
-    onPress?: () => void
-}> = ({children, style, onPress}) => {
+export interface CardContainerProps extends ViewProps {
+  children?: ReactNode,
+  style?: StyleProp<ViewStyle>,
+  onPress?: () => void,
+}
 
-
-
-    return <>
+export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, ...props}) => {
+    return <View {...props}>
     <TouchableOpacity
       style={[
         s.container,
@@ -40,7 +39,7 @@ export const CardContainer: FC<{
     >
       {children}
     </TouchableOpacity>
-    </>;
+    </View>;
 };
 
 const s = StyleSheet.create({
