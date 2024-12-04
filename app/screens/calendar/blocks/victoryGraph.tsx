@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import {VictoryChart, VictoryArea, VictoryLine, VictoryScatter, VictoryTooltip, VictoryAxis} from 'victory-native';
 import colors from '../../../core/colors/colors';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
@@ -179,7 +179,7 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
       {/* Событие клика для выбора точки */}
       <VictoryScatter
         data={data}
-        size={4}
+        size={10}
         style={{
           data: {
             fill: 'transparent',

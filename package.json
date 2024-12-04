@@ -34,7 +34,7 @@
     "react-native-snap-carousel": "^4.0.0-beta.6",
     "react-native-svg": "^15.9.0",
     "react-native-video": "^6.7.0",
-    "victory-native": "^37.0.3-next.0"
+    "victory-native": "^37.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
