@@ -17,17 +17,8 @@ import { Button } from '../../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
 import userStore from '../../../../store/state/userStore/userStore';
 import { observer } from 'mobx-react';
-import { NativeModules } from 'react-native';
 import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
 import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
-
-type HelthData = {
-  caloriesBurned: number;
-  flightsClimbed: number;
-  steps: number;
-}
-
-const { HealthModule} = NativeModules;
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
