@@ -35,7 +35,7 @@ export const MaterialsScreen = () => {
         setActiveTab(id);
     };
     const renderArtcileItem = (item: MaterialType) => {
-        return <CardContainer style={{marginTop: 16,overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>
+        return <CardContainer key={item.id.toString()} style={{marginTop: 16,overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>
             <Image resizeMode="cover" source={item.img}
             style={{ width: '40%', height: '100%' }}
             />
@@ -47,7 +47,7 @@ export const MaterialsScreen = () => {
         </CardContainer>;
       };
       const renderInterviewItem = (item: InterViewType) => {
-        return <CardContainer style={{
+        return <CardContainer key={item.id.toString()} style={{
             height: 160,
             padding: 0,
             marginTop: 16,

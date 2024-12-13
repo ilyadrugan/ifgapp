@@ -30,9 +30,11 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-          <intent-filter>
-              <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
-          </intent-filter>
+            <!-- For supported versions through Android 13, create an activity to show the rationale
+          of Health Connect permissions once users click the privacy policy link. -->
+        <intent-filter>
+            <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+        </intent-filter>
       </activity>
            <activity
               android:name=".PermissionsRationaleActivity"

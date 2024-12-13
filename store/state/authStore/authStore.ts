@@ -1,33 +1,37 @@
 import { makeAutoObservable } from 'mobx';
 import { login } from './authStore.api';
 import userStore from '../userStore/userStore';
-import { getAuthTokenFromStorage, saveAuthTokenToStorage } from '../../../app/core/utils/bearer-token';
+import { deleteAuthTokenToStorage, getAuthTokenFromStorage, saveAuthTokenToStorage } from '../../../app/core/utils/bearer-token';
 import { UserInfo } from '../userStore/models/models';
 import { LoginByUserPasswordModel, LoginByUserPasswordState } from './models/models';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class AuthStore {
   isAuthenticated = false; // Авторизован ли пользователь
   isLoading = false; // Состояние загрузки
+  isOnBoarded = false;
   access_token: string = '';
   userInfo: UserInfo | null = null;
   errorMessage: string = '';
   loginByUserPassword: LoginByUserPasswordState = {loginInputError: '', passwordInputError: ''};
+
   checkAuthUser = async () => {
     const token = await getAuthTokenFromStorage();
+
     if (token) {
-      this.access_token = token;
+      this.setToken(token);
       console.log('TOKEN', token);
       this.isAuthenticated = true;
       userStore.getProfile();
       console.log('getProfile');
     }
   };
+
   constructor() {
-    makeAutoObservable(this); // Делаем объект реактивным
+    this.checkIsOnBoarded();
     this.checkAuthUser();
+    makeAutoObservable(this); // Делаем объект реактивным
   }
-
-
 
   setToken = async (token) => {
     this.access_token = token;
@@ -49,6 +53,7 @@ class AuthStore {
   fillPasswordError = (error: string) => {
     this.loginByUserPassword.passwordInputError =  error;
   };
+
   async login(model: LoginByUserPasswordModel, callBack: ()=>void) {
     this.isLoading = true;
     this.errorMessage = '';
@@ -58,10 +63,12 @@ class AuthStore {
         if (!model.email) {this.loginByUserPassword.loginInputError = 'Заполните поле';}
         if (!model.password) {this.loginByUserPassword.passwordInputError = 'Заполните поле';}
         console.log(result.data);
-        if (result.data){
+        if (result.data) {
         this.setToken(result.data.access_token);
         userStore.setUser(result.data.user);
-        this.access_token && callBack();}
+        this.setIsOnBoarded();
+        this.access_token && callBack();
+      }
       })
       .catch((err)=>{
         console.log('ERROR');
@@ -72,8 +79,21 @@ class AuthStore {
       this.isLoading = false;
   }
 
+  async checkIsOnBoarded() {
+    const isBoarded = await AsyncStorage.getItem('isOnBoarded');
+    if (isBoarded) {
+      this.isOnBoarded = true;
+    }
+  }
+
+  async setIsOnBoarded() {
+    await AsyncStorage.setItem('isOnBoarded', 'true');
+    this.isOnBoarded = true;
+  }
+
   // Выход из аккаунта
-  logout() {
+  async logout() {
+    await deleteAuthTokenToStorage();
     this.isAuthenticated = false;
   }
 }

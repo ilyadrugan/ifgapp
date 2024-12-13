@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { View, Platform, NativeModules, NativeEventEmitter } from 'react-native';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { View, Platform, NativeModules, NativeEventEmitter, AppState } from 'react-native';
 import { ColumnarProgressBar } from '../../../screens/ifg-home/components/progressBar';
 import { ActivityStats } from '../../../screens/ifg-home/data/data';
 import gs from '../../styles/global';
@@ -7,6 +7,7 @@ import { IfgText } from '../text/ifg-text';
 import Separator from '../../../../assets/icons/separator.svg';
 import userStore from '../../../../store/state/userStore/userStore';
 import { getHealthData } from '../../../hooks/getHealthData';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 type HelthData = {
     caloriesBurned: number;
     flightsClimbed: number;
@@ -15,6 +16,7 @@ type HelthData = {
   const { HealthModule } = NativeModules;
 export const IFGActivity:FC  = ()=> {
   const [date, setDate] = useState(new Date());
+  const isFocused = useIsFocused();
     const [healthData, setHealthData] = useState<HelthData>({
       caloriesBurned: 0,
       flightsClimbed: 0,
@@ -50,14 +52,30 @@ export const IFGActivity:FC  = ()=> {
       });
     };
     useEffect(()=>{
+
+
       if (Platform.OS === 'ios') {
         requestHealthKitAuthorizationIOS();
         fetchHealthDataIOS();
       }
-      if (Platform.OS === 'android') {
-        requestHealthData();
-      }
+      // if (Platform.OS === 'android') {
+      //   requestHealthData();
+      // }
+
     },[]);
+    useFocusEffect(
+      React.useCallback(() => {
+        if (Platform.OS === 'android') {
+          console.log('isFocused', isFocused);
+          if (isFocused)
+            {
+              requestHealthData();
+
+            }
+        }
+      }, [])
+    );
+
     return <>
     <IfgText style={[gs.fontCaption2, gs.bold]}>Активность</IfgText>
     <View  style={[gs.flexRow, gs.alignCenter, {gap: 2, justifyContent: 'space-between'}]}>

@@ -1,4 +1,5 @@
 package com.ifgapp
+
 import android.os.Bundle
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -16,7 +17,7 @@ class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState);
     // In order to handle contract results, we need to set the permission delegate.
-    HealthConnectPermissionDelegate.setPermissionDelegate(this, "com.google.android.apps.healthdata");
+      HealthConnectPermissionDelegate.setPermissionDelegate(this)
      }
   /**
    * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]

@@ -5,7 +5,7 @@ import colors from '../../core/colors/colors';
 import { Input } from '../../core/components/input/input';
 import { Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import authStore from '../../../store/state/authStore/authStore';
@@ -27,7 +27,13 @@ export const Login = observer(() => {
         control._reset();
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [authStore.access_token]);
-
+      useFocusEffect(
+        React.useCallback(() => {
+          if (authStore.access_token) {
+            navigation.replace('Main');
+          }
+        }, [authStore.isAuthenticated])
+      );
       const onSubmit = handleSubmit(async (data) => {
         console.log(data);
         if (!data.email) {authStore.fillEmailError('Заполните поле');}

@@ -6,14 +6,15 @@ import { Step1 } from './steps/step1';
 import { Step2 } from './steps/step2';
 import { Step3 } from './steps/step3';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import colors from '../../core/colors/colors';
 import { Dot } from '../../core/components/dot/dot';
 import LinearGradient from 'react-native-linear-gradient';
 import { Step4 } from './steps/step4';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import authStore from '../../../store/state/authStore/authStore';
 
 
 export const Onboarding = () => {
@@ -23,7 +24,13 @@ export const Onboarding = () => {
     const nextStep = () => setStep(step + 1);
     const toLogin = () => navigation.navigate('Login');
     const toTest = () => navigation.navigate('AboutTest');
-
+    useFocusEffect(
+        React.useCallback(() => {
+          if (authStore.isOnBoarded) {
+            navigation.replace('Login');
+          }
+        }, [authStore.isOnBoarded])
+      );
     return (  <>
 
         <ImageBackground

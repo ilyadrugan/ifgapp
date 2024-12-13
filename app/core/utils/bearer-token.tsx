@@ -16,3 +16,7 @@ export const getAuthTokenFromStorage = async (): Promise<string | null> => {
 export const saveAuthTokenToStorage = async (token: string | null) => {
   await AsyncStorage.setItem('AUTH_TOKEN', token ? token : '');
 };
+
+export const deleteAuthTokenToStorage = async  () => {
+  await AsyncStorage.setItem('AUTH_TOKEN', '');
+};

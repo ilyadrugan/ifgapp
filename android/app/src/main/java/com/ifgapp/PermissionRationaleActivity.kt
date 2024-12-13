@@ -1,4 +1,4 @@
-package com.ifgapp.healthconnectexample
+package com.ifgapp
 
 import android.os.Bundle
 import android.webkit.WebResourceRequest

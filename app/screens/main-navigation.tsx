@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding } from './onboarding/onboarding';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { Login } from './login/login';
 import { Registration } from './registration/registration';
@@ -21,15 +21,15 @@ export const MainNavigation: FC = () => {
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : 'OnBoarding'}>
-      <Stack.Screen
-        name="Main"
-        component={Main}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator initialRouteName={authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
       <Stack.Screen
         name="OnBoarding"
         component={Onboarding}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Main"
+        component={Main}
         options={{ headerShown: false }}
       />
       <Stack.Screen
