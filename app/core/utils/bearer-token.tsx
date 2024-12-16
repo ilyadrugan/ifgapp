@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // @ts-ignore
-export const getAuthToken = () => global.authToken;
-
 export const setAuthToken = (token: string | null) => {
   // @ts-ignore
   global.authToken = token;

@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
-import { login } from './authStore.api';
+import { login, registration } from './authStore.api';
 import userStore from '../userStore/userStore';
 import { deleteAuthTokenToStorage, getAuthTokenFromStorage, saveAuthTokenToStorage } from '../../../app/core/utils/bearer-token';
 import { UserInfo } from '../userStore/models/models';
-import { LoginByUserPasswordModel, LoginByUserPasswordState } from './models/models';
+import { LoginByUserPasswordModel, LoginByUserPasswordState, RegisterFormModel, RegisterFormState } from './models/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class AuthStore {
@@ -14,6 +14,17 @@ class AuthStore {
   userInfo: UserInfo | null = null;
   errorMessage: string = '';
   loginByUserPassword: LoginByUserPasswordState = {loginInputError: '', passwordInputError: ''};
+  registerByPromocode: RegisterFormState = {
+    nameInputError: '',
+    last_nameInputError: '',
+    phoneInputError: '',
+    promocodeInputError: '',
+    passwordInputError: '',
+    password_confirmationInputError: '',
+    emailInputError: '',
+    birthdayInputError: '',
+    num_docInputError: '',
+   };
 
   checkAuthUser = async () => {
     const token = await getAuthTokenFromStorage();
@@ -53,7 +64,12 @@ class AuthStore {
   fillPasswordError = (error: string) => {
     this.loginByUserPassword.passwordInputError =  error;
   };
-
+  fillRegisterByPromocodeInputError = (field: string, error: string) => {
+    this.registerByPromocode[`${field}InputError`] =  error;
+  };
+  clearRegisterByPromocodeInputError = (field: string) => {
+    this.registerByPromocode[`${field}InputError`] =  '';
+  };
   async login(model: LoginByUserPasswordModel, callBack: ()=>void) {
     this.isLoading = true;
     this.errorMessage = '';
@@ -78,6 +94,29 @@ class AuthStore {
       // .finally(()=>{this.isLoading = false;});
       this.isLoading = false;
   }
+  async register(model: RegisterFormModel, callBack: ()=>void) {
+    this.isLoading = true;
+    this.errorMessage = '';
+    await registration(model)
+      .then((result)=>{
+        console.log('THEN');
+        console.log(result.data);
+        if (result.data) {
+        this.setToken(result.data.access_token);
+        userStore.setUser(result.data.user);
+        this.setIsOnBoarded();
+        this.access_token && callBack();
+      }
+      })
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
+
+      });
+      // .finally(()=>{this.isLoading = false;});
+      this.isLoading = false;
+  }
+
 
   async checkIsOnBoarded() {
     const isBoarded = await AsyncStorage.getItem('isOnBoarded');
@@ -93,8 +132,9 @@ class AuthStore {
 
   // Выход из аккаунта
   async logout() {
-    await deleteAuthTokenToStorage();
     this.isAuthenticated = false;
+    this.access_token = '';
+    await deleteAuthTokenToStorage();
   }
 }
 

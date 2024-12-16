@@ -37,7 +37,7 @@ const CardTest: FC<{date: string, time: string, title: string}> = ({date, time, 
 
 export const MyTests: FC = () =>{
     return [0, 1, 2].map((val, index)=><>
-    <CardTest date={'22 декабря'} time="10:00" title="II ifg-тестирование" />
+    <CardTest key={index.toString()} date={'22 декабря'} time="10:00" title="II ifg-тестирование" />
     <View style={gs.mt16} />
     </>);
 };

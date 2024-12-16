@@ -184,7 +184,7 @@ export const IndividualProgramm = () => {
     <View style={s.footer}>
     <ButtonNext style={s.buttonNext}
           textStyle={gs.fontBodyMedium}
-          onPress={()=>navigation.navigate('Main')}
+          onPress={()=>navigation.replace('Main')}
           title={'Начать следовать'}
            />
     </View>

@@ -17,11 +17,11 @@ import { ContestView } from './contests/contest';
 const Stack = createNativeStackNavigator();
 
 export const MainNavigation: FC = () => {
-  console.log(authStore.isAuthenticated);
+  console.log(authStore.isOnBoarded);
   return (<>
   <StatusBar hidden={true} />
   <NavigationContainer>
-    <Stack.Navigator initialRouteName={authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
+    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
       <Stack.Screen
         name="OnBoarding"
         component={Onboarding}

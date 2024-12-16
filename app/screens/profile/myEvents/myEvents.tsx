@@ -56,6 +56,7 @@ const CardEvent: FC<{
 export const MyEvents: FC = () =>{
     return [0, 1, 2].map((val, index)=><>
     <CardEvent
+        key={index.toString()}
         date={'22 декабря'}
         time="10:00"
         name="Анна Архицкая"

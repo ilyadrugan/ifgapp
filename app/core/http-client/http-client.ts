@@ -1,9 +1,4 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { ApiPrefix } from '../constants/api-const';
-import reduxStore from '../../../state/store';
-import { camelizeKeys } from 'humps';
-import { LogoutSaga } from '../../../screens/profile/account/state/account.saga';
-import { accountSlice } from '../../../screens/profile/account/state/account.slice';
 import {
   getApplicationName,
   getBuildNumber,
@@ -13,25 +8,29 @@ import {
   getSystemVersion,
   getVersion,
 } from 'react-native-device-info';
-import { getAuthToken } from '../utils/bearer-token';
-
+import authStore from '../../../store/state/authStore/authStore';
 const HttpClient = axios.create({
   headers: {
     'Content-type': 'application/json',
-    // 'App-Version': `${getVersion()}(${getBuildNumber()})`,
-    // 'App-Name': getApplicationName(),
-    // 'System': `${getSystemName()} ${getSystemVersion()}`,
-    'Cache-Control': 'no-cache',
-    // 'Device-ID': getDeviceId(),
-    'Authorization': 'Bearer ' + getAuthToken(),
+    'App-Version': `${getVersion()}(${getBuildNumber()})`,
+    'App-Name': getApplicationName(),
+    'System': `${getSystemName()} ${getSystemVersion()}`,
+    'Device-ID': getDeviceId(),
+    'Authorization': `Bearer ${authStore.access_token}`,
   },
   withCredentials: true,
-  // xsrfHeaderName: 'X-CSRF-TOKEN',
-  // xsrfCookieName: 'csrf_access_token',
+  xsrfHeaderName: 'X-CSRF-TOKEN',
+  xsrfCookieName: 'csrf_access_token',
 });
 
 getDeviceName().then(x => {
   HttpClient.defaults.headers.common['Device-Name'] = x;
+});
+
+export const HttpClientWithoutHeaders = axios.create({
+  withCredentials: true,
+  xsrfHeaderName: 'X-CSRF-TOKEN',
+  xsrfCookieName: 'csrf_access_token',
 });
 
 
@@ -39,14 +38,76 @@ const addClientRequestInterceptors = (httpClient: AxiosInstance) => {
   httpClient.interceptors.request.use(
     (config) => {
       if (config.headers) {
-        config.headers['x-csrf-token'] = 'eyJpdiI6ImpaS245YTR2NHl0OFB4UTRpTDlSdGc9PSIsInZhbHVlIjoid2NxTjQ4YTU1NGx1clE1V3MzQlRPRXJkVk9SK1g5TW1oeEJmbURXcjFOSVV4TFc2YVlnbXo0SlBENUNSTGZFUG9yeUgxYkxQaTF4c09FczVLNjJqZmdKMGdvL0tGbC82eDJBUi9qek5wK0VpMkQ0Qk1RRm9rUldscXBHZE40K1pwaEEvUDVOK1pPTEUzMmpuZTUzdlYzTXJWK0p0SjN0a3l6TFBpWW5ueFdUZ3Q5TW45UGs1dC9xK2lOblp5b2VnOEQrY08vaVhmTGc0d2lzbzJSVVd2MmVCN1pmS1NIRHFET1VQVkhHRUYvelVUQlMxK21Ob1RVa1NyekUrZDAzbm1YNTJWK0NmMkp6K3V3TUJoUzBKYXc2S3Y0Z001RHVmVWViTytTVmNTUXlycEFjdndMMGlWaW0rekdpQWFFcWw1cEdsUWdXUW9iQjR5MWxYOSs5WWtWc2V2Q0pRSEYwaTdYUlBLYXQwSHJFOCtkVE5BVzhZUFdJVzE2NVJaWVhsT2ZjNERzazl0UjRoSzQwUDh1OVFCNi9aN2drWGNaYWdHK1I2T0xUdXZmUmUyQlUrYTJhL2p6VEdYcWtjbmp3V0o4RnNjMDZrZ0FCbmJkSGVsQ3hPbm9tRVovSk42Yk5uYmRtNDJiWkd6L2QzUlVZVWN3YzRscExvK3B6NHNRdEciLCJtYWMiOiIxMDU0YjkwZjJiMTA4ZDkxYjBhZDdkNjI2ODgxOTBmZmIyNzAyYmQ3ZGJkMjRjYmYzYmNkN2QyOTc3NTk5MmM3IiwidGFnIjoiIn0';
-        config.headers.Authorization = `Bearer ${getAuthToken()}`;
+        config.headers['x-csrf-token'] = 'eyJpdiI6ImlXY0xkNllycjN5MXdCMG1IUW9Remc9PSIsInZhbHVlIjoiRkdPWktPWE5NL2VSdysvaTBVZ2ZiRERjM2dQRDJwQjZ3VzJ5YnFVcko4TkZJL0ttV3RjV2IwM2UvWlhLb3hSayt1NWF6c2c5U1Q5V0VYZENiczZRM3lBNVlJV3Z5YkZ6MzFFOUZZU0pGdEdpa2owRmc1ZXJBOFlqSFJNSnFTY3hyMEJpSGVxanVsUzBjenZWcmJhVjgxdHBhTXVZV2I5YXNSdFZuY0ZGZWJSekVRMnRPMlZVT0xheXV6MEdTOUh6UWg3cWU3L1RoMzlQVGoxcU5QY1RqT3NZM0dGUVRXNnJGVlgzaml0bG84Y2RsTUo4ZHdUS3Z2VTRReXBwdmhNa2JaWGZmc2dFRitBb3FSQk9YdG5BMVV6TE1CY1owMlFZc3JQRFZOaU41Wnd1RkNwMWhsbnhZVC9xR2w0OFd3T2hCa1dRNkxmbHBhYXdLd2JLVDh4UitUSGRhYTBuSHdkdnAzcGphK1l2N3A0S2V0YVVkek9ZS3kyZjhUNWJRKzBMZlUzTGNVZ3BHOXVwNk82Qm9SdDk3K2RZL2dCUTNDUmRvaWhhYkF1Qjdpc2RZdHRXRkhqTUZFc0U3SHg1ak5LYW9qTWRSS3NPSGNnK2lzQnlVeUdTeXZ6UEFJbE9TMGYvS3dkMHlUZDhXZWpubHlGZjhvTFZVU1ZTU1dJb1VLKy8iLCJtYWMiOiJjZWViNzFiZmU2Y2M3OTlhYzI0NDk1YjA5M2E4Yzk1MmI5NmUxNGRlZjU2MDEzZDRlNDFmYWZlZDE4MzcxZWIwIiwidGFnIjoiIn0';
+        config.headers.Authorization = `Bearer ${authStore.access_token}`;
       }
       return config;
     }
   );
 };
 
-// addClientRequestInterceptors(HttpClient);
+// const addClientResponseInterceptors = (httpClient: AxiosInstance) => {
+//   httpClient.interceptors.response.use(
+//     (response) => {
+//       if (
+//         response.data &&
+//         response.headers['content-type'].includes('application/json')
+//       ) {
+//         response.data = camelizeKeys(response.data);
+//       }
+//       return response;
+//     },
+//     async (err) => {
+//       const originalConfig = err.config;
+//       if ((!originalConfig.url.includes(`${ApiPrefix}/auth/login`) && originalConfig.url !== `${ApiPrefix}/auth/refreshToken`)
+//         && err.response) {
+//         if (err.response.status === 401 && !originalConfig._retry) {
+//           originalConfig._retry = true;
+//           if (!refreshing) {
+//             try {
+//               refreshing = true;
+//               const result = await HttpClient.get(`${ApiPrefix}/auth/refreshToken`);
+//               const token = result.data.token;
+//               reduxStore.dispatch(accountSlice.actions.SetToken(token));
+//               refreshing = false;
+//               return HttpClient(originalConfig);
+//             } catch (_error) {
+//               refreshing = false;
+//               reduxStore.dispatch(LogoutSaga());
+//               return Promise.reject(_error);
+//             }
+//           } else {
+//             let i = 0;
+//             while (i < 10) {
+//               if (!refreshing) {
+//                 return HttpClient(originalConfig);
+//               }
+//               // @ts-ignore
+//               await new Promise(r => setTimeout(r, 200));
+//               i++;
+//             }
+//             reduxStore.dispatch(LogoutSaga());
+//             return Promise.reject('Refresh error!');
+//           }
+//         }
+//       }
+//       if (
+//         err.response.data &&
+//         err.response.headers['content-type'].includes('application/json')
+//       ) {
+//         err.response.data = camelizeKeys(err.response.data);
+//       }
+//       return Promise.reject(err);
+//     }
+//   );
+// };
+
+addClientRequestInterceptors(HttpClient);
+// addClientResponseInterceptors(HttpClient);
+
+addClientRequestInterceptors(HttpClientWithoutHeaders);
+// addClientResponseInterceptors(HttpClientWithoutHeaders);
+
 
 export default HttpClient;
+

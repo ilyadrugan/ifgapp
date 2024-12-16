@@ -27,24 +27,24 @@ export const IFGActivity:FC  = ()=> {
     const requestHealthKitAuthorizationIOS = async () => {
       try {
         const result = await HealthModule.requestAuthorization();
-        console.log('Authorization granted:', result);
+        // console.log('Authorization granted:', result);
       } catch (error) {
-        console.error('Authorization error:', error);
+        // console.error('Authorization error:', error);
       }
     };
 
     const fetchHealthDataIOS = async () => {
       try {
         const data = await HealthModule.fetchHealthData();
-        console.log('Health data:', data);
+        // console.log('Health data:', data);
         setHealthData(data);
       } catch (error) {
-        console.error('Fetch error:', error);
+        // console.error('Fetch error:', error);
       }
     };
     const requestHealthData = async () => {
       const result = await getHealthData(date);
-      console.log(`Steps: ${result?.totalSteps} | Flights: ${result?.totalFloors} | Calories: ${result?.totalCalories}`);
+      // console.log(`Steps: ${result?.totalSteps} | Flights: ${result?.totalFloors} | Calories: ${result?.totalCalories}`);
       setHealthData({
         caloriesBurned: result?.totalCalories || 0,
         steps: result?.totalSteps || 0,
@@ -66,7 +66,7 @@ export const IFGActivity:FC  = ()=> {
     useFocusEffect(
       React.useCallback(() => {
         if (Platform.OS === 'android') {
-          console.log('isFocused', isFocused);
+          // console.log('isFocused', isFocused);
           if (isFocused)
             {
               requestHealthData();
@@ -93,7 +93,7 @@ export const IFGActivity:FC  = ()=> {
             <View style={[index !== 0 && gs.ml12, {gap: 6}]}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{name}</IfgText>
                 <IfgText color={ActivityStats[name].color} style={[gs.fontCaptionMedium, gs.bold]}>
-                {(healthData && name === 'Шаги') ? healthData?.steps : name === 'Калории' ? healthData?.caloriesBurned : healthData?.flightsClimbed}
+                {(healthData && name === 'Шаги') ? healthData?.steps : name === 'Калории' ? Math.round(healthData?.caloriesBurned) : healthData?.flightsClimbed}
                 {/* {Platform.OS === 'android' && ActivityStats[name].value} */}
                 </IfgText>
             </View>

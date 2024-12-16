@@ -1,7 +1,7 @@
 
 
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -27,6 +27,9 @@ import { dataContests } from '../contests/contests';
 import { ContestType } from '../contests/models/models';
 import { Stories } from './data/data';
 import { hexToRgba } from '../../core/utils/hexToRGBA';
+import userStore from '../../../store/state/userStore/userStore';
+import articlesStore from '../../../store/state/articlesStore/articlesStore';
+import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -35,14 +38,22 @@ export const IFGHome = observer(() => {
     //   inputRange: [0, 1],
     //   outputRange: ['0deg', '-180deg'],
     // });
-    const MaterialCard = ({title, img, text, id})=>
-      <CardContainer key={id.toString()} style={[{width: 200, height: 236, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, id === 0 && gs.ml16]} >
-        <Image resizeMode="cover"  source={img}
-        style={{ height: 114, width: '100%' }}
-        />
-        <View  style={{paddingLeft: 14}}>
-        <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
-        <IfgText style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
+    const getUserProfile = async () => await userStore.getProfile();
+    useEffect(() => {
+      getUserProfile();
+      articlesStore.getArticles();
+    }, []);
+
+    const MaterialCard:FC<ArticleModel> = ({title, media, subtitle, id}, index)=>
+      <CardContainer key={id.toString()} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+                {media.length > 0 ? <Image resizeMode="cover" source={media[0]}
+                style={{ height: 114, width: '100%' }}
+                /> :
+                <View style={{height: 114, width: '100%', backgroundColor: 'gray' }} />
+                }
+        <View style={{paddingHorizontal: 14}}>
+        <IfgText numberOfLines={3} style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
+        <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
     const StoryCard = ({title, borderColor, bgColor, id})=>
@@ -65,7 +76,10 @@ return <>
           renderItem={({item})=>StoryCard(item)}
         />
         <View style={gs.mt24} />
+
         <ActivityBlock />
+
+
         <View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
             <IfgText style={[gs.fontBodyMedium, gs.bold]}>Рекомендации</IfgText>
@@ -137,8 +151,8 @@ return <>
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={Materials}
-                renderItem={({item})=>MaterialCard(item)}
+                data={articlesStore.articlesList}
+                renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={gs.mt24}/>
         <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
@@ -158,7 +172,7 @@ return <>
                     <Image resizeMode="contain"  source={item.img}
                     style={{ height: 114, width: '100%' }}
                     />
-                  <Button onPress={()=>navigation.replace('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
+                  <Button onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
                     <>
                     <IfgText style={gs.fontBody2}>Как получить приз</IfgText>
                     <View style={{marginTop:2}}>

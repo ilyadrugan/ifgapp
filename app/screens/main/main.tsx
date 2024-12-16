@@ -13,7 +13,6 @@ import HomeActive from '../../../assets/icons/tabs/homeFocused.svg';
 import MaterialsActive from '../../../assets/icons/tabs/materialsFocused.svg';
 import ContestsActive from '../../../assets/icons/tabs/contestsFocused.svg';
 import gs from '../../core/styles/global';
-import { IfgText } from '../../core/components/text/ifg-text';
 import colors from '../../core/colors/colors';
 import { ProfileScreen } from '../profile/profile';
 import { IFGHome } from '../ifg-home/ifg-home';

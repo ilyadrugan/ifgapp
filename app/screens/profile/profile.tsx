@@ -1,7 +1,7 @@
 
 
-import { Image, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation} from 'react-native';
-import React, {useRef, useState} from 'react';
+import { Image, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation, RefreshControl} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -23,18 +23,36 @@ import { MyMaterials } from './myMaterials/myMaterials';
 import { MyEvents } from './myEvents/myEvents';
 import { Settings } from './settings/settings';
 import userStore from '../../../store/state/userStore/userStore';
+import { deleteAuthTokenToStorage } from '../../core/utils/bearer-token';
+import authStore from '../../../store/state/authStore/authStore';
+import { observer } from 'mobx-react';
+import { useImageUploader } from '../../core/components/imagePicker/imagePicker';
+import articlesStore from '../../../store/state/articlesStore/articlesStore';
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-export const ProfileScreen = () => {
+export const ProfileScreen = observer(() => {
     const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
     const [currentMenu, setCurrentMenu] = useState(4);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const {selectImage} = useImageUploader();
+    const onRefresh = async () => {
+      setRefreshing(true);
+      await userStore.getProfile();
+      await articlesStore.getUserArticles();
+      setRefreshing(false);
+    };
 
     const animation = useRef(new Animated.Value(0)).current;
-    const exit = () => navigation.replace('Login');
+    const exit = async() => {
+      await authStore.logout().then(()=>{
+        navigation.replace('Login');
+      });
+
+    };
     const height = useRef(new Animated.Value(0)).current; // Высота анимации
     const [contentVisible, setContentVisible] = useState(false); // Контроль видимости контента
     const opacity = useRef(new Animated.Value(0)).current;
@@ -73,44 +91,32 @@ export const ProfileScreen = () => {
       ]).start(()=>setExpanded(!expanded));
       }
 
-
     };
-    // const toggleMenu = () => {
-    //   if (isOpen) {
 
-    //     Animated.timing(animation, {
-    //       toValue: 0,
-    //       duration: 200,
-    //       easing: Easing.ease,
-    //       useNativeDriver: false,
-    //     }).start(() => setIsOpen(false));
-    //   } else {
-    //     setIsOpen(true);
-    //     Animated.timing(animation, {
-    //       toValue: 1,
-    //       duration: 200,
-    //       easing: Easing.ease,
-    //       useNativeDriver: false,
-    //     }).start();
-    //   }
-    // };
     const chooseMenu = (id: number) => {
       if (id === 5) {exit();}
       setCurrentMenu(id);
       toggleExpand();
     };
+    useEffect(() => {
+      if (authStore.access_token) {
+        userStore.getProfile();
+      }
+
+    },[]);
+
 return <>
   <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={gs.flex1}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView style={s.container}>
+      <ScrollView style={s.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={gs.mt16} />
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]} >{menuOptions[currentMenu].name}</IfgText>
         <View style={gs.mt16} />
 
         <CardContainer style={{gap: 0}}>
-          <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
+          {userStore.userInfo?.name && <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
             <View style={[gs.flexRow, gs.alignCenter]}>
             <View style={s.photo}>
         {userStore.userInfo?.profile_photo_url ?
@@ -119,10 +125,10 @@ return <>
         <ProfileHolder />}
 
                 </View>
-                  <TouchableOpacity style={s.pin}>
+                  <TouchableOpacity onPress={()=>selectImage()} style={s.pin}>
                     <Plus />
                   </TouchableOpacity>
-                <View style={gs.ml12}>
+                 <View style={gs.ml12}>
                   <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name} {userStore.userInfo?.last_name}</IfgText>
                   <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption3}>{userStore.userInfo?.email}</IfgText>
                 </View>
@@ -130,7 +136,7 @@ return <>
             <TouchableOpacity style={gs.tapArea} onPress={toggleExpand}>
               <BurgerMenu />
             </TouchableOpacity>
-          </View>
+          </View>}
           <Animated.View style={{ opacity: opacity,  height: height}}>
 
           {expanded &&
@@ -153,7 +159,7 @@ return <>
         {currentMenu === 0 && <MyEvents />}
         {currentMenu === 1 && <MyTests />}
         {currentMenu === 2 && <MyMaterials />}
-        {currentMenu === 3 && <Settings />}
+        {currentMenu === 3 && <Settings onRefresh={onRefresh} />}
         {currentMenu === 4 && <Subscription />}
 
         <View style={{height: 70}}/>
@@ -162,7 +168,7 @@ return <>
       </KeyboardAvoidingView>
     </>;
 
-  };
+  });
 const s = StyleSheet.create({
     container: {
         flex: 1,

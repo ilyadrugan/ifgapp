@@ -8,15 +8,21 @@ import { Provider } from 'mobx-react';
 import stores from './store/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LogBox } from 'react-native';
+import { Toast } from './app/core/components/toast/toast';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+LogBox.ignoreLogs(['Require cycle:']);
+
 const App = () => {
   // AsyncStorage.clear();
   return (<>
   <Provider {...stores}>
     <GestureHandlerRootView style={{ flex: 1 }}>
-       {/* <SafeAreaProvider> */}
-
+       <SafeAreaProvider>
           <MainNavigation/>
-      {/* </SafeAreaProvider> */}
+          <Toast/>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
     </Provider>
   </>);

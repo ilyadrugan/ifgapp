@@ -8,7 +8,7 @@ import gs from '../../styles/global';
 
 export const Input: FC<{
     editable?: boolean,
-    onChange?: () => void,
+    onChange?: (text: string) => void,
     onFocus?: () => void,
     style?: StyleProp<ViewStyle | TextStyle>,
     fullWidth?: boolean,
@@ -18,6 +18,7 @@ export const Input: FC<{
     keyboardType?:KeyboardTypeOptions | undefined,
     secureTextEntry?: boolean
     value?: string,
+    defaultValue?: string,
     error?: string,
     required?: boolean,
   }> = (
@@ -33,6 +34,7 @@ export const Input: FC<{
       keyboardType,
       secureTextEntry,
       value,
+      defaultValue,
       error,
     }) => {
     return <View style={s.container}>
@@ -52,6 +54,7 @@ export const Input: FC<{
       secureTextEntry={secureTextEntry}
       value={value}
       onFocus={onFocus}
+      defaultValue={defaultValue}
     >
 
           {children ? children : null }

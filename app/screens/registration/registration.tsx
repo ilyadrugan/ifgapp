@@ -1,4 +1,4 @@
-import { ImageBackground, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -12,6 +12,11 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { TabInterface, Tabs } from './components/tabs';
 import { SubscribeReg } from './components/subscribeReg/subscribeReg';
+import { API_URL } from '../../core/hosts';
+import { maskDateChange } from '../../core/utils/textFormatters';
+import { Controller, useForm } from 'react-hook-form';
+import { RegisterFormModel, RegisterFormState } from '../../../store/state/authStore/models/models';
+import authStore from '../../../store/state/authStore/authStore';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -30,7 +35,8 @@ export const Registration = () => {
     const [personalChecked, setPersonalChecked] = useState(true);
     const [infoChecked, setInfoChecked] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
-
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [phone, setPhone] = useState('');
     const navigation = useNavigation<any>();
 
     const toLogin = () => navigation.replace('Login');
@@ -50,8 +56,83 @@ export const Registration = () => {
         onTabClick(1);
     }, []);
 
+    const maskDateChange = (text) => {
+        // Удаляем все символы, кроме цифр
+        const numericText = text.replace(/[^0-9]/g, '');
 
-    return (  <>
+        // Форматируем дату в ДД.ММ.ГГГГ
+        let formattedText = numericText;
+        if (numericText.length > 2) {
+          formattedText = `${numericText.slice(0, 2)}.${numericText.slice(2)}`;
+        }
+        if (numericText.length > 4) {
+          formattedText = `${numericText.slice(0, 2)}.${numericText.slice(2, 4)}.${numericText.slice(4)}`;
+        }
+
+        // Ограничиваем длину ввода (ДД.ММ.ГГГГ = 10 символов)
+        if (formattedText.length > 10) {
+          formattedText = formattedText.slice(0, 10);
+        }
+
+        setDateOfBirth(formattedText);
+      };
+
+    const handlePhoneChange = (text) => {
+        const cleaned = text.replace(/\D/g, '');
+
+        let formatted = cleaned;
+
+        if (cleaned.length > 0) {
+          formatted = `+${cleaned.slice(0, 1)}`;
+        }
+        if (cleaned.length > 1) {
+          formatted += ` (${cleaned.slice(1, 4)}`;
+        }
+        if (cleaned.length > 4) {
+          formatted += `) ${cleaned.slice(4, 7)}`;
+        }
+        if (cleaned.length > 7) {
+          formatted += `-${cleaned.slice(7, 9)}`;
+        }
+        if (cleaned.length > 9) {
+          formatted += `-${cleaned.slice(9, 11)}`;
+        }
+
+        setPhone(formatted);
+      };
+      const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+      } = useForm<RegisterFormModel>();
+
+    const onSubmit = handleSubmit(async (data) => {
+        // console.log(data);
+        if (activeTab === 1) {
+            if (!data.last_name) {authStore.fillRegisterByPromocodeInputError('last_name','Заполните поле');}
+            if (!data.name) {authStore.fillRegisterByPromocodeInputError('name','Заполните поле');}
+            if (!phone) {authStore.fillRegisterByPromocodeInputError('phone','Заполните поле');}
+            if (!data.email) {authStore.fillRegisterByPromocodeInputError('email','Заполните поле');}
+            if (!data.password) {authStore.fillRegisterByPromocodeInputError('password','Заполните поле');}
+            if (!data.password_confirmation) {authStore.fillRegisterByPromocodeInputError('password_confirmation','Заполните поле');}
+            if (!data.promocode) {authStore.fillRegisterByPromocodeInputError('promocode','Заполните поле');}
+            const password_equal = data.password_confirmation === data.password
+            if (!password_equal) {
+                authStore.fillRegisterByPromocodeInputError('password_confirmation','Пароли не совпадают');
+            }
+            else if (data.last_name && data.name && phone && data.email && data.password && data.password_confirmation && data.promocode) {
+                const model: RegisterFormModel = {
+                    ...data,
+                    phone: phone,
+                };
+                console.log(model);
+                authStore.register(model, ()=>navigation.SuccessfulReg('Main'));
+            }
+
+        }
+      });
+      return (  <>
      <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={gs.flex1}>
@@ -71,60 +152,141 @@ export const Registration = () => {
         <View style={gs.mt32}/>
        {(activeTab === 1 || activeTab === 0) &&
        <View style={s.formCard}>
-            {activeTab === 0 && <Input
+            {activeTab === 0 && <>
+                <Controller control={control} name={'name'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                <Input
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Номер договора"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-            />}
-            {activeTab === 1 && <><Input
-                fullWidth
-                placeholder="Фамилия"
-                style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
             />
-            <Input
-                fullWidth
-                placeholder="Имя"
-                style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-            />
+                // fullWidth
+                // value={value}
+                // onChange={onChange}
+                // placeholder="Электронная почта"
+                // keyboardType="email-address"
+                // style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                // error={authStore.loginByUserPassword.loginInputError}
+            // />
+        )}/>
+                <Input
+                    maxLength={10}
+                    fullWidth
+                    value={dateOfBirth}
+                    onChange={maskDateChange}
+                    placeholder="Дата рождения"
+                    style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                />
+
+            </>}
+            {activeTab === 1 && <>
+                <Controller control={control} name={'last_name'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                    value={value}
+                    onChange={onChange}
+                    fullWidth
+                    placeholder="Фамилия"
+                    style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                    onFocus={()=>authStore.clearRegisterByPromocodeInputError('last_name')}
+                    error={authStore.registerByPromocode.last_nameInputError}
+                />)}
+                />
+
+                <Controller control={control} name={'name'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                    value={value}
+                    onChange={onChange}
+                    fullWidth
+                    placeholder="Имя"
+                    style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                    onFocus={()=>authStore.clearRegisterByPromocodeInputError('name')}
+                    error={authStore.registerByPromocode.nameInputError}
+                />)}
+                />
             </>
             }
-            <Input
+
+            {activeTab === 1 &&
+
+             <Input
                 fullWidth
-                placeholder="Дата рождения"
-                style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-            />
-            {activeTab === 1 && <Input
-                fullWidth
+                value={phone}
+                onChange={handlePhoneChange}
                 placeholder="Телефон"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-            />}
-            <Input
+                error={authStore.registerByPromocode.phoneInputError}
+                onFocus={()=>authStore.clearRegisterByPromocodeInputError('phone')}
+
+            />
+            }
+            <Controller control={control} name={'email'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Электронная почта"
                 keyboardType="email-address"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                error={authStore.registerByPromocode.emailInputError}
+                onFocus={()=>authStore.clearRegisterByPromocodeInputError('email')}
+
             />
-            <Input
+               )}
+                />
+            <Controller control={control} name={'password'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Пароль"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
+                error={authStore.registerByPromocode.passwordInputError}
+                onFocus={()=>authStore.clearRegisterByPromocodeInputError('password')}
+
             />
-            <Input
+               )}
+                />
+            <Controller control={control} name={'password_confirmation'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Повторите пароль"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
+                error={authStore.registerByPromocode.password_confirmationInputError}
+                onFocus={()=>authStore.clearRegisterByPromocodeInputError('password_confirmation')}
+
             />
-            {activeTab === 1 && <Input
-                fullWidth
-                placeholder="Промокод"
-                style={[gs.fontCaption, s.promocodeForm]}
-            />}
+               )}
+                />
+            {activeTab === 1 &&
+                <Controller control={control} name={'promocode'}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                       fullWidth
+                       value={value}
+                       onChange={onChange}
+                       placeholder="Промокод"
+                       style={[gs.fontCaption, s.promocodeForm]}
+                       error={authStore.registerByPromocode.promocodeInputError}
+                       onFocus={()=>authStore.clearRegisterByPromocodeInputError('promocode')}
+                       />
+                )}
+                />
+            }
             <View style={s.acceptsBlock}>
                 <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
                 <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
-                Согласие на обработку <IfgText color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
+                Согласие на обработку <IfgText onPress={()=> Linking.openURL(`${API_URL}policy`)} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
                 </IfgText>
             </View>
             <View style={[s.acceptsBlock]}>
@@ -134,7 +296,9 @@ export const Registration = () => {
                 </IfgText>
             </View>
             <Button style={s.buttonLogin}
-                onPress={()=>navigation.replace('SuccessfulReg')}
+                // disabled={!personalChecked && !infoChecked}
+                // onPress={()=>navigation.replace('SuccessfulReg')}
+                onPress={onSubmit}
                 >
                 <View style={{
                     flexDirection: 'row',

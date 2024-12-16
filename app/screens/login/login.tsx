@@ -29,7 +29,7 @@ export const Login = observer(() => {
       }, [authStore.access_token]);
       useFocusEffect(
         React.useCallback(() => {
-          if (authStore.access_token) {
+          if (authStore.isAuthenticated) {
             navigation.replace('Main');
           }
         }, [authStore.isAuthenticated])

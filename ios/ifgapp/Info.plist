@@ -28,6 +28,8 @@
 	<string>We need access to your health data to show your steps, calories, and flights climbed.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>We need access to update your health data.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to the photo library for selecting images</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

@@ -15,3 +15,40 @@ export interface LoginByUserPasswordStateErrors {
     password: string;
     message: string;
 }
+
+export interface RegisterFormModel {
+    name: string,
+    last_name: string,
+    phone: string,
+    promocode: string,
+    password: string,
+    password_confirmation: string,
+    email: string,
+    birthday: string;
+    num_doc: string;
+}
+
+export interface RegisterFormState {
+    nameInputError?: string,
+    last_nameInputError?: string,
+    phoneInputError?: string,
+    promocodeInputError?: string,
+    passwordInputError?: string,
+    password_confirmationInputError?: string,
+    emailInputError?: string,
+    birthdayInputError?: string,
+    num_docInputError?: string,
+    errors?: RegisterFormStateErrors
+}
+
+export interface RegisterFormStateErrors {
+    name: string;
+    last_name: string;
+    birthday: string;
+    num_doc: string;
+    email: string;
+    phone: string;
+    password: string;
+    password_confirmation: string,
+    message: string;
+}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import gs from '../../../core/styles/global';
@@ -7,30 +7,42 @@ import colors from '../../../core/colors/colors';
 import { Button } from '../../../core/components/button/button';
 import Star from '../../../../assets/icons/star.svg';
 import { Materials } from '../../individualProgramm/recomendationData/recomendationData';
+import articlesStore from '../../../../store/state/articlesStore/articlesStore';
+import { observer } from 'mobx-react';
 
 
-const CardMaterial: FC<{title: string, text: string, img: string}> = ({text, title, img}) => {
-    return <CardContainer style={{overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>
-                <Image resizeMode="cover" source={img}
+const CardMaterial: FC<{title: string, subtitle: string, img?: string, id: number}> = ({subtitle, title, img, id}) => {
+    console.log('CardMaterial', id);
+
+    return <CardContainer key={title} style={{overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>
+                {img ? <Image resizeMode="cover" source={img}
                 style={{ width: 122, height: '100%' }}
-                />
+                /> :
+                <View style={{ width: 122, height: '100%', backgroundColor: 'gray' }} />
+                }
                 <View style={{paddingRight: 15,paddingVertical: 15, flexDirection: 'column'}}>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold, {maxWidth: '90%'}]}>{title}</IfgText>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8, {maxWidth: '80%'}]}>{text}</IfgText>
+                <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold, {maxWidth: '75%'}]}>{title}</IfgText>
+                <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8, {maxWidth: '75%'}]}>{subtitle}</IfgText>
                 </View>
-            <Button style={s.starButton}>
+            <Button onPress={async()=>articlesStore.deleteUserArticle(id)} style={s.starButton}>
                 <Star />
             </Button>
 
     </CardContainer>;
 };
 
-export const MyMaterials: FC = () =>{
-    return Materials.map(({title, img, text, id})=><>
-    <CardMaterial text={text} img={img} title={title} />
+export const MyMaterials = observer(() =>{
+    useEffect(() => {
+
+        articlesStore.articlesUserList.length === 0 && articlesStore.getUserArticles();
+
+    }, []);
+
+    return articlesStore.articlesUserList.map(({title, subtitle, id})=><View key={id.toString()}>
+    <CardMaterial id={id} subtitle={subtitle} title={title} />
     <View style={gs.mt16} />
-    </>);
-};
+    </View>);
+});
 
 const s = StyleSheet.create({
     dateContainer:{
