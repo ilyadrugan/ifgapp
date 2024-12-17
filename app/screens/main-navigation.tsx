@@ -19,8 +19,7 @@ const Stack = createNativeStackNavigator();
 export const MainNavigation: FC = () => {
   console.log(authStore.isOnBoarded);
   return (<>
-  <StatusBar hidden={true} />
-  <NavigationContainer>
+
     <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
       <Stack.Screen
         name="OnBoarding"
@@ -73,6 +72,5 @@ export const MainNavigation: FC = () => {
         options={{ headerShown: false }}
       />
   </Stack.Navigator>
-  </NavigationContainer>
   </>);
 };

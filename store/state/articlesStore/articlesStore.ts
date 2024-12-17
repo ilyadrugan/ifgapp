@@ -21,7 +21,7 @@ class ArticlesStore {
     this.errorMessage = '';
     await getArticlesApi()
       .then((result)=>{
-        console.log('result.data', result.data.tags);
+        // console.log('result.data', result.data.tags);
         this.articlesList = result.data.articles.data;
         this.articleTagList = result.data.populate_tags;
         this.articleThemesList = result.data.tags;
@@ -40,7 +40,7 @@ class ArticlesStore {
     this.errorMessage = '';
     await getArticlesByTagsApi(query)
       .then((result)=>{
-        console.log('result.data', result.data);
+        // console.log('result.data', result.data);
         this.articlesList = result.data.articles.data;
       }
       )

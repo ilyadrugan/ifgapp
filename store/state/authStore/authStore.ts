@@ -5,6 +5,7 @@ import { deleteAuthTokenToStorage, getAuthTokenFromStorage, saveAuthTokenToStora
 import { UserInfo } from '../userStore/models/models';
 import { LoginByUserPasswordModel, LoginByUserPasswordState, RegisterFormModel, RegisterFormState } from './models/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { updateFirebaseMessagingToken } from '../../../app/core/firebase/firebase';
 
 class AuthStore {
   isAuthenticated = false; // Авторизован ли пользователь
@@ -78,11 +79,13 @@ class AuthStore {
         console.log('THEN');
         if (!model.email) {this.loginByUserPassword.loginInputError = 'Заполните поле';}
         if (!model.password) {this.loginByUserPassword.passwordInputError = 'Заполните поле';}
-        console.log(result.data);
+        // console.log(result.data);
         if (result.data) {
         this.setToken(result.data.access_token);
         userStore.setUser(result.data.user);
         this.setIsOnBoarded();
+        console.log('login updateFirebaseMessagingToken');
+        updateFirebaseMessagingToken();
         this.access_token && callBack();
       }
       })

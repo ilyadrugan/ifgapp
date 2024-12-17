@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { UserChangeInfoModel, UserChangeInfoState, UserInfo } from './models/models';
-import { API_URL, BASE_URL } from '../../../app/core/hosts';
+import { BASE_URL } from '../../../app/core/hosts';
 import authStore from '../authStore/authStore';
 import axios from 'axios';
 import { changeProfile } from './userStore.api';
@@ -37,7 +37,7 @@ class UserStore {
 
             },
           });
-          console.log(response.data.profile);
+          // console.log(response.data.profile);
           if (response.data.profile) {
             // Используем стрелочную функцию, контекст this сохраняется
             this.setUser({
@@ -62,7 +62,7 @@ class UserStore {
       console.log('UserChangeInfoModel',model);
       await changeProfile(model)
       .then((result)=>{
-        console.log(result.data);
+        // console.log(result.data);
         userStore.getProfile();
         this.isLoading = false;
         successToast('Данные успешно изменены');
