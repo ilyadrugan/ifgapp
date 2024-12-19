@@ -1,8 +1,7 @@
 import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity } from 'react-native';
 import colors from '../../core/colors/colors';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
@@ -12,7 +11,10 @@ import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Benefit from '../../../assets/icons/benefit.svg';
 import Email from '../../../assets/icons/email.svg';
 import Delete from '../../../assets/icons/delete.svg';
-import { Questions } from './testData/data';
+import { observer } from 'mobx-react';
+import testingStore from '../../../store/state/testingStore/testingStore';
+import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
+import { errorToast } from '../../core/components/toast/toast';
 
 const data = [
     {
@@ -26,26 +28,65 @@ const data = [
     },
 ];
 
-export const Testing = () => {
+export const Testing = observer(() => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [inTest, setInTest] = useState(false);
     const [showEmail, setShowEmail] = useState(true);
+    const [currentQuestion, setCurrentQuestion] = useState<number>(1);
+    const [currentAnswer, setCurrentAnswer] = useState<number>(-1);
+    const [currentAnswerScore, setCurrentAnswerScore] = useState<number>(0);
+    const [activitiValues, setActivitiValues] = useState<ActivitiValueModel>({
+      'fiz-act': 0,
+      sleep: 0,
+      anistres: 0,
+      pitaniye: 0,
+    });
+    const [totalScore, setTotalScore] = useState<number>(0);
 
-    const [currentQuestion, setCurrentQuestion] = useState(1);
-    const [currentAnswer, setCurrentAnswer] = useState(-1);
-    const [percentage, setPercentage] = useState(currentQuestion / Questions.length * 100 + '%');
-    const nextQuestion = () =>{
-        console.log(currentQuestion);
-        if (currentQuestion === Questions.length){
-            navigation.navigate('ResultTest');
+    const [percentage, setPercentage] = useState<string>();
+    const nextQuestion = async(
+      score: number
+    ) =>{
+        console.log(testingStore.currentTest.questions[currentQuestion - 1], activitiValues, totalScore);
+        const copyActivitiValues = activitiValues;
+        switch (testingStore.currentTest.questions[currentQuestion - 1].group) {
+          case 'Физическая активность':
+              copyActivitiValues['fiz-act'] += Number(score);
+              break;
+          case 'Сон':
+              copyActivitiValues.sleep += Number(score);
+              break;
+          case 'Антистресс':
+              copyActivitiValues.anistres += Number(score);
+              break;
+          case 'Питание':
+              copyActivitiValues.pitaniye += Number(score);
+              break;
+        }
+        setActivitiValues(copyActivitiValues);
+        setTotalScore(totalScore + Number(score));
+        if (currentQuestion === testingStore.currentTest.questions.length){
+            testingStore.setScoreToResult(totalScore, activitiValues);
+            console.log('currentResultsTest',testingStore.currentResultsTest);
+            await testingStore.submitTest(testingStore.currentResultsTest)
+              .then(()=>navigation.navigate('ResultTest'))
+              .catch(()=>errorToast('Проищошла ошибка отправки резульатов'));
             return;
         }
+
         setCurrentQuestion(currentQuestion + 1);
-        setPercentage((currentQuestion + 1) / Questions.length * 100 + '%');
+        setPercentage((currentQuestion + 1) / testingStore.currentTest.questions.length * 100 + '%');
         setCurrentAnswer(-1);
     };
+
+    useEffect(()=>{
+      testingStore.getTestById(9).then((res)=>{
+        // data[0].text = `Тест включает ${testingStore.currentTest.testLength} вопросов.`;
+      });
+    }
+    , []);
     return (
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -58,13 +99,13 @@ export const Testing = () => {
         <View style={gs.mt16} />
 
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold ]}>
-        {inTest ? 'Ifg-тестирование' : 'Пройдите тестирование для получения индивидуального ifg-плана'}
+        {inTest ? `${testingStore.currentTest.name}` : 'Пройдите тестирование для получения индивидуального ifg-плана'}
         </IfgText>
 
     <View style={gs.mt16} />
     {inTest ?
     <CardContainer style={s.cardQuestionsContainer} >
-        <IfgText color={colors.SECONDARY_COLOR} style={gs.fontCaption3}><IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.semiBold]}>Вопрос {currentQuestion}</IfgText> из {Questions.length}</IfgText>
+        <IfgText color={colors.SECONDARY_COLOR} style={gs.fontCaption3}><IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.semiBold]}>Вопрос {currentQuestion}</IfgText> из {testingStore.currentTest.questions.length}</IfgText>
 
             {/* <ProgressBar
                 backgroundColor={colors.WHITE_COLOR}
@@ -78,22 +119,22 @@ export const Testing = () => {
         <View style={[s.filledProgressBar, {width: percentage ? percentage : 0}]}/>
       </View>
     </View>
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{Questions[currentQuestion - 1].questionText}</IfgText>
-        {Questions[currentQuestion - 1].answers.map((val, index)=><TouchableOpacity key={index.toString()} onPress={()=>setCurrentAnswer(index)}>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{testingStore.currentTest.questions[currentQuestion - 1].name}</IfgText>
+        {testingStore.currentTest.questions[currentQuestion - 1].choices.map((val, index)=><TouchableOpacity key={index.toString()} onPress={()=>{setCurrentAnswer(index), setCurrentAnswerScore(val.score);}}>
             <CardContainer style={[gs.flexRow, gs.alignCenter, {borderRadius: 16, backgroundColor: (currentAnswer === index) ? '#DCF2E4' : colors.WHITE_COLOR}]}>
         <View style={currentAnswer === index ? s.radioButtonActive : s.radioButton}/>
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>{val}</IfgText>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>{val.value}</IfgText>
         </CardContainer>
         </TouchableOpacity>)}
     </CardContainer>
-    : data.map(({text}, index)=><CardContainer key={index.toString()} style={s.cardContainer}  >
+    : (data.map(({text}, index)=><CardContainer key={index.toString()} style={s.cardContainer}  >
         <Benefit />
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, {maxWidth: '90%'}]}>
             {text}
         </IfgText>
-    </CardContainer>)}
+    </CardContainer>))}
     <View style={gs.mt4} />
-    <Button disabled={inTest && currentAnswer === -1 } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion() : ()=>setInTest(true)}>
+    <Button disabled={inTest && currentAnswer === testingStore.currentTest.testLength - 1 } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion(currentAnswerScore) : ()=>{setPercentage(currentQuestion / testingStore.currentTest.questions.length * 100 + '%'); setInTest(true);}}>
            <View style={{
                flexDirection: 'row',
                justifyContent: 'space-between',
@@ -126,7 +167,7 @@ export const Testing = () => {
     </CardContainer>}
     </ScrollView>
     );
-  };
+  });
 
 const s = StyleSheet.create({
     container: {

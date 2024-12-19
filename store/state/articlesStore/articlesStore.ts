@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { ArticleModel, ArticleTagModel, ArticleThemesModel } from './models/models';
 import { deleteUserArticleApi, getArticlesApi, getArticlesByTagsApi, getUserArticlesApi } from './articlesStore.api';
-import { formToJSON } from 'axios';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 
 class ArticlesStore {

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
@@ -22,8 +22,10 @@ import { IndividualProgrammData } from '../testing/testData/individualProgramm';
 import { CircularProgress } from '../../core/components/circularProgress/circularProgress';
 import { Materials, Plan } from './recomendationData/recomendationData';
 import {CheckBox} from '../../core/components/checkbox/checkbox';
-export const IndividualProgramm = () => {
+import testingStore from '../../../store/state/testingStore/testingStore';
+export const IndividualProgramm = ({route}) => {
     const navigation = useNavigation<any>();
+    const { activiti_value_json } = route.params;
     const onBack = () => navigation.goBack();
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [recommends, setRecommends] = useState(true);
@@ -81,7 +83,7 @@ export const IndividualProgramm = () => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            <CircularProgress value={10} maxValue={30} />
+            <CircularProgress value={activiti_value_json.pitaniye} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -104,7 +106,7 @@ export const IndividualProgramm = () => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
-            <CircularProgress value={10} maxValue={30} />
+            <CircularProgress value={activiti_value_json.sleep} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -127,7 +129,7 @@ export const IndividualProgramm = () => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
-            <CircularProgress value={10} maxValue={30} />
+            <CircularProgress value={activiti_value_json.anistres} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>

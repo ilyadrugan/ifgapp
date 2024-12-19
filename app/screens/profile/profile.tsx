@@ -28,6 +28,9 @@ import authStore from '../../../store/state/authStore/authStore';
 import { observer } from 'mobx-react';
 import { useImageUploader } from '../../core/components/imagePicker/imagePicker';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
+import ArrowRight from '../../../assets/icons/arrow-right.svg';
+import testingStore from '../../../store/state/testingStore/testingStore';
+
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -43,6 +46,7 @@ export const ProfileScreen = observer(() => {
       setRefreshing(true);
       await userStore.getProfile();
       await articlesStore.getUserArticles();
+      await testingStore.getAllMyTest();
       setRefreshing(false);
     };
 
@@ -166,6 +170,30 @@ return <>
       </ScrollView>
       </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      {currentMenu === 1 && <View style={s.footer}>
+    <Button style={s.buttonNext}
+           onPress={()=>navigation.navigate('Testing')}
+           >
+           <View style={{
+               flexDirection: 'row',
+               justifyContent: 'space-between',
+               alignItems: 'center',
+
+               }}>
+               <View style={{
+                   width:'100%',
+                   flexDirection: 'row',
+                   justifyContent: 'space-between',
+                   alignItems: 'center',
+               }}>
+                <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Пройти тестирование'}</IfgText>
+                   <ArrowRight />
+               </View>
+
+               <View />
+           </View>
+    </Button>
+    </View>}
     </>;
 
   });
@@ -271,6 +299,22 @@ const s = StyleSheet.create({
       width: 25,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    footer: {
+      position:'absolute',
+      bottom: 16,
+      left: 0,
+      right: 0,
+      alignItems: 'center',
+      zIndex: 19999,
+      elevation: 1100,
+  },
+  buttonNext: {
+      backgroundColor: colors.GREEN_COLOR,
+      borderRadius: 16,
+      paddingHorizontal: 24,
+      height: 78,
+      width: '86%',
     },
   });
 

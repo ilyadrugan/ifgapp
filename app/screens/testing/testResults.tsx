@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
@@ -14,11 +14,13 @@ import Play from '../../../assets/icons/play.svg';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
 import { individualProgramm, IndividualProgrammData } from './testData/individualProgramm';
+import authStore from '../../../store/state/authStore/authStore';
 // import VideoPlayer from 'react-native-video-player';
 
-export const ResultTest = () => {
+export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
+    const {activiti_value_json} = route.params;
     const onBack = () => navigation.goBack();
 
     return (<>
@@ -89,7 +91,7 @@ export const ResultTest = () => {
         </ScrollView>
         <View style={s.footer}>
         <Button style={s.buttonNext}
-           onPress={()=>navigation.navigate('Registration')}
+           onPress={()=> authStore.isAuthenticated ? navigation.replace('IndividualProgramm', {activiti_value_json: JSON.parse(activiti_value_json)}) : navigation.navigate('Registration')}
            >
            <View style={{
                flexDirection: 'row',

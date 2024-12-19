@@ -13,8 +13,10 @@ import { Toast } from './app/core/components/toast/toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { FirebaseComponent } from './app/core/components/firebase-component/firebase-component';
 import { NavigationContainer } from '@react-navigation/native';
+import { requestNotificationPermission } from './app/core/firebase/firebase';
 
 LogBox.ignoreLogs(['Require cycle:']);
+requestNotificationPermission();
 
 const App = () => {
   // AsyncStorage.clear();
