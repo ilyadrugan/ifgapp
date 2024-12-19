@@ -71,7 +71,7 @@ export const Testing = observer(() => {
             testingStore.setScoreToResult(totalScore, activitiValues);
             console.log('currentResultsTest',testingStore.currentResultsTest);
             await testingStore.submitTest(testingStore.currentResultsTest)
-              .then(()=>navigation.navigate('ResultTest'))
+              .then(()=>navigation.navigate('ResultTest', {activiti_value_json: JSON.stringify(activitiValues)}))
               .catch(()=>errorToast('Проищошла ошибка отправки резульатов'));
             return;
         }
@@ -99,7 +99,7 @@ export const Testing = observer(() => {
         <View style={gs.mt16} />
 
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold ]}>
-        {inTest ? `${testingStore.currentTest.name}` : 'Пройдите тестирование для получения индивидуального ifg-плана'}
+        {inTest ? 'Ifg-тестирование' : 'Пройдите тестирование для получения индивидуального ifg-плана'}
         </IfgText>
 
     <View style={gs.mt16} />
@@ -134,7 +134,7 @@ export const Testing = observer(() => {
         </IfgText>
     </CardContainer>))}
     <View style={gs.mt4} />
-    <Button disabled={inTest && currentAnswer === testingStore.currentTest.testLength - 1 } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion(currentAnswerScore) : ()=>{setPercentage(currentQuestion / testingStore.currentTest.questions.length * 100 + '%'); setInTest(true);}}>
+    <Button disabled={inTest && currentAnswer === -1  } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion(currentAnswerScore) : ()=>{setPercentage(currentQuestion / testingStore.currentTest.questions.length * 100 + '%'); setInTest(true);}}>
            <View style={{
                flexDirection: 'row',
                justifyContent: 'space-between',

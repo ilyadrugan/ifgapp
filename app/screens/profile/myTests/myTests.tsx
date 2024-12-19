@@ -16,7 +16,6 @@ import { ActivitiValueModel } from '../../../../store/state/testingStore/models/
 
 const CardTest: FC<{dateTime: string, title: string, activities: ActivitiValueModel}> = ({dateTime, title, activities}) => {
     const navigation = useNavigation<any>();
-    console.log(activities);
     return <CardContainer style={{borderRadius: 22, gap: 0}}>
         <View style={gs.flexRow}>
             <Button disabled style={s.dateContainer}>
@@ -31,7 +30,7 @@ const CardTest: FC<{dateTime: string, title: string, activities: ActivitiValueMo
             </Button>
         </View>
         <View style={{marginTop: 10}} />
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{title}</IfgText>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{'Ifg-тестирование'}</IfgText>
         <View style={{marginTop: 21}} />
         <Button onPress={()=>navigation.navigate('ResultTest', {activiti_value_json: activities })} style={s.buttonResult}>
             <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', width: '100%'}}>
@@ -45,7 +44,7 @@ const CardTest: FC<{dateTime: string, title: string, activities: ActivitiValueMo
 export const MyTests: FC = observer(() =>{
 
     useEffect(() => {
-      testingStore.testsList.length === 0 && testingStore.getAllMyTest();
+      testingStore.getAllMyTest();
     },[]);
 
     return <>
