@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { ArticleModel, ArticleTagModel, ArticleThemesModel } from './models/models';
-import { deleteUserArticleApi, getArticlesApi, getArticlesByTagsApi, getUserArticlesApi } from './articlesStore.api';
+import { ArticleHashTagModel, ArticleModel, ArticleThemesModel } from './models/models';
+import { deleteUserArticleApi, getArticlesByTagsApi, getMaterialFiltersApi, getMaterialHashtagsApi, getUserArticlesApi } from './articlesStore.api';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 
 class ArticlesStore {
@@ -8,22 +8,22 @@ class ArticlesStore {
   articlesList: ArticleModel[] = [];
   articlesUserList: ArticleModel[] = [];
   errorMessage: string = '';
-  articleTagList: ArticleTagModel[] = [];
+  articleHashTagList: ArticleHashTagModel[] = [];
   articleThemesList: ArticleThemesModel[] = [];
 
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
   }
 
-  async getArticles() {
+  async getArticlesByTags(query?: string) {
     this.isLoading = true;
     this.errorMessage = '';
-    await getArticlesApi()
+    await getArticlesByTagsApi(query)
       .then((result)=>{
         // console.log('result.data', result.data.tags);
         this.articlesList = result.data.articles.data;
-        this.articleTagList = result.data.populate_tags;
-        this.articleThemesList = result.data.tags;
+        // this.articleHashTagList = result.data.populate_tags;
+        // this.articleThemesList = result.data.tags;
       }
       )
       .catch((err)=>{
@@ -34,10 +34,44 @@ class ArticlesStore {
       .finally(()=>{this.isLoading = false;});
 
   }
-  async getArticlesByTags(query: string) {
+  async getMaterialFilters() {
     this.isLoading = true;
     this.errorMessage = '';
-    await getArticlesByTagsApi(query)
+    await getMaterialFiltersApi()
+      .then((result)=>{
+        console.log('getMaterialFiltersApi',result.data.data);
+        // console.log('result.data', result.data);
+        this.articleThemesList = result.data.data;
+        console.log(this.articleThemesList);
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR', err.message);
+        this.errorMessage = err.message;
+
+      })
+      .finally(()=>{this.isLoading = false;});
+  }
+  async getMaterialHashtags() {
+    this.isLoading = true;
+    this.errorMessage = '';
+    await getMaterialHashtagsApi()
+      .then((result)=>{
+        console.log('result.data',  result.data.data);
+        this.articleHashTagList = result.data.data;
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
+
+      })
+      .finally(()=>{this.isLoading = false;});
+  }
+  async getArticleFilters(query?: string) {
+    this.isLoading = true;
+    this.errorMessage = '';
+    await getArticlesByTagsApi(query || '')
       .then((result)=>{
         // console.log('result.data', result.data);
         this.articlesList = result.data.articles.data;
@@ -50,7 +84,6 @@ class ArticlesStore {
       })
       .finally(()=>{this.isLoading = false;});
   }
-
   async getUserArticles() {
     this.isLoading = true;
     this.errorMessage = '';

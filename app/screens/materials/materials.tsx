@@ -42,16 +42,23 @@ export const MaterialsScreen = observer(() => {
     };
 
     useEffect(() => {
-      articlesStore.getArticles().then((res)=>{
-        console.log(res);
-      });
+        articlesStore.getMaterialFilters().then((res)=>{
+            console.log(res);
+          });
+        articlesStore.getMaterialHashtags().then((res)=>{
+            console.log(res);
+          });
+        articlesStore.getArticlesByTags().then((res)=>{
+            console.log(res);
+        });
     }, []);
 
     const renderArtcileItem = (item: ArticleModel) => {
         return <CardContainer key={item.id.toString()} style={{marginTop: 16,overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>
-            <Image resizeMode="cover" source={require('../../../assets/backgrounds/material1.png')}
+            {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+
             style={{ width: '40%', height: '100%' }}
-            />
+            /> : <View />}
             <View style={{paddingRight: 15,paddingVertical: 12, flexDirection: 'column'}}>
             <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold, {maxWidth: '75%'}]}>{item.title}</IfgText>
             <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8, {maxWidth: '65%'}]}>{item.subtitle}</IfgText>
@@ -84,12 +91,10 @@ export const MaterialsScreen = observer(() => {
 
         </CardContainer>;
       };
-    const onHashTag = (id: number) => {
-        setActiveHashTag(id);
-    };
-    const onRefresh = async () => {
+
+    const onRefresh = async (query?:string) => {
         setRefreshing(true);
-        await articlesStore.getArticles();
+        await articlesStore.getArticlesByTags(query);
         setRefreshing(false);
     };
 return <>
@@ -99,17 +104,13 @@ return <>
         <View style={gs.mt16} />
         <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
         <View style={gs.mt16} />
-        <DropdownBlock themes={articlesStore.articleThemesList} />
-        <View style={gs.mt16} />
+        {(!articlesStore.isLoading || articlesStore.articleThemesList.length > 0) &&
+            <DropdownBlock activeTab={activeTab} themes={articlesStore.articleThemesList} onRefresh={onRefresh} />}
+
 
 
         {activeTab === 0 &&
         <>
-        <View style={s.hashtagsContainer}>
-            {articlesStore.articleTagList.map(item => <TouchableOpacity key={item.id.toString()} onPress={()=>onHashTag(item.id)} style={[s.hashtag, activeHashTag === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
-                <IfgText color={activeHashTag === item.id ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>#{item.name}</IfgText>
-            </TouchableOpacity>)}
-        </View>
         {!articlesStore.isLoading && articlesStore.articlesList.map((item:ArticleModel)=>renderArtcileItem(item))}
         </>
         }

@@ -1,12 +1,16 @@
 import HttpClient from '../../../app/core/http-client/http-client';
-import { API_URL, BASE_URL } from '../../../app/core/hosts';
+import { BASE_URL } from '../../../app/core/hosts';
 
-export const getArticlesApi = async () => {
-    return await HttpClient.get(`${BASE_URL}/articles`);
+export const getMaterialFiltersApi = async () => {
+    return await HttpClient.get(`${BASE_URL}/materials/filters`);
 };
 
-export const getArticlesByTagsApi = async (query: string) => {
-    return await HttpClient.get(`${BASE_URL}/articles${query}`);
+export const getMaterialHashtagsApi = async () => {
+    return await HttpClient.get(`${BASE_URL}/materials/hashtags`);
+};
+
+export const getArticlesByTagsApi = async (query?: string) => {
+    return await HttpClient.get(`${BASE_URL}/articles${query || ''}`);
 };
 
 export const getUserArticlesApi = async () => {
@@ -15,6 +19,5 @@ export const getUserArticlesApi = async () => {
 };
 
 export const deleteUserArticleApi = async (id: number) => {
-    console.log(`${BASE_URL}/article/wishlist`);
     return await HttpClient.post(`${BASE_URL}/article/wishlist`, {id: id});
 };

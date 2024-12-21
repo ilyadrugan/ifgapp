@@ -41,12 +41,12 @@ export const IFGHome = observer(() => {
     const getUserProfile = async () => await userStore.getProfile();
     useEffect(() => {
       getUserProfile();
-      articlesStore.getArticles();
+      articlesStore.getArticlesByTags();
     }, []);
 
     const MaterialCard:FC<ArticleModel> = ({title, media, subtitle, id}, index)=>
       <CardContainer key={id.toString()} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
-                {media.length > 0 ? <Image resizeMode="cover" source={media[0]}
+                {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
                 style={{ height: 114, width: '100%' }}
                 /> :
                 <View style={{height: 114, width: '100%', backgroundColor: 'gray' }} />

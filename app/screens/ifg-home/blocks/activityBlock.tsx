@@ -82,7 +82,7 @@ export const ActivityBlock = observer(() => {
     };
 
     useEffect(() => {
-      console.log('userStore.userInfo',userStore.userInfo);
+      // console.log('userStore.userInfo',userStore.userInfo);
     }, []);
 
 

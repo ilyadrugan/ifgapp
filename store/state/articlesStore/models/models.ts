@@ -6,24 +6,33 @@ export type ArticleModel = {
     type: string,
     id: number,
     status: boolean,
-    media: string[]
+    media: MediaModel[]
 }
 
-export type ArticleTagModel = {
+export type MediaModel = {
+    id: number,
+    full_path: string[]
+}
+
+export type ArticleHashTagModel = {
     id: number,
     name: string,
-    tags_ids: number[]
 }
 
 export type ArticleThemesModel = {
-    id: number,
-    tag: string,
-    parent: null,
-    children: []
+    tag_id: number,
+    title: string,
+    children?: ArticleThemeModel[]
 }
+
+export type ArticleThemeModel = {
+    tag_id: number,
+    title: string
+}
+
 export type ArticleSortModel = {
-    id: number,
-    tag: string,
+    tag_id: number,
+    title: string,
     order?: number,
     sort_value?: string
 }
