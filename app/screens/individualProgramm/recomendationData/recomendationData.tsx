@@ -1,5 +1,3 @@
-import { ImageSourcePropType } from 'react-native';
-
 export const Plan = [
     {
         activities: ['Пейте воду', 'Начните завтракать', 'Употребляйте фрукты и овощи!' ],
@@ -15,48 +13,3 @@ export const Plan = [
     },
 ];
 
-export interface MaterialType {
-    id: number;
-    img: ImageSourcePropType;
-    title: string;
-    text: string;
-}
-
-export const Materials: MaterialType[] = [
-    {
-       id: 0,
-       img: require('../../../../assets/backgrounds/material1.png'),
-       title: '​​​​10 лучших советов для правильного питания',
-       text: 'Простые практики, которые помогут сделать питание полезным...',
-    },
-    {
-        id: 1,
-        img: require('../../../../assets/backgrounds/material2.png'),
-        title: '​​​​10 лучших советов для правильного питания',
-        text: 'Простые практики, которые помогут сделать питание полезным...',
-    },
-    {
-        id: 2,
-        img: require('../../../../assets/backgrounds/material1.png'),
-        title: '​​​​10 лучших советов для правильного питания',
-        text: 'Простые практики, которые помогут сделать питание полезным...',
-     },
-    {
-        id: 3,
-        img: require('../../../../assets/backgrounds/material2.png'),
-        title: '​​​​10 лучших советов для правильного питания',
-        text: 'Простые практики, которые помогут сделать питание полезным...',
-    },
-    {
-        id: 4,
-        img: require('../../../../assets/backgrounds/material1.png'),
-        title: '​​​​10 лучших советов для правильного питания',
-        text: 'Простые практики, которые помогут сделать питание полезным...',
-     },
-    {
-        id: 5,
-        img: require('../../../../assets/backgrounds/material2.png'),
-        title: '​​​​10 лучших советов для правильного питания',
-        text: 'Простые практики, которые помогут сделать питание полезным...',
-    },
-];

@@ -11,6 +11,8 @@ import { Main } from './main/main';
 import { IndividualProgramm } from './individualProgramm/individualProgramm';
 import authStore from '../../store/state/authStore/authStore';
 import { ContestView } from './contests/contest';
+import { ArticleView } from './materials/article';
+import { InterviewView } from './materials/interview';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +70,17 @@ export const MainNavigation: FC = () => {
         component={ContestView}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="ArticleView"
+        component={ArticleView}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+      name="InterviewView"
+      component={InterviewView}
+      options={{ headerShown: false }}
+      />
+
   </Stack.Navigator>
   </>);
 };

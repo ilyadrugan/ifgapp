@@ -1,16 +1,30 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { ArticleHashTagModel, ArticleListModel, ArticleModel, ArticleQueryParamsModel, ArticleThemesModel, InterViewsTypesModel } from './models/models';
-import { deleteUserArticleApi, getArticlesByTagsApi, getInterViewsByTagsApi, getMaterialFiltersApi, getMaterialHashtagsApi, getUserArticlesApi } from './articlesStore.api';
+import { ArticleHashTagModel, ArticleListModel, ArticleModel, ArticleQueryParamsModel, ArticleThemesModel, ArticleViewModel, InterViewsTypesModel, InterviewViewModel } from './models/models';
+import { changeLikeArticleApi, changeLikeInterViewApi, changeUserArticleApi, getArticleByIdApi, getArticlesByTagsApi, getInterviewByIdApi, getInterViewsByTagsApi, getMaterialFiltersApi, getMaterialHashtagsApi, getUserArticlesApi } from './articlesStore.api';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 
 class ArticlesStore {
   isLoading = false; // Состояние загрузки
+  isUserArticleLoading = false;
   articlesList: ArticleListModel = {
     current_page: 1,
     articles: [],
     total: 0,
     isLoading: false,
     hasMore: true,
+  };
+  currentArticle: ArticleViewModel = {
+    title: '',
+    subtitle: '',
+    datetime_publish: '',
+    body: '',
+    id: 0,
+    media: [],
+    like: 0,
+    unlike: 0,
+    views: 0,
+    created_at: '',
+    url: '',
   };
   interViewsActual: InterViewsTypesModel = {
     current_page: 1,
@@ -26,6 +40,20 @@ class ArticlesStore {
     isLoading: false,
     hasMore: true,
   };
+  currentInterview: InterviewViewModel = {
+    id: 0,
+    title: '',
+    desc: '',
+    theme: '',
+    publication_date: '',
+    thumb_title: '',
+    thumb_desc: '',
+    like: 0,
+    unlike: 0,
+    views: 0,
+    video: '',
+    media: [],
+  };
   articlesUserList: ArticleModel[] = [];
   errorMessage: string = '';
   articleHashTagList: ArticleHashTagModel[] = [];
@@ -34,15 +62,14 @@ class ArticlesStore {
   interViewsQueryParams: ArticleQueryParamsModel = {};
 
   constructor() {
+    this.getUserArticles();
     makeAutoObservable(this); // Делаем объект реактивным
   }
 
   setArticleQueryParam(name: string, value: string) {
-    console.log('setArticleQueryParam');
     this.articlesQueryParams[name] = value;
   }
   setInterViewsQueryParam(name: string, value: string) {
-    console.log('setInterViewsQueryParam');
     this.interViewsQueryParams[name] = value;
   }
   removeArticleParam(name) {
@@ -63,7 +90,6 @@ class ArticlesStore {
   getInterViewsQueryParamsString() {
     return new URLSearchParams(this.interViewsQueryParams).toString();
   }
-  // page: `${this.articlesList.current_page}`,
   clearArticles() {
     this.articlesList = {
       current_page: 1,
@@ -95,6 +121,75 @@ class ArticlesStore {
       };
       this.interViewsQueryParams.page =  '1';
     }
+  }
+  clearCurrentArticle() {
+    this.currentArticle = {
+      title: '',
+      subtitle: '',
+      datetime_publish: '',
+      body: '',
+      id: 0,
+      media: [],
+      like: 0,
+      unlike: 0,
+      views: 0,
+      created_at: '',
+      url: '',
+    };
+  }
+  clearCurrentInterView() {
+    this.currentInterview = {
+      id: 0,
+      title: '',
+      desc: '',
+      theme: '',
+      publication_date: '',
+      thumb_title: '',
+      thumb_desc: '',
+      like: 0,
+      unlike: 0,
+      views: 0,
+      video: '',
+      media: [],
+    };
+  }
+  async getArticleById(id: number) {
+    this.isLoading = true;
+    this.errorMessage = '';
+    await getArticleByIdApi(id)
+      .then((result)=>{
+        this.currentArticle = result.data.data;
+        if (result.data.data.body_json) {
+          this.currentArticle.body_json = result.data.data.body_json[0].data;
+          // console.log('result.data.data.body_json[0].data', result.data.data.body_json[0].data);
+        }
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR', err.message);
+        errorToast(err.message);
+        this.errorMessage = err.message;
+      })
+      .finally(()=>{
+        this.isLoading = false;
+      });
+  }
+  async getInterviewById(id: number) {
+    this.isLoading = true;
+    this.errorMessage = '';
+    await getInterviewByIdApi(id)
+      .then((result)=>{
+        this.currentInterview = result.data.data;
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR', err.message);
+        errorToast(err.message);
+        this.errorMessage = err.message;
+      })
+      .finally(()=>{
+        this.isLoading = false;
+      });
   }
   async loadMoreArticles(query?: string) {
     console.log('loadMoreArticles',this.articlesList );
@@ -192,7 +287,7 @@ class ArticlesStore {
   }
 
   async getUserArticles() {
-    this.isLoading = true;
+    this.isUserArticleLoading = true;
     this.errorMessage = '';
     await getUserArticlesApi()
       .then((result)=>{
@@ -214,18 +309,19 @@ class ArticlesStore {
 
       })
       .finally(()=>{
-        this.isLoading = false;
+        this.isUserArticleLoading = false;
       });
   }
-  async deleteUserArticle(id: number) {
-    this.isLoading = true;
+  async changeUserArticle(id: number) {
+    this.isUserArticleLoading = true;
     this.errorMessage = '';
     console.log(id);
-    await deleteUserArticleApi(id)
-      .then((result)=>{
+    await changeUserArticleApi(id)
+      .then(async (result)=>{
         console.log(result);
-        successToast('Материал успешно удалён из избранного');
-        this.getUserArticles();
+        await this.getUserArticles().then(()=>
+          successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
+        );
       }
       )
       .catch((err)=>{
@@ -233,7 +329,47 @@ class ArticlesStore {
         this.errorMessage = err.message;
         errorToast(err.message);
       })
-      .finally(()=>{this.isLoading = false;});
+      .finally(()=>{this.isUserArticleLoading = false;});
+  }
+  async changeLikeUserArticle(id: number, action: number) {
+    this.isUserArticleLoading = true;
+    this.errorMessage = '';
+    console.log(id);
+    await changeLikeArticleApi(id, action)
+      .then(async (result)=>{
+        console.log(result);
+        await this.getArticleById(id);
+        // await this.getUserArticles().then(()=>
+        //   successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
+        // );
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
+        errorToast(err.message);
+      })
+      .finally(()=>{this.isUserArticleLoading = false;});
+  }
+  async changeLikeInterView(id: number, action: number) {
+    this.isUserArticleLoading = true;
+    this.errorMessage = '';
+    console.log(id);
+    await changeLikeInterViewApi(id, action)
+      .then(async (result)=>{
+        console.log(result);
+        await this.getInterviewById(id);
+        // await this.getUserArticles().then(()=>
+        //   successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
+        // );
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
+        errorToast(err.message);
+      })
+      .finally(()=>{this.isUserArticleLoading = false;});
   }
 }
 

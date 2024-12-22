@@ -9,6 +9,21 @@ export type ArticleModel = {
     media: MediaModel[]
 }
 
+export type ArticleViewModel = {
+    title: string,
+    subtitle: string,
+    datetime_publish: string,
+    body?: string,
+    body_json?: string,
+    id: number,
+    media: MediaModel[],
+    like: number,
+    unlike: number,
+    views: number,
+    created_at: string,
+    url: string,
+}
+
 export type ArticleListModel = {
     articles: ArticleModel[],
     total: number,
@@ -24,6 +39,21 @@ export type InterViewModel = {
     publication_date: string,
     thumb_title: string,
     thumb_desc: string,
+    media: MediaModel[]
+}
+
+export type InterviewViewModel = {
+    id: number,
+    title: string,
+    desc: string,
+    theme: string,
+    publication_date: string,
+    thumb_title: string,
+    thumb_desc: string,
+    like: number,
+    unlike: number,
+    views: number,
+    video: string,
     media: MediaModel[]
 }
 

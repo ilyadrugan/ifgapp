@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { Button, ButtonNext } from '../../core/components/button/button';
+import { Button, ButtonNext, ButtonTo } from '../../core/components/button/button';
 
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
@@ -23,13 +23,25 @@ import { CircularProgress } from '../../core/components/circularProgress/circula
 import { Materials, Plan } from './recomendationData/recomendationData';
 import {CheckBox} from '../../core/components/checkbox/checkbox';
 import testingStore from '../../../store/state/testingStore/testingStore';
+import articlesStore from '../../../store/state/articlesStore/articlesStore';
 export const IndividualProgramm = ({route}) => {
     const navigation = useNavigation<any>();
     const { activiti_value_json } = route.params;
     const onBack = () => navigation.goBack();
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [recommends, setRecommends] = useState(true);
-
+    const MaterialCard = ({title, media, subtitle, id}, index)=>
+      <CardContainer onPress={()=>navigation.replace('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+                {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
+                style={{ height: 114, width: '100%' }}
+                /> :
+                <View style={{height: 114, width: '100%', backgroundColor: 'gray' }} />
+                }
+        <View style={{paddingHorizontal: 14}}>
+        <IfgText numberOfLines={3} style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
+        <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
+        </View>
+    </CardContainer>;
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -146,37 +158,24 @@ export const IndividualProgramm = ({route}) => {
           </View>)}
         </CardContainer>
         <View style={gs.mt24} />
-          <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>А также читайте:</IfgText>
-            <Button style={s.buttonToMAterials} onPress={()=>console.log('all materials')}>
-            <>
-            <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Все материалы</IfgText>
 
-                <ArrowTo />
-                </>
-            </Button>
-        </View>
-          <View style={gs.mt16} />
-          <ScrollView
-                style={{marginHorizontal: -16, paddingHorizontal: 16  }}
+          <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>
+
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>{'А также читайте'}</IfgText>
+            <View>
+            <ButtonTo onPress={()=>navigation.navigate('Материалы')} title="Все материалы" />
+
+            </View>
+          </View>
+        <View style={gs.mt16} />
+        <FlatList
                 horizontal
-                contentContainerStyle={{flexGrow: 1, flexDirection: 'column'}}
+                style={{marginHorizontal: -16}}
+                contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                >
-
-        <View style={{flexDirection: 'row'}} >
-              {Materials.map(({title, img, text, id})=>
-              <CardContainer key={id.toString()} style={[{width: 200, padding:0 , overflow: 'hidden' }, gs.mr16]} >
-                <Image resizeMode="cover"  source={img}
-                style={{ height: 114, width: '100%' }}
-                />
-                <View style={{padding: 14}}>
-                <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
-                <IfgText style={[gs.fontCaptionSmall, gs.mt8]}>{text}</IfgText>
-                </View>
-            </CardContainer>)}
-        </View>
-    </ScrollView>
+                data={articlesStore.articlesList.articles}
+                renderItem={({item, index})=>MaterialCard(item, index)}
+        />
     <View style={{height: 180}}/>
     <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}

@@ -12,3 +12,10 @@ export function formatTimeWithMoment(dateTimeStr: string, timeZoneOffset: string
       .locale('ru')
       .format('HH:mm');
   }
+
+export function formatDateWithParamsMoment(dateTimeStr: string, timeZoneOffset: string, format: string) {
+    return moment(dateTimeStr)
+      .utcOffset(timeZoneOffset)
+      .locale('ru')
+      .format(format);
+  }

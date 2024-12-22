@@ -18,7 +18,6 @@ import { ActivityBlock } from './blocks/activityBlock';
 import { RecommendationBlock } from './blocks/recommendationBlock';
 import { TimeToDrinkBlock } from './blocks/timeToDrink';
 import { ArticleHeader } from './components/articleHeader';
-import { Materials } from '../individualProgramm/recomendationData/recomendationData';
 import {ShadowGradient} from '../../core/components/gradient/shadow-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatFooter } from './blocks/chat-footer';
@@ -32,6 +31,8 @@ import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
 
+
+
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
 
@@ -43,10 +44,11 @@ export const IFGHome = observer(() => {
     useEffect(() => {
       userStore.getProfile();
       articlesStore.loadMoreArticles();
+
     }, []);
 
-    const MaterialCard:FC<ArticleModel> = ({title, media, subtitle, id}, index)=>
-      <CardContainer key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+    const MaterialCard = ({title, media, subtitle, id}, index)=>
+      <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
                 style={{ height: 114, width: '100%' }}
                 /> :
@@ -156,11 +158,11 @@ return <>
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={gs.mt24}/>
-        <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
+        {presentsStore.presentsList.presents.length > 0 && <><View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Конкурсы</IfgText>
             <ButtonTo onPress={()=>navigation.navigate('Конкурсы')} title="Все конкурсы" />
           </View>
-        <View style={gs.mt16}/>
+        <View style={gs.mt16}/></>}
         <FlatList
                 horizontal
                 style={{marginHorizontal: -16}}
@@ -173,7 +175,7 @@ return <>
                     <Image resizeMode="contain"  source={{uri: `https://ifeelgood.life${item.media[0].full_path[1]}`}}
                     style={{ height: 114, width: '100%' }}
                     />
-                <Button onPress={()=>navigation.replace('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
+                <Button onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
                   <>
                   <IfgText style={gs.fontBody2}>{item.deleted_at ? 'Как получить приз' : 'К результатам'}</IfgText>
                   <View style={{marginTop:2}}>

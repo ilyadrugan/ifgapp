@@ -13,6 +13,15 @@ export const getArticlesByTagsApi = async (query?: string) => {
     console.log(`${BASE_URL}/articles?${query || ''}`);
     return await HttpClient.get(`${BASE_URL}/articles?${query || ''}`);
 };
+
+export const getArticleByIdApi = async (id: number) => {
+    console.log(`${BASE_URL}/articles/${id}`);
+    return await HttpClient.get(`${BASE_URL}/articles/${id}`);
+};
+export const getInterviewByIdApi = async (id: number) => {
+    console.log(`${BASE_URL}/interview/${id}`);
+    return await HttpClient.get(`${BASE_URL}/interview/${id}`);
+};
 export const getInterViewsByTagsApi = async (query?: string) => {
     console.log(`${BASE_URL}/interview?${query || ''}`);
     return await HttpClient.get(`${BASE_URL}/interview?${query || ''}`);
@@ -22,6 +31,12 @@ export const getUserArticlesApi = async () => {
     return await HttpClient.get(`${BASE_URL}/lk/articles`);
 };
 
-export const deleteUserArticleApi = async (id: number) => {
+export const changeLikeArticleApi = async (id: number, action: number) => {
+    return await HttpClient.post(`${BASE_URL}/article/like?id=${id}&action=${action}`);
+};
+export const changeLikeInterViewApi = async (id: number, action: number) => {
+    return await HttpClient.post(`${BASE_URL}/event/like?id=${id}&action=${action}`);
+};
+export const changeUserArticleApi = async (id: number) => {
     return await HttpClient.post(`${BASE_URL}/article/wishlist`, {id: id});
 };

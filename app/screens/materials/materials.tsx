@@ -4,7 +4,6 @@ import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableO
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { TabInterface, TabsMaterials } from './components/tabs';
-import { Materials, MaterialType } from '../individualProgramm/recomendationData/recomendationData';
 import { CardContainer, HashtagContainer } from '../../core/components/card/cardContainer';
 import colors from '../../core/colors/colors';
 import { ButtonTo } from '../../core/components/button/button';
@@ -72,12 +71,12 @@ export const MaterialsScreen = observer(() => {
             <View style={{paddingRight: 15,paddingVertical: 12, flexDirection: 'column'}}>
             <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold, {maxWidth: '75%'}]}>{item.title}</IfgText>
             <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8, {maxWidth: '65%'}]}>{item.subtitle}</IfgText>
-            <View style={gs.mt12}><ButtonTo style={{width: 114, height: 26}} title="Подробнее" /></View>
+            <View style={gs.mt12}><ButtonTo onPress={()=>navigation.navigate('ArticleView', {articleId: item.id})} style={{width: 114, height: 26}} title="Подробнее" /></View>
             </View>
         </CardContainer>;
       };
     const renderInterviewItem:FC<{item: InterViewModel, index:number}> = ({item, index}) => {
-        return <CardContainer  style={s.interviewCard}>
+        return <CardContainer style={s.interviewCard}>
                 <>
             {(index % 2 === 0 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '40%', height: '100%' }}
@@ -87,7 +86,7 @@ export const MaterialsScreen = observer(() => {
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold ]}>{stripHtmlTags(item.thumb_title)}</IfgText>
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8   ]}>{stripHtmlTags(item.thumb_desc)}</IfgText>
                 </View>
-            <ButtonTo style={{width: 114, height: 26}} title="Подробнее" />
+            <ButtonTo onPress={()=>navigation.navigate('InterviewView', {interviewId: item.id})} style={{width: 114, height: 26}} title="Подробнее" />
             </View>
             {(index % 2 === 1 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '40%', height: '100%' }}

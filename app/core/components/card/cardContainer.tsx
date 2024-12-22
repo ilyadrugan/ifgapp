@@ -35,6 +35,7 @@ export const CardContainer: FC<CardContainerProps> = ({children, style, onPress,
         s.container,
         style,
       ]}
+      onPress={onPress}
       disabled={onPress ? false : true}
     >
       {children}
