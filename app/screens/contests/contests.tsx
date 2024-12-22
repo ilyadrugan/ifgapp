@@ -21,21 +21,21 @@ export const ContestsScreen = observer(() => {
     const onLoadMore = async () => {
         await presentsStore.loadMorePresents(`page=${presentsStore.presentsList.current_page}`);
     };
-    const renderItem = (item: PresentModel) => <CardContainer style={s.contestContainer} >
+    const renderItem = (item: PresentModel) => !item.deleted_at && <CardContainer style={s.contestContainer} >
         <View style={{justifyContent: 'space-between', height: '100%', width: '60%'}} >
             <View>
                 <IfgText style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
                 {/* <IfgText style={[gs.fontCaption3, gs.mt12]}>{item.description}</IfgText> */}
             </View>
             <ButtonTo onPress={()=>navigation.navigate('ContestView', {contestId: item.id})}
-            title={!item.deleted_at ? 'Как получить приз' : 'К результатам'} style={{width:!item.deleted_at ? 157 : 130}} />
+            title={item.winners ? 'К результатам' : 'Как получить приз'} style={{width:item.winners ? 130 : 157}} />
         </View>
         <Image
             resizeMode="cover"
             source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '65%', height: '130%' ,marginTop: -16 }}
         />
-        {item.deleted_at && <View style={s.isOver}>
+       {item.winners && <View style={s.isOver}>
             <IfgText style={[gs.fontCaptionSmallMedium,gs.light]}>Конкурс завершен</IfgText>
         </View>}
     </CardContainer>;
