@@ -9,6 +9,36 @@ export type ArticleModel = {
     media: MediaModel[]
 }
 
+export type ArticleListModel = {
+    articles: ArticleModel[],
+    total: number,
+    current_page: number,
+    isLoading: boolean,
+    hasMore: boolean
+}
+
+export type InterViewModel = {
+    id: number,
+    title: string,
+    theme: string,
+    publication_date: string,
+    thumb_title: string,
+    thumb_desc: string,
+    media: MediaModel[]
+}
+
+export type InterViewListModel = {
+    interViews: InterViewModel[],
+}
+
+export type InterViewsTypesModel = {
+    interviews: InterViewModel[],
+    total: number,
+    current_page: number,
+    hasMore: boolean,
+    isLoading: boolean,
+}
+
 export type MediaModel = {
     id: number,
     full_path: string[]
@@ -35,4 +65,13 @@ export type ArticleSortModel = {
     title: string,
     order?: number,
     sort_value?: string
+}
+
+export type ArticleQueryParamsModel = {
+    'sort[date]'?: string,
+    'sort[likes]'?: string,
+    'sort[popular]'?: string,
+    tag?: string,
+    page?: string,
+    populate_tags?: string
 }

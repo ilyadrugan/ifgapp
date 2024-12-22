@@ -38,14 +38,14 @@ export const IFGHome = observer(() => {
     //   inputRange: [0, 1],
     //   outputRange: ['0deg', '-180deg'],
     // });
-    const getUserProfile = async () => await userStore.getProfile();
+    // const getUserProfile = async () => await userStore.getProfile();
     useEffect(() => {
-      getUserProfile();
-      articlesStore.getArticlesByTags();
+      userStore.getProfile();
+      articlesStore.loadMoreArticles();
     }, []);
 
     const MaterialCard:FC<ArticleModel> = ({title, media, subtitle, id}, index)=>
-      <CardContainer key={id.toString()} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+      <CardContainer key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
                 style={{ height: 114, width: '100%' }}
                 /> :
@@ -151,7 +151,7 @@ return <>
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={articlesStore.articlesList}
+                data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={gs.mt24}/>

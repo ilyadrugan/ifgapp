@@ -15,13 +15,18 @@ import Open from '../../../../assets/icons/open-up.svg';
 import articlesStore from '../../../../store/state/articlesStore/articlesStore';
 import { ArticleSortModel, ArticleThemeModel, ArticleThemesModel } from '../../../../store/state/articlesStore/models/models';
 import colors from '../../../core/colors/colors';
+import { observer } from 'mobx-react';
 
 // Активируем LayoutAnimation для Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const DropdownBlock: FC<{themes: ArticleThemesModel[], onRefresh: (query?: string)=>void, activeTab: number}> = ({themes, onRefresh, activeTab}) => {
+const DropdownBlock: FC<{
+  themes: ArticleThemesModel[],
+  activeTab: number,
+  activeSwitch: number
+}> = observer(({themes, activeTab, activeSwitch}) => {
   const [sortOpen, setSortOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
   const [themeOptions, setThemeOptions] = useState<ArticleThemesModel[]>([ {title: 'Показать все'} as ArticleThemesModel,...themes]);
@@ -122,35 +127,44 @@ const DropdownBlock: FC<{themes: ArticleThemesModel[], onRefresh: (query?: strin
     console.log(themeOptions);
   },[]);
 
-  const getMaterialsByTheme = (option: ArticleThemesModel , query: string) => {
-    // let query = '?';
-    console.log(option);
-    // if (sortOption.sort_value) {
-    //   query += `sort[${sortOption.sort_value}]=${sortOption.sort_order}&`;
-    // }
-    if (option.children !== undefined){
-      query += `tag=${option.tag_id}`;
-    }
-    return query;
-  };
-
   const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number) => {
-    let query = '?';
     console.log(option);
+    // if (activeTab === 0) {articlesStore.clearArticles();}
+    // if (activeTab === 1) {articlesStore.clearInterViews('finished'); articlesStore.clearInterViews('actual');}
     if (option.tag_id !== 100 && (option.sort_value || sortOption.sort_value)) {
       const value = option.sort_value || sortOption.sort_value;
       const order = option.order || sortOption.order;
-      query += `sort[${value}]=${order}&`;
+      articlesStore.removeArticleParam('sort[popular]');
+      articlesStore.removeArticleParam('sort[likes]');
+      articlesStore.removeArticleParam('sort[date]');
+      articlesStore.removeInterViewsParam('sort[popular]');
+      articlesStore.removeInterViewsParam('sort[likes]');
+      articlesStore.removeInterViewsParam('sort[date]');
+      articlesStore.setArticleQueryParam(`sort[${value}]`, `${order}`);
+      articlesStore.setInterViewsQueryParam(`sort[${value}]`, `${order}`);
+
     }
     if (option.title !== 'Показать все' && (option.children !== undefined || themeOption.children !== undefined)){
       const tagId = option.children !== undefined ? option.tag_id : themeOption.tag_id;
-      query += `tag=${tagId}&`;
+      articlesStore.setArticleQueryParam('tag', `${tagId}`);
+      articlesStore.setInterViewsQueryParam('tag', `${tagId}`);
     }
     if (typeof option === 'number' || activeHashTag !== 0) {
       const optionId = typeof option === 'number' ? option : activeHashTag;
-      query += `populate_tags=${optionId}`;
+      articlesStore.setArticleQueryParam('populate_tags', `${optionId}`);
     }
-    return query;
+    if (option.title === 'Показать все'){
+      articlesStore.removeArticleParam('tag');
+      articlesStore.removeInterViewsParam('tag');
+    }
+    if (option.tag_id === 100) {
+      articlesStore.removeInterViewsParam('sort[popular]');
+      articlesStore.removeInterViewsParam('sort[likes]');
+      articlesStore.removeInterViewsParam('sort[date]');
+      articlesStore.removeArticleParam('sort[popular]');
+      articlesStore.removeArticleParam('sort[likes]');
+      articlesStore.removeArticleParam('sort[date]');
+    }
   };
   // useEffect(() => {
 
@@ -159,10 +173,26 @@ const DropdownBlock: FC<{themes: ArticleThemesModel[], onRefresh: (query?: strin
 
   const getQuery = async (option: ArticleSortModel | ArticleThemesModel | number) => {
     // const sortQuery = getMaterialsBySort(option)
-    const finalQuery = getMaterialsBySortTheme(option);
-    console.log(finalQuery);
-    // await articlesStore.getArticlesByTags(finalQuery);
-    onRefresh(finalQuery);
+    getMaterialsBySortTheme(option);
+
+    // setCurrentQuery(finalQuery);
+    console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
+    console.log('interviewsQueryParams',articlesStore.getInterViewsQueryParamsString());
+    if (activeTab === 0) {
+      await articlesStore.clearArticles();
+      await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
+    }
+    if (activeTab === 1) {
+      if (activeSwitch === 0) {
+        articlesStore.clearInterViews('actual');
+        await articlesStore.loadMoreFinishedInterviews(articlesStore.getInterViewsQueryParamsString());
+      }
+      if (activeSwitch === 1) {
+        articlesStore.clearInterViews('finished');
+        await articlesStore.loadMoreActualInterviews(articlesStore.getInterViewsQueryParamsString());
+      }
+    }
+    // onRefresh(finalQuery);
   };
 
   const renderOption = (option: ArticleSortModel | ArticleThemesModel, onSelect, type) => (
@@ -186,6 +216,7 @@ const DropdownBlock: FC<{themes: ArticleThemesModel[], onRefresh: (query?: strin
   );
   const onHashTag = (populate_tag: number) => {
     setActiveHashTag(populate_tag);
+    // await articlesStore.clearArticles();
   };
   return (
     <>
@@ -234,13 +265,13 @@ const DropdownBlock: FC<{themes: ArticleThemesModel[], onRefresh: (query?: strin
           <View style={gs.mt16} />
           {activeTab === 0 &&
             <View style={styles.hashtagsContainer}>
-                {(!articlesStore.isLoading || articlesStore.articleHashTagList) && articlesStore.articleHashTagList.map((item) => <TouchableOpacity key={item.id.toString()} onPress={()=>{onHashTag(item.id); getQuery(item.id);}} style={[styles.hashtag, activeHashTag === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
+                {(!articlesStore.isLoading || articlesStore.articleHashTagList) && articlesStore.articleHashTagList.map((item) => <TouchableOpacity key={item.id.toString()} onPress={async ()=>{onHashTag(item.id); getQuery(item.id);}} style={[styles.hashtag, activeHashTag === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
                     <IfgText color={activeHashTag === item.id ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>#{item.name}</IfgText>
                 </TouchableOpacity>)}
             </View>}
     </>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -1,8 +1,6 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding } from './onboarding/onboarding';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
 import { Login } from './login/login';
 import { Registration } from './registration/registration';
 import { AboutTest } from './testing/aboutTest';
@@ -17,7 +15,6 @@ import { ContestView } from './contests/contest';
 const Stack = createNativeStackNavigator();
 
 export const MainNavigation: FC = () => {
-  console.log(authStore.isOnBoarded);
   return (<>
 
     <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>

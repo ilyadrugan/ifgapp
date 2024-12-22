@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { TabInterface, TabsMaterials } from './components/tabs';
@@ -11,10 +11,10 @@ import { ButtonTo } from '../../core/components/button/button';
 import DropdownBlock from './components/dropdown';
 import { hashTags, interViews, InterViewType, switchs } from './data/data';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
-import { ArticleModel } from '../../../store/state/articlesStore/models/models';
+import { ArticleModel, InterViewModel } from '../../../store/state/articlesStore/models/models';
 import { observer } from 'mobx-react';
 // import { SafeAreaView } from 'react-native-safe-area-context';
-
+import {stripHtmlTags} from '../../core/utils/stripHtmlTags';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -30,31 +30,41 @@ export const MaterialsScreen = observer(() => {
     const navigation = useNavigation<any>();
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
-    const [activeHashTag, setActiveHashTag] = useState<number>();
-    const [artciles, setArticles] = useState<ArticleModel[]>([]);
     const [refreshing, setRefreshing] = useState(false);
+    const onSwitch = async (id: number) => {
+        if (id === 1) {
+            await articlesStore.clearInterViews('actual');
+            await articlesStore.loadMoreFinishedInterviews(articlesStore.getInterViewsQueryParamsString());
+        }
+        if (id === 0) {
 
-    const onSwitch = (id: number) => {
+            await articlesStore.clearInterViews('finished');
+            await articlesStore.loadMoreActualInterviews(articlesStore.getInterViewsQueryParamsString());
+        }
         setSwitch(id);
     };
     const onTabClick = (id: number) => {
+        // articlesStore.clearParams();
         setActiveTab(id);
     };
 
     useEffect(() => {
         articlesStore.getMaterialFilters().then((res)=>{
-            console.log(res);
+            console.log('res', res);
           });
         articlesStore.getMaterialHashtags().then((res)=>{
-            console.log(res);
+            console.log('res', res);
           });
-        articlesStore.getArticlesByTags().then((res)=>{
-            console.log(res);
-        });
+        onLoadMore();
+        // articlesStore.loadMoreActualInterviews().then((res)=>{
+        //     console.log(res);
+        // });
+        console.log(`getQueryParamsString ${articlesStore.articlesQueryParams}`);
     }, []);
 
-    const renderArtcileItem = (item: ArticleModel) => {
-        return <CardContainer key={item.id.toString()} style={{marginTop: 16,overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>
+    const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
+
+        return <CardContainer style={s.articleCard}>
             {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
 
             style={{ width: '40%', height: '100%' }}
@@ -66,69 +76,96 @@ export const MaterialsScreen = observer(() => {
             </View>
         </CardContainer>;
       };
-      const renderInterviewItem = (item: InterViewType) => {
-        return <CardContainer key={item.id.toString()} style={{
-            height: 160,
-            padding: 0,
-            marginTop: 16,
-            overflow: 'hidden',
-            gap: 0,
-            borderRadius: 22,
-            flexDirection: 'row'}}>
-            {(item.id % 2) && <Image resizeMode="cover" source={item.img}
+    const renderInterviewItem:FC<{item: InterViewModel, index:number}> = ({item, index}) => {
+        return <CardContainer  style={s.interviewCard}>
+                <>
+            {(index % 2 === 0 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '40%', height: '100%' }}
             />}
             <View style={{flex: 1,justifyContent: 'space-between', paddingHorizontal: 15,paddingVertical: 12, flexDirection: 'column'}}>
-            <View>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold ]}>{item.person}</IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8   ]}>{item.title}</IfgText>
-            </View>
+                <View>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold ]}>{stripHtmlTags(item.thumb_title)}</IfgText>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8   ]}>{stripHtmlTags(item.thumb_desc)}</IfgText>
+                </View>
             <ButtonTo style={{width: 114, height: 26}} title="Подробнее" />
             </View>
-            {!(item.id % 2) && <Image resizeMode="cover" source={item.img}
+            {(index % 2 === 1 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '40%', height: '100%' }}
             />}
-
+</>
         </CardContainer>;
       };
 
-    const onRefresh = async (query?:string) => {
-        setRefreshing(true);
-        await articlesStore.getArticlesByTags(query);
-        setRefreshing(false);
+    // const onRefresh = async () => {
+    //     setRefreshing(true);
+    //     if (activeTab === 0) {
+    //         await articlesStore.clearArticles();
+    //         await articlesStore.loadMoreArticles(articlesStore.getQueryParamsString());
+    //     }
+    //     if (activeTab === 1) {
+    //         await articlesStore.clearInterViews();
+    //         await articlesStore.loadMoreInterviews(articlesStore.getQueryParamsString());
+    //     }
+    //     console.log(articlesStore.interViews);
+    //     setRefreshing(false);
+    // };
+    const onLoadMore = async () => {
+        if (activeTab === 0) {
+            articlesStore.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
+            await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
+        }
+        if (activeTab === 1) {
+            if (activeSwitch === 0) {
+                articlesStore.interViewsQueryParams.page =  `${articlesStore.interViewsActual.current_page}`;
+                await articlesStore.loadMoreActualInterviews(articlesStore.getInterViewsQueryParamsString());
+            }
+            if (activeSwitch === 1) {
+                articlesStore.interViewsQueryParams.page =  `${articlesStore.interViewsFinished.current_page}`;
+                await articlesStore.loadMoreFinishedInterviews(articlesStore.getInterViewsQueryParamsString());
+            }
+        }
     };
+
 return <>
-      <ScrollView style={s.container}  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <View style={gs.mt16} />
-            <IfgText style={[gs.h2, gs.bold]} >{'Материалы'}</IfgText>
-        <View style={gs.mt16} />
-        <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
-        <View style={gs.mt16} />
-        {(!articlesStore.isLoading || articlesStore.articleThemesList.length > 0) &&
-            <DropdownBlock activeTab={activeTab} themes={articlesStore.articleThemesList} onRefresh={onRefresh} />}
+       <FlatList
+       style={s.container}
+       keyExtractor={(item, index)=>item.id.toString()}
+    //    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+       ListFooterComponent={<>
+       <View style={gs.mt16} />
+       {(articlesStore.interViewsFinished.isLoading || articlesStore.interViewsActual.isLoading || articlesStore.articlesList.isLoading) && <ActivityIndicator animating size={'large'} />}
+       <View style={{height: 100}} /></>}
+       ListEmptyComponent={(!articlesStore.interViewsActual.isLoading && !articlesStore.interViewsFinished.isLoading && !articlesStore.articlesList.isLoading) &&
+       <View style={[gs.mt16, {justifyContent: 'center'}]}>
+        <IfgText>Ничего не найдено</IfgText>
+       </View>}
+       ListHeaderComponentStyle={{zIndex: 999, elevation: 999}}
+       ListHeaderComponent={<>
+            <View style={gs.mt16} />
+                    <IfgText style={[gs.h2, gs.bold]} >{'Материалы'}</IfgText>
+                <View style={gs.mt16} />
+                <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
+                <View style={gs.mt16} />
+            {(articlesStore.articleThemesList.length > 0) &&
+                    <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} />}
+            <View style={s.hashtagsContainer}>
 
+                {activeTab === 1 && switchs.map(item => <TouchableOpacity key={item.id.toString() + 'l'} onPress={()=>onSwitch(item.id)} style={[s.interview, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
+                        <IfgText color={activeSwitch === item.id ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>{item.name}</IfgText>
+                    </TouchableOpacity>)}
 
+                </View>
+       </>}
 
-        {activeTab === 0 &&
-        <>
-        {!articlesStore.isLoading && articlesStore.articlesList.map((item:ArticleModel)=>renderArtcileItem(item))}
-        </>
-        }
+       data={activeTab === 0 ? articlesStore.articlesList.articles :
+            activeSwitch === 0 ?
+            articlesStore.interViewsActual.interviews :
+            articlesStore.interViewsFinished.interviews}
+       renderItem={activeTab === 0 ? renderArtcileItem : renderInterviewItem}
+       onEndReached={onLoadMore}
+       onEndReachedThreshold={0.1}
+       />
 
-        {activeTab === 1 &&
-        <>
-        <View style={s.hashtagsContainer}>
-            {switchs.map(item => <TouchableOpacity key={item.id.toString()} onPress={()=>onSwitch(item.id)} style={[s.interview, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
-                <IfgText color={activeSwitch === item.id ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>{item.name}</IfgText>
-            </TouchableOpacity>)}
-        </View>
-        {interViews.map(item=>renderInterviewItem(item))}
-        {/* {Materials.map((item:MaterialType)=>renderItem(item))} */}
-        </>
-        }
-
-        <View style={{height: 100}}/>
-      </ScrollView>
       </>;});
 
 const s = StyleSheet.create({
@@ -157,5 +194,25 @@ const s = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 12,
         paddingVertical: 6,
+    },
+    interviewCard: {
+        height: 160,
+        padding: 0,
+        marginTop: 16,
+        overflow: 'hidden',
+        gap: 0,
+        borderRadius: 22,
+        flexDirection: 'row',
+    },
+    articleCard:{
+        marginTop: 16,
+        overflow: 'hidden',
+        gap: 18,
+        padding: 0,
+        borderRadius: 16,
+        borderWidth: 1,
+        borderTopWidth: 0,
+        borderColor: '#E7E7E7',
+        flexDirection: 'row',
     },
 });
