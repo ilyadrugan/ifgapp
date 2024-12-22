@@ -12,7 +12,7 @@ export type PresentModel = {
     title: string,
     deleted_at: string,
     id: number,
-    status: boolean,
+    winners: [],
     media: MediaModel[]
 }
 
