@@ -10,7 +10,7 @@ const dataWeeks = [
   { x: 'Вт', y: 40 },
   { x: 'Ср', y: 30 },
   { x: 'Чт', y: 60 },
-  { x: 'Пт', y: 78 }, // Выделенная точка
+  { x: 'Пт', y: 78 },
   { x: 'Сб', y: 50 },
   { x: 'Вс', y: 30 },
 ];
@@ -77,13 +77,15 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
   useEffect(() => {
     // const today = new Date().getDay() === 0 ? 8 : new Date().getDay();
     const today = new Date().getDay();
+    // console.log('today.getDay()', today);
     const todayDot: DotType = {
         _x: today === 0 ? 7 : today,
-        _y: dataWeeks[today - 1].y,
-        x:  dataWeeks[today - 1].x,
-        xName: dataWeeks[today - 1].x,
-        y: dataWeeks[today - 1].y,
+        _y: dataWeeks[today - 1 < 0 ? 6 : today ].y,
+        x:  dataWeeks[today - 1 < 0 ? 6 : today].x,
+        xName: dataWeeks[today - 1 < 0 ? 6 : today].x,
+        y: dataWeeks[today - 1 < 0 ? 6 : today].y,
     };
+    // console.log(todayDot);
     setSelectedPoint(todayDot);
   }, []);
 
