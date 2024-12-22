@@ -30,6 +30,7 @@ import { hexToRgba } from '../../core/utils/hexToRGBA';
 import userStore from '../../../store/state/userStore/userStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import { ArticleModel } from '../../../store/state/articlesStore/models/models';
+import presentsStore from '../../../store/state/presentsStore/presentsStore';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -165,24 +166,23 @@ return <>
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={dataContests}
-                renderItem={({item}: ContestType)=>
-                <CardContainer style={[{width: 190, height: 236, padding:14, borderWidth: 1, borderColor: '#E7E7E7', justifyContent: 'space-between' }, gs.mr12, item.id === 0 && gs.ml16 ]} >
-                    <IfgText style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
-                    <Image resizeMode="contain"  source={item.img}
+                data={presentsStore.presentsList.presents}
+                renderItem={({item, index})=>
+                item.id !== presentsStore.currentPresent.id && <CardContainer style={[{width: 190, height: 236, padding:14, borderWidth: 1, borderColor: '#E7E7E7', justifyContent: 'space-between' }, gs.mr12, index === 0 && gs.ml16 ]} >
+                    <IfgText numberOfLines={2} style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
+                    <Image resizeMode="contain"  source={{uri: `https://ifeelgood.life${item.media[0].full_path[1]}`}}
                     style={{ height: 114, width: '100%' }}
                     />
-                  <Button onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
-                    <>
-                    <IfgText style={gs.fontBody2}>Как получить приз</IfgText>
-                    <View style={{marginTop:2}}>
-                      <ArrowRightBlack width={12} />
-                    </View>
-                    </>
+                <Button onPress={()=>navigation.replace('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
+                  <>
+                  <IfgText style={gs.fontBody2}>{item.deleted_at ? 'Как получить приз' : 'К результатам'}</IfgText>
+                  <View style={{marginTop:2}}>
+                    <ArrowRightBlack width={12} />
+                  </View>
+                  </>
 
-                  </Button>
-                </CardContainer>
-                }
+                </Button>
+            </CardContainer>}
         />
         <View style={gs.mt24} />
           <ImageBackground

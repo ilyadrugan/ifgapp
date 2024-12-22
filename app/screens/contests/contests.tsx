@@ -1,86 +1,59 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { FlatList, StyleSheet, View, Image, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View, Image, ImageBackground, ActivityIndicator, RefreshControl } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import colors from '../../core/colors/colors';
 import { ButtonTo } from '../../core/components/button/button';
 import { ContestType } from './models/models';
+import presentsStore from '../../../store/state/presentsStore/presentsStore';
+import { PresentModel } from '../../../store/state/presentsStore/models/models';
+import { observer } from 'mobx-react';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
-export const dataContests: ContestType[] = [
-    {
-        id: 0,
-        title: '3 коврика для йоги и занятий спортом',
-        description: 'C Xiaomi MiBand 8 вы сможете узнать об улучшениях своей физической формы...',
-        img: require('../../../assets/backgrounds/carpet.png'),
-        isOver: false,
-    },
-    {
-        id: 1,
-        title: 'Фитнес браслет',
-        description: 'C Xiaomi MiBand 8 вы сможете узнать об улучшениях своей физической формы...',
-        img: require('../../../assets/backgrounds/braclet.png'),
-        isOver: false,
-    },
-    {
-        id: 2,
-        title: '3 коврика для йоги и занятий спортом',
-        description: 'C Xiaomi MiBand 8 вы сможете узнать об улучшениях своей физической формы...',
-        img: require('../../../assets/backgrounds/carpet.png'),
-        isOver: false,
-    },
-    {
-        id: 3,
-        title: 'Фитнес браслет',
-        description: 'C Xiaomi MiBand 8 вы сможете узнать об улучшениях своей физической формы...',
-        img: require('../../../assets/backgrounds/braclet.png'),
-        isOver: false,
-    },
-    {
-        id: 4,
-        title: '3 коврика для йоги и занятий спортом',
-        description: 'C Xiaomi MiBand 8 вы сможете узнать об улучшениях своей физической формы...',
-        img: require('../../../assets/backgrounds/carpet.png'),
-        isOver: true,
-        winners: ['Иван Иванов'],
-    },
-    {
-        id: 5,
-        title: 'Фитнес браслет',
-        description: 'C Xiaomi MiBand 8 вы сможете узнать об улучшениях своей физической формы...',
-        img: require('../../../assets/backgrounds/braclet.png'),
-        isOver: true,
-        winners: ['Иван Иванов', 'Иван Иванов'],
-    },
-];
-
-export const ContestsScreen = () => {
+export const ContestsScreen = observer(() => {
     const navigation = useNavigation<any>();
-
-    const renderItem = (item: ContestType) => <CardContainer style={s.contestContainer} >
+    const [refreshing, setRefreshing] = useState(false);
+    useEffect(()=>{
+        onLoadMore();
+    },[]);
+    const onLoadMore = async () => {
+        await presentsStore.loadMorePresents(`page=${presentsStore.presentsList.current_page}`);
+    };
+    const renderItem = (item: PresentModel) => <CardContainer style={s.contestContainer} >
         <View style={{justifyContent: 'space-between', height: '100%', width: '60%'}} >
             <View>
                 <IfgText style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
-                <IfgText style={[gs.fontCaption3, gs.mt12]}>{item.description}</IfgText>
+                {/* <IfgText style={[gs.fontCaption3, gs.mt12]}>{item.description}</IfgText> */}
             </View>
-            <ButtonTo onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} title="Как получить приз" style={{width: 157}} />
+            <ButtonTo onPress={()=>navigation.navigate('ContestView', {contestId: item.id})}
+            title={!item.deleted_at ? 'Как получить приз' : 'К результатам'} style={{width:!item.deleted_at ? 157 : 130}} />
         </View>
         <Image
-            resizeMode="contain"
-            source={item.img}
-            style={{ width: '65%', height: '140%', marginTop: 30 }}
+            resizeMode="cover"
+            source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+            style={{ width: '65%', height: '130%' ,marginTop: -16 }}
         />
-        {item.isOver && <View style={s.isOver}>
+        {item.deleted_at && <View style={s.isOver}>
             <IfgText style={[gs.fontCaptionSmallMedium,gs.light]}>Конкурс завершен</IfgText>
         </View>}
     </CardContainer>;
-
+    const onRefresh = async () => {
+        setRefreshing(true);
+        presentsStore.clearPresents();
+        await onLoadMore();
+        setRefreshing(false);
+    };
     return <>
       <FlatList
-      style={s.container}
-            data={dataContests}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            style={s.container}
+            data={presentsStore.presentsList.presents}
+            ListFooterComponent={<>
+                <View style={gs.mt16} />
+                {presentsStore.presentsList.isLoading && <ActivityIndicator animating size={'large'} />}
+                <View style={{height: 100}} /></>}
             ListHeaderComponent={<>
             <View style={gs.mt16} />
             <IfgText style={[gs.h2, gs.bold]} >{'Конкурсы'}</IfgText>
@@ -100,9 +73,10 @@ export const ContestsScreen = () => {
             </>
             }
             renderItem={({item})=>renderItem(item)}
-            ListFooterComponent={<View style={{height: 100}} />}
-        />
-      </>;};
+            onEndReached={onLoadMore}
+            onEndReachedThreshold={0.1}
+                  />
+      </>;});
 
 const s = StyleSheet.create({
     container: {

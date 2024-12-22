@@ -45,7 +45,7 @@ export const ButtonTo:FC<{
   title?: string,
   style?: StyleProp<ViewStyle>,
   textColor?: string,
-  whiteIcon?: boolean
+  whiteIcon?: boolean,
 }> = ({onPress, title, style, textColor, whiteIcon}) => <Button style={[s.buttonTo, style]} onPress={onPress}>
 <>
 <IfgText color={textColor || colors.GRAY_COLOR3} style={gs.fontBody2}>{title}</IfgText>
