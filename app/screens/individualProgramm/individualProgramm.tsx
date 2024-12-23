@@ -71,7 +71,7 @@ export const IndividualProgramm = ({route}) => {
                     <ArrowRight />
                 </>
             </Button>
-        <VideoPlayer source={url} title={'О платформе ifeelgood'}/>
+        <VideoPlayer thumbnailName="thumbnail1" source={url} title={'О платформе ifeelgood'}/>
 
          </ImageBackground>
          <View style={gs.mt24} />

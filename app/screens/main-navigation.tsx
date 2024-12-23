@@ -13,6 +13,7 @@ import authStore from '../../store/state/authStore/authStore';
 import { ContestView } from './contests/contest';
 import { ArticleView } from './materials/article';
 import { InterviewView } from './materials/interview';
+import { Coverage } from './coverage/coverage';
 
 const Stack = createNativeStackNavigator();
 
@@ -80,7 +81,11 @@ export const MainNavigation: FC = () => {
       component={InterviewView}
       options={{ headerShown: false }}
       />
-
+      <Stack.Screen
+      name="Coverage"
+      component={Coverage}
+      options={{ headerShown: false }}
+      />
   </Stack.Navigator>
   </>);
 };

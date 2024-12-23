@@ -177,7 +177,7 @@ return <>
                     />
                 <Button onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
                   <>
-                  <IfgText style={gs.fontBody2}>{item.deleted_at ? 'Как получить приз' : 'К результатам'}</IfgText>
+                  <IfgText style={gs.fontBody2}>{!item.winners ? 'Как получить приз' : 'К результатам'}</IfgText>
                   <View style={{marginTop:2}}>
                     <ArrowRightBlack width={12} />
                   </View>
@@ -194,7 +194,7 @@ return <>
          >
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Финансовая защита заемщиков кредитов</IfgText>
             <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Узнайте как защитить себя и своих близких на случай непредвиденных ситуаций с жизнью и здоровьем в совместном проекте АльфаСтрахование-Жизнь и ifeelgood!</IfgText>
-            <Button outlined style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: colors.WHITE_COLOR, borderWidth: 1, padding: 20, borderRadius: 12, height: 60}}>
+            <Button onPress={()=>navigation.navigate('Coverage')} outlined style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: colors.WHITE_COLOR, borderWidth: 1, padding: 20, borderRadius: 12, height: 60}}>
                 <>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подробнее</IfgText>
                     <ArrowRight />

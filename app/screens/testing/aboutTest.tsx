@@ -126,7 +126,7 @@ export const AboutTest = () => {
             source={require('../../../assets/backgrounds/smallPhone0.5.png')}/>
          </ImageBackground>
          <View style={gs.mt16} />
-        <VideoPlayer source={url} title={'О платформе ifeelgood'}/>
+        <VideoPlayer thumbnailName="thumbnail1" source={url} title={'О платформе ifeelgood'}/>
     <View style={gs.mt16} />
     <CardContainer>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>
