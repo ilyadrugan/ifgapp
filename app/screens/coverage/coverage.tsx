@@ -200,6 +200,7 @@ export const Coverage = observer(() => {
             <IfgText style={[gs.fontCaption, gs.bold]}>{item.title}</IfgText>
         </View>
         <IfgText style={[gs.fontCaption2]}>{item.text}</IfgText>
+        <ButtonTo style={{width: 114, height: 26}} title="Подробнее" />
         </CardContainer>;
     };
     return <>
