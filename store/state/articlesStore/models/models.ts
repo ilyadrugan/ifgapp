@@ -22,6 +22,7 @@ export type ArticleViewModel = {
     views: number,
     created_at: string,
     url: string,
+    type: string
 }
 
 export type ArticleListModel = {

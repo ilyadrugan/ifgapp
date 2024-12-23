@@ -334,16 +334,10 @@ class ArticlesStore {
   async changeLikeUserArticle(id: number, action: number) {
     this.isUserArticleLoading = true;
     this.errorMessage = '';
-    console.log(id);
     await changeLikeArticleApi(id, action)
       .then(async (result)=>{
-        console.log(result);
         this.currentArticle.like = result.data.like;
         this.currentArticle.unlike = result.data.unlike;
-
-        // await this.getUserArticles().then(()=>
-        //   successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
-        // );
       }
       )
       .catch((err)=>{
@@ -356,15 +350,10 @@ class ArticlesStore {
   async changeLikeInterView(id: number, action: number) {
     this.isUserArticleLoading = true;
     this.errorMessage = '';
-    console.log(id);
     await changeLikeInterViewApi(id, action)
       .then(async (result)=>{
-        console.log(result);
         this.currentInterview.like = result.data.like;
         this.currentInterview.unlike = result.data.unlike;
-        // await this.getUserArticles().then(()=>
-        //   successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
-        // );
       }
       )
       .catch((err)=>{

@@ -7,13 +7,16 @@ import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
-import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
+import { parseHTMLToObjects, stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Like from '../../../assets/icons/like.svg';
 import EyeViews from '../../../assets/icons/eye-views.svg';
 import Star from '../../../assets/icons/star.svg';
 import Share from '../../../assets/icons/share.svg';
+import VerifiedExpert from '../../../assets/icons/articleTypes/verified_expert.svg';
+import VerifiedResearcher from '../../../assets/icons/articleTypes/verified_researcher.svg';
+import VerifiedScience from '../../../assets/icons/articleTypes/verified_science.svg';
 import RenderHTML from 'react-native-render-html';
 import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
 import { onShare } from '../../core/components/share/share';
@@ -31,6 +34,8 @@ export const ArticleView = observer(({route}) => {
     useEffect(() => {
       if (articleId !== undefined) {
         loadArticleById(articleId);
+        console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
+        // console.log(parseHTMLToObjects(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || ''));
         setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));
       }
     }, []);
@@ -74,8 +79,8 @@ export const ArticleView = observer(({route}) => {
                 source={{uri: `https://ifeelgood.life${articlesStore.currentArticle.media[0].full_path[0]}`}}
         />
 
-        <View style={gs.mt16} />
-        {/* <CardContainer>
+        {/*<View style={gs.mt16} />
+         <CardContainer>
         <RenderHTML
         // contentWidth={300}
         source={{ html: articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '' }}
@@ -83,10 +88,27 @@ export const ArticleView = observer(({route}) => {
           <IfgText>{stripHtmlTags(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '').replace(/&.*;/g, ' ')}</IfgText>
         </CardContainer> */}
         <View style={gs.mt24} />
+        <View style={[gs.flexRow, {gap: 12,width: '100%', justifyContent: 'space-between'} ]}>
+        <View style={{flex: 1}}>
         <CardContainer style={[gs.flexRow, {justifyContent: 'space-between', borderRadius: 12}]}>
-        <IfgText style={gs.fontCaption}>Опубликовано:</IfgText>
-        <IfgText style={[gs.fontCaption, gs.bold]}>{formatDateWithParamsMoment(articlesStore.currentArticle.datetime_publish, '+03:00', 'D.MM.YYYY')}</IfgText>
+          <IfgText style={gs.fontCaption}>Опубликовано:</IfgText>
+          <IfgText style={[gs.fontCaption, gs.bold]}>{formatDateWithParamsMoment(articlesStore.currentArticle.datetime_publish, '+03:00', 'D.MM.YYYY')}</IfgText>
         </CardContainer>
+        </View>
+
+
+          {articlesStore.currentArticle.type !== 'none' && <CardContainer style={{
+            aspectRatio: 1, borderRadius: 16, alignItems: 'center', justifyContent: 'center',
+            backgroundColor: articlesStore.currentArticle.type === 'verified_science' ? colors.PINK_COLOR :
+            articlesStore.currentArticle.type === 'verified_researcher' ? '#FFAE21' : '#54B676'}} >
+              <View style={{position: 'absolute',alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', width: 32, height: 32, borderRadius: 16}}>
+
+                {articlesStore.currentArticle.type === 'verified_science' && <VerifiedScience />}
+                {articlesStore.currentArticle.type === 'verified_researcher' && <VerifiedResearcher />}
+                {articlesStore.currentArticle.type === 'verified_expert' && <VerifiedExpert />}
+              </View>
+            </CardContainer>}
+        </View>
         <View style={gs.mt12} />
 
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
@@ -139,14 +161,14 @@ export const ArticleView = observer(({route}) => {
             </View>
           </View>
         <View style={gs.mt16} />
-        <FlatList
+        {/* <FlatList
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
                 data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
-        />
+        /> */}
         <View style={{height: 100}} />
     </ScrollView>}</>;
     });
