@@ -75,13 +75,13 @@ export const ArticleView = observer(({route}) => {
         />
 
         <View style={gs.mt16} />
-        <CardContainer>
-        {/* <RenderHTML
+        {/* <CardContainer>
+        <RenderHTML
         // contentWidth={300}
         source={{ html: articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '' }}
-      /> */}
-          {/* <IfgText>{stripHtmlTags(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '').replace(/&.*;/g, ' ')}</IfgText> */}
-        </CardContainer>
+      />
+          <IfgText>{stripHtmlTags(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '').replace(/&.*;/g, ' ')}</IfgText>
+        </CardContainer> */}
         <View style={gs.mt24} />
         <CardContainer style={[gs.flexRow, {justifyContent: 'space-between', borderRadius: 12}]}>
         <IfgText style={gs.fontCaption}>Опубликовано:</IfgText>

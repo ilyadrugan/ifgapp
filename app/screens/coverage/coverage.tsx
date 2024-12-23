@@ -348,14 +348,14 @@ export const Coverage = observer(() => {
             <ButtonTo onPress={()=>navigation.navigate('Материалы')} title="Все материалы" />
           </View>
           <View style={gs.mt16} />
-          {/* <FlatList
+          <FlatList
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
                 data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
-        /> */}
+        />
         <View style={gs.mt24} />
         <IfgText style={[gs.h3, gs.bold]}>
         Стандарты ВСС

@@ -24,12 +24,21 @@ import { Materials, Plan } from './recomendationData/recomendationData';
 import {CheckBox} from '../../core/components/checkbox/checkbox';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
-export const IndividualProgramm = ({route}) => {
+import { observer } from 'mobx-react';
+
+export const IndividualProgramm = observer(({route}) => {
     const navigation = useNavigation<any>();
     const { activiti_value_json } = route.params;
     const onBack = () => navigation.goBack();
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [recommends, setRecommends] = useState(true);
+    useEffect(() => {
+
+        getMyTests().then(()=>console.log(testingStore.testsList[0].activiti_value_json));
+
+    }, []);
+    const getMyTests = async () => await testingStore.getAllMyTest();
+
     const MaterialCard = ({title, media, subtitle, id}, index)=>
       <CardContainer onPress={()=>navigation.replace('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
@@ -67,7 +76,7 @@ export const IndividualProgramm = ({route}) => {
             <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
             <Button style={s.howItWorksButton}>
                 <>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Начать заниматься</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>Начать заниматься</IfgText>
                     <ArrowRight />
                 </>
             </Button>
@@ -89,13 +98,13 @@ export const IndividualProgramm = ({route}) => {
         </>}
         <View style={gs.mt16} />
 
-        <CardContainer>
+        {!testingStore.isLoading && (activiti_value_json || testingStore.testsList[0].activiti_value_json ) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            <CircularProgress value={activiti_value_json.pitaniye} maxValue={180 / 4} />
+            <CircularProgress value={activiti_value_json ? activiti_value_json.pitaniye : JSON.parse(testingStore.testsList[0].activiti_value_json).pitaniye} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -118,7 +127,7 @@ export const IndividualProgramm = ({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
-            <CircularProgress value={activiti_value_json.sleep} maxValue={180 / 4} />
+            <CircularProgress value={activiti_value_json ? activiti_value_json.sleep : JSON.parse(testingStore.testsList[0].activiti_value_json).sleep} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -141,7 +150,7 @@ export const IndividualProgramm = ({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
-            <CircularProgress value={activiti_value_json.anistres} maxValue={180 / 4} />
+            <CircularProgress value={activiti_value_json ? activiti_value_json.anistres : JSON.parse(testingStore.testsList[0].activiti_value_json).anistres} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -157,6 +166,7 @@ export const IndividualProgramm = ({route}) => {
           </View>
           </View>)}
         </CardContainer>
+        </>}
         <View style={gs.mt24} />
 
           <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>
@@ -168,14 +178,14 @@ export const IndividualProgramm = ({route}) => {
             </View>
           </View>
         <View style={gs.mt16} />
-        <FlatList
+        {/* <FlatList
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
                 data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
-        />
+        /> */}
     <View style={{height: 180}}/>
     <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
@@ -191,7 +201,7 @@ export const IndividualProgramm = ({route}) => {
     </View>
 </>
     );
-  };
+  });
 
 const s = StyleSheet.create({
   container: {
@@ -300,5 +310,6 @@ shadowGradient: {
     borderWidth: 1,
     flexDirection: 'row',
     paddingHorizontal: 20,
+    height: 60,
   },
   });

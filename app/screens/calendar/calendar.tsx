@@ -223,7 +223,7 @@ export const CalendarScreen = () =>{
         <View style={{height: 280}} />
     </ScrollView>
     <View style={s.footer}>
-        <ButtonNext textStyle={gs.fontBodyMedium} onPress={()=>navigation.navigate('IndividualProgramm')} style={{height: 78}} title="Моя программа" />
+        <ButtonNext textStyle={gs.fontBodyMedium} onPress={()=>navigation.navigate('IndividualProgramm', {activiti_value_json: undefined})} style={{height: 78}} title="Моя программа" />
     </View>
     <ShadowGradient opacity={0.3} />
     </>;
