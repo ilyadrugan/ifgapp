@@ -98,7 +98,7 @@ return <>
         <TimeToDrinkBlock isNew={true}/>
 
         <View style={gs.mt16} />
-        <CardContainer  >
+        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} >
           <ArticleHeader
             isNew
             time={'10:00'}
@@ -117,7 +117,7 @@ return <>
         </CardContainer>
 
         <View style={gs.mt16} />
-        <CardContainer  >
+        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}  >
           <ArticleHeader
             time={'10:00'}
             hashTagColor={colors.PINK_COLOR}
@@ -133,7 +133,7 @@ return <>
             <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Кто-то из вас более спортивный, а кто-то последний раз занимался спортом на уроке физкультуры. Ничего страшного!</IfgText>
           </View>
           <IfgText style={[gs.fontCaptionSmall]}>👋🏻Узнайте подробнее о важности ходьбы в нашей статье...</IfgText>
-          <ButtonNext title="Читать статью" oliveTitle="+ 3 балла" />
+          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} title="Читать статью" oliveTitle="+ 3 балла" />
         </CardContainer>
 
         <View style={gs.mt16} />
