@@ -338,7 +338,9 @@ class ArticlesStore {
     await changeLikeArticleApi(id, action)
       .then(async (result)=>{
         console.log(result);
-        await this.getArticleById(id);
+        this.currentArticle.like = result.data.like;
+        this.currentArticle.unlike = result.data.unlike;
+
         // await this.getUserArticles().then(()=>
         //   successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
         // );
@@ -358,7 +360,8 @@ class ArticlesStore {
     await changeLikeInterViewApi(id, action)
       .then(async (result)=>{
         console.log(result);
-        await this.getInterviewById(id);
+        this.currentInterview.like = result.data.like;
+        this.currentInterview.unlike = result.data.unlike;
         // await this.getUserArticles().then(()=>
         //   successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
         // );
