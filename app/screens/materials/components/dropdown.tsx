@@ -8,6 +8,7 @@ import {
   Platform,
   UIManager,
   Animated,
+  Dimensions,
 } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
@@ -21,7 +22,7 @@ import { observer } from 'mobx-react';
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
+const width = Dimensions.get('screen').width;
 const DropdownBlock: FC<{
   themes: ArticleThemesModel[],
   activeTab: number,
@@ -82,19 +83,6 @@ const DropdownBlock: FC<{
       duration: 200,
       useNativeDriver: true,
     }).start();
-    // if (!sortOpen) {
-    //   Animated.timing(scaleSortY, {
-    //     toValue: 1,
-    //     duration: 200,
-    //     useNativeDriver: true,
-    //   }).start();
-    // } else {
-    //   Animated.timing(scaleSortY, {
-    //     toValue: -1,
-    //     duration: 200,
-    //     useNativeDriver: true,
-    //   }).start();
-    // }
   };
 
   const toggleThemeDropdown = () => {
@@ -107,20 +95,6 @@ const DropdownBlock: FC<{
       duration: 200,
       useNativeDriver: true,
     }).start();
-    // if (!themeOpen) {
-    //   setThemeOpen(!themeOpen);
-    //   Animated.timing(scaleThemeY, {
-    //     toValue: themeOpen? -1 : 1,
-    //     duration: 200,
-    //     useNativeDriver: true,
-    //   }).start();
-    // } else {
-    //   Animated.timing(scaleThemeY, {
-    //     toValue: -1,
-    //     duration: 200,
-    //     useNativeDriver: true,
-    //   }).start();
-    // }
   };
 
   useEffect(()=>{
@@ -242,8 +216,8 @@ const DropdownBlock: FC<{
       </View>
 
       {/* Выбрать тему */}
-      <View style={styles.dropdownContainer}>
-        <TouchableOpacity onPress={toggleThemeDropdown} style={styles.dropdownHeader}>
+      <View style={[styles.dropdownContainer, {zIndex: -100, elevation: -100}]}>
+        <TouchableOpacity onPress={toggleThemeDropdown} style={[styles.dropdownHeader]}>
         <View>
             <IfgText color="#A0A0A0" style={gs.fontCaptionSmallSmall}>Выбрать тему</IfgText>
             <IfgText style={gs.fontCaptionSmall}>{themeOption.title}</IfgText>
@@ -290,6 +264,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
+    // zIndex: -1000,
+    // elevation: -100,
   },
   dropdownBody: {
     paddingVertical: 8,
@@ -298,18 +274,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1f1f1',
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: '#E4E4E4',
     zIndex: 1000,
     elevation: 100,
   },
   option: {
     paddingVertical: 8,
     paddingLeft: 12,
-    width: '100%',
+    // width: '100%',
+    width: width - 35,
   },
   hashtagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
+    zIndex: -100,
+    elevation: -100,
   },
   hashtag: {
     padding: 8,
