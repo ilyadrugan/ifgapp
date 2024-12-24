@@ -37,6 +37,7 @@ export const InterviewView = observer(({route}) => {
       if (interviewId !== undefined) {
         loadInterviewById(interviewId);
         console.log(interviewId);
+        console.log(stripHtmlTags(articlesStore.currentInterview.title).split('').length);
         // setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));
       }
     }, [interviewId]);
@@ -69,14 +70,14 @@ export const InterviewView = observer(({route}) => {
         <ImageBackground
             resizeMode="stretch"
             source={require('../../../assets/backgrounds/gradientCard4.png')}
-            style={[s.cardGradientContainer]}
+            style={[s.cardGradientContainer, {borderRadius: stripHtmlTags(articlesStore.currentInterview.title).length > 100 ? 36 : 22}]}
             >
                 <View style={{width: '55%'}}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>{stripHtmlTags(articlesStore.currentInterview.thumb_title)}</IfgText>
                 <IfgText  color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>{stripHtmlTags(articlesStore.currentInterview.title)}</IfgText>
                 <ButtonTo style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Участвовать" whiteIcon/>
                 </View>
-                <Image resizeMode="contain" style={{position: 'absolute',width: '55%', height: '130%',  right: 0 }}
+                <Image resizeMode="contain" style={{width: '56%', height: '130%', bottom: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? -16 : 8, right: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? 48 : 32  }}
                 source={{uri: `https://ifeelgood.life${articlesStore.currentInterview.media[0].full_path[0]}`}}/>
         </ImageBackground>
         <View style={gs.mt16} />
@@ -169,12 +170,13 @@ const s = StyleSheet.create({
         padding: 16,
     },
     cardGradientContainer:{
-        flex: 1,
+        // flex: 1,
         padding: 16,
+        paddingRight: 0,
         flexDirection: 'row',
         gap: 10,
         overflow: 'hidden',
-        borderRadius: 22,
+        justifyContent: 'space-between',
       },
       buttonBack: {
         flexDirection: 'row',

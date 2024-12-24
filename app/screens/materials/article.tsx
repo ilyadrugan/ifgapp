@@ -7,7 +7,7 @@ import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
-import { parseHTMLToObjects, stripHtmlTags } from '../../core/utils/stripHtmlTags';
+import { parseHTMLToObjects, parseHTMLToSequentialObjects, stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Like from '../../../assets/icons/like.svg';
@@ -33,9 +33,11 @@ export const ArticleView = observer(({route}) => {
     const [isInFavoriet, setIsInFavoriet] = useState(false);
     useEffect(() => {
       if (articleId !== undefined) {
-        loadArticleById(articleId);
+        loadArticleById(articleId).then(()=>{
+         console.log(JSON.stringify(parseHTMLToSequentialObjects(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '', null, 2)));
+        }
+        );
         console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
-        // console.log(parseHTMLToObjects(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || ''));
         setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));
       }
     }, []);
@@ -161,14 +163,14 @@ export const ArticleView = observer(({route}) => {
             </View>
           </View>
         <View style={gs.mt16} />
-        {/* <FlatList
+        <FlatList
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
                 data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
-        /> */}
+        />
         <View style={{height: 100}} />
     </ScrollView>}</>;
     });

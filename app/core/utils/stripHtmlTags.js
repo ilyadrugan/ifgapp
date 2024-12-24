@@ -70,3 +70,47 @@ export function parseHTMLToObjects(htmlString) {
 
     return result;
   }
+
+export  function parseHTMLToSequentialObjects(htmlString) {
+    const result = [];
+    const stack = []; // Для отслеживания вложенности
+
+    const parser = new Parser(
+      {
+        onopentag(name, attributes) {
+          const tagObject = { tag: name, attributes, children: [] };
+
+          // Если есть вложенность, добавляем объект в children последнего тега
+          if (stack.length > 0) {
+            const parent = stack[stack.length - 1];
+            parent.children.push(tagObject);
+          } else {
+            result.push(tagObject); // Иначе добавляем в корневой массив
+          }
+
+          // Пушим текущий тег в стек
+          stack.push(tagObject);
+        },
+        ontext(text) {
+          text = text.trim();
+          if (text && stack.length > 0) {
+            // Добавляем текст в children текущего открытого тега
+            const parent = stack[stack.length - 1];
+            parent.children.push({ text });
+          } else if (text) {
+            // Если нет текущего тега, добавляем текст в корень
+            result.push({ text });
+          }
+        },
+        onclosetag() {
+          stack.pop(); // Убираем текущий тег из стека при закрытии
+        },
+      },
+      { decodeEntities: true } // Декодируем HTML-сущности
+    );
+
+    parser.write(htmlString);
+    parser.end();
+
+    return result;
+  }

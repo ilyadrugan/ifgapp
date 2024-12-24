@@ -25,6 +25,7 @@ class ArticlesStore {
     views: 0,
     created_at: '',
     url: '',
+    type: '',
   };
   interViewsActual: InterViewsTypesModel = {
     current_page: 1,
@@ -135,6 +136,7 @@ class ArticlesStore {
       views: 0,
       created_at: '',
       url: '',
+      type: '',
     };
   }
   clearCurrentInterView() {
