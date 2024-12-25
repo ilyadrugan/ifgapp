@@ -34,9 +34,9 @@ export const IndividualProgramm = observer(({route}) => {
     const [recommends, setRecommends] = useState(true);
     useEffect(() => {
 
-        getMyTests().then(()=>console.log(testingStore.testsList[0].activiti_value_json));
+      getMyTests().then(()=>console.log(testingStore.testsList[0].activiti_value_json));
 
-    }, []);
+    }, [activiti_value_json]);
     const getMyTests = async () => await testingStore.getAllMyTest();
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
@@ -104,7 +104,7 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            <CircularProgress value={activiti_value_json ? activiti_value_json.pitaniye : JSON.parse(testingStore.testsList[0].activiti_value_json).pitaniye} maxValue={180 / 4} />
+            <CircularProgress value={Object.hasOwn(activiti_value_json, 'pitaniye') ? activiti_value_json.pitaniye : JSON.parse(testingStore.testsList[0].activiti_value_json).pitaniye} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -127,7 +127,7 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
-            <CircularProgress value={activiti_value_json ? activiti_value_json.sleep : JSON.parse(testingStore.testsList[0].activiti_value_json).sleep} maxValue={180 / 4} />
+            <CircularProgress value={Object.hasOwn(activiti_value_json, 'sleep') ? activiti_value_json.sleep : JSON.parse(testingStore.testsList[0].activiti_value_json).sleep} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -150,7 +150,7 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
-            <CircularProgress value={activiti_value_json ? activiti_value_json.anistres : JSON.parse(testingStore.testsList[0].activiti_value_json).anistres} maxValue={180 / 4} />
+            <CircularProgress value={Object.hasOwn(activiti_value_json, 'anistres')  ? activiti_value_json.anistres : JSON.parse(testingStore.testsList[0].activiti_value_json).anistres} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -179,6 +179,7 @@ export const IndividualProgramm = observer(({route}) => {
           </View>
         <View style={gs.mt16} />
         <FlatList
+                keyExtractor={(item, index)=> index.toString()}
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
