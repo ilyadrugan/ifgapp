@@ -178,14 +178,14 @@ export const IndividualProgramm = observer(({route}) => {
             </View>
           </View>
         <View style={gs.mt16} />
-        {/* <FlatList
+        <FlatList
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
                 data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
-        /> */}
+        />
     <View style={{height: 180}}/>
     <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}

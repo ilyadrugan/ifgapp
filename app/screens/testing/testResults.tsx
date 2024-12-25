@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Linking } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -15,14 +15,30 @@ import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
 import { individualProgramm, IndividualProgrammData } from './testData/individualProgramm';
 import authStore from '../../../store/state/authStore/authStore';
+import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
+import { html } from './mocksHtmlResults/htmlResults';
 // import VideoPlayer from 'react-native-video-player';
 
 export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
+    const [balanceLvl, setBalanceLvl] = useState(0);
     const {activiti_value_json} = route.params;
     const onBack = () => navigation.goBack();
-
+    useEffect(()=>{
+      if (activiti_value_json) {
+        const values = JSON.parse(activiti_value_json) as ActivitiValueModel;
+        console.log(values);
+        const summ = values.anistres + values['fiz-act'] + values.pitaniye + values.sleep;
+        console.log(summ);
+        if (summ <= 40) {setBalanceLvl(0);}
+        else if (summ <= 80) {setBalanceLvl(1);}
+        else if (summ <= 120) {setBalanceLvl(2);}
+        else if (summ <= 140) {setBalanceLvl(3);}
+        else if (summ <= 160) {setBalanceLvl(4);}
+        else {setBalanceLvl(5);}
+      }
+    }, [activiti_value_json]);
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -38,28 +54,28 @@ export const ResultTest = ({route}) => {
         Результаты тестирования
         </IfgText>
         <View style={gs.mt16} />
-        <CardContainer style={s.cardContainer} >
+        <CardContainer style={[s.cardContainer, {borderColor: html[balanceLvl].color}]} >
             <View style={[gs.flexRow, gs.alignCenter, {gap: 6}]}>
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>Ваш ifg-уровень</IfgText>
                 <Question />
             </View>
             <View style={[gs.flexRow, gs.alignCenter, {gap: 6}]}>
-                <View style={s.circle} >
+                <View style={[s.circle, {backgroundColor: html[balanceLvl].color}]} >
                     <Accept />
                 </View>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Оптимальный</IfgText>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{html[balanceLvl].title}</IfgText>
             </View>
         </CardContainer>
         <View style={gs.mt16} />
         <CardContainer>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваша ключевая задача</IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>баланс и постоянные практики по каждому из направлений.</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>{html[balanceLvl].quote}</IfgText>
         </CardContainer>
         <View style={gs.mt16} />
         <CardContainer>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Что означает?</IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>Результат тестирования свидетельствует о том, что вы либо выполняете абсолютный минимум для поддержки здоровья, либо у вас нарушен баланс. </IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>Например, вы можете правильно питаться и заниматься спортом, однако иметь высокий стресс на работе и не высыпаться. Вы поймёте это после ознакомления с рекомендациями!</IfgText>
+            <IfgText style={[gs.fontBodyMedium, gs.bold]}>Что означает?</IfgText>
+            <IfgText style={[gs.fontCaption2]}><IfgText style={gs.bold}>{html[balanceLvl].html[0]}</IfgText>{html[balanceLvl].html[1]}</IfgText>
+            <IfgText style={[gs.fontCaption2]}>{html[balanceLvl].html[2]}</IfgText>
         </CardContainer>
         <View style={gs.mt16} />
         <ImageBackground
@@ -68,10 +84,10 @@ export const ResultTest = ({route}) => {
         style={[s.cardGradientContainer]}
          >
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
-            <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
-            <Button style={s.howItWorksButton}>
+            <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Поможем сделать первые шаги на пути к хорошему самочувствию. Запускайте бот-помощник и внедряйте полезные привычки вместе с нами в течение 21 дня.</IfgText>
+            <Button onPress={()=>Linking.openURL('https://t.me/ifgbot_bot')} style={s.howItWorksButton}>
                 <>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Как это работает?</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>Начать</IfgText>
                     <Play />
                 </>
             </Button>
@@ -131,16 +147,17 @@ const s = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent:'space-between',
-        borderRadius: 26,
+        borderRadius: 24,
         borderColor: colors.GREEN_COLOR,
         borderWidth: 16,
-        backgroundColor: '#EFFCF4',
+        backgroundColor: '#ffffff',
       },
       cardGradientContainer:{
         flex: 1,
         padding: 16,
         flexDirection: 'column',
         gap: 10,
+        borderRadius: 32,
       },
       imageStyle: {
         maxHeight: 110,
