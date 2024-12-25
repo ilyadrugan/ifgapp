@@ -198,7 +198,7 @@ const DropdownBlock: FC<{
     console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
     console.log('interviewsQueryParams',articlesStore.getInterViewsQueryParamsString());
     if (activeTab === 0) {
-      // await articlesStore.clearArticles();
+      await articlesStore.clearArticles();
       await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
     }
     if (activeTab === 1) {
