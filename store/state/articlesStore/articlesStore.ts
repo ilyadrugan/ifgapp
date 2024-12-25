@@ -102,6 +102,7 @@ class ArticlesStore {
     this.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
   }
   clearInterViews(type: string) {
+    console.log('clearInterViews');
     if (type === 'actual') {
       this.interViewsActual = {
         current_page: 1,
@@ -194,8 +195,8 @@ class ArticlesStore {
       });
   }
   async loadMoreArticles(query?: string) {
-    console.log('loadMoreArticles',this.articlesList );
-    if (this.articlesList.isLoading || !this.articlesList.hasMore) {return;}
+    // console.log('loadMoreArticles',this.articlesList );
+    if (this.articlesList.isLoading || (!this.articlesList.hasMore && this.articlesList.articles.length !== 0)) {return;}
     this.articlesList.isLoading = true;
     await getArticlesByTagsApi(query)
       .then((result)=>{
@@ -215,9 +216,10 @@ class ArticlesStore {
       .finally(()=>{this.articlesList.isLoading = false;});
   }
   async loadMoreActualInterviews(query?: string) {
-    console.log('loadMoreActualInterviews',this.interViewsActual);
-    if (this.interViewsActual.isLoading || !this.interViewsActual.hasMore) {return;}
+    // console.log('loadMoreActualInterviews',this.interViewsActual);
+    if (this.interViewsActual.isLoading || (!this.interViewsActual.hasMore && this.interViewsActual.interviews.length !== 0)) {return;}
     this.interViewsActual.isLoading = true;
+
     await getInterViewsByTagsApi(query)
       .then((result)=>{
         runInAction(() => {
@@ -236,8 +238,8 @@ class ArticlesStore {
       .finally(()=>{this.interViewsActual.isLoading = false;});
   }
   async loadMoreFinishedInterviews(query?: string) {
-    console.log('loadMoreFinishedInterviews',this.interViewsFinished);
-    if (this.interViewsFinished.isLoading || !this.interViewsFinished.hasMore) {return;}
+    // console.log('loadMoreFinishedInterviews',this.interViewsFinished);
+    if (this.interViewsFinished.isLoading || (!this.interViewsFinished.hasMore && this.interViewsFinished.interviews.length !== 0)) {return;}
     this.interViewsFinished.isLoading = true;
     await getInterViewsByTagsApi(query)
       .then((result)=>{

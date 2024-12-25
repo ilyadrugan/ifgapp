@@ -109,16 +109,16 @@ export const MaterialsScreen = observer(() => {
     //     setRefreshing(false);
     // };
     const onLoadMore = async () => {
-        if (activeTab === 0) {
+        if (activeTab === 0 && articlesStore.articlesList.hasMore) {
             articlesStore.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
             await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
         }
         if (activeTab === 1) {
-            if (activeSwitch === 0) {
+            if (activeSwitch === 0 && articlesStore.interViewsActual.hasMore) {
                 articlesStore.interViewsQueryParams.page =  `${articlesStore.interViewsActual.current_page}`;
                 await articlesStore.loadMoreActualInterviews(articlesStore.getInterViewsQueryParamsString());
             }
-            if (activeSwitch === 1) {
+            if (activeSwitch === 1 && articlesStore.interViewsFinished.hasMore) {
                 articlesStore.interViewsQueryParams.page =  `${articlesStore.interViewsFinished.current_page}`;
                 await articlesStore.loadMoreFinishedInterviews(articlesStore.getInterViewsQueryParamsString());
             }
