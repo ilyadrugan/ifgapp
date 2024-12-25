@@ -102,7 +102,7 @@ return <CardContainer >
         </TouchableOpacity>
       <View style={[gs.ml12]}>
 
-      <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + '\n'}{userStore.userInfo?.last_name}</IfgText>
+      <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}</IfgText>
       </View>
   </View>
   <Button style={s.buttonBack} onPress={()=> navigation.navigate('Профиль')}>

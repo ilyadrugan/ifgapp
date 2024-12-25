@@ -152,8 +152,11 @@ const CustomCalendar = () => {
           <TouchableOpacity
             key={date.toDateString()}
             onLayout={(event) => {
+              if (!boxWidth) {
                 const { width } = event.nativeEvent.layout;
                 setBoxWidth(width);
+              }
+
             }}
             style={[
               s.dayContainer,
