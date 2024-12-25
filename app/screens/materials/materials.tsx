@@ -32,12 +32,12 @@ export const MaterialsScreen = observer(() => {
     const [refreshing, setRefreshing] = useState(false);
     const onSwitch = async (id: number) => {
         if (id === 1) {
-            await articlesStore.clearInterViews('actual');
+            // await articlesStore.clearInterViews('actual');
             await articlesStore.loadMoreFinishedInterviews(articlesStore.getInterViewsQueryParamsString());
         }
         if (id === 0) {
 
-            await articlesStore.clearInterViews('finished');
+            // await articlesStore.clearInterViews('finished');
             await articlesStore.loadMoreActualInterviews(articlesStore.getInterViewsQueryParamsString());
         }
         setSwitch(id);
@@ -63,7 +63,7 @@ export const MaterialsScreen = observer(() => {
 
     const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
 
-        return <CardContainer style={s.articleCard}>
+        return <CardContainer key={activeTab + index + activeTab} style={s.articleCard}>
             {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
 
             style={{ width: '40%', height: '100%' }}
@@ -76,7 +76,7 @@ export const MaterialsScreen = observer(() => {
         </CardContainer>;
       };
     const renderInterviewItem:FC<{item: InterViewModel, index:number}> = ({item, index}) => {
-        return <CardContainer style={s.interviewCard}>
+        return <CardContainer key={activeTab + index + activeTab} style={s.interviewCard}>
                 <>
             {(index % 2 === 0 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '40%', height: '100%' }}
@@ -128,7 +128,8 @@ export const MaterialsScreen = observer(() => {
 return <>
        <FlatList
        style={s.container}
-       keyExtractor={(item, index)=>item.id.toString()}
+       keyExtractor={(item, index)=>activeTab + index.toString() + activeTab}
+
     //    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
        ListFooterComponent={<>
        <View style={gs.mt16} />

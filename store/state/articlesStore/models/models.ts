@@ -95,7 +95,8 @@ export type ArticleSortModel = {
     tag_id: number,
     title: string,
     order?: number,
-    sort_value?: string
+    sort_value?: string,
+    sort_field: string
 }
 
 export type ArticleQueryParamsModel = {

@@ -19,7 +19,6 @@ import Star from '../../../assets/icons/star.svg';
 import Share from '../../../assets/icons/share.svg';
 import RenderHTML from 'react-native-render-html';
 import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
-import { MaterialCard } from '../ifg-home/ifg-home';
 import { onShare } from '../../core/components/share/share';
 import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlayer/youtubePlayer';
 
@@ -51,7 +50,18 @@ export const InterviewView = observer(({route}) => {
     // const addInFavorite = async () => await articlesStore.changeUserArticle(articleId).then(()=>
     //   {console.log(articlesStore.articlesUserList.map((item)=>item.id));
     //   setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));});
-
+    const MaterialCard = ({title, media, subtitle, id}, index)=>
+      <CardContainer onPress={()=>navigation.replace('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+                {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
+                style={{ height: 114, width: '100%' }}
+                /> :
+                <View style={{height: 114, width: '100%', backgroundColor: 'gray' }} />
+                }
+        <View style={{paddingHorizontal: 14}}>
+        <IfgText numberOfLines={3} style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
+        <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
+        </View>
+    </CardContainer>;
     return <>
     {articlesStore.isLoading && <View style={{justifyContent: 'center', alignItems: 'center', height: '100%' }}>
       <ActivityIndicator size={'large'} animating/>
@@ -141,7 +151,7 @@ export const InterviewView = observer(({route}) => {
           </Button>
         </View>
         <View style={gs.mt24} />
-        {/* <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>
+        <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>
 
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>{'А также читайте'}</IfgText>
             <View>
@@ -149,15 +159,16 @@ export const InterviewView = observer(({route}) => {
 
             </View>
           </View>
-        <View style={gs.mt16} /> */}
-        {/* <FlatList
+        <View style={gs.mt16} />
+        <FlatList
+                keyExtractor={(item, index)=> index.toString()}
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
                 data={articlesStore.articlesList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
-        /> */}
+        />
         <View style={{height: 100}} />
     </ScrollView>}</>;
     });

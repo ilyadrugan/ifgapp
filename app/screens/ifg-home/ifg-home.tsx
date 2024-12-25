@@ -150,6 +150,7 @@ return <>
           </View>
           <View style={gs.mt16} />
           <FlatList
+                keyExtractor={(item, index)=>index.toString()}
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
