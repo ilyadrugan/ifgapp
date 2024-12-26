@@ -6,6 +6,9 @@ const gs = StyleSheet.create({
     fontSize: 48,
     lineHeight: 48,
   },
+  italic: {
+    fontStyle: 'italic',
+  },
   bold: {
     fontFamily: 'tilda-sans_extra-bold',
   },

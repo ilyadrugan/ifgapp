@@ -13,8 +13,8 @@ export type ArticleViewModel = {
     title: string,
     subtitle: string,
     datetime_publish: string,
-    body?: string,
-    body_json?: string,
+    body: string | null,
+    body_json: BodyJsonType[] | null,
     id: number,
     media: MediaModel[],
     like: number,
@@ -23,6 +23,10 @@ export type ArticleViewModel = {
     created_at: string,
     url: string,
     type: string
+}
+
+export type BodyJsonType = {
+    data: string
 }
 
 export type ArticleListModel = {

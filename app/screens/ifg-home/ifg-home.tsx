@@ -44,11 +44,16 @@ export const IFGHome = observer(() => {
     useEffect(() => {
       userStore.getProfile();
       articlesStore.loadMoreArticles();
+      articlesStore.clearCurrentArticle();
+
+      console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
 
     }, []);
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
-      <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+      <CardContainer onPress={async()=>{
+        await articlesStore.clearCurrentArticle();
+        navigation.navigate('ArticleView', {articleId: id});}}  style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
                 style={{ height: 114, width: '100%' }}
                 /> :
@@ -165,6 +170,7 @@ return <>
           </View>
         <View style={gs.mt16}/></>}
         <FlatList
+                keyExtractor={(item, index)=>index.toString()}
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}

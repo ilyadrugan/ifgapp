@@ -7,7 +7,7 @@ import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
-import { parseHTMLToObjects, parseHTMLToSequentialObjects, stripHtmlTags } from '../../core/utils/stripHtmlTags';
+import { parseHTMLToSequentialObjects, stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Like from '../../../assets/icons/like.svg';
@@ -20,37 +20,41 @@ import VerifiedScience from '../../../assets/icons/articleTypes/verified_science
 import RenderHTML from 'react-native-render-html';
 import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
 import { onShare } from '../../core/components/share/share';
+import RenderHTMLContent from './components/renderHTMLJson';
+import data from './tmp.json';
 
 const width = Dimensions.get('screen').width;
 
 export const ArticleView = observer(({route}) => {
     const navigation = useNavigation<any>();
     const onBack = () => {
-      articlesStore.clearCurrentArticle();
       navigation.goBack();
     };
     const { articleId } = route.params;
-    const [isInFavoriet, setIsInFavoriet] = useState(false);
+    const [isInFavorite, setIsInFavorite] = useState(false);
     useEffect(() => {
-      if (articleId !== undefined) {
-        loadArticleById(articleId).then(()=>{
-         console.log(JSON.stringify(parseHTMLToSequentialObjects(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '', null, 2)));
-        }
-        );
-        console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
-        setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));
-      }
-    }, []);
+      console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
 
+     if (articleId !== undefined) {
+        loadArticleById(articleId).then(()=>
+        setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
+        // console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
+      }
+    }, [articleId]);
+    const clearCurrentArticle = async () => await articlesStore.clearCurrentArticle();
     const loadArticleById = async (id) => await articlesStore.getArticleById(id);
 
     const likeArticle = async (action: number) => await articlesStore.changeLikeUserArticle(articleId, action);
 
     const addInFavorite = async () => await articlesStore.changeUserArticle(articleId).then(()=>
       {console.log(articlesStore.articlesUserList.map((item)=>item.id));
-      setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));});
-    const MaterialCard = ({title, media, subtitle, id}, index)=>
-        <CardContainer onPress={()=>navigation.replace('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
+      setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId));});
+
+      const MaterialCard = ({title, media, subtitle, id}, index)=>
+        <CardContainer onPress={async()=>{
+          await articlesStore.clearCurrentArticle();
+          navigation.replace('ArticleView', {articleId: id});}}
+          style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                   {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
                   style={{ height: 114, width: '100%' }}
                   /> :
@@ -81,14 +85,10 @@ export const ArticleView = observer(({route}) => {
                 source={{uri: `https://ifeelgood.life${articlesStore.currentArticle.media[0].full_path[0]}`}}
         />
 
-        {/*<View style={gs.mt16} />
-         <CardContainer>
-        <RenderHTML
-        // contentWidth={300}
-        source={{ html: articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '' }}
-      />
-          <IfgText>{stripHtmlTags(articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '').replace(/&.*;/g, ' ')}</IfgText>
-        </CardContainer> */}
+        <View style={gs.mt16} />
+         <CardContainer style={{gap:0}}>
+        <RenderHTMLContent fromBodyJson={articlesStore.currentArticle.body_json ? true : false} content={articlesStore.currentArticle.body_json ? articlesStore.currentArticle.body_json[0].data : articlesStore.currentArticle.body} />
+        </CardContainer>
         <View style={gs.mt24} />
         <View style={[gs.flexRow, {gap: 12,width: '100%', justifyContent: 'space-between'} ]}>
         <View style={{flex: 1}}>
@@ -139,11 +139,11 @@ export const ArticleView = observer(({route}) => {
           <IfgText style={gs.fontCaption2}>{articlesStore.currentArticle.views}</IfgText>
           </Button>
 
-          <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavoriet ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+          <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
           <View >
           <Star />
           </View>
-          <IfgText style={gs.fontCaption2}>В {isInFavoriet ? 'избранном' : 'избранное'}</IfgText>
+          <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
           </Button>
           <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
           style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
@@ -165,6 +165,7 @@ export const ArticleView = observer(({route}) => {
         <View style={gs.mt16} />
         <FlatList
                 horizontal
+                keyExtractor={(item, index)=>index.toString()}
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}

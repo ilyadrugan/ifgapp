@@ -17,7 +17,8 @@ class ArticlesStore {
     title: '',
     subtitle: '',
     datetime_publish: '',
-    body: '',
+    body: null,
+    body_json: null,
     id: 0,
     media: [],
     like: 0,
@@ -129,7 +130,8 @@ class ArticlesStore {
       title: '',
       subtitle: '',
       datetime_publish: '',
-      body: '',
+      body: null,
+      body_json: null,
       id: 0,
       media: [],
       like: 0,
@@ -161,15 +163,37 @@ class ArticlesStore {
     this.errorMessage = '';
     await getArticleByIdApi(id)
       .then((result)=>{
+        console.log('result.data.data',result.data.data);
+
         this.currentArticle = result.data.data;
-        if (result.data.data.body_json) {
-          this.currentArticle.body_json = result.data.data.body_json[0].data;
-          // console.log('result.data.data.body_json[0].data', result.data.data.body_json[0].data);
-        }
+
+        // this.currentArticle = {
+        //   id: result.data.data.id,
+        //   title: result.data.data.title,
+        //   subtitle: result.data.data.subtitle,
+        //   datetime_publish: result.data.data.datetime_publish,
+        //   like: result.data.data.like,
+        //   unlike: result.data.data.unlike,
+        //   type: result.data.data.type,
+        //   media: result.data.data.media,
+        //   created_at: result.data.data.created_at,
+        //   views: result.data.data.views,
+        //   body: null,
+        //   body_json: null,
+        //   url: result.data.data.url,
+
+        // };
+        // console.log('this.currentArticle',this.currentArticle);
+        // console.log('result.data.data',result.data.data.body);
+        // if (result.data.data.body_json.length > 0) {
+        //   this.currentArticle.body_json = result.data.data.body_json[0].data;
+        //   console.log('result.data.data.body_json[0].data', result.data.data.body_json[0].data);
+        // }
+        // this.currentArticle.body = result.data.data.body;
       }
       )
       .catch((err)=>{
-        console.log('ERROR', err.message);
+        console.log('ERROR getArticleById', err.message);
         errorToast(err.message);
         this.errorMessage = err.message;
       })
