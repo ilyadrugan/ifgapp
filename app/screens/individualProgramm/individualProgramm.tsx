@@ -25,18 +25,30 @@ import {CheckBox} from '../../core/components/checkbox/checkbox';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import { observer } from 'mobx-react';
+import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
 
 export const IndividualProgramm = observer(({route}) => {
     const navigation = useNavigation<any>();
-    const { activiti_value_json } = route.params;
+    const { params } = route;
+    const activiti_value_json = params?.activiti_value_json;
+  const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
+    console.log(activiti_value_json);
+
+    // const { activiti_value_json } = route.params || undefined;
+    // console.log('activiti_value_json', activiti_value_json);
     const onBack = () => navigation.goBack();
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [recommends, setRecommends] = useState(true);
     useEffect(() => {
+      if (!activiti_value_json) {
+        console.log('activiti_value_json is undefined');
+        getMyTests().then(()=>setActivityValue(JSON.parse(testingStore.testsList[0].activiti_value_json)));
+      }
+      else {
+        setActivityValue(activiti_value_json);
+      }
 
-      getMyTests().then(()=>console.log(testingStore.testsList[0].activiti_value_json));
-
-    }, [activiti_value_json]);
+    }, []);
     const getMyTests = async () => await testingStore.getAllMyTest();
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
@@ -98,13 +110,13 @@ export const IndividualProgramm = observer(({route}) => {
         </>}
         <View style={gs.mt16} />
 
-        {!testingStore.isLoading && (activiti_value_json || testingStore.testsList[0].activiti_value_json ) && <><CardContainer>
+        {activityValue  && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            <CircularProgress value={Object.hasOwn(activiti_value_json, 'pitaniye') ? activiti_value_json.pitaniye : JSON.parse(testingStore.testsList[0].activiti_value_json).pitaniye} maxValue={180 / 4} />
+            <CircularProgress value={activityValue.pitaniye} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -127,7 +139,7 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
-            <CircularProgress value={Object.hasOwn(activiti_value_json, 'sleep') ? activiti_value_json.sleep : JSON.parse(testingStore.testsList[0].activiti_value_json).sleep} maxValue={180 / 4} />
+            <CircularProgress value={activityValue.sleep} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
@@ -150,7 +162,7 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
-            <CircularProgress value={Object.hasOwn(activiti_value_json, 'anistres')  ? activiti_value_json.anistres : JSON.parse(testingStore.testsList[0].activiti_value_json).anistres} maxValue={180 / 4} />
+            <CircularProgress value={activityValue.anistres} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
