@@ -20,6 +20,7 @@ import { observer } from 'mobx-react';
 import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
 import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
 import { useImageUploader } from '../../../core/components/imagePicker/imagePicker';
+import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -146,7 +147,7 @@ return <CardContainer >
   </Animated.View>
 
   </CardContainer>
-  <IFGScoreLine score={86} title={'IFG-баллы за сегодня'} />
+  <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы за сегодня'} />
   <IFGActivity/>
 
 

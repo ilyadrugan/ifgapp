@@ -33,6 +33,7 @@ import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import storiesStore from '../../../store/state/storiesStore/storiesStore';
 import { StoryModal } from '../../core/components/storyModal/storyModal';
 import { GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
+import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
 
 
 export const IFGHome = observer(() => {
@@ -42,9 +43,10 @@ export const IFGHome = observer(() => {
 
     useEffect(() => {
       userStore.getProfile();
+      storiesStore.getStories();
+      ifgScoreStore.getScoreToday()
       articlesStore.loadMoreArticles();
       articlesStore.clearCurrentArticle();
-      storiesStore.getStories();
       console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
 
     }, []);
