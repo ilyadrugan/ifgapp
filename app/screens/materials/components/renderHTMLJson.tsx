@@ -1,21 +1,28 @@
 import React from 'react';
-import { Text, View, StyleSheet, Linking, Image } from 'react-native';
+import { Text, View, StyleSheet, Linking, Image, Dimensions, StyleProp, StyleSheetProperties, ViewStyle, TextStyle } from 'react-native';
 import { parseHTMLToSequentialObjects, stripHtmlTags } from '../../../core/utils/stripHtmlTags';
 import Accept from '../../../../assets/icons/accept-article.svg';
 import gs from '../../../core/styles/global';
 // import { Text } from '../../../core/components/text/ifg-text';
 import colors from '../../../core/colors/colors';
 import { IfgText } from '../../../core/components/text/ifg-text';
+
+const width = Dimensions.get('screen').width;
 export const RenderHTMLContent = ({ content, fromBodyJson }) => {
+  let styleText: StyleProp<ViewStyle | TextStyle> = {};
 const renderNode = (node, index) => {
 
   if (node.text) {
     // Оборачиваем текст в <Text>, чтобы избежать ошибки
       // return node.text;
-
+      let style;
+      if (!fromBodyJson) {
+        style = styleText;
+        styleText = {} as StyleProp<ViewStyle | TextStyle>;
+      }
 
       return fromBodyJson ? node.text :
-        <Text key={index} style={styles.defaultText}>
+        <Text key={index} style={[styles.defaultText, style]}>
           {node.text}
          </Text>
       ;
@@ -48,6 +55,8 @@ const renderNode = (node, index) => {
               </View>
             );
       case 'li':
+        console.log('li', node, node.children);
+
         return (
           <View style={styles.li}>
             {node.isOrdered ? (
@@ -100,6 +109,7 @@ const renderNode = (node, index) => {
             </Text>
         );
       case 'a':
+        styleText = [styleText, styles.link];
         return (
           <Text
             style={styles.link}
@@ -108,28 +118,31 @@ const renderNode = (node, index) => {
             </Text>
         );
       case 'strong':
+        styleText = [styleText, gs.bold];
         return (
           <Text style={styles.strong}>
             {node.children.map((child, childIndex) => renderNode(child, childIndex))}
             </Text>
         );
       case 'em':
+        styleText = [styleText, gs.italic];
         return (
           <Text style={styles.em}>
             {node.children.map((child, childIndex) => renderNode(child, childIndex))}
             </Text>
         );
-      // case 'img':
-      //   console.log('node.attributes?.src', `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`);
-      //   const imageUri = node.attributes?.src || '';
-      //   if (!imageUri) {return null;}
-      //   return (
-      //       <Image
-      //         source={{ uri: `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}` }}
-      //         resizeMode="contain" style={{width: '100%', height: 200}}
-      //         onError={(e) => console.warn('Failed to load image:', e.nativeEvent.error)}
-      //         />
-      //     );
+      case 'img':
+        console.log('node.attributes?.src', `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`);
+        const imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
+        // if (!imageUri) {return null;}
+        return (
+          <View style={{backgroundColor: 'black'}}>
+            <Image
+              source={{ uri: imageUri }}
+              resizeMode="contain" style={{width: '100%', height: 200}}
+              onError={(e) => console.warn('Failed to load image:', e.nativeEvent.error)}
+              /></View>
+          );
       default:
         return null; // Для тегов, которые не обрабатываются
     }
@@ -155,6 +168,7 @@ const styles = StyleSheet.create({
     ...gs.fontCaption2,
     marginBottom: 12,
     color: colors.PLACEHOLDER_COLOR,
+    flex: 1,
   },
   ul: {
 
@@ -194,6 +208,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 12,
     color: colors.PLACEHOLDER_COLOR,
+    flex: 1,
+
   },
   blockquote: {
     justifyContent: 'center',
@@ -214,6 +230,8 @@ const styles = StyleSheet.create({
   span: {
     ...gs.fontCaption2,
     color: colors.PLACEHOLDER_COLOR,
+    maxWidth: width - 3 * 32 ,
+
   },
   link: {
     color: colors.GREEN_COLOR,

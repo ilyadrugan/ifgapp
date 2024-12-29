@@ -5,9 +5,9 @@ import { FirebaseMessagingTokenDeleteModel, FirebaseMessagingTokenUpdateModel } 
 export const FirebaseApi = {
   updateMessagingToken: async (model: FirebaseMessagingTokenUpdateModel) => {
     console.log('updateMessagingToken', model);
-    return await HttpClient.post(`${BASE_URL}/firebase/messaging-token`, model);
+    return await HttpClient.post(`${BASE_URL}/lk/send-fcm`, model);
   },
   deleteMessagingToken: async (model: FirebaseMessagingTokenDeleteModel) => {
-    return await HttpClient.post(`${BASE_URL}/firebase/delete-messaging-token`, model);
+    return await HttpClient.post(`${BASE_URL}/lk/delete-fcm`, model);
   },
 };

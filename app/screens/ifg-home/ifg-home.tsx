@@ -30,22 +30,21 @@ import userStore from '../../../store/state/userStore/userStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
-
+import storiesStore from '../../../store/state/storiesStore/storiesStore';
+import { StoryModal } from '../../core/components/storyModal/storyModal';
+import { GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
 
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [currentStoryPressed, setCurrentStoryPressed] = useState(0);
 
-        // const rotateInterpolation = rotation.interpolate({
-    //   inputRange: [0, 1],
-    //   outputRange: ['0deg', '-180deg'],
-    // });
-    // const getUserProfile = async () => await userStore.getProfile();
     useEffect(() => {
       userStore.getProfile();
       articlesStore.loadMoreArticles();
       articlesStore.clearCurrentArticle();
-
+      storiesStore.getStories();
       console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
 
     }, []);
@@ -64,10 +63,12 @@ export const IFGHome = observer(() => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
-    const StoryCard = ({title, borderColor, bgColor, id})=>
-          <CardContainer  style={[{width: 124, height: 166, padding:12, borderRadius: 16, borderWidth: 1, borderColor:  borderColor, backgroundColor: bgColor, justifyContent: 'space-between' }, gs.mr12, id === 0 && gs.ml16]} >
+    const StoryCard = (item: StoryModel, index)=>
+          <CardContainer onPress={() => {
+            setCurrentStoryPressed(index);
+            setModalVisible(true);}} style={[{width: 124, height: 166, padding:12, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(item.category_id).borderColor, backgroundColor: GetActivityBgColorName(item.category_id).bgColor, justifyContent: 'space-between' }, gs.mr12, index === 0 && gs.ml16]} >
             <Eye />
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontLightSmall, gs.regular]}>{title}</IfgText>
+            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontLightSmall, gs.regular]}>{item.title}</IfgText>
       </CardContainer>;
 return <>
 
@@ -75,14 +76,17 @@ return <>
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
         <View style={gs.mt16} />
+
         <FlatList
-          data={Stories}
+          keyExtractor={(item, index) => index.toString()}
+          data={storiesStore.storiesList}
           horizontal
           style={{marginHorizontal: -16}}
           contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
           showsHorizontalScrollIndicator={false}
-          renderItem={({item})=>StoryCard(item)}
+          renderItem={({item, index})=>StoryCard(item, index)}
         />
+
         <View style={gs.mt24} />
 
         <ActivityBlock />
@@ -210,6 +214,12 @@ return <>
          </ImageBackground>
 
         <View style={{height: 70}}/>
+       {storiesStore.storiesList.length > 0 && <StoryModal
+        stories={storiesStore.storiesList}
+        currentStoryPressed={currentStoryPressed}
+        isVisible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+      />}
       </ScrollView>
       <ChatFooter />
     </>;

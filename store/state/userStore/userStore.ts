@@ -49,6 +49,7 @@ class UserStore {
               birthday: response.data.profile.birthday,
             } as UserInfo);
             this.isLoading = false;
+            console.log(userStore.userInfo);
           }
         } catch (error) {
           console.error(error);

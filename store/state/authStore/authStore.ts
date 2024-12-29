@@ -6,6 +6,7 @@ import { UserInfo } from '../userStore/models/models';
 import { LoginByUserPasswordModel, LoginByUserPasswordState, RegisterFormModel, RegisterFormState } from './models/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateFirebaseMessagingToken } from '../../../app/core/firebase/firebase';
+import { errorToast } from '../../../app/core/components/toast/toast';
 
 class AuthStore {
   isAuthenticated = false; // Авторизован ли пользователь
@@ -85,7 +86,12 @@ class AuthStore {
         userStore.setUser(result.data.user);
         this.setIsOnBoarded();
         console.log('login updateFirebaseMessagingToken');
-        updateFirebaseMessagingToken();
+        updateFirebaseMessagingToken()
+          .then(res=> console.log(res.data))
+          .catch((err)=>{
+            console.log('updateFirebaseMessagingToken Error',err.message);
+            errorToast(err.message);
+          });
         this.access_token && callBack();
       }
       })

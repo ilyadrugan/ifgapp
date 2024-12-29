@@ -5,15 +5,15 @@ import { FirebaseApi } from './firebase.api';
 import { FirebaseMessagingTokenUpdateModel, FirebaseMessagingTokenDeleteModel } from './firebase.model';
 
 export async function updateFirebaseMessagingToken() {
-  const token = await messaging().getToken();
+  const fcm_token = await messaging().getToken();
   const deviceName = getModel();
   const deviceId = await syncUniqueId();
   const os = Platform.OS === 'android' ? 0 : 1;
   const tokenUpdateModel = {
-    token,
-    deviceName,
-    deviceId,
-    platformOs: os,
+    fcm_token,
+    // deviceName,
+    // deviceId,
+    // platformOs: os,
   } as FirebaseMessagingTokenUpdateModel;
   return await FirebaseApi.updateMessagingToken(tokenUpdateModel);
 }

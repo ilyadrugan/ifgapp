@@ -61,8 +61,9 @@ export function useFirebaseMessaging(
     });
 
     async function onMessageReceived(message: FirebaseMessagingTypes.RemoteMessage) {
-      if (!message) {return;}
       console.log('onMessageReceived');
+      if (!message) {return;}
+
       console.log(message);
       const channelId = await notifee.createChannel({
         id: 'default',
@@ -76,7 +77,7 @@ export function useFirebaseMessaging(
         data: message.data,
         android: {
           channelId: channelId,
-          // smallIcon: 'ic_notification',
+          smallIcon: 'ic_notification',
           color: colors.GREEN_COLOR,
         },
       });

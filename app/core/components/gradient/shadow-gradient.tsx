@@ -2,10 +2,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import React, { FC } from 'react';
 
-export const ShadowGradient:FC<{opacity: number, style?: StyleProp<ViewStyle>,}> = ({opacity = 0.75, style}) =>
+export const ShadowGradient:FC<{opacity: number, style?: StyleProp<ViewStyle>,onTop?: boolean}> = ({opacity = 0.75, style, onTop}) =>
     <LinearGradient
         colors={['transparent', `rgba(0, 0, 0, ${opacity})` ]}
-        style={[s.shadowGradient ]}
+        style={[s.shadowGradient, onTop ? {top: 0} : { bottom: 0} ]}
         />;
 
 
