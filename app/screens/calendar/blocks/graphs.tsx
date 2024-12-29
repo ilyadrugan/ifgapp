@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
@@ -6,6 +6,7 @@ import { TabInterface, TabsMaterials } from '../../materials/components/tabs';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import colors from '../../../core/colors/colors';
 import VictoryGraph from './victoryGraph';
+import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 
 const tabss: TabInterface[] = [
     {
@@ -34,6 +35,11 @@ const switchs = [
 export const Graphs = () =>{
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
+
+    useEffect(() => {
+        dailyActivityStore.getIfgScoreActivity('week');
+      }, []);
+
     const onSwitch = (id: number) => {
         setSwitch(id);
     };

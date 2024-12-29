@@ -77,7 +77,7 @@ export function useFirebaseMessaging(
         data: message.data,
         android: {
           channelId: channelId,
-          smallIcon: 'ic_notification',
+          // smallIcon: 'ic_notification',
           color: colors.GREEN_COLOR,
         },
       });

@@ -1,7 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-import { BASE_URL } from '../../../app/core/hosts';
-import axios from 'axios';
-import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 import { getIfgScoreApi } from './ifgScoreStore.api';
 
 
@@ -27,8 +24,6 @@ class IfgScoreStore {
         })
         .finally(()=>{this.isLoading = false;});
     };
-
-
 }
 
 const ifgScoreStore = new IfgScoreStore();

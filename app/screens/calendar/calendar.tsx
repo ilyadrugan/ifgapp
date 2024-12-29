@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Animated } from 'react-native';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
@@ -17,9 +17,12 @@ import Antistress18 from '../../../assets/icons/antistress18.svg';
 import PhysicalActivity18 from '../../../assets/icons/physical-activity.svg';
 import { ShadowGradient } from '../../core/components/gradient/shadow-gradient';
 import { useNavigation } from '@react-navigation/native';
+import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 
 export const CalendarScreen = () =>{
     const navigation = useNavigation<any>();
+
+    
 
     return <>
     <ScrollView style={s.container}>

@@ -8,12 +8,13 @@ import 'react-native-gesture-handler';
 import CustomCalendar from './calendar';
 import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
 import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
+import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 
 export const CalendarBlock = () =>{
 
     return <CardContainer>
         <CustomCalendar />
-        <IFGScoreLine score={86} title={'IFG-баллы'} />
+        <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы'} />
         <IFGActivity/>
     </CardContainer>;
 };
