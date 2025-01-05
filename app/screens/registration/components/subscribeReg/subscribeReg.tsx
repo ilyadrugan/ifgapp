@@ -24,8 +24,8 @@ export const SubscribeReg: FC = () => {
       value: 14,
     },
   ];
-    const [activeDiscount, setActiveDiscount] = useState<number>(0);
     const [onPayment, setOnPayment] = useState<boolean>(false);
+    const [activeDiscount, setActiveDiscount] = useState<number>(0);
 
     const onChange = (id: number) => setActiveDiscount(id);
     const onSubscribe = () => setOnPayment(true);

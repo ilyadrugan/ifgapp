@@ -38,8 +38,8 @@ export const Input: FC<{
       error,
     }) => {
     return <View style={s.container}>
-
-    <TextInput
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+      <TextInput
       style={[
         s.input,
         style,
@@ -55,11 +55,10 @@ export const Input: FC<{
       value={value}
       onFocus={onFocus}
       defaultValue={defaultValue}
-    >
+     />
+    {children ? children : null }
+      </View>
 
-          {children ? children : null }
-
-    </TextInput>
     {error && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
     {error || 'Что-то пошло не так'}</IfgText>}
     </View>;

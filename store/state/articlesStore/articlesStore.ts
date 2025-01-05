@@ -348,7 +348,7 @@ class ArticlesStore {
       .then(async (result)=>{
         console.log(result);
         await this.getUserArticles().then(()=>
-          successToast(`Материал успешно ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
+          successToast(`Материал ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
         );
       }
       )

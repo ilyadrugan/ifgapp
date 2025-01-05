@@ -19,7 +19,7 @@ class RecommendationStore {
       await getRecommendationsApi()
         .then((result)=>{
           this.recommendationList = result.data;
-          console.log(' this.recommendationList', this.recommendationList);
+          console.log('this.recommendationList', this.recommendationList);
 
         }
         )

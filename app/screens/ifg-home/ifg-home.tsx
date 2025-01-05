@@ -70,9 +70,15 @@ export const IFGHome = observer(() => {
     const StoryCard = (item: StoryModel, index)=>
           <CardContainer onPress={() => {
             setCurrentStoryPressed(index);
-            setModalVisible(true);}} style={[{width: 124, height: 166, padding:12, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(item.category_id).borderColor, backgroundColor: GetActivityBgColorName(item.category_id).bgColor, justifyContent: 'space-between' }, gs.mr12, index === 0 && gs.ml16]} >
+            setModalVisible(true);}} style={[{width: 124, height: 166, padding:12, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(item.category_id).borderColor, backgroundColor: GetActivityBgColorName(item.category_id).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
+           <ImageBackground
+           source={{uri: item.cover}}
+           style={{width: '100%', height: '100%',justifyContent: 'space-between'  }}
+            resizeMode="cover"
+           >
             <Eye />
             <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontLightSmall, gs.regular]}>{item.title}</IfgText>
+            </ImageBackground>
       </CardContainer>;
 return <>
 
@@ -82,7 +88,7 @@ return <>
         <View style={gs.mt16} />
 
         <FlatList
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
           data={storiesStore.storiesList}
           horizontal
           style={{marginHorizontal: -16}}

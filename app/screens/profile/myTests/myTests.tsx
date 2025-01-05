@@ -49,10 +49,10 @@ export const MyTests: FC = observer(() =>{
 
     return <>
 
-    {testingStore.testsList.map((val, index)=><>
-    <CardTest activities={val.activiti_value_json} key={index.toString()} dateTime={val.created_at} title={val.name} />
-    <View style={gs.mt16} />
-    </>)}
+    {testingStore.testsList.map((val, index)=><View key={index.toString()} style={gs.mb16} >
+    <CardTest activities={val.activiti_value_json} dateTime={val.created_at} title={val.name} />
+    </View>
+   )}
         <View style={{height: 70}}/>
     </>;
 });
