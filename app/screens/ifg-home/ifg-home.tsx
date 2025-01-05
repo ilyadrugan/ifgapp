@@ -34,6 +34,7 @@ import storiesStore from '../../../store/state/storiesStore/storiesStore';
 import { StoryModal } from '../../core/components/storyModal/storyModal';
 import { GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
 import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
+import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 
 
 export const IFGHome = observer(() => {
@@ -44,7 +45,8 @@ export const IFGHome = observer(() => {
     useEffect(() => {
       userStore.getProfile();
       storiesStore.getStories();
-      ifgScoreStore.getScoreToday()
+      ifgScoreStore.getScoreToday();
+      recommendationStore.getRecommendations();
       articlesStore.loadMoreArticles();
       articlesStore.clearCurrentArticle();
       console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);

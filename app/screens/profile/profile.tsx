@@ -160,7 +160,7 @@ return <>
         </CardContainer>
 
         <View style={gs.mt16} />
-        {currentMenu === 0 && <MyEvents />}
+        {/* {currentMenu === 0 && <MyEvents />} */}
         {currentMenu === 1 && <MyTests />}
         {currentMenu === 2 && <MyMaterials />}
         {currentMenu === 3 && <Settings onRefresh={onRefresh} />}

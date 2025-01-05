@@ -69,6 +69,12 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
   const [selectedPoint, setSelectedPoint] = useState<DotType>();
   const [data, setData] = useState(monthly ? dataMonths : dataWeeks);
 
+
+  useEffect(() => {
+    setData(monthly ? dataMonths : dataWeeks);
+  }, [monthly]);
+
+
   const handlePress = (datum) => {
     console.log(datum);
     setSelectedPoint(datum); // Устанавливаем выбранную точку

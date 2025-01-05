@@ -10,7 +10,7 @@ export const CircularProgress: FC<{
   value: number,
   maxValue: number,
 }> = ({ value, maxValue }) => {
-  console.log('value', value);
+  // console.log('value', value);
   const size = 80; // Размер круга
   const strokeWidth = 6; // Толщина окружности
   const radius = (size - strokeWidth) / 2; // Радиус круга
