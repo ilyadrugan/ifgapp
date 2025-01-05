@@ -1,1411 +1,1073 @@
 [
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Каждый год приносит новые тенденции в сфере здоровья, и 2024-й не стал исключением. Последние тренды, нацеленные на улучшение самочувствия, нельзя назвать радикально новыми. Современное общество зачастую возвращается к основам здорового образа жизни и напоминает о важности его главных аспектов: правильного питания, регулярной физической активности, качественного сна и контроля над стрессом. О них особенно важно помнить в наше время, когда ритм жизни неуклонно ускоряется и у людей не остаётся времени и сил на заботу о себе."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
+  {
+    "tag": "div",
+    "attributes": {
+      "style": "line-height: 1.4;",
+      "align": "left"
     },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Рассказываем об основных wellness-трендах, заполонивших социальные сети в последние месяцы, и делимся проверенными рекомендациями для каждого направления, которые помогут следовать тенденциям и вместе с тем приносить большую пользу организму."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
+    "children": [
+      {
+        "text": " "
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "h2",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
+    "children": [
+      {
+        "tag": "img",
+        "attributes": {
+          "src": "../../../storage/uploads/mceu_28925658711702895569491.png"
+        },
+        "children": []
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "tag": "em",
+                "attributes": {},
+                "children": [
+                  {
+                    "text": "Вячеслав Дубынин"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "tag": "em",
+            "attributes": {},
+            "children": [
+              {
+                "text": "физиолог, доктор биологических наук"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "text": " "
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "В России 30% людей "
           },
-          "children": [
-            {
-              "tag": "span",
-              "attributes": {
-                "style": "font-size: 18px"
+          {
+            "tag": "a",
+            "attributes": {
+              "href": "https://tass.ru/obschestvo/10187155"
+            },
+            "children": [
+              {
+                "text": "испытывают"
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Тренд 1. Активное потребление воды"
-                    }
-                  ]
-                }
-              ]
+              {
+                "text": " "
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "background-color: rgba(255,255,255,var(--bg-opacity));"
+        },
+        "children": [
+          {
+            "text": "проблемы со сном"
+          }
+        ]
+      },
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt; background-color: rgba(255,255,255,var(--bg-opacity));"
+        },
+        "children": [
+          {
+            "text": ", а 37% жалуются на трудности с засыпанием. Мы поговорили с Вячеславом Дубининым, специалистом в области физиологии нервной системы, и узнали, как правильно организовать сон."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h2",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
+        },
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Зачем мы спим?"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Многие уверены, что ночью мозг отдыхает. Но это не так. Нервная система продолжает работать. В том числе она:"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "ul",
+    "attributes": {},
+    "children": [
+      {
+        "text": "\n"
+      },
+      {
+        "tag": "li",
+        "attributes": {
+          "style": "line-height: 1.4;"
+        },
+        "children": [
+          {
+            "tag": "span",
+            "attributes": {
+              "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
             },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "text": "Вопрос касательно того, сколько воды нужно пить в течение суток, ежегодно вызывает жаркие споры и обсуждения. Рекомендации разнятся: одни эксперты"
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.nhs.uk/live-well/eat-well/food-guidelines-and-food-labels/the-eatwell-guide/"
-          },
-          "children": [
-            {
-              "text": "настаивают"
-            }
-          ]
-        },
-        {
-          "text": "на необходимости ежедневно потреблять 2 литра воды, другие утверждают, что достаточно прислушиваться к организму и пить в те моменты, когда вам действительно хочется. И хотя правильного ответа нет, одно остаётся неизменным: людям необходимо пить воду для поддержания нормального функционирования систем организма (подробно о том, почему важно сохранять водный баланс и к чему может привести обезвоживание,"
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://ifeelgood.life/news/314"
-          },
-          "children": [
-            {
-              "text": "читайте в нашем материале"
-            }
-          ]
-        },
-        {
-          "text": ")."
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Сегодня часто можно встретить людей, которые берут на работу, в поездки и на прогулки бутылки с водой. Это здоровая привычка, которая помогает контролировать потребление жидкости, не забывать пить в течение дня и вместе с тем заботиться об окружающей среде. Но в потоке повседневных дел люди часто забывают мыть бутылки, из-за чего в них"
-            }
-          ]
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.nytimes.com/2024/01/17/well/live/water-bottle-clean-mold.html"
-          },
-          "children": [
-            {
-              "text": "появляется"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "плесень."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "По словам врачей, если пить воду из бутылки с плесенью в течение нескольких недель, это"
-            }
-          ]
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5834427/"
-          },
-          "children": [
-            {
-              "text": "может спровоцировать"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "тошноту и расстройства желудка. В связи с этим специалисты рекомендуют мыть ёмкость каждый день или как минимум раз в неделю."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "blockquote",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "p",
-          "attributes": {
-            "style": "text-align: center"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Рекомендации"
-                }
-              ]
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        },
-        {
-          "tag": "ul",
-          "attributes": {},
-          "children": [
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+            "children": [
+              {
+                "tag": "strong",
+                "attributes": {},
+                "children": [
+                  {
+                    "text": "Проверяет состояние внутренних органов"
+                  }
+                ]
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Пейте воду на протяжении дня."
-                    }
-                  ]
-                },
-                {
-                  "text": "Не стоит дожидаться появления чувства жажды. Когда вам сильно хочется пить, ваш организм сигнализирует о том, что он обезвожен."
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+              {
+                "text": " "
               },
-              "children": [
-                {
-                  "text": "Для поддержания водного баланса"
-                },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "выбирайте питьевую воду"
-                    }
-                  ]
-                },
-                {
-                  "text": ". В ней нет калорий и простых углеводов, способных привести к лишним килограммам и проблемам с зубами. Добавьте в воду дольку лимона или ягоды, чтобы она стала более приятной на вкус."
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+              {
+                "tag": "strong",
+                "attributes": {},
+                "children": [
+                  {
+                    "text": "через нервные волокна."
+                  }
+                ]
               },
-              "children": [
-                {
-                  "text": "Если вы живёте в крупном городе и не уверены в хорошем состоянии водопровода,"
-                },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "не стоит пить воду из-под крана"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Более того, в тёплое время года такая вода может содержать в себе опасные бактерии и инфекции."
-                }
-              ]
+              {
+                "text": " Если с ними что-то не так, мозг усиливает кровоснабжение и активизирует иммунную систему."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "\n"
+      },
+      {
+        "tag": "li",
+        "attributes": {
+          "style": "line-height: 1.4;"
+        },
+        "children": [
+          {
+            "tag": "span",
+            "attributes": {
+              "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
             },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+            "children": [
+              {
+                "tag": "strong",
+                "attributes": {},
+                "children": [
+                  {
+                    "text": "Запоминает новую информацию. "
+                  }
+                ]
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Не кипятите воду"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Это не поможет очистить её от микробов и химических примесей. Использование кипячёной воды оправдано только в том случае, если вы набрали её из неизвестного источника."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+              {
+                "text": "Во сне информация "
               },
-              "children": [
-                {
-                  "text": "Чтобы напоминать себе о необходимости выпить воду,"
+              {
+                "tag": "a",
+                "attributes": {
+                  "href": "https://www.nature.com/articles/nn.2732"
                 },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "используйте напоминания или специальные приложения на смартфоне"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Это поможет вам следить за водным балансом и не допускать обезвоживания."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "h2",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "font-size: 18px;color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Тренд 2. Забота о здоровье кишечника"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "В последнее десятилетие поддержание здоровья кишечника стало одной из центральных проблем, касающихся профилактики заболеваний. В 2024 году эта тенденция продолжает набирать обороты, а видео на эту тему стабильно набирают миллионы просмотров, вызывая интерес у аудитории."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Весной блогеры советовали подписчикам пить сок алоэ для улучшения работы пищеварительной системы. После они начали выступать за ежедневное употребление оливкового масла, утверждая, что оно помогает при вздутии живота. А позже стали добавлять в напитки яблочный уксус, надеясь нормализовать работу желудочно-кишечного тракта."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Это далеко не весь перечень рекомендаций, встречающихся на просторах соцсетей. Эксперты"
-            }
-          ]
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.nytimes.com/2022/04/20/well/eat/tiktok-gut-health.html"
-          },
-          "children": [
-            {
-              "text": "подчёркивают"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": ", что в настоящее время нет данных, указывающих на то, что какой-либо из этих методов действительно может положительно сказаться на работе пищеварительной системы. Более того, важно учитывать, что не все продукты одинаково полезны: тот же сок алоэ может вызвать у некоторых людей расстройства желудка."
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Поскольку в последние годы резко"
-            }
-          ]
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.gastrojournal.org/article/S0016-5085(20)30487-X/pdf"
-          },
-          "children": [
-            {
-              "text": "возросло"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "число людей, страдающих от различных заболеваний кишечника, важно систематически проходить обследования у врачей и следить за своим питанием. Так вы сможете предупредить серьёзные проблемы, улучшить пищеварение и повысить качество жизни."
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
-    },
-    {
-      "tag": "blockquote",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "p",
-          "attributes": {
-            "style": "text-align: center"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Рекомендации"
-                }
-              ]
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        },
-        {
-          "tag": "ul",
-          "attributes": {},
-          "children": [
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+                "children": [
+                  {
+                    "text": "переходит из кратковременной памяти в долговременную"
+                  }
+                ]
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Ешьте "
-                    },
-                    {
-                      "text": "больше продуктов, богатых клетчаткой"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Среди них овощи, фрукты, цельные злаки и бобовые. Клетчатка улучшает микрофлору и нормализует работу кишечника."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
+              {
+                "text": "."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "\n"
+      },
+      {
+        "tag": "li",
+        "attributes": {
+          "style": "line-height: 1.4;"
+        },
+        "children": [
+          {
+            "tag": "span",
+            "attributes": {
+              "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
             },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+            "children": [
+              {
+                "tag": "strong",
+                "attributes": {},
+                "children": [
+                  {
+                    "text": "Удаляет мусор"
+                  }
+                ]
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Ограничьте употребление переработанных продуктов"
-                    }
-                  ]
-                },
-                {
-                  "text": ": полуфабрикатов, сладостей, колбас, консервов, чипсов, сладких газированных напитков и т. д. Такая еда содержит много сахара, соли и трансжиров, наносящих вред пищеварительной системе."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+              {
+                "text": ". Во время сна из мозга выводятся "
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Постепенно включайте в рацион ферментированные продукты"
-                    }
-                  ]
+              {
+                "tag": "a",
+                "attributes": {
+                  "href": "https://www.science.org/lookup/doi/10.1126/science.1241224"
                 },
-                {
-                  "text": ": квашеную капусту, кефир, кимчи, комбучу и др. Пробиотики, образующиеся в процессе ферментации, помогают восстановить баланс полезных бактерий в кишечнике."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+                "children": [
+                  {
+                    "text": "продукты обмена веществ,"
+                  }
+                ]
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Избегайте переедания"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Потребление лишней пищи может перегрузить желудочно-кишечный тракт, нарушая его работу. Ешьте по мере возникновения голода и придерживайтесь умеренных порций."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
+              {
+                "text": " которые днём накапливаются в нейронах и могут быть токсичны."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "\n"
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Если человек мало или плохо спит, например, часто просыпается ночью, то у него"
+          },
+          {
+            "text": " "
+          },
+          {
+            "tag": "a",
+            "attributes": {
+              "href": "https://www.jneurosci.org/content/34/47/15715"
             },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+            "children": [
+              {
+                "text": "ухудшается память"
+              }
+            ]
+          },
+          {
+            "text": ", развиваются "
+          },
+          {
+            "tag": "a",
+            "attributes": {
+              "href": "https://www.nature.com/articles/s41586-019-1579-3"
+            },
+            "children": [
+              {
+                "text": "болезни внутренних органов"
+              }
+            ]
+          },
+          {
+            "text": " и т. д. Поэтому важно поддерживать необходимую продолжительность и качество сна."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h2",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
+        },
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Здоровый сон"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Чтобы быстро засыпать и легко просыпаться, существуют простые правила. К ним нужно относиться как к привычкам: попробовать следовать советам 2-3 недели и смотреть, как меняется сон и самочувствие по утрам."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h3",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
+        },
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Режим сна"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Когда мы ложимся спать в одно и то же время, наш организм привыкает к этому. Эндокринная система поддерживает нужный уровень гормонов, а нервная система контролирует работу внутренних органов. Если режима сна нет, человеку трудно засыпать и просыпаться."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Важно заметить, что лучших часов для сна нет. Если человек ложится спать в 2 часа ночи и просыпается в 9-10 часов утра, это нормально. Главное, чтобы такой режим был постоянным, потому что "
+          },
+          {
+            "tag": "a",
+            "attributes": {
+              "href": "https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1461-0248.2009.01343.x"
+            },
+            "children": [
+              {
+                "text": "нервная система адаптируется"
+              }
+            ]
+          },
+          {
+            "text": " к образу жизни человека."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h3",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt;font-family: 'times new roman', times, serif;"
+        },
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Ритуал вхождения в сон"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Нервная система работает "
+          },
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "рефлексами"
+              }
+            ]
+          },
+          {
+            "text": ": любое воздействие извне приводит к определённой реакции организма. Сон не является исключением, поэтому мы можем использовать это для создания"
+          },
+          {
+            "text": " "
+          },
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "ритуала вхождения в сон"
+              }
+            ]
+          },
+          {
+            "text": ", то есть"
+          },
+          {
+            "text": " "
+          },
+          {
+            "text": "последовательность действий, показывающих нервной системе, что скоро надо лечь спать."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Ритуал может быть простым: почистить зубы, приглушить освещение в спальне или составить список дел на завтра. Через несколько недель ежедневного повторения мозг понимает, что скоро человек ляжет спать, и снижает свою активность."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h3",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
+        },
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Ориентация на своё состояние"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Перед тем, как лечь спать, подумайте о том, как вы себя чувствуете: хотите спать и уже немного заторможены или у вас ещё есть энергия?"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Самое плохое, что можно сделать, "
+          },
+          {
+            "text": "—"
+          },
+          {
+            "text": " попытаться уснуть насильно. Иногда люди ложатся и думают: "
+          },
+          {
+            "text": "«"
+          },
+          {
+            "text": "Надо уснуть! Осталось спать всего 6 часов"
+          },
+          {
+            "text": "»"
+          },
+          {
+            "text": ". Такие размышления приводят к стрессу, "
+          },
+          {
+            "tag": "a",
+            "attributes": {
+              "href": "https://lib.medvestnik.ru/apps/lib/assets/uploads/pharmateca/PDF/8670.pdf"
+            },
+            "children": [
+              {
+                "text": "который активизирует нервную систему"
+              }
+            ]
+          },
+          {
+            "text": ". Cтоит ложиться спать только тогда, когда мы действительно этого хотим."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "blockquote",
+    "attributes": {},
+    "children": [
+      {
+        "text": "\n"
+      },
+      {
+        "tag": "p",
+        "attributes": {},
+        "children": [
+          {
+            "text": " "
+          }
+        ]
+      },
+      {
+        "text": "\n"
+      },
+      {
+        "tag": "p",
+        "attributes": {},
+        "children": [
+          {
+            "tag": "span",
+            "attributes": {
+              "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+            },
+            "children": [
+              {
+                "tag": "strong",
+                "attributes": {},
+                "children": [
+                  {
+                    "text": "Лайфхак от эксперта:"
+                  }
+                ]
               },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Минимизируйте влияние стресса"
-                    }
-                  ]
-                },
-                {
-                  "text": ". В стрессовых ситуациях в организме активно выделяет гормон кортизол. Он вызывает проблемы с пищеварением, дискомфорт в кишечнике и влияет на усвоение питательных веществ."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "h2",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "font-size: 18px"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Тренд 3. Регулярные домашние тренировки"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Тренировки в домашних условиях сыскали популярность несколько лет назад. Это связано с рядом факторов: ограниченный доступ к фитнес-центрам в период пандемии, стремление сэкономить время и деньги, желание заниматься в привычной, комфортной обстановке. В 2024 году популярность онлайн-тренировок не только сохраняется, но и"
-            }
-          ]
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.cnews.ru/news/line/2024-04-05_fitnes-trenery_perehodyat"
-          },
-          "children": [
-            {
-              "text": "продолжает активно расти"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "."
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Сегодня существует множество программ, каналов и приложений, предлагающих готовые комплексы упражнений и не требующих специального оборудования. Это делает их доступными каждому, независимо от возраста и уровня подготовки. Домашние занятия могут быть такими же эффективными, как и тренировки в спортзале, если выполнять их правильно и регулярно."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Среди популярных направлений сегодня выделяются высокоинтенсивные интервальные тренировки, йога, пилатес и упражнения с собственным весом. Все эти виды активности можно легко адаптировать под домашние условия, что делает их идеальным выбором для тех, кто не может посещать тренажёрные залы."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "blockquote",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "p",
-          "attributes": {
-            "style": "text-align: center"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Рекомендации"
-                }
-              ]
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        },
-        {
-          "tag": "ul",
-          "attributes": {},
-          "children": [
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
+              {
+                "text": " "
               },
-              "children": [
-                {
-                  "text": "Перед тем как начать тренироваться,"
-                },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "поймите, к какому результату вы хотите прийти"
-                    }
-                  ]
-                },
-                {
-                  "text": ". От этого фактора будет зависеть, в каком направлении вам следует двигаться и какой вид тренировок лучше выбрать."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "text": "Чтобы не навредить своему организму и не перенапрячь мышцы,"
-                },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "начинайте с небольшой нагрузки"
-                    }
-                  ]
-                },
-                {
-                  "text": ", постепенно её увеличивая. Перед началом занятий обязательно пройдите медицинский осмотр."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Занимайтесь тем, что вам по-настоящему нравится"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Тогда у вас не будет желания бросить тренировки, вы будете поддерживать мотивацию на высоком уровне и быстрее приблизитесь к своей цели."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Соблюдайте норму физической активности"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Каждую неделю уделяйте 150 минут нагрузкам средней интенсивности, 2-3 силовым тренировкам и комплексу упражнений на растяжку."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Фиксируйте свои результаты"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Так вы сможете отслеживать прогресс, грамотно выстраивать тренировочный план и мотивировать себя на новые достижения."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+              {
+                "text": "можно помассировать глазные яблоки до чувства дискомфорта, не причиняя боль. Это снизит уровень артериального давления и поможет расслабиться."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "\n"
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "h2",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "font-size: 18px"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Тренд 4. Замедление и внимание к отдыху"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
+    "children": [
+      {
+        "text": " "
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Ещё одна ключевая тенденция в области здоровья в 2024 году — это умение находить время для отдыха и полного восстановления. Постоянная занятость и высокая продуктивность стали неотъемлемой частью нашей жизни, поэтому в интернете всё чаще звучит призыв замедлиться и уделить повышенное внимание своему внутреннему состоянию. Это связано с тем, что постоянная работа на пределе возможностей"
-            }
-          ]
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
         },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5627926/"
-          },
-          "children": [
-            {
-              "text": "приводит"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "к эмоциональному выгоранию, снижению когнитивных способностей и ухудшению физического здоровья."
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
+        "children": [
+          {
+            "text": "Если спать не хочется, надо подождать 30-40 минут. Уровень энергии ритмичен, и обычный цикл активности и спокойствия длится 1,5 часа. После смены фазы у нас появляется желание уснуть. Тогда и стоит ложиться спать. В период ожидания лучше заняться чем-то спокойным, например, почитать скучную книгу."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h3",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Проявлениями тренда стал"
-            }
-          ]
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
         },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.nytimes.com/2024/03/08/well/mind/floor-time-benefits.html"
-          },
-          "children": [
-            {
-              "text": "отдых на полу"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "и ставшее популярным"
-            }
-          ]
-        },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.scotsman.com/news/scotland/hurkle-durkle-scots-word-meaning-origin-4491313"
-          },
-          "children": [
-            {
-              "text": "понятие hurkle durkle"
-            }
-          ]
-        },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": ", которое пришло в социальные сети из шотландского языка. В оригинале оно означает «лежать в постели, когда пришло время вставать», а в интернете стало напоминаем о том, что иногда полезно никуда не спешить и позволить себе отдохнуть."
-            }
-          ]
-        },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Комфортная спальня"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Важно помнить, что эти способы релаксации не должны заменять полноценный ночной отдых. Если вы лежите в постели в течение длительного времени, это не всегда приносит пользу, особенно если вы не смогли выспаться за ночь. Эксперты"
-            }
-          ]
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
         },
-        {
-          "tag": "a",
-          "attributes": {
-            "href": "https://www.nytimes.com/2024/02/17/well/bed-rotting-hurkle-durkle.html"
-          },
-          "children": [
-            {
-              "text": "рекомендуют"
-            }
-          ]
+        "children": [
+          {
+            "text": "Место для сна должно быть удобным и должно вызывать только положительные эмоции. Для этого стоит подобрать комфортную кровать, купить постельное бельё, которое нравится, и никогда не работать в спальне."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h3",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
         },
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "проводить в постели не более 30 минут после пробуждения, так как в противном случае это может нарушить циркадные ритмы. Чтобы после пробуждения у вас не было соблазна остаться в кровати, необходимо работать над улучшением сна."
-            }
-          ]
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Влияние фазы сна на подъём"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
         },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
+        "children": [
+          {
+            "text": "Сон состоит из двух фаз: медленной и быстрой. Мы просыпаемся бодрыми, когда встаём во время быстрой фазы. Пробуждение в медленной фазе, напротив, приводит к ощущению вялости и заторможенности."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "blockquote",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "p",
-          "attributes": {
-            "style": "text-align: center"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Рекомендации"
-                }
-              ]
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
         },
-        {
-          "tag": "ul",
-          "attributes": {},
-          "children": [
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "text": "Старайтесь ежедневно"
-                },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "ложиться спать и просыпаться в одно и то же время"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Так ваш организм настроится на определённый режим, и вам станет гораздо легче просыпаться."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Создайте в спальне комфортные условия для сна"
-                    }
-                  ]
-                },
-                {
-                  "text": ". В комнате должно быть темно, тихо и прохладно. Помимо этого, пользуйтесь удобным матрасом и подушкой, чтобы вам было приятно спать."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Расслабляйтесь перед сном"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Не стоит выполнять физические упражнения перед тем, как лечь в кровать. Лучше почитать книгу, послушать умиротворяющую музыку или помедитировать."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "Откажитесь от использования гаджетов перед засыпанием"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Экраны электронных устройств излучают синий свет, подавляющий мелатонин — гормон, регулирующий циркадные ритмы."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            },
-            {
-              "tag": "li",
-              "attributes": {
-                "style": "color: rgb(0, 0, 0)"
-              },
-              "children": [
-                {
-                  "text": "Если вы понимаете, что не можете самостоятельно справиться с нарушением сна,"
-                },
-                {
-                  "tag": "strong",
-                  "attributes": {},
-                  "children": [
-                    {
-                      "text": "обратитесь к сомнологу"
-                    }
-                  ]
-                },
-                {
-                  "text": ". Врач поможет вам разработать стратегию по улучшению качества сна."
-                },
-                {
-                  "tag": "br",
-                  "attributes": {},
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+        "children": [
+          {
+            "text": "Главное, что подъём в быструю фазу можно рассчитать самостоятельно. Один цикл сна длится около 1,5 часов. Если вы засыпаете в 22:00, то со средней продолжительностью сна в 8 часов лучше всего поставить будильник на 6:30 утра."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "h2",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "font-size: 18px"
-          },
-          "children": [
-            {
-              "tag": "strong",
-              "attributes": {},
-              "children": [
-                {
-                  "text": "Главное"
-                }
-              ]
-            }
-          ]
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
         },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
+        "children": [
+          {
+            "text": "Но если после звонка будильника вы чувствуете, что нужно ещё немного подремать, то попробуйте полежать 10 минут. Можно повторять это до тех пор, пока вы не окажетесь в быстрой фазе сна и не почувствуете бодрость."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "h2",
+    "attributes": {
+      "style": "line-height: 1.4;"
     },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Потребление достаточного количества воды, забота о здоровье кишечника, регулярное выполнение упражнений в домашних условиях, замедление жизненного ритма, обеспечение полноценного отдыха — это те простые, но важные шаги, которые помогают вести правильный образ жизни и поддерживать здоровье на высоком уровне. Инновации в медицине и новые wellness-тенденции могут приносить свои плоды, но важно помнить, что основой благополучия всегда остаются базовые привычки, проверенные временем."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Следуя рекомендациям из нашей статьи и соблюдая баланс между всеми аспектами, вы значительно улучшите своё эмоциональное и физическое состояние. При этом обязательно учитывайте индивидуальные предпочтения и особенности организма. Экспериментируйте с различными практиками и изменениями в питании, физической активности и отдыхе, чтобы найти оптимальные варианты."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Не нужно слепо следовать всем тенденциям, встречающимся на просторах интернета. Если методика подходит одному человеку, это вовсе не гарантирует, что она будет в той же мере эффективнадля другого. Важно прислушиваться к организму, адаптировать рекомендации под собственные потребности и при необходимости консультироваться со специалистами. Это особенно актуально в вопросах питания, тренировок и отдыха."
-            },
-            {
-              "tag": "br",
-              "attributes": {},
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "tag": "p",
-      "attributes": {},
-      "children": [
-        {
-          "tag": "span",
-          "attributes": {
-            "style": "color: rgb(0, 0, 0)"
-          },
-          "children": [
-            {
-              "text": "Подводя итог, подчеркнём, что 2024 год принёс в сферу здоровья не столько новые подходы, сколько переосмысление старых и проверенных методов. Возвращение к основам, таким как осознанное отношение к собственному здоровью и забота о своём организме, — это ключ к прекрасному самочувствию и долгосрочным результатам."
-            }
-          ]
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-size: 18pt; font-family: 'times new roman', times, serif;"
         },
-        {
-          "tag": "br",
-          "attributes": {},
-          "children": []
-        }
-      ]
-    }
-  ]
+        "children": [
+          {
+            "tag": "strong",
+            "attributes": {},
+            "children": [
+              {
+                "text": "Выводы"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Главный совет "
+          },
+          {
+            "text": "—"
+          },
+          {
+            "text": " помнить, что сон очень индивидуален. Любые рекомендации и нормы относительны, поэтому важно самому следить за продолжительностью сна и своими ощущениями по утрам."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "text": "\n"
+  },
+  {
+    "tag": "p",
+    "attributes": {
+      "style": "line-height: 1.4;"
+    },
+    "children": [
+      {
+        "tag": "span",
+        "attributes": {
+          "style": "font-family: 'times new roman', times, serif; font-size: 14pt;"
+        },
+        "children": [
+          {
+            "text": "Если человек постоянно не высыпается, часто просыпается ночью или долго не может уснуть, лучше всего обратиться за медицинской помощью: к терапевту или врачу-сомнологу, который специализируется на нарушениях сна."
+          }
+        ]
+      }
+    ]
+  }
+]

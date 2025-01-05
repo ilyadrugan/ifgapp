@@ -10,143 +10,138 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 const width = Dimensions.get('screen').width;
 export const RenderHTMLContent = ({ content, fromBodyJson }) => {
   let styleText: StyleProp<ViewStyle | TextStyle> = {};
-const renderNode = (node, index) => {
-
-  if (node.text) {
-    // Оборачиваем текст в <Text>, чтобы избежать ошибки
-      // return node.text;
-      let style;
-      if (!fromBodyJson) {
-        style = styleText;
-        styleText = {} as StyleProp<ViewStyle | TextStyle>;
-      }
-
-      return fromBodyJson ? node.text :
-        <Text key={index} style={[styles.defaultText, style]}>
-          {node.text}
-         </Text>
-      ;
-
-
-  }
+  const renderNode = (node, index) => {
+    if (node.text) {
+        let style;
+        if (!fromBodyJson) {
+          style = styleText;
+          styleText = {} as StyleProp<ViewStyle | TextStyle>;
+        }
+        return fromBodyJson ? node.text :
+          <Text key={index} style={[styles.defaultText, style]}>
+            {node.text}
+          </Text>
+        ;
+    }
 
     switch (node.tag) {
-      case 'p':
-        return (
-          <Text style={styles.paragraph}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-        );
-      case 'ul':
-        return (
-          <View style={styles.ul}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </View>
-        );
-      case 'ol':
-        return (
-            <View style={styles.ol} key={index}>
-              {node.children.map((child, childIndex) =>
-                  renderNode(
-                    { ...child, isOrdered: true, index: childIndex + 1 },
-                    childIndex
-                  )
-                )}
-              </View>
-            );
-      case 'li':
-        console.log('li', node, node.children);
-
-        return (
-          <View style={styles.li}>
-            {node.isOrdered ? (
-              <IfgText color={colors.GREEN_COLOR} style={[gs.h2Intro,{ marginTop: 0}]}>0{node.index} </IfgText>
-            ) : <View style={styles.bullet}/>}
-            <Text style={styles.liText}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-          </View>
-        );
-      case 'h1':
-        return (
-          <Text style={styles.h1}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-        );
-      case 'h2':
-        return (
-          <Text style={styles.h2}>
-            {node.children.map((child, childIndex) =>
-                            <View style={[gs.flexRow, gs.alignCenter]}>
-          <View style={gs.mr12}>
-          <Accept />
-        </View>
-          {renderNode(child, childIndex)}
-
-          </View>
-                // renderNode(child)
-                )}
-          </Text>
-        );
-      case 'blockquote':
-        return (
-          <View style={styles.blockquote}>
-            <Text style={styles.blockquoteText}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-          </View>
-        );
-      case 'div':
-        return (
-          <View style={styles.div}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </View>
-        );
-      case 'span':
-        return (
-          <Text style={styles.span}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-        );
-      case 'a':
-        styleText = [styleText, styles.link];
-        return (
-          <Text
-            style={styles.link}
-            onPress={() => Linking.openURL(node.attributes?.href)}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-        );
-      case 'strong':
-        styleText = [styleText, gs.bold];
-        return (
-          <Text style={styles.strong}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-        );
-      case 'em':
-        styleText = [styleText, gs.italic];
-        return (
-          <Text style={styles.em}>
-            {node.children.map((child, childIndex) => renderNode(child, childIndex))}
-            </Text>
-        );
-      case 'img':
-        console.log('node.attributes?.src', `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`);
-        const imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
-        // if (!imageUri) {return null;}
-        return (
-          <View style={{backgroundColor: 'black'}}>
-            <Image
-              source={{ uri: imageUri }}
-              resizeMode="contain" style={{width: '100%', height: 200}}
-              onError={(e) => console.warn('Failed to load image:', e.nativeEvent.error)}
-              /></View>
+        case 'p':
+          if (node.children[0].tag === 'img') {return renderNode(node.children[0], 0);}
+          return (
+            <Text style={styles.paragraph}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
           );
-      default:
-        return null; // Для тегов, которые не обрабатываются
-    }
+        case 'ul':
+          return (
+            <View style={styles.ul}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </View>
+          );
+        case 'ol':
+          return (
+              <View style={styles.ol} key={index}>
+                {node.children.map((child, childIndex) =>
+                    renderNode(
+                      { ...child, isOrdered: true, index: childIndex + 1 },
+                      childIndex
+                    )
+                  )}
+                </View>
+              );
+        case 'li':
+          console.log('li',node, node.isOrdered, node.index);
+          return (
+            <View style={styles.li} key={index}>
+              {node.isOrdered ? (
+                <IfgText color={colors.GREEN_COLOR} style={[gs.h2Intro,{ marginTop: 0}]}>0{node.index} </IfgText>
+              ) : <View style={styles.bullet}/>}
+              <IfgText style={styles.liText}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </IfgText>
+            </View>
+          );
+        case 'h1':
+          return (
+            <Text style={styles.h1}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
+          );
+        case 'h2':
+          return (
+            <Text style={styles.h2}>
+              {node.children.map((child, childIndex) =>
+                              <View style={[gs.flexRow, gs.alignCenter]}>
+            <View style={gs.mr12}>
+            <Accept />
+          </View>
+            {renderNode(child, childIndex)}
+
+            </View>
+                  // renderNode(child)
+                  )}
+            </Text>
+          );
+        case 'blockquote':
+          return (
+            <View style={styles.blockquote}>
+              <Text style={styles.blockquoteText}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
+            </View>
+          );
+        case 'div':
+          return (
+            <View style={styles.div}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </View>
+          );
+        case 'span':
+          return (
+            <Text style={styles.span}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
+          );
+        case 'a':
+          styleText = [styleText, styles.link];
+          return (
+            <Text
+              style={styles.link}
+              onPress={() => Linking.openURL(node.attributes?.href)}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
+          );
+        case 'strong':
+          styleText = [styleText, gs.bold];
+          return (
+            <Text style={styles.strong}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
+          );
+        case 'em':
+          styleText = [styleText, gs.italic];
+          return (
+            <Text style={styles.em}>
+              {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </Text>
+          );
+        case 'img':
+          const imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
+          console.log('Image URI:', imageUri); // Отладка URI
+          return (
+            <View style={{ width: '100%', height: 200 }}>
+              <Image
+                source={{ uri: imageUri }}
+                resizeMode="cover"
+                style={{ width: '100%', height: 200 }}
+              />
+            </View>
+          );
+        default:
+          return null; // Для тегов, которые не обрабатываются
+      }
   };
+
   return (
     <View style={{flexDirection: 'column'}}>
       {content && parseHTMLToSequentialObjects(content).map((node, index) => (
