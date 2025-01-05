@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { login, registration } from './authStore.api';
+import { deleteProfile, login, registration } from './authStore.api';
 import userStore from '../userStore/userStore';
 import { deleteAuthTokenToStorage, getAuthTokenFromStorage, saveAuthTokenToStorage } from '../../../app/core/utils/bearer-token';
 import { UserInfo } from '../userStore/models/models';
@@ -126,7 +126,27 @@ class AuthStore {
       this.isLoading = false;
   }
 
+  async delete(callBack: ()=>void) {
+    this.isLoading = true;
+    this.errorMessage = '';
+    await deleteProfile()
+      .then((result)=>{
+        console.log(result.data);
+        if (result.data) {
+          this.isAuthenticated = false;
+          this.access_token = '';
+          deleteAuthTokenToStorage();
+          callBack();
+      }
+      })
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
 
+      });
+      // .finally(()=>{this.isLoading = false;});
+      this.isLoading = false;
+  }
   async checkIsOnBoarded() {
     const isBoarded = await AsyncStorage.getItem('isOnBoarded');
     if (isBoarded) {

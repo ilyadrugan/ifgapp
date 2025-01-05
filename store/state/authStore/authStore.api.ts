@@ -12,3 +12,8 @@ export const registration = async (model: RegisterFormModel) => {
     console.log(Config,`${API_URL}/register`);
     return await HttpClient.post(`${API_URL}/register`, model);
 };
+
+export const deleteProfile = async () => {
+    console.log(Config,`${BASE_URL}/auth/delete`);
+    return await HttpClient.post(`${BASE_URL}/auth/delete`);
+};

@@ -11,9 +11,13 @@ import { Controller, useForm } from 'react-hook-form';
 import userStore from '../../../../store/state/userStore/userStore';
 import { UserChangeInfoModel } from '../../../../store/state/userStore/models/models';
 import { observer } from 'mobx-react';
+import authStore from '../../../../store/state/authStore/authStore';
+import { useNavigation } from '@react-navigation/native';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState('');
+    const navigation = useNavigation<any>();
+    const [onDeleting, setOnDeleting] = useState(false);
 
     const {
         control,
@@ -70,10 +74,17 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 userStore.changeProfile(model);
                 onRefresh();
             }
-
-
       });
-    return <CardContainer style={{gap: 18}}>
+      const onDelete = () => {
+        if (onDeleting) {
+            authStore.delete(()=>navigation.replace('Login'));
+        }
+        else {
+            setOnDeleting((prev)=>!prev);
+        }
+      };
+    return <>
+    {!onDeleting && <CardContainer style={{gap: 18}}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>
         Личные данные
         </IfgText>
@@ -163,17 +174,8 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             <Button style={s.button}
                 onPress={onSubmit}
                 >
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    }}>
-                    <View style={{
-                        width:'100%',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
+                 <View style={s.buttonContainer}>
+                 <View style={s.buttonContent}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Сохранить</IfgText>
                         <ArrowRight />
                     </View>
@@ -181,7 +183,36 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 </View>
 
             </Button>
-    </CardContainer>;
+    </CardContainer>}
+
+    {!onDeleting && <CardContainer style={gs.mt16}>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Удаление профиля</IfgText>
+        <Button style={[s.button, {backgroundColor: '#FA5D5D'}]}
+                onPress={onDelete}
+                >
+                <View style={s.buttonContainer}>
+                    <View style={s.buttonContent}>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Удалить свой профиль?</IfgText>
+                        <ArrowRight />
+                    </View>
+                    <View />
+                </View>
+
+            </Button>
+    </CardContainer>}
+    {onDeleting && <CardContainer>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Вы уверены что готовы удалить свой профиль?</IfgText>
+        <View style={[gs.mt8, gs.flexRow, gs.alignCenter, {gap: 18}]}>
+            <Button onPress={onDelete} style={{alignItems: 'center',backgroundColor: '#FA5D5D', borderRadius: 16, height: 78, flex: 1}} >
+              <IfgText style={gs.fontCaptionMedium} color={colors.WHITE_COLOR}>Да</IfgText>
+            </Button>
+            <Button onPress={()=>setOnDeleting((prev)=>!prev)} style={{alignItems: 'center',backgroundColor: colors.GREEN_COLOR, borderRadius: 16,  flex: 1, height:78}}>
+              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Нет</IfgText>
+            </Button>
+          </View>
+    </CardContainer>}
+
+    </>;
 });
 
 const s = StyleSheet.create({
@@ -209,5 +240,15 @@ const s = StyleSheet.create({
         paddingHorizontal: 24,
         height: 78,
       },
-
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+    buttonContent: {
+        width:'100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
   });
