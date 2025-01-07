@@ -38,3 +38,4 @@ export type GraphDataType = {
     value: number,
     created_at: string,
 }
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
@@ -8,13 +8,15 @@ import CustomCalendar from './calendar';
 import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
 import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
+import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
+import { observer } from 'mobx-react';
 
-export const CalendarBlock = () =>{
+export const CalendarBlock: FC = observer(() =>{
 
     return <CardContainer>
         <CustomCalendar />
         <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы'} />
-        {/* <IFGActivity/> */}
+        {!dailyActivityStore.isLoading && <IFGActivity dailyActivities={dailyActivityStore.dailyActivityData}/>}
     </CardContainer>;
-};
+});
 

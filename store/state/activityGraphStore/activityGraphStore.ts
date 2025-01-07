@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi } from './activityGraphStore.api';
-import { DailyActivityModel, DailyCaloriesModel, DailyCommonModel, DailyIfgScoreModel, DailyStepsModel } from './models/models';
+import { getDailyActivityApi, getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi } from './activityGraphStore.api';
+import { DailyActivityModel, DailyCommonModel } from './models/models';
 
 class DailyActivityStore {
   isLoading = false; // Состояние загрузки
@@ -8,24 +8,42 @@ class DailyActivityStore {
   graphCaloriesActivities: DailyCommonModel[] = [];
   graphStepsActivities: DailyCommonModel[] = [];
   graphIfgScoreActivities: DailyCommonModel[] = [];
+  dailyActivityData: DailyActivityModel;
+
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
   }
 
   getPeriodActivity = async (date_from, date_to) => {
-      this.isLoading = true;
-    //   this.errorMessage = '';
-      await getPeriodActivityApi(date_from, date_to)
-        .then((result)=>{
-          this.graphPeriodActivities = result.data.data;
-        }
-        )
-        .catch((err)=>{
-          console.log('ERROR', err.message);
+    this.isLoading = true;
+  //   this.errorMessage = '';
+    await getPeriodActivityApi(date_from, date_to)
+      .then((result)=>{
+        this.graphPeriodActivities = result.data.data;
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR', err.message);
 
-        })
-        .finally(()=>{this.isLoading = false;});
-    };
+      })
+      .finally(()=>{this.isLoading = false;});
+  };
+  
+  getDailyActivity = async (date_to) => {
+    this.isLoading = true;
+  //   this.errorMessage = '';
+    await getDailyActivityApi(date_to)
+      .then((result)=>{
+        console.log('getDailyActivityApi',result.data.data);
+        this.dailyActivityData = result.data.data;
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR', err.message);
+
+      })
+      .finally(()=>{this.isLoading = false;});
+  };
     getGraphCaloriesActivity = async (period) => {
         this.isLoading = true;
       //   this.errorMessage = '';

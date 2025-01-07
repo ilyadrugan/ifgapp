@@ -11,6 +11,8 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
 import CalendarIcon from '../../../../assets/icons/calendar.svg';
+import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
+import { observer } from 'mobx-react';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const months = [
@@ -28,7 +30,7 @@ const months = [
   'Декабрь',
 ];
 
-const CustomCalendar = () => {
+const CustomCalendar = observer(() => {
   const [currentDate, setCurrentDate] = useState(new Date()); // Текущая дата
   const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Выбранная дата
   const [calendarMode, setCalendarMode] = useState<'month' | 'week'>('month');
@@ -105,8 +107,10 @@ const CustomCalendar = () => {
   };
 
   // Выбор дня
-  const handleDayPress = (date: Date) => {
+  const handleDayPress = async (date: Date) => {
+    // console.log();
     setSelectedDate(date);
+    await dailyActivityStore.getDailyActivity(date.toISOString().split('T')[0]);
   };
 
   // Проверить, выбран ли день
@@ -181,7 +185,7 @@ const CustomCalendar = () => {
 
     </View>
   );
-};
+});
 
 const s = StyleSheet.create({
   header: {
