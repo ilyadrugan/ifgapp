@@ -4,48 +4,12 @@ import {VictoryChart, VictoryArea, VictoryLine, VictoryScatter, VictoryTooltip, 
 import colors from '../../../core/colors/colors';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import gs from '../../../core/styles/global';
+import { GraphDataType } from '../../../../store/state/activityGraphStore/models/models';
+import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 
-const dataWeeks = [
-  { x: 'Пн', y: 20 },
-  { x: 'Вт', y: 40 },
-  { x: 'Ср', y: 30 },
-  { x: 'Чт', y: 60 },
-  { x: 'Пт', y: 78 },
-  { x: 'Сб', y: 50 },
-  { x: 'Вс', y: 30 },
-];
-const dataMonths = [
-    { x: '1', y: 20 },
-    { x: '2', y: 40 },
-    { x: '3', y: 30 },
-    { x: '4', y: 60 },
-    { x: '5', y: 78 }, // Выделенная точка
-    { x: '6', y: 50 },
-    { x: '7', y: 30 },
-    { x: '8', y: 78 }, // Выделенная точка
-    { x: '9', y: 50 },
-    { x: '10', y: 30 },
-    { x: '11', y: 78 }, // Выделенная точка
-    { x: '12', y: 50 },
-    { x: '13', y: 20 },
-    { x: '14', y: 40 },
-    { x: '15', y: 30 },
-    { x: '16', y: 60 },
-    { x: '17', y: 78 }, // Выделенная точка
-    { x: '18', y: 50 },
-    { x: '19', y: 30 },
-    { x: '20', y: 78 }, // Выделенная точка
-    { x: '21', y: 50 },
-    { x: '22', y: 30 },
-    { x: '23', y: 78 }, // Выделенная точка
-    { x: '24', y: 50 },
-    { x: '25', y: 50 },
-    { x: '26', y: 30 },
-    { x: '27', y: 78 }, // Выделенная точка
-    { x: '28', y: 50 },
-    { x: '29', y: 30 },
-    { x: '30', y: 78 }, // Выделенная точка
-  ];
+
+const dataWeekNames = ['Вс','Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
 type DotType = {
     _x: number,
     _y: number,
@@ -53,7 +17,13 @@ type DotType = {
     xName: string,
     y: number | string,
 }
+
+type DotDataType = {
+  x: string,
+  y: number,
+}
 const CustomDoubleCircle = ({ x, y }) => {
+  console.log('CustomDoubleCircle', x, y);
     return (
       <Svg>
         {/* Внешний круг с прозрачностью */}
@@ -65,42 +35,60 @@ const CustomDoubleCircle = ({ x, y }) => {
       </Svg>
     );
   };
-const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
-  const [selectedPoint, setSelectedPoint] = useState<DotType>();
-  const [data, setData] = useState(monthly ? dataMonths : dataWeeks);
+const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({monthly, graphData}) => {
+  const [selectedPoint, setSelectedPoint] = useState<DotType | null>();
+  const [data, setData] = useState<DotDataType[]>([]);
+  const [maxValue, setMaxValue] = useState<number>(0);
 
 
-  useEffect(() => {
-    setData(monthly ? dataMonths : dataWeeks);
-  }, [monthly]);
-
-
-  const handlePress = (datum) => {
-    console.log(datum);
-    setSelectedPoint(datum); // Устанавливаем выбранную точку
+  const convertGraphData = () => {
+    return graphData.map((el, index)=>{
+      return {x: monthly ? new Date(el.created_at).getDate().toString() : new Date(el.created_at).getDate().toString(), y: el.value};
+    });
   };
 
+  const handlePress = (datum) => {
+    setSelectedPoint(datum); // Устанавливаем выбранную точку
+  };
+  const customRound = (number: number) => {
+    if (number >= 0 && number < 100) {
+      return Math.ceil(number / 10) * 10; // Округление до ближайшего десятка
+    } else if (number >= 100 && number < 1000) {
+      return Math.ceil(number / 100) * 100; // Округление до ближайшей сотни
+    } else if (number >= 1000 && number < 10000) {
+      return Math.ceil(number / 500) * 500; // Округление до ближайших 500
+    } else if (number >= 10000) {
+      return Math.ceil(number / 1000) * 1000; // Округление до ближайшей тысячи
+    }
+    return number; // Если число меньше 0, просто возвращаем его
+  };
   useEffect(() => {
-    // const today = new Date().getDay() === 0 ? 8 : new Date().getDay();
+    if (graphData.length === 0) {return;}
+    setSelectedPoint(null);
+
+    const  convertedData = convertGraphData();
+    const convertedDataLen = convertedData.length;
+
     const today = new Date().getDay();
-    // console.log('today.getDay()', today);
     const todayDot: DotType = {
-        _x: today === 0 ? 7 : today,
-        _y: dataWeeks[today - 1 < 0 ? 6 : today ].y,
-        x:  dataWeeks[today - 1 < 0 ? 6 : today].x,
-        xName: dataWeeks[today - 1 < 0 ? 6 : today].x,
-        y: dataWeeks[today - 1 < 0 ? 6 : today].y,
+        _x: convertedData.length,
+        _y: convertedData[convertedDataLen - 1].y,
+        x:  convertedData[convertedDataLen - 1].x,
+        xName: convertedData[convertedDataLen - 1].x,
+        y: convertedData[convertedDataLen - 1].y,
     };
-    // console.log(todayDot);
     setSelectedPoint(todayDot);
-  }, []);
+    // setMaxValue(findMaxValue(convertedData));
+    setData(convertedData);
+  }, [graphData, monthly]);
 
   return (
-    <View style={styles.container}>
+    (data.length > 0 && !dailyActivityStore.isLoading) && <View style={styles.container}>
 
       <VictoryChart
         // domainPadding={{ x: 10, y: 10 }} // Отступы для осей
         height={200}
+
       >
     <Defs>
       <LinearGradient id="gradientFill" x1="0" y1="0" x2="0" y2="1">
@@ -110,6 +98,8 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
    </Defs>
         {/* Ось X */}
         <VictoryAxis
+        tickFormat={(t, index) => {
+          return monthly ? (((index + 1) % 3) === 0 ? t : '') : dataWeekNames[Math.abs(new Date().getDay() - 6 + index)];}} // Показать каждую пятую метку
           style={{
             axis: { stroke: 'transparent' },
             tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'tilda-sans_medium' },
@@ -119,7 +109,8 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
         {/* Ось Y */}
         <VictoryAxis
           dependentAxis
-          tickValues={[0, 50, 100]} // Фиксированные значения
+          tickValues={data.reduce((acc, curr) => acc.y > curr.y ? acc : curr).y === 0 ? [0, 50, 100]
+             : [0, customRound(data.reduce((acc, curr) => acc.y > curr.y ? acc : curr).y) / 2, customRound(data.reduce((acc, curr) => acc.y > curr.y ? acc : curr).y)]} // Фиксированные значения
           style={{
             axis: { stroke: 'transparent' },
             grid: { stroke: '#F2EDEE' },
@@ -152,8 +143,8 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
           }}
         />
 
-    <VictoryScatter
-        data={selectedPoint ? [selectedPoint] : []} // Показывать только выбранную точку
+    {selectedPoint && <VictoryScatter
+        data={[selectedPoint]} // Показывать только выбранную точку
         size={8}
         style={{
           data: {
@@ -182,7 +173,7 @@ const VictoryGraph: FC<{monthly?: boolean}> = ({monthly}) => {
             pointerLength={3}
           />
           }
-      />
+      />}
 
       {/* Событие клика для выбора точки */}
       <VictoryScatter

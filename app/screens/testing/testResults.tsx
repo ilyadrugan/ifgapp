@@ -29,7 +29,7 @@ export const ResultTest = ({route}) => {
       if (activiti_value_json) {
         const values = JSON.parse(activiti_value_json) as ActivitiValueModel;
         console.log(values);
-        const summ = values.anistres + values['fiz-act'] + values.pitaniye + values.sleep;
+        const summ = values.anistres + values['fizact'] + values.pitaniye + values.sleep;
         console.log(summ);
         if (summ <= 40) {setBalanceLvl(0);}
         else if (summ <= 80) {setBalanceLvl(1);}

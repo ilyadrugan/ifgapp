@@ -17,12 +17,9 @@ import Antistress18 from '../../../assets/icons/antistress18.svg';
 import PhysicalActivity18 from '../../../assets/icons/physical-activity.svg';
 import { ShadowGradient } from '../../core/components/gradient/shadow-gradient';
 import { useNavigation } from '@react-navigation/native';
-import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 
 export const CalendarScreen = () =>{
     const navigation = useNavigation<any>();
-
-
 
     return <>
     <ScrollView style={s.container}>

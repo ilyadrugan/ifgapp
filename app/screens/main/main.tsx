@@ -31,7 +31,7 @@ export const Main: FC = observer(() => {
 
   return (
     <View style={{ height: deviceHeight}}>
-      <Tab.Navigator initialRouteName="Дом"
+      <Tab.Navigator initialRouteName="Календарь"
         // headerShown={false}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {

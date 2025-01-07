@@ -5,6 +5,8 @@ export type UserInfo = {
     email: string;
     profile_photo_url: string;
     birthday: string;
+    ifg_level: string;
+    city: string;
 }
 
 export type UserChangeInfoModel = {

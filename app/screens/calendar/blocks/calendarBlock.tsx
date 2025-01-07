@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
-import { TouchableOpacity, View, StyleSheet, Text, Dimensions, Animated } from 'react-native';
 import colors from '../../../core/colors/colors';
 import 'react-native-gesture-handler';
 import CustomCalendar from './calendar';
@@ -15,14 +14,7 @@ export const CalendarBlock = () =>{
     return <CardContainer>
         <CustomCalendar />
         <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы'} />
-        <IFGActivity/>
+        {/* <IFGActivity/> */}
     </CardContainer>;
 };
 
-const s = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: '#fff',
-      },
-  });

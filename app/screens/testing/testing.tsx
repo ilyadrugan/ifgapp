@@ -37,8 +37,9 @@ export const Testing = observer(() => {
     const [currentQuestion, setCurrentQuestion] = useState<number>(1);
     const [currentAnswer, setCurrentAnswer] = useState<number>(-1);
     const [currentAnswerScore, setCurrentAnswerScore] = useState<number>(0);
+    const [currentAnswers, setCurrentAnswers] = useState({});
     const [activitiValues, setActivitiValues] = useState<ActivitiValueModel>({
-      'fiz-act': 0,
+      'fizact': 0,
       sleep: 0,
       anistres: 0,
       pitaniye: 0,
@@ -46,14 +47,17 @@ export const Testing = observer(() => {
     const [totalScore, setTotalScore] = useState<number>(0);
 
     const [percentage, setPercentage] = useState<string>();
+
     const nextQuestion = async(
       score: number
     ) =>{
-        console.log(testingStore.currentTest.questions[currentQuestion - 1], activitiValues, totalScore);
+        const question = testingStore.currentTest.questions[currentQuestion - 1];
+        const answer = testingStore.currentTest.questions[currentQuestion - 1].choices[currentAnswer].value;
+        // console.log(question, answer, activitiValues, totalScore);
         const copyActivitiValues = activitiValues;
-        switch (testingStore.currentTest.questions[currentQuestion - 1].group) {
+        switch (question.group) {
           case 'Физическая активность':
-              copyActivitiValues['fiz-act'] += Number(score);
+              copyActivitiValues.fizact += Number(score);
               break;
           case 'Сон':
               copyActivitiValues.sleep += Number(score);
@@ -65,14 +69,17 @@ export const Testing = observer(() => {
               copyActivitiValues.pitaniye += Number(score);
               break;
         }
+        const tmpObj = {[question.name]: answer};
+        // console.log({...currentAnswers, ...tmpObj});
+        setCurrentAnswers({...currentAnswers, ...tmpObj});
         setActivitiValues(copyActivitiValues);
         setTotalScore(totalScore + Number(score));
         if (currentQuestion === testingStore.currentTest.questions.length){
-            testingStore.setScoreToResult(totalScore, activitiValues);
-            console.log('currentResultsTest',testingStore.currentResultsTest);
+            testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}));
+            // console.log('currentResultsTest',testingStore.currentResultsTest);
             await testingStore.submitTest(testingStore.currentResultsTest)
               .then(()=>navigation.navigate('ResultTest', {activiti_value_json: JSON.stringify(activitiValues)}))
-              .catch(()=>errorToast('Проищошла ошибка отправки резульатов'));
+              .catch(()=>errorToast('Произошла ошибка отправки резульатов'));
             return;
         }
 

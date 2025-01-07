@@ -70,14 +70,16 @@ export const IFGHome = observer(() => {
     const StoryCard = (item: StoryModel, index)=>
           <CardContainer onPress={() => {
             setCurrentStoryPressed(index);
-            setModalVisible(true);}} style={[{width: 124, height: 166, padding:12, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(item.category_id).borderColor, backgroundColor: GetActivityBgColorName(item.category_id).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
+            setModalVisible(true);}} style={[{width: 124, overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(item.category_id).borderColor, backgroundColor: GetActivityBgColorName(item.category_id).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
            <ImageBackground
-           source={{uri: item.cover}}
+           source={{uri: `https://abcd.100qrs.ru${item.cover}`}}
            style={{width: '100%', height: '100%',justifyContent: 'space-between'  }}
             resizeMode="cover"
            >
+            <View style={[gs.ml12, gs.mt12]}>
             <Eye />
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontLightSmall, gs.regular]}>{item.title}</IfgText>
+            </View>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{item.title}</IfgText>
             </ImageBackground>
       </CardContainer>;
 return <>

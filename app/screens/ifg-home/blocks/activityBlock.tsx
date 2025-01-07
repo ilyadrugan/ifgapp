@@ -83,7 +83,8 @@ export const ActivityBlock = observer(() => {
     };
 
     useEffect(() => {
-      // console.log('userStore.userInfo',userStore.userInfo);
+      console.log('userStore.userInfo',userStore.userInfo);
+      userStore.getProfile();
     }, []);
 
 
@@ -125,7 +126,7 @@ return <CardContainer >
       </View>
       <TouchableOpacity activeOpacity={1}  onPress={toggleExpand} style={[gs.flexRow, gs.alignCenter]}>
         <IfgText style={[gs.fontCaption2, gs.bold, gs.mr6]}>
-          Начальный
+          {userStore.userInfo?.ifg_level}
         </IfgText>
         <TouchableOpacity disabled style={{ transform: [{ scaleY: scaleY }] }}>
           <Open />

@@ -19,11 +19,13 @@ export type ChoiceModel = {
 export type ResultsTestModel = {
     survey_id: number,
     total_score: number,
-    activiti_value_json: ActivitiValueModel
+    activiti_value_json: string,
+    answers_json: string,
+    activiti_value: string
 }
 
 export type ActivitiValueModel = {
-        'fiz-act': number,
+        'fizact': number,
         sleep: number,
         anistres: number,
         pitaniye: number

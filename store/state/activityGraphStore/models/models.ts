@@ -26,3 +26,15 @@ export type DailyIfgScoreModel = {
     score: number,
     created_at: string,
 }
+
+export type DailyCommonModel = {
+    calories?: number,
+    steps?: number,
+    score?: number,
+    created_at: string,
+}
+
+export type GraphDataType = {
+    value: number,
+    created_at: string,
+}
