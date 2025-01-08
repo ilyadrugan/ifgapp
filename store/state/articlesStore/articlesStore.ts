@@ -142,6 +142,7 @@ class ArticlesStore {
       type: '',
     };
   }
+
   clearCurrentInterView() {
     this.currentInterview = {
       id: 0,
@@ -158,6 +159,7 @@ class ArticlesStore {
       media: [],
     };
   }
+  
   async getArticleById(id: number) {
     this.isLoading = true;
     this.errorMessage = '';
@@ -346,7 +348,7 @@ class ArticlesStore {
     console.log(id);
     await changeUserArticleApi(id)
       .then(async (result)=>{
-        console.log(result);
+        // console.log(result);
         await this.getUserArticles().then(()=>
           successToast(`Материал ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
         );

@@ -23,7 +23,7 @@ type DotDataType = {
   y: number,
 }
 const CustomDoubleCircle = ({ x, y }) => {
-  console.log('CustomDoubleCircle', x, y);
+  // console.log('CustomDoubleCircle', x, y);
     return (
       <Svg>
         {/* Внешний круг с прозрачностью */}

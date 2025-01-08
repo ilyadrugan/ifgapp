@@ -1,8 +1,11 @@
 import { Parser } from 'htmlparser2';
 
 export function stripHtmlTags(htmlString) {
+    if (!htmlString) {return '';}
     return htmlString.replace(/<\/?[^>]+(>|$)/g, '')
         .replaceAll('&nbsp;', ' ')
+        .replaceAll('&mdash;', '—')
+        .replaceAll('&ndash;', '-')
         .replace(/\u00A0/g, ' ')
         ;
 }

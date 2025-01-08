@@ -17,20 +17,21 @@ import { individualProgramm, IndividualProgrammData } from './testData/individua
 import authStore from '../../../store/state/authStore/authStore';
 import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
 import { html } from './mocksHtmlResults/htmlResults';
+import testingStore from '../../../store/state/testingStore/testingStore';
 // import VideoPlayer from 'react-native-video-player';
 
 export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
     const [balanceLvl, setBalanceLvl] = useState(0);
-    const {activiti_value_json} = route.params;
+    const {testId} = route.params;
     const onBack = () => navigation.goBack();
     useEffect(()=>{
-      if (activiti_value_json) {
-        const values = JSON.parse(activiti_value_json) as ActivitiValueModel;
-        console.log(values);
-        const summ = values.anistres + values['fizact'] + values.pitaniye + values.sleep;
-        console.log(summ);
+      console.log('authStore', authStore.access_token);
+      if (testId) {
+       testingStore.setMyCurrentResultsTest(testId);
+        const summ = testingStore.myCurrentResultsTest.total_score;
+        console.log('testingStore.myCurrentResultsTest',testingStore.myCurrentResultsTest);
         if (summ <= 40) {setBalanceLvl(0);}
         else if (summ <= 80) {setBalanceLvl(1);}
         else if (summ <= 120) {setBalanceLvl(2);}
@@ -38,7 +39,7 @@ export const ResultTest = ({route}) => {
         else if (summ <= 160) {setBalanceLvl(4);}
         else {setBalanceLvl(5);}
       }
-    }, [activiti_value_json]);
+    }, [testId]);
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -107,7 +108,7 @@ export const ResultTest = ({route}) => {
         </ScrollView>
         <View style={s.footer}>
         <Button style={s.buttonNext}
-           onPress={()=> authStore.isAuthenticated ? navigation.replace('IndividualProgramm', {activiti_value_json: JSON.parse(activiti_value_json)}) : navigation.navigate('Registration')}
+           onPress={()=> authStore.access_token ? navigation.replace('IndividualProgramm') : navigation.navigate('Registration')}
            >
            <View style={{
                flexDirection: 'row',

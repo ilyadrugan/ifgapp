@@ -1,6 +1,6 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert} from 'react-native';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl} from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -35,6 +35,7 @@ import { StoryModal } from '../../core/components/storyModal/storyModal';
 import { GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
 import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
+import testingStore from '../../../store/state/testingStore/testingStore';
 
 
 export const IFGHome = observer(() => {
@@ -44,13 +45,14 @@ export const IFGHome = observer(() => {
 
     useEffect(() => {
       userStore.getProfile();
+      testingStore.getAllMyTest();
       storiesStore.getStories();
       ifgScoreStore.getScoreToday();
-      recommendationStore.getRecommendations();
+      if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
       articlesStore.loadMoreArticles();
       articlesStore.clearCurrentArticle();
-      console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-
+      // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
+      recommendationStore.getPersonalRecommendations();
     }, []);
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
@@ -118,27 +120,32 @@ return <>
         <RecommendationBlock />
         <TimeToDrinkBlock isNew={true}/>
 
-        <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} >
+
+        {recommendationStore.personalRecomendationList.map((rec, index)=>{
+          console.log('rec', rec);
+          return <CardContainer style={gs.mt16} key={index.toString()} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
           <ArticleHeader
-            isNew
-            time={'10:00'}
+            // isNew
+            // time={'10:00'}
             hashTagColor={colors.PINK_COLOR}
             hashTagText={'#Активность'}
           />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Ходите по лестнице или на степпере</IfgText>
+          <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
           <View style={[gs.flexRow, gs.alignCenter]}>
             <Image
             resizeMode="contain"
             style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article1.png')}
+            source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
             />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Куда бы вы ни пошли сегодня, старайтесь выбирать лестницу, а не лифт или эскалатор, и поднимайтесь на нужный...</IfgText>
+            {/* <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Куда бы вы ни пошли сегодня, старайтесь выбирать лестницу, а не лифт или эскалатор, и поднимайтесь на нужный...</IfgText> */}
           </View>
-        </CardContainer>
+          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 3 балла" />
+
+        </CardContainer>;
+        })}
 
         <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}  >
+        {/* <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}  >
           <ArticleHeader
             time={'10:00'}
             hashTagColor={colors.PINK_COLOR}
@@ -157,7 +164,7 @@ return <>
           <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} title="Читать статью" oliveTitle="+ 3 балла" />
         </CardContainer>
 
-        <View style={gs.mt16} />
+        <View style={gs.mt16} /> */}
         <View style={gs.flexRow}>
           <Button style={s.buttonTo} onPress={()=>console.log('7recs')}>
               <IfgText color={colors.GRAY_COLOR3} style={[gs.fontBody2, gs.light, {lineHeight: 16}]}>Ранее - 7 рекомендаций</IfgText>

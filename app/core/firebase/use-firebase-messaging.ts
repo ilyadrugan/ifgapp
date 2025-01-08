@@ -34,7 +34,6 @@ export function useFirebaseMessaging(
   }
 
   function _needToShow(message: FirebaseMessagingTypes.RemoteMessage): boolean {
-    console.log('needToShow', message);
     const action = getPushAction(message.data);
     if (!action) {return true;}
     return needToShow(action);

@@ -63,7 +63,7 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
         useNativeDriver: false,
       }).start(({ finished }) => {
         if (finished) {
-            console.log('finished', finished);
+            // console.log('finished', finished);
           handleNextStory();
         }
       });
@@ -102,7 +102,7 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
         const elapsedTime = Date.now() - startTime; // Время, прошедшее с начала анимации
         const remainingDuration = duration - elapsedTime; // Оставшееся время анимации
         // Возобновляем анимацию с оставшегося прогресса
-        console.log('handleResumeProgressAnimation',currentStoryIndex, previousValue,remainingDuration );
+        // console.log('handleResumeProgressAnimation',currentStoryIndex, previousValue,remainingDuration );
         progressAnims[currentStoryIndex].setValue(previousValue); // Устанавливаем прогресс с момента приостановки
         Animated.timing(progressAnims[currentStoryIndex], {
           toValue: 1,
@@ -123,16 +123,13 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx > 50) {
           // Свайп вправо (предыдущая)
-          console.log('Свайп вправо');
           handlePreviousStory();
         } else if (gestureState.dx < -50) {
-            console.log('Свайп влево');
             handleNextStory();
         }
       },
     });
     const onSwipe = ({ nativeEvent }) => {
-        console.log('onSwipe', nativeEvent.translationX);
         if (nativeEvent.translationX > 50) {
           // Свайп вправо
           handlePreviousStory();

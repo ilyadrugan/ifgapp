@@ -14,6 +14,7 @@ import Delete from '../../../assets/icons/delete.svg';
 import Fish from '../../../assets/icons/fish.svg';
 import Moon from '../../../assets/icons/moon.svg';
 import Antistress from '../../../assets/icons/antistress.svg';
+import PhysicalActivity from '../../../assets/icons/physical-activity32.svg';
 
 import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,31 +27,38 @@ import testingStore from '../../../store/state/testingStore/testingStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import { observer } from 'mobx-react';
 import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
+import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
+import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 
-export const IndividualProgramm = observer(({route}) => {
+export const IndividualProgramm = observer(() => {
     const navigation = useNavigation<any>();
-    const { params } = route;
-    const activiti_value_json = params?.activiti_value_json;
   const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
-    console.log(activiti_value_json);
 
     // const { activiti_value_json } = route.params || undefined;
     // console.log('activiti_value_json', activiti_value_json);
-    const onBack = () => navigation.goBack();
+    const onBack = () => {
+      testingStore.clearMyCurrentResultsTest();
+      navigation.goBack();
+    };
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [recommends, setRecommends] = useState(true);
     useEffect(() => {
-      if (!activiti_value_json) {
-        console.log('activiti_value_json is undefined');
-        getMyTests().then(()=>setActivityValue(JSON.parse(testingStore.testsList[0].activiti_value_json)));
+      if (testingStore.myCurrentResultsTest.id === 0) {
+        testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
+        console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
       }
-      else {
-        setActivityValue(activiti_value_json);
-      }
-
+      getRecomendations(testingStore.myCurrentResultsTest.id);
+      recommendationStore.getPersonalRecommendations();
     }, []);
-    const getMyTests = async () => await testingStore.getAllMyTest();
+    const getRecomendations = async (testId: number) => await recommendationStore.getRecommendations(testId);
 
+    const onRecommendationCheck = (link: string) =>{
+      console.log('onRecommendationCheck', link);
+      recommendationStore.storeRecommendation(link)
+    };
+    const checkRecommendationInHub = (link: string) => {
+      return recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === link);
+    };
     const MaterialCard = ({title, media, subtitle, id}, index)=>
       <CardContainer onPress={()=>navigation.replace('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
@@ -110,25 +118,25 @@ export const IndividualProgramm = observer(({route}) => {
         </>}
         <View style={gs.mt16} />
 
-        {activityValue  && <><CardContainer>
+        {(testingStore.myCurrentResultsTest.id !== 0 && !recommendationStore.isLoading) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            <CircularProgress value={activityValue.pitaniye} maxValue={180 / 4} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Питание} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {Plan[0].activities.map((activity, index)=><View key={index.toString()} style={s.row}>
+          {recommendationStore.recommendationList.Питание.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-            <CheckBox checked={true}/>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
+            <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{Plan[0].goals[index]}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -139,19 +147,19 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
-            <CircularProgress value={activityValue.sleep} maxValue={180 / 4} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Сон} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {Plan[1].activities.map((activity, index)=><View key={index.toString()} style={s.row}>
+          {recommendationStore.recommendationList.Сон.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-            <CheckBox checked={true}/>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
+          <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{Plan[1].goals[index]}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -162,19 +170,42 @@ export const IndividualProgramm = observer(({route}) => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
-            <CircularProgress value={activityValue.anistres} maxValue={180 / 4} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Антистресс} maxValue={180 / 4} />
           </CardContainer>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {Plan[2].activities.map((activity, index)=><View key={index.toString()} style={s.row}>
+          {recommendationStore.recommendationList.Антистресс.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-            <CheckBox checked={true}/>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{activity}</IfgText>
+          <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{Plan[1].goals[index]}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+          </View>
+          </View>)}
+        </CardContainer>
+        <View style={gs.mt16} />
+        <CardContainer>
+          <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.OCEAN_COLOR, flexDirection: 'row'}} >
+            <View style={{justifyContent: 'space-between', height: '100%', flex:1}}>
+              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Физическая активность</IfgText>
+              <PhysicalActivity />
+            </View>
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json['Физическая активность']} maxValue={180 / 4} />
+          </CardContainer>
+          <View style={[gs.flexRow]}>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
+            <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
+          </View>
+          {recommendationStore.recommendationList['Физическая активность'].map((item, index)=><View key={index.toString()} style={s.row}>
+          <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
+          <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
+          </View>
+          <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>

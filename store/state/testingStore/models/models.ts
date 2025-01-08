@@ -21,9 +21,15 @@ export type ResultsTestModel = {
     total_score: number,
     activiti_value_json: string,
     answers_json: string,
-    activiti_value: string
+    // activiti_value: string
 }
-
+export type MyCurrentResultsTestModel = {
+    id: number,
+    survey_id: number,
+    total_score: number,
+    activiti_value_json: ActivitiValueViewModel,
+    // activiti_value: string
+}
 export type ActivitiValueModel = {
         'fizact': number,
         sleep: number,
@@ -31,11 +37,18 @@ export type ActivitiValueModel = {
         pitaniye: number
 }
 
+export type ActivitiValueViewModel = {
+    'Сон': number,
+    'Питание': number,
+    'Антистресс': number,
+    'Физическая активность': number
+}
+
 export type MyTestModel = {
     id: number,
     survey_id: number,
     name: string,
     total_score: number,
-    activiti_value_json: ActivitiValueModel,
+    activiti_value_json: string,
     created_at: string,
 }

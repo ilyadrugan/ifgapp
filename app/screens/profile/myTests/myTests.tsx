@@ -11,11 +11,12 @@ import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import testingStore from '../../../../store/state/testingStore/testingStore';
 import { formatDateWithMoment, formatTimeWithMoment } from '../../../core/utils/formatDateTime';
-import { ActivitiValueModel } from '../../../../store/state/testingStore/models/models';
+import { ActivitiValueModel, ActivitiValueViewModel } from '../../../../store/state/testingStore/models/models';
 
 
-const CardTest: FC<{dateTime: string, title: string, activities: ActivitiValueModel}> = ({dateTime, title, activities}) => {
+const CardTest: FC<{testId:number, dateTime: string, title: string, activities: ActivitiValueViewModel}> = ({testId, dateTime, title, activities}) => {
     const navigation = useNavigation<any>();
+    // console.log('activities', activities);
     return <CardContainer style={{borderRadius: 22, gap: 0}}>
         <View style={gs.flexRow}>
             <Button disabled style={s.dateContainer}>
@@ -32,7 +33,7 @@ const CardTest: FC<{dateTime: string, title: string, activities: ActivitiValueMo
         <View style={{marginTop: 10}} />
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{'Ifg-тестирование'}</IfgText>
         <View style={{marginTop: 21}} />
-        <Button onPress={()=>navigation.navigate('ResultTest', {activiti_value_json: activities })} style={s.buttonResult}>
+        <Button onPress={()=>navigation.navigate('ResultTest', {testId: testId })} style={s.buttonResult}>
             <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', width: '100%'}}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.medium]}>Результаты</IfgText>
             <ArrowRigthBlack />
@@ -45,12 +46,13 @@ export const MyTests: FC = observer(() =>{
 
     useEffect(() => {
       testingStore.getAllMyTest();
+    //   console.log(testingStore.testsList[0]);
     },[]);
 
     return <>
 
     {testingStore.testsList.map((val, index)=><View key={index.toString()} style={gs.mb16} >
-    <CardTest activities={val.activiti_value_json} dateTime={val.created_at} title={val.name} />
+    <CardTest testId={val.id} activities={val.activiti_value_json} dateTime={val.created_at} title={val.name} />
     </View>
    )}
         <View style={{height: 70}}/>

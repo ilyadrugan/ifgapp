@@ -19,13 +19,13 @@ export const ArticleHeader:FC<{
   }> = ({hashTagText, hashTagColor, time, isNew, isCicleBadge }) =>
     <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                <View style={s.timeContainer}>
+                {time && <View style={s.timeContainer}>
                         <Time />
                         <IfgText style={[gs.fontCaption3, gs.medium]} >
                         {time}
                         </IfgText>
 
-                </View>
+                </View>}
                 <View style={{marginLeft: 10}} />
                 {isCicleBadge && <View style={s.circle} />}
                 {isNew &&

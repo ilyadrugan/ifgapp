@@ -21,6 +21,7 @@ export default {
     ORANGE_COLOR: '#FFAC44',
     BACKGROUND_COLOR: '#F3F3F3',
     BLUE_COLOR: '#EFFCF4',
+    OCEAN_COLOR: '#6CAFFF',
     BLUE_LIGHT_COLOR: '#DDEEFF',
     PINK_COLOR: '#FE99C4',
     RED_COLOR: '#fd0b0b',

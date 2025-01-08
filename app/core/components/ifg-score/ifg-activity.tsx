@@ -18,7 +18,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel}>  = observer(
   const [dailyValues, setDailyValues] = useState(dailyActivities);
   const {healthData} = useHealthData();
   useEffect(() => {
-    console.log('dailyActivities', dailyActivities);
+    // console.log('dailyActivities', dailyActivities);
     setDailyValues(dailyActivities);
   }, [dailyActivities]);
 

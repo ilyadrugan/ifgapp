@@ -32,7 +32,7 @@ export const Subscription: FC = observer(() =>{
           <CardContainer style={s.subsriptionCard}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка IFeelGood Pro</IfgText>
             <View style={gs.mt6} />
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>299 ₽</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>499 ₽</IfgText>
             <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>Спишется 24 мая</IfgText>
             <View style={gs.mt6} />
             <Button outlined style={s.unsubscribeButton}>
@@ -43,14 +43,14 @@ export const Subscription: FC = observer(() =>{
          {tariffsStore.tariffs.length > 0 && <CardContainer style={s.subsriptionCard}>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка Pro</IfgText>
           <View style={s.discounts}>
-          <TouchableOpacity onPress={()=>onChange(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
+          <TouchableOpacity onPress={()=>onChange(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive, gs.flex1]} >
               <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
               {tariffsStore.tariffs[0].price_discount &&
               <View style={s.discountPercents}>
                 <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%</IfgText>
               </View>}
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>onChange(1)} style={[s.dicountValue, activeDiscount === 1 && s.discountValueActive]} >
+          <TouchableOpacity onPress={()=>onChange(1)} style={[s.dicountValue, activeDiscount === 1 && s.discountValueActive, gs.flex1]} >
               <IfgText color={activeDiscount === 1 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[1].title}</IfgText>
               {tariffsStore.tariffs[1].price_discount &&
               <View style={s.discountPercents}>

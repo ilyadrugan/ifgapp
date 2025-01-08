@@ -90,10 +90,10 @@ export const getHealthData = async (date: Date) => {
         { accessType: 'read', recordType: 'FloorsClimbed' },
         { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
       ]).then((permissions) => {
-        console.log('Granted permissions ', { permissions });
+        // console.log('Granted permissions ', { permissions });
       });
       const grantedAllPermissions = await getGrantedPermissions();
-        console.log('grantedPermissions', grantedAllPermissions);
+        // console.log('grantedPermissions', grantedAllPermissions);
         if (grantedAllPermissions.length == 0){
           showAlert('Разрешение на предоставление данных с Health Connect','Для работы с данными, необходимо выдать разрешение на синхронизацию данных одного из стандартных приложений и IFGApp с Health Connect', [{
             text: 'Сделаю позже',
@@ -110,20 +110,20 @@ export const getHealthData = async (date: Date) => {
       };
 
       // Steps
-      console.log('getting steps');
+      // console.log('getting steps');
       const steps = await readRecords('Steps', { timeRangeFilter });
-      console.log('steps', steps.records);
+      // console.log('steps', steps.records);
       const totalSteps = steps.records.reduce((sum, cur) => sum + cur.count, 0);
 
       // CALORIES_BURNED
-      console.log('getting total_calories');
+      // console.log('getting total_calories');
       const calories = await readRecords('TotalCaloriesBurned', {
       timeRangeFilter,
       });
-      console.log('calories', calories.records);
+      // console.log('calories', calories.records);
 
       const totalCalories = calories.records.reduce((sum, cur) => sum + cur.energy.inKilocalories, 0);
-      console.log('total_calories', totalCalories);
+      // console.log('total_calories', totalCalories);
 
       // Floors climbed
       const floorsClimbed = await readRecords('FloorsClimbed', {

@@ -18,7 +18,7 @@ class StoriesStore {
     //   this.errorMessage = '';
       await getStoriesApi()
         .then((result)=>{
-          console.log('result.data', result.data['common stories']);
+          // console.log('result.data', result.data['common stories']);
           this.storiesList = result.data['common stories'].map((story)=>{
            const substory: SubStoryModel = {
             title: story.title,
@@ -27,7 +27,7 @@ class StoriesStore {
            story.subStories = [substory];
            return story;
           });
-         console.log('this.storiesList', this.storiesList);
+        //  console.log('this.storiesList', this.storiesList);
         }
         )
         .catch((err)=>{

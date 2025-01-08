@@ -126,7 +126,7 @@ export const Registration = () => {
                     ...data,
                     phone: phone,
                 };
-                console.log(model);
+                // console.log(model);
                 authStore.register(model, ()=>navigation.SuccessfulReg('Main'));
             }
 

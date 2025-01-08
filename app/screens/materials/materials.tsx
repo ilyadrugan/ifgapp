@@ -49,10 +49,10 @@ export const MaterialsScreen = observer(() => {
 
     useEffect(() => {
         articlesStore.getMaterialFilters().then((res)=>{
-            console.log('res', res);
+            // console.log('res', res);
           });
         articlesStore.getMaterialHashtags().then((res)=>{
-            console.log('res', res);
+            // console.log('res', res);
           });
         onLoadMore();
         // articlesStore.loadMoreActualInterviews().then((res)=>{

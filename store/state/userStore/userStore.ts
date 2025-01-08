@@ -50,7 +50,7 @@ class UserStore {
             // } as UserInfo);
             this.userInfo = response.data.profile;
             this.isLoading = false;
-            console.log(userStore.userInfo);
+            // console.log(userStore.userInfo);
           }
         } catch (error) {
           console.error(error);
@@ -61,7 +61,7 @@ class UserStore {
 
     changeProfile = async (model: UserChangeInfoModel) => {
       this.isLoading = true;
-      console.log('UserChangeInfoModel',model);
+      // console.log('UserChangeInfoModel',model);
       await changeProfile(model)
       .then(()=>{
         // console.log(result.data);

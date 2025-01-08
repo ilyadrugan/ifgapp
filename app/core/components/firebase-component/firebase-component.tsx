@@ -11,7 +11,7 @@ export const FirebaseComponent: FC = () => {
   useFirebaseMessaging(onPushAction, needToShow);
 
   function onPushAction(action: PushAction) {
-    console.log('onPushAction', action);
+    // console.log('onPushAction', action);
     switch (action.action) {
       // case PushActionType.NavigateToContractorChat: {
       //   const data = action.data as NavigateToContractorChatData;
@@ -56,7 +56,7 @@ export const FirebaseComponent: FC = () => {
   }
 
   function needToShow(action: PushAction): boolean {
-    console.log('needToShow', action);
+    // console.log('needToShow', action);
 
     switch (action.action) {
       // case PushActionType.NavigateToContractorChat: {

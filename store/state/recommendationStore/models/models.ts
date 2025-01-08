@@ -1,10 +1,10 @@
-import { ArticleModel, MediaModel } from '../../articlesStore/models/models';
+import { ArticleModel, ArticleViewModel, MediaModel } from '../../articlesStore/models/models';
 
 export type RecommendationsModel = {
-    'Сон': RecommendationActivivtyModel,
-    'Питание': RecommendationActivivtyModel,
-    'Антистресс': RecommendationActivivtyModel,
-    'Физическая активность': RecommendationActivivtyModel,
+    'Сон': RecommendationActivivtyModel[],
+    'Питание': RecommendationActivivtyModel[],
+    'Антистресс': RecommendationActivivtyModel[],
+    'Физическая активность': RecommendationActivivtyModel[],
 }
 
 export type RecommendationActivivtyModel = {
@@ -14,11 +14,18 @@ export type RecommendationActivivtyModel = {
   }
 }
 
+export type PersonalRecommendationModel = {
+  id: number,
+  link_text: string,
+  article: ArticleViewModel
+}
+
 export type ActivivtyExpressModel = {
   id: string,
   html: string,
   score_on: string,
-  score_to: string
+  score_to: string,
+  link_text: string,
 }
 export enum ActivitiesType {
     PhysicalActivity = 1,
