@@ -9,7 +9,8 @@ export type DailyActivityModel = {
     stress: number,
     sleep: number,
     phisical_activity: number,
-    watter: number
+    watter: number,
+    score:{score: number}
 }
 
 export type DailyCaloriesModel = {
