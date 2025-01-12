@@ -11,11 +11,22 @@ import SeparatorHorizontal from '../../../../assets/icons/separator-horizontal.s
 import { CupsData, CupStatus, CupsType } from './data/data-cups';
 import { ButtonNext } from '../../../core/components/button/button';
 import { ArticleHeader } from '../components/articleHeader';
+import { observer } from 'mobx-react';
+import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
+import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 
 const width = Dimensions.get('screen').width;
 
-export const TimeToDrinkBlock: FC<{isNew?: boolean}> = ({isNew}) => {
-    const [cupsData, setCupsData] = useState<CupsType[]>(CupsData);
+export const TimeToDrinkBlock: FC<{isNew?: boolean, watterCount?: number}> = observer(({isNew}) => {
+    // console.log('watterCount',watterCount );
+    const [cupsData, setCupsData] = useState<CupsType[]>(dailyActivityStore.dailyTodayActivityData?.watter ? [0,1,2,3,4,5,6,7].map((item)=>
+    {
+        if (item < dailyActivityStore.dailyTodayActivityData.watter) {return {id: item, status: CupStatus.Filled} as CupsType;}
+        if (item === dailyActivityStore.dailyTodayActivityData.watter) {return {id: item, status: CupStatus.Plused} as CupsType;}
+        else {return {id: item, status: CupStatus.Empty} as CupsType;}
+    }
+    ) : CupsData);
+    const [scoreGotted, setScoreGotted] = useState<boolean>(dailyActivityStore.dailyTodayActivityData.isDrinkEight);
 
     const onCupTap = (id: number, status: CupStatus) =>{
         const copyData = [...cupsData];
@@ -37,7 +48,23 @@ export const TimeToDrinkBlock: FC<{isNew?: boolean}> = ({isNew}) => {
                 break;
         }
         setCupsData(copyData);
+        addToDailyActivity(copyData);
     };
+
+    const addToDailyActivity = async (cups: CupsType[]) => {
+        if (dailyActivityStore.dailyActivityData.watter === 0) {
+            dailyActivityStore.addDailyActivity('food', dailyActivityStore.dailyTodayActivityData.food + 1);
+            ifgScoreStore.addScore(1);
+        }
+       await dailyActivityStore.addDailyActivity('watter', cups.filter(cup=>cup.status === CupStatus.Filled).length);
+    };
+
+    const addScoreForWatter = () => {
+        setScoreGotted((prev)=>!prev);
+        dailyActivityStore.addDailyActivity('watter', cupsData.filter(cup=>cup.status === CupStatus.Filled).length);
+        dailyActivityStore.addDailyActivity('food', dailyActivityStore.dailyTodayActivityData.food + 2);
+        dailyActivityStore.addDailyActivity('isDrinkEight', true);
+        ifgScoreStore.addScore(2);};
 
     return <>
     <CardContainer style={gs.mt16}>
@@ -64,7 +91,7 @@ export const TimeToDrinkBlock: FC<{isNew?: boolean}> = ({isNew}) => {
         {/* Cups */}
         <View style={s.cups}>
             {cupsData.map((cup: CupsType)=>
-            <TouchableOpacity key={cup.id.toString()} onPress={()=>onCupTap(cup.id, cup.status)} disabled={cup.status === CupStatus.Empty} style={[
+            <TouchableOpacity key={cup.id.toString()} onPress={()=>onCupTap(cup.id, cup.status)} disabled={cup.status !== CupStatus.Plused} style={[
                     s.cupContainer,
                     cup.status === CupStatus.Empty && s.cupEmptyContainer,
                     cup.status === CupStatus.Filled && s.cupFilledContainer,
@@ -77,11 +104,11 @@ export const TimeToDrinkBlock: FC<{isNew?: boolean}> = ({isNew}) => {
             </TouchableOpacity>
             )}
         </View>
-        <ButtonNext title="Сделано" oliveTitle="+ 3 балла" />
+       {(!scoreGotted) && <ButtonNext onPress={addScoreForWatter} disabled={cupsData.filter((cup: CupsType)=>cup.status === CupStatus.Filled).length !== 8} title="Сделано" oliveTitle="+ 3 балла" />}
     </CardContainer>
 
     </>;
-};
+});
 
 
 const s = StyleSheet.create({

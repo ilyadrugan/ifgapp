@@ -166,7 +166,7 @@ export const InterviewView = observer(({route}) => {
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={articlesStore.articlesList.articles}
+                data={articlesStore.articlesMainList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={{height: 100}} />

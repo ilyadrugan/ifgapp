@@ -14,6 +14,7 @@ import { ContestView } from './contests/contest';
 import { ArticleView } from './materials/article';
 import { InterviewView } from './materials/interview';
 import { Coverage } from './coverage/coverage';
+import { PersonalRecommendations } from './personalRecomendations/personalRecommendations';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,12 @@ export const MainNavigation: FC = () => {
       component={Coverage}
       options={{ headerShown: false }}
       />
+      <Stack.Screen
+      name="PersonalRecommendations"
+      component={PersonalRecommendations}
+      options={{ headerShown: false }}
+      />
+
   </Stack.Navigator>
   </>);
 };

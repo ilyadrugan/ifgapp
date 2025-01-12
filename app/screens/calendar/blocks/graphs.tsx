@@ -9,7 +9,7 @@ import VictoryGraph from './victoryGraph';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { observer } from 'mobx-react';
 import { DailyCaloriesModel, DailyCommonModel, DailyIfgScoreModel, GraphDataType } from '../../../../store/state/activityGraphStore/models/models';
-
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -40,7 +40,6 @@ export const Graphs = observer(() =>{
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [graphData, setGraphData] = useState<GraphDataType[]>([]);
-
     useEffect(() => {
         dailyActivityStore.getIfgScoreActivity('week').then(()=>convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities));
         dailyActivityStore.getGraphCaloriesActivity('week');
@@ -69,6 +68,7 @@ export const Graphs = observer(() =>{
     };
     const onTabClick = (id: number) => {
         console.log('onTabClick', id);
+
         if (id !== activeTab){
             dailyActivityStore.getIfgScoreActivity(id === 0 ? 'week' : 'month').then(()=>{
                 if (activeSwitch === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}

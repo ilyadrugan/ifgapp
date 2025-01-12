@@ -1,6 +1,6 @@
 
 
-export const maskDateChange = (text) => {
+export const maskDateChange = (text: string) => {
     // Удаляем все символы, кроме цифр
     const numericText = text.replace(/[^0-9]/g, '');
 
@@ -19,4 +19,24 @@ export const maskDateChange = (text) => {
     }
 
     return formattedText;
+  };
+
+export const formatRecommendation = (n: number) => {
+    const absN = Math.abs(n); // Берем модуль числа на случай отрицательных чисел
+    const lastDigit = absN % 10;
+    const lastTwoDigits = absN % 100;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+      return `${n} рекомендаций`;
+    }
+
+    if (lastDigit === 1) {
+      return `${n} рекомендация`;
+    }
+
+    if (lastDigit >= 2 && lastDigit <= 4) {
+      return `${n} рекомендации`;
+    }
+
+    return `${n} рекомендаций`;
   };

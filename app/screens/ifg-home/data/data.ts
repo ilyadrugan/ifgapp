@@ -38,27 +38,3 @@ export const ActivityStats = {
     },
 };
 
-export const Stories = [
-    {
-        id: 0,
-        borderColor: '#835CC2',
-        bgColor: '#f0e8f3',
-        title: 'Хочу правильно питаться',
-        image:'https://ifeelgood.life/storage/library/sCLj35z96TZBf51Z0.12Мб/full/oH7fc8QEnYvxquKn.jpg',
-    },
-    {
-        id: 1,
-        borderColor: '#FFAC44',
-        bgColor: '#f3eee8',
-        title: 'Хочу больше двигаться',
-        image: 'https://ifeelgood.life/storage/library/sCLj35z96TZBf51Z0.12Мб/full/oH7fc8QEnYvxquKn.jpg',
-
-    },
-    {
-        id: 2,
-        borderColor: '#5C9DC2',
-        bgColor: '#e9eef4',
-        title: 'Хочу высыпаться',
-        image:'https://ifeelgood.life/storage/library/sCLj35z96TZBf51Z0.12Мб/full/oH7fc8QEnYvxquKn.jpg',
-    },
-];

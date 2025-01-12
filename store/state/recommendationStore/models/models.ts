@@ -17,6 +17,9 @@ export type RecommendationActivivtyModel = {
 export type PersonalRecommendationModel = {
   id: number,
   link_text: string,
+  user_recomendation_id: number,
+  status: string,
+  category: string,
   article: ArticleViewModel
 }
 
@@ -27,6 +30,12 @@ export type ActivivtyExpressModel = {
   score_to: string,
   link_text: string,
 }
+
+export type StoreRecommendationModel = {
+  link_text: string,
+  category: string,
+}
+
 export enum ActivitiesType {
     PhysicalActivity = 1,
     Pitanie = 2,

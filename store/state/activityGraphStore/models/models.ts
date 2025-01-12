@@ -10,6 +10,7 @@ export type DailyActivityModel = {
     sleep: number,
     phisical_activity: number,
     watter: number,
+    isDrinkEight: boolean,
     score:{score: number}
 }
 
@@ -38,5 +39,17 @@ export type DailyCommonModel = {
 export type GraphDataType = {
     value: number,
     created_at: string,
+}
+
+export type StoreDailyActivities = {
+    steps?: number,
+    calories?: number,
+    floor_spans?: number,
+    food?: number,
+    stress?: number,
+    sleep?: number,
+    phisical_activity?: number,
+    watter?: number,
+    isDrinkEight?: boolean
 }
 

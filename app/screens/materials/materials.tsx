@@ -14,6 +14,8 @@ import { ArticleModel, InterViewModel } from '../../../store/state/articlesStore
 import { observer } from 'mobx-react';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 import {stripHtmlTags} from '../../core/utils/stripHtmlTags';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { ScreenWidth } from '../../hooks/useDimensions';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -146,8 +148,10 @@ return <>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
                 <View style={gs.mt16} />
-            {(articlesStore.articleThemesList.length > 0) &&
-                    <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} />}
+            {(articlesStore.articleThemesList.length > 0) ?
+                    <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} /> :
+                    <ShimmerPlaceholder height={200} width={ScreenWidth - 32} />
+                    }
             <View style={s.hashtagsContainer}>
 
                 {activeTab === 1 && switchs.map(item => <TouchableOpacity key={item.id.toString() + 'l'} onPress={()=>onSwitch(item.id)} style={[s.interview, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>

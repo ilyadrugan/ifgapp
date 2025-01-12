@@ -8,10 +8,11 @@ import React from 'react';
 export const CheckBox: FC<{
     checked?: boolean,
     onPress?: () => void,
-  }> = ({ checked, onPress }) => {
+    disabled?: boolean
+  }> = ({ checked, onPress, disabled }) => {
 
     return (<>
-    <TouchableOpacity onPress={onPress} style={[s.container, checked ? s.checked : s.unchecked]} >
+    <TouchableOpacity disabled={disabled} onPress={onPress} style={[s.container, checked ? s.checked : s.unchecked]} >
         {checked && <CheckedIcon />}
     </TouchableOpacity>
     </>);

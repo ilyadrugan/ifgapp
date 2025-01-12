@@ -14,7 +14,9 @@ export const ButtonNext:FC<{
   oliveTitle?: string,
   style?: StyleProp<ViewStyle>,
   textStyle?: StyleProp<TextStyle>,
-}> = ({onPress, title, oliveTitle, style, textStyle}) => <Button style={[s.buttonNext, style && style]}
+  disabled?: boolean
+}> = ({onPress, title, oliveTitle, style, textStyle, disabled}) =>
+        <Button disabled={disabled} style={[s.buttonNext, style && style]}
                 onPress={onPress}
                 >
                 <View style={{

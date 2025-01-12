@@ -1,7 +1,7 @@
 
 
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl} from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -32,28 +32,71 @@ import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import storiesStore from '../../../store/state/storiesStore/storiesStore';
 import { StoryModal } from '../../core/components/storyModal/storyModal';
-import { GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
+import { GetActivitiesTypeNumber, GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
 import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import testingStore from '../../../store/state/testingStore/testingStore';
+import { categoryColors } from '../../core/colors/categoryColors';
+import { formatRecommendation } from '../../core/utils/textFormatters';
+import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { ScreenWidth } from '../../hooks/useDimensions';
 
+
+
+const StoriesImages = {
+  'Физическая активность': require('../../../assets/backgrounds/storyActivity.png'),
+  'Правильное питание': require('../../../assets/backgrounds/storyPitanie.png'),
+  'Снижение стресса': require('../../../assets/backgrounds/storyPitanie.png'),
+  'Крепкий сон': require('../../../assets/backgrounds/storySleep.png'),
+};
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
     const [isModalVisible, setModalVisible] = useState(false);
     const [currentStoryPressed, setCurrentStoryPressed] = useState(0);
+    const [currentCaregoryStoryPressed, setCurrentCaregoryStoryPressed] = useState('');
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
+      getData();
+    }, []);
+    // useLayoutEffect(() => {
+    //   userStore.getProfile();
+
+    //   testingStore.getAllMyTest();
+    //   if (storiesStore.storiesList['Физическая активность'].length === 0) {storiesStore.getStories();}
+    //   ifgScoreStore.getScoreToday();
+    //   if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
+    //   articlesStore.loadMainArticles();
+    //   articlesStore.clearCurrentArticle();
+    //   presentsStore.loadMorePresents();
+    //   // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
+    //   dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
+    //   dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
+    //   recommendationStore.getPersonalRecommendations();
+    // }, []);
+    const getData = async () => {
       userStore.getProfile();
+
       testingStore.getAllMyTest();
       storiesStore.getStories();
       ifgScoreStore.getScoreToday();
       if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
-      articlesStore.loadMoreArticles();
+      articlesStore.loadMainArticles();
       articlesStore.clearCurrentArticle();
+      presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
+      dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
+      // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
       recommendationStore.getPersonalRecommendations();
-    }, []);
+    };
+
+    const onRefresh = async () => {
+      setRefreshing((prev)=>!prev);
+      await getData();
+      setRefreshing((prev)=>!prev);
+    };
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
       <CardContainer onPress={async()=>{
@@ -69,42 +112,60 @@ export const IFGHome = observer(() => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
-    const StoryCard = (item: StoryModel, index)=>
+    const StoryCard = (item: string, index)=>
           <CardContainer onPress={() => {
-            setCurrentStoryPressed(index);
-            setModalVisible(true);}} style={[{width: 124, overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(item.category_id).borderColor, backgroundColor: GetActivityBgColorName(item.category_id).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
-           <ImageBackground
-           source={{uri: `https://abcd.100qrs.ru${item.cover}`}}
-           style={{width: '100%', height: '100%',justifyContent: 'space-between'  }}
-            resizeMode="cover"
-           >
+            setCurrentCaregoryStoryPressed(item);
+            // setCurrentStoryPressed(index);
+            setModalVisible(true);}} style={[{width: 124, overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, backgroundColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
             <View style={[gs.ml12, gs.mt12]}>
             <Eye />
             </View>
-            <IfgText color={colors.WHITE_COLOR} style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{item.title}</IfgText>
-            </ImageBackground>
+            <Image
+           source={StoriesImages[item]}
+           style={{height: 80, width: 110, alignSelf: 'center'}}
+            resizeMode="contain"
+            />
+            <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{item}</IfgText>
+            {/* </ImageBackground> */}
+
       </CardContainer>;
+    const StoryShimmerCard = (item, index) => <ShimmerPlaceholder
+    style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
+    />;
 return <>
 
-      <ScrollView style={s.container}>
+      <ScrollView style={s.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
         <View style={gs.mt16} />
 
+        {storiesStore.isLoading ?
         <FlatList
-          keyExtractor={(_, index) => index.toString()}
-          data={storiesStore.storiesList}
-          horizontal
-          style={{marginHorizontal: -16}}
-          contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item, index})=>StoryCard(item, index)}
-        />
+        keyExtractor={(_, index) => index.toString()}
+        data={[0,1,2,3]}
+        horizontal
+        style={{marginHorizontal: -16}}
+        contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({item, index})=>StoryShimmerCard(item, index)}
+      />
+        :
+        <FlatList
+        keyExtractor={(_, index) => index.toString()}
+        data={Object.keys(storiesStore.storiesList)}
+        horizontal
+        style={{marginHorizontal: -16}}
+        contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({item, index})=>StoryCard(item, index)}
+      />}
+
 
         <View style={gs.mt24} />
 
-        <ActivityBlock />
-
+       <ActivityBlock />
+       {/* : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />} */}
 
         <View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
@@ -117,59 +178,40 @@ return <>
                 </>
             </Button>
         </View>
-        <RecommendationBlock />
-        <TimeToDrinkBlock isNew={true}/>
+        {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
+        {!dailyActivityStore.dailyTodayActivityDataLoading ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
+        : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={300} width={ScreenWidth - 32} />}
 
 
-        {recommendationStore.personalRecomendationList.map((rec, index)=>{
-          console.log('rec', rec);
+        {recommendationStore.personalRecomendationList.filter((rec)=>rec.status === 'pending').slice(0,3).map((rec, index)=>{
           return <CardContainer style={gs.mt16} key={index.toString()} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
           <ArticleHeader
             // isNew
-            // time={'10:00'}
-            hashTagColor={colors.PINK_COLOR}
-            hashTagText={'#Активность'}
+            time={'10:00'}
+            hashTagColor={categoryColors[rec.category]}
+            hashTagText={'#' + rec.category}
           />
           <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
           <View style={[gs.flexRow, gs.alignCenter]}>
             <Image
-            resizeMode="contain"
+            resizeMode="cover"
             style={{width: 44, height: 44}}
             source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
             />
-            {/* <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Куда бы вы ни пошли сегодня, старайтесь выбирать лестницу, а не лифт или эскалатор, и поднимайтесь на нужный...</IfgText> */}
+           {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
           </View>
-          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 3 балла" />
+          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />
 
         </CardContainer>;
         })}
 
-        <View style={gs.mt16} />
-        {/* <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}  >
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.PINK_COLOR}
-            hashTagText={'#Активность'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Узнайте, чем полезна ходьба</IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article2.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Кто-то из вас более спортивный, а кто-то последний раз занимался спортом на уроке физкультуры. Ничего страшного!</IfgText>
-          </View>
-          <IfgText style={[gs.fontCaptionSmall]}>👋🏻Узнайте подробнее о важности ходьбы в нашей статье...</IfgText>
-          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} title="Читать статью" oliveTitle="+ 3 балла" />
-        </CardContainer>
-
-        <View style={gs.mt16} /> */}
+        {recommendationStore.personalRecomendationList.length - 3 > 0 &&
+          <><View style={gs.mt16} />
         <View style={gs.flexRow}>
-          <Button style={s.buttonTo} onPress={()=>console.log('7recs')}>
-              <IfgText color={colors.GRAY_COLOR3} style={[gs.fontBody2, gs.light, {lineHeight: 16}]}>Ранее - 7 рекомендаций</IfgText>
+          <Button style={s.buttonTo} onPress={()=>navigation.navigate('PersonalRecommendations')}>
+              <IfgText color={colors.GRAY_COLOR3} style={[gs.fontBody2, gs.light, {lineHeight: 16}]}>Ранее - {formatRecommendation(recommendationStore.personalRecomendationList.length - 3)}</IfgText>
           </Button>
-        </View>
+        </View></>}
 
         <View style={gs.mt24} />
           <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
@@ -178,12 +220,12 @@ return <>
           </View>
           <View style={gs.mt16} />
           <FlatList
-                keyExtractor={(item, index)=>index.toString()}
+                keyExtractor={(_, index)=>index.toString()}
                 horizontal
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={articlesStore.articlesList.articles}
+                data={articlesStore.articlesMainList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={gs.mt24}/>
@@ -233,9 +275,10 @@ return <>
          </ImageBackground>
 
         <View style={{height: 70}}/>
-       {storiesStore.storiesList.length > 0 && <StoryModal
-        stories={storiesStore.storiesList}
-        currentStoryPressed={currentStoryPressed}
+       {(currentCaregoryStoryPressed && storiesStore.storiesList[currentCaregoryStoryPressed].length > 0) && <StoryModal
+        stories={storiesStore.storiesList[currentCaregoryStoryPressed]}
+        category={currentCaregoryStoryPressed}
+        // currentStoryPressed={currentStoryPressed}
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
       />}

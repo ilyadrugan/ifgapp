@@ -6,6 +6,13 @@ import { errorToast, successToast } from '../../../app/core/components/toast/toa
 class ArticlesStore {
   isLoading = false; // Состояние загрузки
   isUserArticleLoading = false;
+  articlesMainList: ArticleListModel = {
+    current_page: 1,
+    articles: [],
+    total: 0,
+    isLoading: false,
+    hasMore: true,
+  };
   articlesList: ArticleListModel = {
     current_page: 1,
     articles: [],
@@ -159,7 +166,7 @@ class ArticlesStore {
       media: [],
     };
   }
-  
+
   async getArticleById(id: number) {
     this.isLoading = true;
     this.errorMessage = '';
@@ -240,6 +247,27 @@ class ArticlesStore {
 
       })
       .finally(()=>{this.articlesList.isLoading = false;});
+  }
+  async loadMainArticles(query?: string) {
+    // console.log('loadMoreArticles',this.articlesList );
+    this.articlesMainList.isLoading = true;
+    await getArticlesByTagsApi(query)
+      .then((result)=>{
+        this.articlesMainList.articles = result.data.articles.data;
+        // runInAction(() => {
+        //   this.articlesMainList.articles = [...this.articlesList.articles, ...result.data.articles.data],
+        //   this.articlesMainList.current_page += 1,
+        //   this.articlesMainList.total = result.data.articles.total,
+        //   this.articlesMainList.hasMore = result.data.articles.to < result.data.articles.total;
+        //   });
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR',  err.message);
+        this.errorMessage = err.message;
+
+      })
+      .finally(()=>{this.articlesMainList.isLoading = false;});
   }
   async loadMoreActualInterviews(query?: string) {
     // console.log('loadMoreActualInterviews',this.interViewsActual);

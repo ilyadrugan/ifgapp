@@ -11,5 +11,5 @@ export const IFGScoreLine: FC<{score: number, title: string}> = ({score, title})
         <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
         <IfgText color={colors.GREEN_COLOR} style={[gs.fontCaption, gs.bold]}>{score}</IfgText>
         </View>
-        <ProgressBar color={colors.GREEN_LIGHT_COLOR} width={score} unfilledColor="#EDEDED" />
+        <ProgressBar color={colors.GREEN_LIGHT_COLOR} width={score / 180 * 100} unfilledColor="#EDEDED" />
     </>;

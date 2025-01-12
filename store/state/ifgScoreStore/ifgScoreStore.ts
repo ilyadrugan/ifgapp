@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { getIfgScoreApi } from './ifgScoreStore.api';
+import { addIfgScoreApi, getIfgScoreApi, getTodayIfgScoreApi } from './ifgScoreStore.api';
 
 
 class IfgScoreStore {
@@ -9,12 +9,26 @@ class IfgScoreStore {
     makeAutoObservable(this); // Делаем объект реактивным
   }
 
-  getScoreToday = async () => {
+  getTotalScore = async () => {
       this.isLoading = true;
     //   this.errorMessage = '';
       await getIfgScoreApi()
         .then((result)=>{
           console.log('result.data', result.data);
+          this.todayScore = result.data.total;
+        }
+        )
+        .catch((err)=>{
+          console.log('ERROR', err.message);
+
+        })
+        .finally(()=>{this.isLoading = false;});
+    };
+   getScoreToday = async () => {
+      this.isLoading = true;
+    //   this.errorMessage = '';
+      await getTodayIfgScoreApi()
+        .then((result)=>{
           this.todayScore = result.data.data.score;
         }
         )
@@ -24,6 +38,21 @@ class IfgScoreStore {
         })
         .finally(()=>{this.isLoading = false;});
     };
+  addScore = async (score: number) => {
+    // this.isLoading = true;
+    //   this.errorMessage = '';
+      await addIfgScoreApi(score + this.todayScore)
+        .then((result)=>{
+          console.log('result.data', result.data);
+          this.todayScore = Number(score) + Number(this.todayScore);
+        }
+        )
+        .catch((err)=>{
+          console.log('ERROR addIfgScoreApi', err.message);
+
+        });
+        // .finally(()=>{this.isLoading = false;});
+  };
 }
 
 const ifgScoreStore = new IfgScoreStore();

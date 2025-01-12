@@ -2,8 +2,8 @@ import { makeAutoObservable } from 'mobx';
 import { BASE_URL } from '../../../app/core/hosts';
 import axios from 'axios';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
-import { completeRecommendationApi, getPersonalRecommendationsApi, getRecommendationsApi, storeRecommendationApi } from './recommendationStore.api';
-import { PersonalRecommendationModel, RecommendationsModel } from './models/models';
+import { completeRecommendationApi, deleteRecommendationApi, getPersonalRecommendationsApi, getRecommendationsApi, storeRecommendationApi } from './recommendationStore.api';
+import { PersonalRecommendationModel, RecommendationsModel, StoreRecommendationModel } from './models/models';
 
 
 class RecommendationStore {
@@ -25,7 +25,7 @@ class RecommendationStore {
       await getRecommendationsApi(resultTestId)
         .then((result)=>{
           this.recommendationList = result.data;
-          console.log('this.recommendationList', this.recommendationList);
+          // console.log('this.recommendationList', this.recommendationList);
         }
         )
         .catch((err)=>{
@@ -39,7 +39,7 @@ class RecommendationStore {
         await getPersonalRecommendationsApi()
           .then((result)=>{
             this.personalRecomendationList = result.data;
-            console.log('this.personalReacomendationList', this.personalRecomendationList);
+            // console.log('this.personalReacomendationList', this.personalRecomendationList);
           }
           )
           .catch((err)=>{
@@ -47,10 +47,10 @@ class RecommendationStore {
           })
           .finally(()=>{this.isLoading = false;});
       };
-    storeRecommendation = async (line_text: string) => {
-        console.log('storeRecommendation');
+    storeRecommendation = async (model: StoreRecommendationModel) => {
+        console.log('storeRecommendation', model);
           this.isLoading = true;
-          await storeRecommendationApi(line_text)
+          await storeRecommendationApi(model)
             .then((result)=>{
               console.log('storeRecommendationApi result', result.data);
             }
@@ -60,7 +60,7 @@ class RecommendationStore {
             })
             .finally(()=>{this.isLoading = false;});
         };
-      completeRecommendation = async (id: string) => {
+    completeRecommendation = async (id: string) => {
           console.log('completeRecommendation');
             this.isLoading = true;
             await completeRecommendationApi(id)
@@ -73,7 +73,19 @@ class RecommendationStore {
               })
               .finally(()=>{this.isLoading = false;});
           };
-
+    deleteRecommendation = async (user_recomendation_id: string) => {
+            console.log('deleteRecommendation',user_recomendation_id);
+              this.isLoading = true;
+              await deleteRecommendationApi(user_recomendation_id)
+                .then((result)=>{
+                  console.log('deleteRecommendationApi result', result.data);
+                }
+                )
+                .catch((err)=>{
+                  console.log('deleteRecommendationApi ERROR', err.message);
+                })
+                .finally(()=>{this.isLoading = false;});
+      };
 }
 
 const recommendationStore = new RecommendationStore();

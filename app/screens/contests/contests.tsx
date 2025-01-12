@@ -21,7 +21,7 @@ export const ContestsScreen = observer(() => {
     const onLoadMore = async () => {
         await presentsStore.loadMorePresents(`page=${presentsStore.presentsList.current_page}`);
     };
-    const renderItem = (item: PresentModel) => !item.deleted_at && <CardContainer style={s.contestContainer} >
+    const renderItem = (item: PresentModel) => <CardContainer style={s.contestContainer} >
         <View style={{justifyContent: 'space-between', height: '100%', width: '60%'}} >
             <View>
                 <IfgText style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>

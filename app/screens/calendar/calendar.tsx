@@ -17,10 +17,42 @@ import Antistress18 from '../../../assets/icons/antistress18.svg';
 import PhysicalActivity18 from '../../../assets/icons/physical-activity.svg';
 import { ShadowGradient } from '../../core/components/gradient/shadow-gradient';
 import { useNavigation } from '@react-navigation/native';
+import testingStore from '../../../store/state/testingStore/testingStore';
+import { observer } from 'mobx-react';
+import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
+import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
+import { categoryColors } from '../../core/colors/categoryColors';
+import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { ScreenWidth } from '../../hooks/useDimensions';
 
-export const CalendarScreen = () =>{
+export const CalendarScreen = observer(() =>{
     const navigation = useNavigation<any>();
-
+  console.log(testingStore.myCurrentResultsTest);
+  useEffect(() => {
+    recommendationStore.getPersonalRecommendations();
+    dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
+}, []);
+  const renderRecommendation = (rec:PersonalRecommendationModel) => {
+    return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
+    <ArticleHeader
+      // isNew
+      time={'10:00'}
+      hashTagColor={categoryColors[rec.category]}
+      hashTagText={'#' + rec.category}
+    />
+    <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
+    <View style={[gs.flexRow, gs.alignCenter]}>
+      <Image
+      resizeMode="cover"
+      style={{width: 44, height: 44}}
+      source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
+      />
+     {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
+    </View>
+    {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}
+  </CardContainer>;
+};
     return <>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -52,8 +84,10 @@ export const CalendarScreen = () =>{
 
             </View>
         </CardContainer>
-        <TimeToDrinkBlock />
-
+        {dailyActivityStore.dailyTodayActivityData ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
+        : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />}
+        {recommendationStore.personalRecomendationList.filter((rec)=>(rec.category === 'Питание')).map((rec)=>
+        renderRecommendation(rec))}
         <View style={gs.mt24} />
         {/* Физическая активность */}
         <CardContainer  style={[{borderRadius: 12}]} >
@@ -73,42 +107,9 @@ export const CalendarScreen = () =>{
 
             </View>
         </CardContainer>
-        <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}>
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.PINK_COLOR}
-            hashTagText={'#Активность'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Ходите по лестнице или на степпере </IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article1.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Куда бы вы ни пошли сегодня, старайтесь выбирать лестницу, а не лифт или эскалатор, и поднимайтесь на нужный...</IfgText>
-          </View>
-        </CardContainer>
-        <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}>
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.PINK_COLOR}
-            hashTagText={'#Активность'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Узнайте, чем полезна ходьба</IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article2.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Кто-то из вас более спортивный, а кто-то последний раз занимался спортом на уроке физкультуры. Ничего страшного!</IfgText>
-          </View>
-          <IfgText style={[gs.fontCaptionSmall]}>👋🏻Узнайте подробнее о важности ходьбы в нашей статье...</IfgText>
-          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} title="Читать статью" oliveTitle="+ 3 балла" />
-        </CardContainer>
+
+        {recommendationStore.personalRecomendationList.filter((rec)=>rec.category === 'Физическая активность').map((rec)=>
+        renderRecommendation(rec))}
 
         <View style={gs.mt24} />
         {/* Антистресс */}
@@ -128,42 +129,8 @@ export const CalendarScreen = () =>{
 
             </View>
         </CardContainer>
-        <View style={gs.mt16} />
-        <CardContainer>
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.OLIVE_COLOR}
-            hashTagText={'#Антистресс'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Ходите по лестнице или на степпере </IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article1.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Куда бы вы ни пошли сегодня, старайтесь выбирать лестницу, а не лифт или эскалатор, и поднимайтесь на нужный...</IfgText>
-          </View>
-        </CardContainer>
-        <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}>
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.OLIVE_COLOR}
-            hashTagText={'#Антистресс'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Узнайте, чем полезна ходьба</IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article2.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Кто-то из вас более спортивный, а кто-то последний раз занимался спортом на уроке физкультуры. Ничего страшного!</IfgText>
-          </View>
-          <IfgText style={[gs.fontCaptionSmall]}>👋🏻Узнайте подробнее о важности ходьбы в нашей статье...</IfgText>
-          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} title="Читать статью" oliveTitle="+ 3 балла" />
-        </CardContainer>
+        {recommendationStore.personalRecomendationList.filter((rec)=>rec.category === 'Антистресс').map((rec)=>
+        renderRecommendation(rec))}
 
         <View style={gs.mt24} />
         {/* Сон */}
@@ -183,51 +150,16 @@ export const CalendarScreen = () =>{
 
             </View>
         </CardContainer>
-        <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}>
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.ORANGE_COLOR}
-            hashTagText={'#Сон'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Ходите по лестнице или на степпере</IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article1.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Куда бы вы ни пошли сегодня, старайтесь выбирать лестницу, а не лифт или эскалатор, и поднимайтесь на нужный...</IfgText>
-          </View>
-        </CardContainer>
-        <View style={gs.mt16} />
-        <CardContainer onPress={()=>navigation.navigate('ArticleView', {articleId: 91})}>
-          <ArticleHeader
-            time={'10:00'}
-            hashTagColor={colors.ORANGE_COLOR}
-            hashTagText={'#Сон'}
-          />
-          <IfgText style={[gs.fontCaption, gs.bold]}>Узнайте, чем полезна ходьба</IfgText>
-          <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="contain"
-            style={{width: 44, height: 44}}
-            source={require('../../../assets/backgrounds/article2.png')}
-            />
-            <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>Кто-то из вас более спортивный, а кто-то последний раз занимался спортом на уроке физкультуры. Ничего страшного!</IfgText>
-          </View>
-          <IfgText style={[gs.fontCaptionSmall]}>👋🏻Узнайте подробнее о важности ходьбы в нашей статье...</IfgText>
-          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: 91})} title="Читать статью" oliveTitle="+ 3 балла" />
-        </CardContainer>
-
-        <View style={{height: 280}} />
+        {recommendationStore.personalRecomendationList.filter((rec)=>rec.category === 'Сон').map((rec)=>
+        renderRecommendation(rec))}
+        <View style={{height: 200}} />
     </ScrollView>
     <View style={s.footer}>
         <ButtonNext textStyle={gs.fontBodyMedium} onPress={()=>navigation.navigate('IndividualProgramm')} style={{height: 78}} title="Моя программа" />
     </View>
     <ShadowGradient opacity={0.3} />
     </>;
-};
+});
 
 const s = StyleSheet.create({
     container:{

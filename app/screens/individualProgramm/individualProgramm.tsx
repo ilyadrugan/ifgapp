@@ -29,11 +29,24 @@ import { observer } from 'mobx-react';
 import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
+import { StoreRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 
 export const IndividualProgramm = observer(() => {
     const navigation = useNavigation<any>();
-  const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
-
+    const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
+    const setCheckBoxesValues = () =>{
+      const values = {
+        'Питание': recommendationStore.recommendationList.Питание.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+        'Сон': recommendationStore.recommendationList.Сон.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+        'Антистресс': recommendationStore.recommendationList.Антистресс.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+        'Физическая активность': recommendationStore.recommendationList['Физическая активность'].map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+      };
+      console.log('values', values);
+      return values;
+      // setCheckBoxes(values)
+    };
+    // const valuesChecks = setCheckBoxesValues();
+    const [checkBoxes, setCheckBoxes] = useState(setCheckBoxesValues());
     // const { activiti_value_json } = route.params || undefined;
     // console.log('activiti_value_json', activiti_value_json);
     const onBack = () => {
@@ -48,15 +61,45 @@ export const IndividualProgramm = observer(() => {
         console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
       }
       getRecomendations(testingStore.myCurrentResultsTest.id);
-      recommendationStore.getPersonalRecommendations();
+      if (recommendationStore.personalRecomendationList.length === 0) {recommendationStore.getPersonalRecommendations();}
+      // setCheckBoxesValues();
+      // console.log(first)
     }, []);
+
+
+
     const getRecomendations = async (testId: number) => await recommendationStore.getRecommendations(testId);
 
-    const onRecommendationCheck = (link: string) =>{
-      console.log('onRecommendationCheck', link);
-      recommendationStore.storeRecommendation(link)
+    const onRecommendationCheck = (link: string, category: string, index: number) =>{
+      console.log('onRecommendationCheck', link, category);
+      // const values = checkBoxes;
+      if (!checkBoxes[category][index]) {
+        // values[category][index] = true;
+
+        const model: StoreRecommendationModel = {
+          link_text: link,
+          category: category,
+        };
+        recommendationStore.storeRecommendation(model);
+      }
+      else {
+        // values[category][index] = false;
+
+        const userRecommendationId = recommendationStore.personalRecomendationList.find((rec)=>rec.link_text === link)?.id;
+        console.log('userRecommendationId', userRecommendationId);
+        recommendationStore.deleteRecommendation(String(userRecommendationId));
+      }
+      setCheckBoxes((prevState) => ({
+        ...prevState,
+        [category]: prevState[category].map((item, idx) =>
+          idx === index ? !item : item // Изменяем только нужный элемент
+        ),
+      }));
+      recommendationStore.getPersonalRecommendations();
+
     };
     const checkRecommendationInHub = (link: string) => {
+      // console.log('checkRecommendationInHub', link, recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === link));
       return recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === link);
     };
     const MaterialCard = ({title, media, subtitle, id}, index)=>
@@ -118,7 +161,7 @@ export const IndividualProgramm = observer(() => {
         </>}
         <View style={gs.mt16} />
 
-        {(testingStore.myCurrentResultsTest.id !== 0 && !recommendationStore.isLoading) && <><CardContainer>
+        {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
@@ -132,7 +175,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {recommendationStore.recommendationList.Питание.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-            <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+            <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Питание', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Питание'][index]}/>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -155,7 +198,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {recommendationStore.recommendationList.Сон.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Сон', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Сон'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -178,7 +221,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {recommendationStore.recommendationList.Антистресс.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Антистресс', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Антистресс'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -201,7 +244,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {recommendationStore.recommendationList['Физическая активность'].map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox onPress={()=>onRecommendationCheck(item.activity.express[0].link_text)} checked={checkRecommendationInHub(item.activity.express[0].link_text)}/>
+          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Физическая активность', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Физическая активность'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -227,7 +270,7 @@ export const IndividualProgramm = observer(() => {
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={articlesStore.articlesList.articles}
+                data={articlesStore.articlesMainList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
     <View style={{height: 180}}/>

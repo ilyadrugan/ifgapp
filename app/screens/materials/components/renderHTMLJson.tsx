@@ -50,7 +50,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
                 </View>
               );
         case 'li':
-          console.log('li',node, node.isOrdered, node.index);
+          // console.log('li',node, node.isOrdered, node.index);
           return (
             <View style={styles.li} key={index}>
               {node.isOrdered ? (

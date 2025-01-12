@@ -53,7 +53,7 @@ class UserStore {
             // console.log(userStore.userInfo);
           }
         } catch (error) {
-          console.error(error);
+          console.error('getProfile',error);
           this.isLoading = false;
         }
 

@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import {VictoryChart, VictoryArea, VictoryLine, VictoryScatter, VictoryTooltip, VictoryAxis} from 'victory-native';
 import colors from '../../../core/colors/colors';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import gs from '../../../core/styles/global';
 import { GraphDataType } from '../../../../store/state/activityGraphStore/models/models';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 
-
+const width = Dimensions.get('screen').width;
 const dataWeekNames = ['Вс','Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
 type DotType = {
@@ -39,7 +40,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
   const [selectedPoint, setSelectedPoint] = useState<DotType | null>();
   const [data, setData] = useState<DotDataType[]>([]);
   const [maxValue, setMaxValue] = useState<number>(0);
-
+  const [isGraphLoading, setIsGraphLoading] = useState(false);
 
   const convertGraphData = () => {
     return graphData.map((el, index)=>{
@@ -63,6 +64,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     return number; // Если число меньше 0, просто возвращаем его
   };
   useEffect(() => {
+    setIsGraphLoading(true);
     if (graphData.length === 0) {return;}
     setSelectedPoint(null);
 
@@ -80,10 +82,11 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     setSelectedPoint(todayDot);
     // setMaxValue(findMaxValue(convertedData));
     setData(convertedData);
+    setIsGraphLoading(false);
   }, [graphData, monthly]);
 
   return (
-    (data.length > 0 && !dailyActivityStore.isLoading) && <View style={styles.container}>
+    (data.length > 0  && !isGraphLoading && !dailyActivityStore.isGraphLoading) ? <View style={styles.container}>
 
       <VictoryChart
         // domainPadding={{ x: 10, y: 10 }} // Отступы для осей
@@ -146,6 +149,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     {selectedPoint && <VictoryScatter
         data={[selectedPoint]} // Показывать только выбранную точку
         size={8}
+
         style={{
           data: {
             fill: '#ECFFF2',
@@ -198,7 +202,8 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
         ]}
       />
       </VictoryChart>
-    </View>
+    </View> :
+    <ShimmerPlaceholder style={{borderRadius: 22}} height={200} width={width - (32 * 2)} />
   );
 };
 

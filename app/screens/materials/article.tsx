@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Image,  View, ActivityIndicator, ScrollView, StyleSheet, FlatList, Dimensions } from 'react-native';
 import colors from '../../core/colors/colors';
 import { Button, ButtonTo } from '../../core/components/button/button';
@@ -22,6 +22,12 @@ import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
 import { onShare } from '../../core/components/share/share';
 import RenderHTMLContent from './components/renderHTMLJson';
 import data from './tmp.json';
+import { IntersectionObserver, useIntersection, InView, IOScrollView } from 'react-native-intersection-observer';
+import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
+import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
+import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
+import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
+import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
 
 const width = Dimensions.get('screen').width;
 
@@ -32,6 +38,8 @@ export const ArticleView = observer(({route}) => {
     };
     const { articleId } = route.params;
     const [isInFavorite, setIsInFavorite] = useState(false);
+    const [isReaded, setIsReaded] = useState(false);
+    const [personalRecommendation, setPersonalRecommendation] = useState<PersonalRecommendationModel>();
     useEffect(() => {
       console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
 
@@ -39,6 +47,11 @@ export const ArticleView = observer(({route}) => {
         loadArticleById(articleId).then(()=>
         setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
         // console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
+        const persRec = recommendationStore.personalRecomendationList.find((rec)=> rec.article.id === articleId);
+        if (persRec) {
+          setPersonalRecommendation(persRec);
+          setIsReaded(persRec.status === 'completed');
+        }
       }
     }, [articleId]);
     const clearCurrentArticle = async () => await articlesStore.clearCurrentArticle();
@@ -65,12 +78,24 @@ export const ArticleView = observer(({route}) => {
           <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
           </View>
       </CardContainer>;
+    const onRead =  async () => {
+     await ifgScoreStore.addScore(1);
+     if (personalRecommendation) {
+      console.log('personalRecommendation.id',personalRecommendation.id);
+      await recommendationStore.completeRecommendation(`${personalRecommendation.id}`);
+      const categoryEng = RecommendationCategoryToEng(personalRecommendation.category);
+      await dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyActivityData[categoryEng] + 1);
+      await recommendationStore.getPersonalRecommendations();
+    }
+     setIsReaded(true);
+    };
     return <>
     {articlesStore.isLoading && <View style={{justifyContent: 'center', alignItems: 'center', height: '100%' }}>
       <ActivityIndicator size={'large'} animating/>
       </View>}
-      {articlesStore.currentArticle.id !== 0 && <ScrollView
-      style={s.container}>
+      {articlesStore.currentArticle.id !== 0 && <IOScrollView
+      style={s.container}
+      >
         <Button style={s.buttonBack} onPress={onBack}>
             <>
                 <ArrowBack />
@@ -128,8 +153,11 @@ export const ArticleView = observer(({route}) => {
           <IfgText style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.unlike} не нравится</IfgText>
           </Button>
         </View>
-
+        <InView onChange={(inView: boolean) => {
+          if (!isReaded && inView) {onRead();}
+        }}>
         <View style={gs.mt12} />
+        </InView>
 
         <View style={[gs.flexRow, { gap: 10, flexWrap: 'wrap'}]}>
           <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
@@ -162,6 +190,7 @@ export const ArticleView = observer(({route}) => {
 
             </View>
           </View>
+
         <View style={gs.mt16} />
         <FlatList
                 horizontal
@@ -169,11 +198,11 @@ export const ArticleView = observer(({route}) => {
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={articlesStore.articlesList.articles}
+                data={articlesStore.articlesMainList.articles}
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={{height: 100}} />
-    </ScrollView>}</>;
+    </IOScrollView>}</>;
     });
 
 const s = StyleSheet.create({

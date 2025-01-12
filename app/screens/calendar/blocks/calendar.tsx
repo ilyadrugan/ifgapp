@@ -32,7 +32,7 @@ const months = [
 
 const CustomCalendar = observer(() => {
   const [currentDate, setCurrentDate] = useState(new Date()); // Текущая дата
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Выбранная дата
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // Выбранная дата
   const [calendarMode, setCalendarMode] = useState<'month' | 'week'>('month');
   const [boxWidth, setBoxWidth] = useState(0);
   const toggleCalendarMode = () => {

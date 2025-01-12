@@ -10,13 +10,19 @@ import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { observer } from 'mobx-react';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { Dimensions } from 'react-native';
+const width = Dimensions.get('screen').width;
 
 export const CalendarBlock: FC = observer(() =>{
 
     return <CardContainer>
         <CustomCalendar />
-        {!dailyActivityStore.isLoading && <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : 0} title={'IFG-баллы'} />}
-        {!dailyActivityStore.isLoading && <IFGActivity dailyActivities={dailyActivityStore.dailyActivityData}/>}
+        {!dailyActivityStore.isLoading ? <>
+        <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : 0} title={'IFG-баллы'} />
+         <IFGActivity dailyActivities={dailyActivityStore.dailyActivityData}/>
+         </> :
+         <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />}
     </CardContainer>;
 });
 

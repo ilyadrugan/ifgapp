@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Easing, LayoutAnimation, Platform, UIManager, Image, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import colors from '../../../core/colors/colors';
 import { CardContainer } from '../../../core/components/card/cardContainer';
@@ -21,6 +21,12 @@ import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line'
 import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
 import { useImageUploader } from '../../../core/components/imagePicker/imagePicker';
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
+import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
+import { DailyActivityModel } from '../../../../store/state/activityGraphStore/models/models';
+import { categoryColorsEng } from '../../../core/colors/categoryColors';
+import { RecommendationCategoryToRu } from '../../../core/utils/recommendationFormatter';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { ScreenWidth } from '../../../hooks/useDimensions';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -82,14 +88,12 @@ export const ActivityBlock = observer(() => {
       }
     };
 
-    useEffect(() => {
-      console.log('userStore.userInfo',userStore.userInfo);
-      userStore.getProfile();
-    }, []);
-
-
+    // useEffect(() => {
+    //   dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
+    // }, []);
 
 return <CardContainer >
+{!userStore.isLoading ? <>
 <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
   <View style={[gs.flexRow, gs.alignCenter]}>
       <View style={s.photo}>
@@ -115,7 +119,11 @@ return <CardContainer >
       </View>
       </>
   </Button>
-</View>
+  </View>
+  </> :
+  <ShimmerPlaceholder style={{borderRadius: 8}} height={40} width={ScreenWidth - 64} />
+}
+{!dailyActivityStore.dailyTodayActivityDataLoading ? <>
 <CardContainer style={{backgroundColor: '#EFFCF4', borderRadius: 16, gap: 0}}>
   <View style={[gs.flexRow, {justifyContent: 'space-between'}]} >
       <View style={[gs.flexRow, gs.alignCenter]}>
@@ -138,18 +146,24 @@ return <CardContainer >
 
   {expanded && <>
   <View style={gs.mt12}/>
-  {Object.keys(BalanceLevel).map((name, index)=>
+  {['food', 'stress', 'sleep', 'phisical_activity'].map((name, index)=>
   <View key={index.toString()} style={[gs.alignCenter, gs.flexRow]}>
     <IfgText color={'#747474'} style={[gs.fontCaptionSmallMedium, gs.regular, {width: 80}]}>
-      {name}
+      {RecommendationCategoryToRu(name)}
     </IfgText>
-    <ProgressBar  width={BalanceLevel[name].level} color={BalanceLevel[name].color}/>
+    <ProgressBar width={dailyActivityStore.dailyTodayActivityData[name]} color={categoryColorsEng[name]}/>
   </View>)}</>}
   </Animated.View>
 
   </CardContainer>
   <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы за сегодня'} />
-  <IFGActivity/>
+  <IFGActivity />
+  </>
+  :
+
+  <ShimmerPlaceholder style={{borderRadius: 22}} height={210} width={ScreenWidth - 64}/>}
+
+  {/* {dailyActivityStore.dailyTodayActivityData && } */}
 
 
 </CardContainer>;});

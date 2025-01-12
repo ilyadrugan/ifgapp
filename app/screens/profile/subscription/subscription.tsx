@@ -12,6 +12,8 @@ import Arrow from '../../../../assets/icons/arrow-right.svg';
 import tariffsStore from '../../../../store/state/tariffsStore/tariffsStore';
 import { Input } from '../../../core/components/input/input';
 import { observer } from 'mobx-react';
+import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { ScreenWidth } from '../../../hooks/useDimensions';
 
 const backCardHeight = 180;
 
@@ -40,7 +42,7 @@ export const Subscription: FC = observer(() =>{
             </Button>
           </CardContainer>
 
-         {tariffsStore.tariffs.length > 0 && <CardContainer style={s.subsriptionCard}>
+         {(tariffsStore.tariffs.length > 0 && !tariffsStore.isLoading) ? <CardContainer style={s.subsriptionCard}>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка Pro</IfgText>
           <View style={s.discounts}>
           <TouchableOpacity onPress={()=>onChange(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive, gs.flex1]} >
@@ -79,7 +81,7 @@ export const Subscription: FC = observer(() =>{
               </Button>
 
             </Input>
-          </CardContainer>}
+          </CardContainer> : <ShimmerPlaceholder style={{borderRadius: 22}} height={333} width={ScreenWidth - 64}/>}
 
           <View style={[gs.mt8, gs.flexRow, gs.alignCenter, {gap: 18}]}>
             <Button style={{alignItems: 'center',backgroundColor: colors.GREEN_COLOR, borderRadius: 16, height: 60, flex: 1}} >

@@ -26,11 +26,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
-export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number, isVisible: boolean, onClose: ()=>void }>
-= ({ stories, currentStoryPressed, isVisible, onClose }) => {
+export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean, onClose: ()=>void }>
+= ({ stories, category, isVisible, onClose }) => {
         const navigation = useNavigation<any>();
 
-    const [currentStoryIndex, setCurrentStoryIndex] = useState(currentStoryPressed);
+    const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
     const progressAnims = useRef(
       stories.map(() => new Animated.Value(0)) // Массив анимаций для прогресс-баров
     ).current;
@@ -39,17 +39,17 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
     const [previousValue, setPreviousValue] = useState(0); // Значение прогресса на момент приостановки
     const [startTime, setStartTime] = useState(0); // Время начала анимации до приостановки
     const [pauseStartTime, setPauseStartTime] = useState(0); // Время начала паузы
- const insets = useSafeAreaInsets();
-    useEffect(() => {
-      if (isVisible) {
-        setCurrentStoryIndex(currentStoryPressed); // Сброс текущей стори при открытии
-        startProgressAnimation(currentStoryPressed);
-      }
-    }, [isVisible, currentStoryPressed]);
+    const insets = useSafeAreaInsets();
+    // useEffect(() => {
+    //   if (isVisible) {
+    //     setCurrentStoryIndex(currentStoryPressed); // Сброс текущей стори при открытии
+    //     startProgressAnimation(currentStoryPressed);
+    //   }
+    // }, [isVisible, currentStoryPressed]);
 
     useEffect(() => {
       startProgressAnimation(currentStoryIndex);
-    }, [currentStoryIndex]);
+    }, [currentStoryIndex, isVisible]);
 
     const startProgressAnimation = (storyIndex: number) => {
       progressAnims[storyIndex].setValue(0); // Сброс анимации для текущей стори
@@ -74,6 +74,7 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
         setCurrentStoryIndex((prevIndex) => prevIndex + 1);
       } else {
         onClose(); // Закрыть модальное окно, если это последняя стори
+        setCurrentStoryIndex(0);
       }
     };
 
@@ -118,26 +119,26 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
       }
     };
 
-    const panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx > 50) {
-          // Свайп вправо (предыдущая)
-          handlePreviousStory();
-        } else if (gestureState.dx < -50) {
-            handleNextStory();
-        }
-      },
-    });
-    const onSwipe = ({ nativeEvent }) => {
-        if (nativeEvent.translationX > 50) {
-          // Свайп вправо
-          handlePreviousStory();
-        } else if (nativeEvent.translationX < -50) {
-          // Свайп влево
-          handleNextStory();
-        }
-      };
+    // const panResponder = PanResponder.create({
+    //   onStartShouldSetPanResponder: () => true,
+    //   onPanResponderRelease: (evt, gestureState) => {
+    //     if (gestureState.dx > 50) {
+    //       // Свайп вправо (предыдущая)
+    //       handlePreviousStory();
+    //     } else if (gestureState.dx < -50) {
+    //         handleNextStory();
+    //     }
+    //   },
+    // });
+    // const onSwipe = ({ nativeEvent }) => {
+    //     if (nativeEvent.translationX > 50) {
+    //       // Свайп вправо
+    //       handlePreviousStory();
+    //     } else if (nativeEvent.translationX < -50) {
+    //       // Свайп влево
+    //       handleNextStory();
+    //     }
+    //   };
   return (
     <Modal
       visible={isVisible}
@@ -147,7 +148,7 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
     //   statusBarTranslucent={true}
     >
 
-        <PanGestureHandler onGestureEvent={onSwipe}>
+        <PanGestureHandler >
       <View style={styles.modalContainer}  >
         {/* <View style={{ transform: [{rotate: '180deg'}]}}> */}
         <LinearGradient
@@ -195,12 +196,13 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
           activeOpacity={1}
         >
           <Image
-            source={{ uri: `https://ifeelgood.life${stories[currentStoryIndex].article.media[0].full_path[0]}` }}
+            source={{ uri: `https://abcd.100qrs.ru${stories[currentStoryIndex].cover}` }}
             style={styles.storyImage}
             resizeMode="cover"
           />
         <View>
-        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex].title}</IfgText>
+        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex].article.title}</IfgText>
+        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex].article.subtitle}</IfgText>
         </View>
 
         </TouchableOpacity>
@@ -228,7 +230,7 @@ export const StoryModal: FC<{stories: StoryModel[], currentStoryPressed: number,
       </View>
       </PanGestureHandler>
       <View style={{position: 'absolute', width: '100%', bottom: 0,  alignItems: 'center',justifyContent: 'center', marginBottom: 50}}>
-      <ButtonNext onPress={()=>{onClose(); navigation.navigate('ArticleView', {articleId: stories[currentStoryIndex].article.id});}} style={{width: width - 32 }} title="Читать статью" oliveTitle="+3 балла"/>
+      <ButtonNext onPress={()=>{onClose(); navigation.navigate('ArticleView', {articleId: stories[currentStoryIndex].article.id});}} style={{width: width - 32 }} title="Читать статью" oliveTitle="+ 1 балл"/>
       </View>
 
     </Modal>

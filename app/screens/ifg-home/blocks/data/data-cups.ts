@@ -10,15 +10,15 @@ export interface CupsType {
 export const CupsData = [
     {
         id: 0,
-        status: CupStatus.Filled,
+        status: CupStatus.Plused,
     },
     {
         id: 1,
-        status: CupStatus.Filled,
+        status: CupStatus.Empty,
     },
     {
         id: 2,
-        status: CupStatus.Plused,
+        status: CupStatus.Empty,
     },
     {
         id: 3,

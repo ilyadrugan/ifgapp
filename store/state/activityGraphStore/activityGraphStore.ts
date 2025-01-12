@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { getDailyActivityApi, getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi } from './activityGraphStore.api';
-import { DailyActivityModel, DailyCommonModel } from './models/models';
+import { addDailyActivityApi, getDailyActivityApi, getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi } from './activityGraphStore.api';
+import { DailyActivityModel, DailyCommonModel, StoreDailyActivities } from './models/models';
 
 class DailyActivityStore {
   isLoading = false; // Состояние загрузки
@@ -9,6 +9,9 @@ class DailyActivityStore {
   graphStepsActivities: DailyCommonModel[] = [];
   graphIfgScoreActivities: DailyCommonModel[] = [];
   dailyActivityData: DailyActivityModel;
+  dailyTodayActivityData: DailyActivityModel;
+  dailyTodayActivityDataLoading = false;
+  isGraphLoading = false; // Состояние загрузки
 
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
@@ -28,7 +31,7 @@ class DailyActivityStore {
       })
       .finally(()=>{this.isLoading = false;});
   };
-  
+
   getDailyActivity = async (date_to) => {
     this.isLoading = true;
   //   this.errorMessage = '';
@@ -44,8 +47,25 @@ class DailyActivityStore {
       })
       .finally(()=>{this.isLoading = false;});
   };
+  getDailyTodayActivity = async (date_to) => {
+    this.dailyTodayActivityDataLoading = true;
+  //   this.errorMessage = '';
+    await getDailyActivityApi(date_to)
+      .then((result)=>{
+        console.log('getDailyTodayActivity',result.data.data);
+        this.dailyTodayActivityData = result.data.data;
+        console.log('getDailyTodayActivity dailyTodayActivityDataLoading',this.dailyTodayActivityDataLoading);
+
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR', err.message);
+
+      })
+      .finally(()=>{this.dailyTodayActivityDataLoading = false;});
+  };
     getGraphCaloriesActivity = async (period) => {
-        this.isLoading = true;
+        this.isGraphLoading = true;
       //   this.errorMessage = '';
         await getGraphCaloriesActivityApi(period)
           .then((result)=>{
@@ -56,10 +76,10 @@ class DailyActivityStore {
             console.log('ERROR', err.message);
 
           })
-          .finally(()=>{this.isLoading = false;});
+          .finally(()=>{this.isGraphLoading = false;});
       };
       getGraphStepsActivity = async (period) => {
-        this.isLoading = true;
+        this.isGraphLoading = true;
       //   this.errorMessage = '';
         await getGraphStepsActivityApi(period)
           .then((result)=>{
@@ -70,10 +90,10 @@ class DailyActivityStore {
             console.log('ERROR', err.message);
 
           })
-          .finally(()=>{this.isLoading = false;});
+          .finally(()=>{this.isGraphLoading = false;});
       };
       getIfgScoreActivity = async (period) => {
-        this.isLoading = true;
+        this.isGraphLoading = true;
       //   this.errorMessage = '';
         await getIfgScoreActivityApi(period)
           .then((result)=>{
@@ -84,7 +104,25 @@ class DailyActivityStore {
             console.log('ERROR', err.message);
 
           })
-          .finally(()=>{this.isLoading = false;});
+          .finally(()=>{this.isGraphLoading = false;});
+      };
+      addDailyActivity = async (field: string, value: number | boolean) => {
+        // this.isLoading = true;
+      //   this.errorMessage = '';
+        const model: StoreDailyActivities = {
+          [field]: value,
+        };
+        console.log('addDailyActivityApi');
+        await addDailyActivityApi(model)
+          .then((result)=>{
+            this.dailyActivityData[field] = result.data.data[field];
+          }
+          )
+          .catch((err)=>{
+            console.log('ERROR', err.message);
+
+          });
+          // .finally(()=>{this.isLoading = false;});
       };
 }
 

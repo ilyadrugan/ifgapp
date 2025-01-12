@@ -19,7 +19,7 @@ class TestingStore {
     },
   };
   errorMessage: string = '';
-
+  disableRecommendationCheck: boolean = true;
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
     this.clearMyCurrentResultsTest();
@@ -35,7 +35,10 @@ class TestingStore {
     });
   }
   setMyCurrentResultsTest(testId: number) {
-    const test = this.testsList.find((test)=>(test.id === testId));
+    this.disableRecommendationCheck = true;
+    const test = this.testsList.find((test, index)=>{
+      if (index === 0 && test.id === testId) {this.disableRecommendationCheck = false;}
+      return (test.id === testId);});
     if (test) {
       this.myCurrentResultsTest = {
       id: test?.id,
