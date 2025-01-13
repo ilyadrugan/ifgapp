@@ -151,7 +151,7 @@ return <CardContainer >
     <IfgText color={'#747474'} style={[gs.fontCaptionSmallMedium, gs.regular, {width: 80}]}>
       {RecommendationCategoryToRu(name)}
     </IfgText>
-    <ProgressBar width={dailyActivityStore.dailyTodayActivityData[name]} color={categoryColorsEng[name]}/>
+    <ProgressBar width={dailyActivityStore.dailyTodayActivityData[name] || 0} color={categoryColorsEng[name]}/>
   </View>)}</>}
   </Animated.View>
 

@@ -179,7 +179,7 @@ return <>
             </Button>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
-        {!dailyActivityStore.dailyTodayActivityDataLoading ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
+        {(!dailyActivityStore.dailyTodayActivityDataLoading && dailyActivityStore.dailyTodayActivityData) ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={300} width={ScreenWidth - 32} />}
 
 
