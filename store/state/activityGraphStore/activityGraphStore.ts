@@ -12,6 +12,7 @@ class DailyActivityStore {
   dailyTodayActivityData: DailyActivityModel;
   dailyTodayActivityDataLoading = false;
   isGraphLoading = false; // Состояние загрузки
+  dailyTodayActivityAddLoading = false;
 
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
@@ -107,15 +108,33 @@ class DailyActivityStore {
           .finally(()=>{this.isGraphLoading = false;});
       };
       addDailyActivity = async (field: string, value: number | boolean) => {
-        // this.isLoading = true;
+        console.log('addDailyActivityApi', field, value);
+
+        // if (this.dailyTodayActivityAddLoading) {return;}
+        this.dailyTodayActivityAddLoading = true;
       //   this.errorMessage = '';
         const model: StoreDailyActivities = {
           [field]: value,
         };
-        console.log('addDailyActivityApi');
+        console.log('addDailyActivityApi', model);
         await addDailyActivityApi(model)
           .then((result)=>{
-            this.dailyActivityData[field] = result.data.data[field];
+            this.dailyTodayActivityData[field] = result.data.data[field];
+          }
+          )
+          .catch((err)=>{
+            console.log('ERROR', err.message);
+
+          });
+          // .finally(()=>{this.dailyTodayActivityAddLoading = false;});
+      };
+      addDailyActivityArray = async (model: StoreDailyActivities) => {
+        // this.isLoading = true;
+      //   this.errorMessage = '';
+        console.log('addDailyActivityArray');
+        await addDailyActivityApi(model)
+          .then((result)=>{
+            console.log('addDailyActivityArray result',result.data.data);
           }
           )
           .catch((err)=>{

@@ -88,9 +88,9 @@ export const ActivityBlock = observer(() => {
       }
     };
 
-    // useEffect(() => {
-    //   dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
-    // }, []);
+    useEffect(() => {
+      console.log('dailyTodayActivityData', dailyActivityStore.dailyTodayActivityData);
+    }, []);
 
 return <CardContainer >
 {!userStore.isLoading ? <>
@@ -157,7 +157,7 @@ return <CardContainer >
 
   </CardContainer>
   <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы за сегодня'} />
-  <IFGActivity />
+  <IFGActivity today />
   </>
   :
 

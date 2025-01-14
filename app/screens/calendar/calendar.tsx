@@ -25,13 +25,14 @@ import { categoryColors } from '../../core/colors/categoryColors';
 import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
+import { formatDate } from '../../core/utils/formatDateTime';
 
 export const CalendarScreen = observer(() =>{
     const navigation = useNavigation<any>();
   console.log(testingStore.myCurrentResultsTest);
   useEffect(() => {
     recommendationStore.getPersonalRecommendations();
-    dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
+    dailyActivityStore.getDailyTodayActivity(formatDate());
 }, []);
   const renderRecommendation = (rec:PersonalRecommendationModel) => {
     return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >

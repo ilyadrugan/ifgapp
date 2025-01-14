@@ -1,7 +1,9 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { NativeModules, Platform } from 'react-native';
 import { getHealthData } from './getHealthData';
+import dailyActivityStore from '../../store/state/activityGraphStore/activityGraphStore';
+import { StoreDailyActivities } from '../../store/state/activityGraphStore/models/models';
 
 type HelthData = {
     caloriesBurned: number;
@@ -11,6 +13,7 @@ type HelthData = {
 const { HealthModule } = NativeModules;
 
 export function useHealthData(date?: Date) {
+  const isFocused = useIsFocused();
     const [healthData, setHealthData] = useState<HelthData>({
       caloriesBurned: 0,
       flightsClimbed: 0,
@@ -44,8 +47,15 @@ export function useHealthData(date?: Date) {
         steps: result?.totalSteps || 0,
         flightsClimbed: result?.totalFloors || 0,
       });
+      setDataToDailyActivities({
+        steps: result?.totalSteps,
+        calories: result?.totalCalories,
+        floor_spans: result?.totalFloors,
+      });
     };
-
+    const setDataToDailyActivities = (model: StoreDailyActivities) => {
+      dailyActivityStore.addDailyActivityArray(model);
+    };
     useEffect(()=>{
       if (Platform.OS === 'ios') {
         requestHealthKitAuthorizationIOS();
@@ -55,17 +65,18 @@ export function useHealthData(date?: Date) {
         requestHealthData();
       }
     },[]);
-    // useFocusEffect(
-    //   React.useCallback(() => {
-    //     if (Platform.OS === 'android') {
-    //       // console.log('isFocused', isFocused);
-    //       if (isFocused)
-    //         {
-    //           requestHealthData();
+    
+    useFocusEffect(
+      React.useCallback(() => {
+        if (Platform.OS === 'android') {
+          console.log('isFocused', isFocused);
+          if (isFocused)
+            {
+              requestHealthData();
 
-    //         }
-    //     }
-    //   }, [])
-    // );
+            }
+        }
+      }, [])
+    );
     return { healthData };
 }

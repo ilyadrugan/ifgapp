@@ -13,6 +13,7 @@ import colors from '../../../core/colors/colors';
 import CalendarIcon from '../../../../assets/icons/calendar.svg';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { observer } from 'mobx-react';
+import { formatDate } from '../../../core/utils/formatDateTime';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const months = [
@@ -110,7 +111,8 @@ const CustomCalendar = observer(() => {
   const handleDayPress = async (date: Date) => {
     // console.log();
     setSelectedDate(date);
-    await dailyActivityStore.getDailyActivity(date.toISOString().split('T')[0]);
+    // console.log('date date',date.toLocaleDateString());
+    await dailyActivityStore.getDailyActivity(formatDate(date));
   };
 
   // Проверить, выбран ли день

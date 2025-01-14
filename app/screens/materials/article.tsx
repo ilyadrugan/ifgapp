@@ -82,10 +82,11 @@ export const ArticleView = observer(({route}) => {
      await ifgScoreStore.addScore(1);
      if (personalRecommendation) {
       console.log('personalRecommendation.id',personalRecommendation.id);
-      await recommendationStore.completeRecommendation(`${personalRecommendation.id}`);
+      recommendationStore.completeRecommendation(`${personalRecommendation.id}`);
       const categoryEng = RecommendationCategoryToEng(personalRecommendation.category);
-      await dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyActivityData[categoryEng] + 1);
-      await recommendationStore.getPersonalRecommendations();
+      console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+      dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+      recommendationStore.getPersonalRecommendations();
     }
      setIsReaded(true);
     };

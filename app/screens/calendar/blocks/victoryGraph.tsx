@@ -41,6 +41,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
   const [data, setData] = useState<DotDataType[]>([]);
   const [maxValue, setMaxValue] = useState<number>(0);
   const [isGraphLoading, setIsGraphLoading] = useState(false);
+  const [rendered, setRendered] = useState(false);
 
   const convertGraphData = () => {
     return graphData.map((el, index)=>{
@@ -64,7 +65,8 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     return number; // Если число меньше 0, просто возвращаем его
   };
   useEffect(() => {
-    setIsGraphLoading(true);
+    // setIsGraphLoading(true);
+    setRendered(false);
     if (graphData.length === 0) {return;}
     setSelectedPoint(null);
 
@@ -82,13 +84,19 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     setSelectedPoint(todayDot);
     // setMaxValue(findMaxValue(convertedData));
     setData(convertedData);
-    setIsGraphLoading(false);
+    console.log();
+    // setIsGraphLoading(false);
   }, [graphData, monthly]);
 
   return (
-    (data.length > 0  && !isGraphLoading && !dailyActivityStore.isGraphLoading) ? <View style={styles.container}>
+    (((data.length === 7 && !monthly) || (data.length > 0 && monthly)  && !dailyActivityStore.isGraphLoading)) ? <View
+    // onLayout={() => {
+    //   setRendered(true);
+    //   console.log('График завершил рендеринг!');
+    // }}
+    style={styles.container}>
 
-      <VictoryChart
+       <VictoryChart
         // domainPadding={{ x: 10, y: 10 }} // Отступы для осей
         height={200}
 

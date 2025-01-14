@@ -41,6 +41,7 @@ import { formatRecommendation } from '../../core/utils/textFormatters';
 import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
+import { formatDate } from '../../core/utils/formatDateTime';
 
 
 
@@ -87,7 +88,7 @@ export const IFGHome = observer(() => {
       articlesStore.clearCurrentArticle();
       presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-      dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
+      dailyActivityStore.getDailyTodayActivity(formatDate());
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
       recommendationStore.getPersonalRecommendations();
     };

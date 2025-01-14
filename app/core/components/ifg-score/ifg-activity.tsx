@@ -14,13 +14,14 @@ import colors from '../../colors/colors';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { observer } from 'mobx-react';
 
-export const IFGActivity:FC<{dailyActivities?: DailyActivityModel}>  = observer(({dailyActivities}) => {
-  const [dailyValues, setDailyValues] = useState(dailyActivities);
-  const {healthData} = useHealthData();
-  useEffect(() => {
-    // console.log('dailyActivities', dailyActivities);
-    setDailyValues(dailyActivities);
-  }, [dailyActivities]);
+export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boolean}>  = observer(({dailyActivities, today}) => {
+    const [dailyValues, setDailyValues] = useState(dailyActivities);
+    const {healthData} = useHealthData();
+    useEffect(() => {
+        // console.log('dailyActivities', dailyActivities);
+        setDailyValues(dailyActivities);
+        // console.log('healthData', healthData);
+    }, [dailyActivities]);
 
     return <>
     <IfgText style={[gs.fontCaption2, gs.bold]}>Активность</IfgText>
@@ -33,13 +34,13 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel}>  = observer(
             color={ActivityStats[name].color}/>
         )} */}
         <ColumnarProgressBar
-            height={(dailyValues?.steps || healthData.steps || 0) / 10000 * 100}
+            height={(today ? healthData.steps : dailyValues?.steps ||  0) / 10000 * 100}
             color={colors.GREEN_COLOR}/>
         <ColumnarProgressBar
-            height={(dailyValues?.calories || healthData.caloriesBurned || 0) / 1500 * 100}
+            height={(today ? healthData.caloriesBurned : dailyValues?.calories || 0) / 1500 * 100}
             color={colors.OLIVE_COLOR}/>
          <ColumnarProgressBar
-            height={(dailyValues?.floor_spans || healthData.flightsClimbed || 0) / 10000 * 100}
+            height={(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0) / 10000 * 100}
             color={colors.ORANGE_COLOR}/>
         </View>
         <View style={[gs.flexRow]}>
@@ -59,7 +60,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel}>  = observer(
             <View style={{gap: 6}}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{'Шаги'}</IfgText>
                 <IfgText color={colors.GREEN_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>
-                {dailyValues?.steps || healthData.steps || 0}
+                {(today ? healthData.steps : dailyValues?.steps ||  0)}
                 </IfgText>
             </View>
             <View style={gs.ml12} />
@@ -69,7 +70,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel}>  = observer(
             <View style={[gs.ml12, {gap: 6}]}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{'Калории'}</IfgText>
                 <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>
-                {dailyValues?.calories || healthData.caloriesBurned || 0}
+                {(today ? healthData.caloriesBurned : dailyValues?.calories || 0)}
                 </IfgText>
             </View>
             <View style={gs.ml12} />
@@ -79,7 +80,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel}>  = observer(
             <View style={[gs.ml12, {gap: 6}]}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{'Пролеты'}</IfgText>
                 <IfgText color={colors.ORANGE_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>
-                {dailyValues?.floor_spans || healthData.flightsClimbed || 0}
+                {(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0)}
                 </IfgText>
             </View>
         </View>
