@@ -30,6 +30,8 @@ import { useImageUploader } from '../../core/components/imagePicker/imagePicker'
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import testingStore from '../../../store/state/testingStore/testingStore';
+import paymentsStore from '../../../store/state/paymentsStore/paymentsStore';
+import tariffsStore from '../../../store/state/tariffsStore/tariffsStore';
 
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
@@ -47,6 +49,8 @@ export const ProfileScreen = observer(() => {
       await userStore.getProfile();
       await articlesStore.getUserArticles();
       await testingStore.getAllMyTest();
+      await paymentsStore.getPaymentCards();
+      await tariffsStore.getTariffs();
       setRefreshing(false);
     };
 

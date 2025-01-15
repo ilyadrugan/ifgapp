@@ -5,3 +5,8 @@ export const addPaymentCardApi = async () => {
     console.log(`${BASE_URL}/lk/add-card`);
     return await HttpClient.get(`${BASE_URL}/lk/add-card`);
 };
+
+export const getCardsApi = async () => {
+    console.log(`${BASE_URL}/lk/get-cards`);
+    return await HttpClient.get(`${BASE_URL}/lk/get-cards`);
+};

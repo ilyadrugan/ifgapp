@@ -7,7 +7,6 @@ import gs from '../../../core/styles/global';
 import { Button } from '../../../core/components/button/button';
 import Trash16 from '../../../../assets/icons/trash16.svg';
 import Trash18 from '../../../../assets/icons/trash18.svg';
-import Visa from '../../../../assets/icons/visa.svg';
 import Arrow from '../../../../assets/icons/arrow-right.svg';
 import tariffsStore from '../../../../store/state/tariffsStore/tariffsStore';
 import { Input } from '../../../core/components/input/input';
@@ -16,6 +15,8 @@ import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../../hooks/useDimensions';
 import { YookassaWidget } from './yookassaWidget';
 import paymentsStore from '../../../../store/state/paymentsStore/paymentsStore';
+import { CardModel } from '../../../../store/state/paymentsStore/models/models';
+import { LogoBankCard } from '../../../core/utils/bankCardsIcons';
 
 const backCardHeight = 180;
 
@@ -27,6 +28,7 @@ export const Subscription: FC = observer(() =>{
 
     useEffect(() => {
       tariffsStore.getTariffs();
+      paymentsStore.getPaymentCards();
     }, []);
 
     const onAddCard = async () => {
@@ -102,24 +104,26 @@ export const Subscription: FC = observer(() =>{
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>
             <IfgText color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline]}>Изменить метод оплаты</IfgText>
           </View>
-          <CardContainer style={s.bankCardContainer}>
-            <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
-              <Visa/>
-              <Button outlined style={s.deleteCardButton}>
-                <View style={gs.flexRow}>
-                <Trash16/>
-                <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>
-                </View>
-              </Button>
-            </View>
-            <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
-              <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>1817 • основной</IfgText>
-              {/* <Button outlined style={s.deleteButton}>
-                <Trash18/>
-              </Button> */}
-            </View>
-          </CardContainer>
-          <CardContainer  onPress={onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
+          {paymentsStore.cards.map((card:CardModel)=>
+                    <CardContainer style={s.bankCardContainer}>
+                    <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
+                      {LogoBankCard(card.card_type)}
+                      <Button outlined style={s.deleteCardButton}>
+                        <View style={gs.flexRow}>
+                        <Trash16/>
+                        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>
+                        </View>
+                      </Button>
+                    </View>
+                    <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
+                      <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>{card.last4} {card.default && '• основной'}</IfgText>
+                      {/* <Button outlined style={s.deleteButton}>
+                        <Trash18/>
+                      </Button> */}
+                    </View>
+                  </CardContainer>
+          )}
+          <CardContainer onPress={onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
           <View style={gs.mt4}>
               <View style={s.container}>
                 <View style={s.horizontal} />
