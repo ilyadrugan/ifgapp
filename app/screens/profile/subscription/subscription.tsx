@@ -14,18 +14,24 @@ import { Input } from '../../../core/components/input/input';
 import { observer } from 'mobx-react';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../../hooks/useDimensions';
+import { YookassaWidget } from './yookassaWidget';
+import paymentsStore from '../../../../store/state/paymentsStore/paymentsStore';
 
 const backCardHeight = 180;
 
 
 export const Subscription: FC = observer(() =>{
     const [activeDiscount, setActiveDiscount] = useState<number>(0);
-
+    const [openYokassa, setOpenYokassa] = useState(false);
     const onChange = (id: number) => setActiveDiscount(id);
 
     useEffect(() => {
       tariffsStore.getTariffs();
     }, []);
+
+    const onAddCard = async () => {
+      // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
+    };
 
     return <>
             <CardContainer style={{ gap: 16 }}>
@@ -113,7 +119,7 @@ export const Subscription: FC = observer(() =>{
               </Button> */}
             </View>
           </CardContainer>
-          <CardContainer  onPress={()=>console.log('add card')} style={[s.bankCardContainer,s.bankCardAddContainer]}>
+          <CardContainer  onPress={onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
           <View style={gs.mt4}>
               <View style={s.container}>
                 <View style={s.horizontal} />
@@ -122,7 +128,14 @@ export const Subscription: FC = observer(() =>{
             </View>
             <IfgText color={colors.GRAY_COLOR5} style={gs.fontCaption}>Добавить карту</IfgText>
           </CardContainer>
-        </CardContainer></>;
+        </CardContainer>
+        {/* {paymentsStore.paymentData && <YookassaWidget
+        isVisible={openYokassa}
+        onClose={()=>setOpenYokassa((prev)=>!prev)}
+        ctToken={paymentsStore.paymentData.confirmation.confirmation_token}
+        // postMessengerConnectionId="2722141632791544"
+        />} */}
+        </>;
 });
 
 const s = StyleSheet.create({

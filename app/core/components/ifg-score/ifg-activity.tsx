@@ -16,6 +16,7 @@ import { observer } from 'mobx-react';
 
 export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boolean}>  = observer(({dailyActivities, today}) => {
     const [dailyValues, setDailyValues] = useState(dailyActivities);
+    //new Date('2024-12-12T00:00:00')
     const {healthData} = useHealthData();
     useEffect(() => {
         // console.log('dailyActivities', dailyActivities);
