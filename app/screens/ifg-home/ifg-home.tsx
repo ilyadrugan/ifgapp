@@ -284,7 +284,7 @@ return <>
         onClose={() => setModalVisible(false)}
       />}
       </ScrollView>
-      <ChatFooter />
+      {/*<ChatFooter />*/}
     </>;
 
   });

@@ -39,8 +39,8 @@ export const Onboarding = () => {
         <View style={{zIndex: 99, elevation: 10}}>
             {step === 0 && <Step1 />}
             {step === 1 && <Step2 />}
-            {step === 2 && <Step3 />}
-            {step === 3 && <Step4 />}
+            {/* {step === 2 && <Step3 />} */}
+            {step === 2 && <Step4 />}
         </View>
         <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
@@ -48,7 +48,7 @@ export const Onboarding = () => {
         />
         <View style={s.footer}>
          <Button style={s.buttonNext}
-                onPress={step === 3 ? toTest : nextStep}
+                onPress={step === 2 ? toTest : nextStep}
                 >
                 <View style={{
                     flexDirection: 'row',
@@ -62,8 +62,8 @@ export const Onboarding = () => {
                         alignItems: 'center',
                     }}>
                     <View style={{flexDirection: 'row', alignItems:'center'}}>
-                         <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{step < 3 ? 'Далее' : 'Начать знакомство'}</IfgText>
-                         {step < 3 && <IfgText color={colors.OLIVE_COLOR} style={[gs.fontBody1, gs.ml12, { fontSize: 16 } ]}>Шаг {step + 1} из 4</IfgText>}
+                         <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{step < 2 ? 'Далее' : 'Начать знакомство'}</IfgText>
+                         {step < 2 && <IfgText color={colors.OLIVE_COLOR} style={[gs.fontBody1, gs.ml12, { fontSize: 16 } ]}>Шаг {step + 1} из 3</IfgText>}
                     </View>
                         <ArrowRight />
                     </View>
@@ -72,7 +72,7 @@ export const Onboarding = () => {
                 </View>
 
             </Button>
-            {step === 3 &&
+            {step === 2 &&
             <Button style={[gs.mt16,s.buttonOutline]}
                 onPress={toLogin}
                 >
@@ -88,7 +88,7 @@ export const Onboarding = () => {
                 <Dot active={step === 0}/>
                 <Dot active={step === 1}/>
                 <Dot active={step === 2}/>
-                <Dot active={step === 3}/>
+                {/* <Dot active={step === 3}/> */}
             </View>
 
         </View>
@@ -103,7 +103,6 @@ const s = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-
       },
     footer: {
         position: 'absolute',
@@ -114,7 +113,6 @@ const s = StyleSheet.create({
         zIndex: 9999,
         elevation: 100,
     },
-
     shadowGradient: {
         position: 'absolute',
         bottom: 0,
@@ -140,6 +138,5 @@ const s = StyleSheet.create({
         width: '86%',
         borderWidth: 1,
       },
-
   });
 

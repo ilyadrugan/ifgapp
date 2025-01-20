@@ -23,15 +23,15 @@ const tabss: TabInterface[] = [
 const switchs = [
     {
         id: 0,
-        name: 'IFG баллам',
+        name: 'ifg-баллы',
     },
     {
         id: 1,
-        name: 'Шагам',
+        name: 'Шаги',
     },
     {
         id: 2,
-        name: 'Калориям',
+        name: 'Калории',
     },
 ];
 
@@ -88,7 +88,7 @@ export const Graphs = observer(() =>{
         <IfgText style={gs.fontCaptionSmall}>Мои результаты за последнюю:</IfgText>
         <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
         <VictoryGraph graphData={graphData} monthly={activeTab === 1} />
-        <IfgText style={gs.fontCaptionSmall}>Активность по:</IfgText>
+        <IfgText style={gs.fontCaptionSmall}>Активность</IfgText>
         <View style={gs.flexRow}>
             {switchs.map(item => <TouchableOpacity key={item.id.toString()} onPress={()=>onSwitch(item.id)} style={[s.switch, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
                 <IfgText color={activeSwitch === item.id ? colors.WHITE_COLOR : '#878787'} style={[gs.fontLightSmall]}>{item.name}</IfgText>
