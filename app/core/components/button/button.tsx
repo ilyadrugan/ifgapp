@@ -47,10 +47,11 @@ export const ButtonTo:FC<{
   title?: string,
   style?: StyleProp<ViewStyle>,
   textColor?: string,
+  textStyle?: StyleProp<TextStyle>,
   whiteIcon?: boolean,
-}> = ({onPress, title, style, textColor, whiteIcon}) => <Button style={[s.buttonTo, style]} onPress={onPress}>
+}> = ({onPress, title, style, textColor, textStyle, whiteIcon}) => <Button style={[s.buttonTo, style]} onPress={onPress}>
 <>
-<IfgText color={textColor || colors.GRAY_COLOR3} style={gs.fontBody2}>{title}</IfgText>
+<IfgText color={textColor || colors.GRAY_COLOR3} style={textStyle || gs.fontBody2}>{title}</IfgText>
 
     {whiteIcon ? <ArrowRight12 /> : <ArrowTo />}
     </>

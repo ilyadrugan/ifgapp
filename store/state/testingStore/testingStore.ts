@@ -71,9 +71,10 @@ class TestingStore {
   async submitTest(results: ResultsTestModel) {
     this.isLoading = true;
     this.errorMessage = '';
+    console.log('submitTest', results);
     await submitResultsTestApi(results)
       .then((result)=>{
-        // console.log('result', result);
+        console.log('result', result);
       }
       )
       .catch((err)=>{

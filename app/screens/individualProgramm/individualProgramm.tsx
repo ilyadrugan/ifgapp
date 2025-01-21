@@ -56,7 +56,7 @@ export const IndividualProgramm = observer(() => {
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [recommends, setRecommends] = useState(true);
     useEffect(() => {
-      if (testingStore.myCurrentResultsTest.id === 0) {
+      if (!testingStore.myCurrentResultsTest) {
         testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
         console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
       }

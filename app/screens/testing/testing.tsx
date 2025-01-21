@@ -76,7 +76,7 @@ export const Testing = observer(() => {
         setTotalScore(totalScore + Number(score));
         if (currentQuestion === testingStore.currentTest.questions.length){
             testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}));
-            // console.log('currentResultsTest',testingStore.currentResultsTest);
+            console.log('currentResultsTest',testingStore.currentResultsTest, {...currentAnswers, ...tmpObj});
             await testingStore.submitTest(testingStore.currentResultsTest)
               .then(()=>navigation.navigate('ResultTest', {activiti_value_json: JSON.stringify(activitiValues)}))
               .catch(()=>errorToast('Произошла ошибка отправки резульатов'));

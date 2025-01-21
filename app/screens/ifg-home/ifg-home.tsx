@@ -42,6 +42,7 @@ import dailyActivityStore from '../../../store/state/activityGraphStore/activity
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
+import Delete from '../../../assets/icons/delete.svg';
 
 
 
@@ -58,6 +59,7 @@ export const IFGHome = observer(() => {
     const [currentStoryPressed, setCurrentStoryPressed] = useState(0);
     const [currentCaregoryStoryPressed, setCurrentCaregoryStoryPressed] = useState('');
     const [refreshing, setRefreshing] = useState(false);
+    const [closeEndSetting, setCloseEndSetting] = useState(false);
 
     useEffect(() => {
       getData();
@@ -162,8 +164,37 @@ return <>
         renderItem={({item, index})=>StoryCard(item, index)}
       />}
 
-
-        <View style={gs.mt24} />
+      <View style={gs.mt24} />
+      {!testingStore.testsList.some(test=>test.survey_id === 9) && !closeEndSetting ?
+      <CardContainer style={{borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
+        <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
+        <View style={[s.circle]}>
+            <Delete />
+        </View>
+        </TouchableOpacity>
+                <View style={{width: '54%'}}>
+                <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.bold]}>Завершите настройку приложения</IfgText>
+                <IfgText  color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>Пройдите полную версию IFG-тестирования для получения более точных рекомендаций</IfgText>
+                <ButtonTo onPress={()=>navigation.navigate('Testing')} style={[s.buttonTo, gs.mt16, {borderColor: colors.WHITE_COLOR}]} textStyle={[gs.fontCaption3, gs.medium]} textColor={colors.WHITE_COLOR} title="Пройти тестирование" whiteIcon/>
+                </View>
+                <Image resizeMode="contain" style={{height: 160, width: 132, position: 'absolute', bottom: 0, right: 16}} source={require('../../../assets/backgrounds/phone0.4.png')}/>
+      </CardContainer>
+      :
+      <ImageBackground
+          resizeMode="stretch"
+          source={require('../../../assets/backgrounds/gradientCard3.png')}
+          style={[s.cardGradientContainer]}
+          >
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Финансовая защита заемщиков кредитов</IfgText>
+            <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Узнайте как защитить себя и своих близких на случай непредвиденных ситуаций с жизнью и здоровьем в совместном проекте АльфаСтрахование-Жизнь и ifeelgood!</IfgText>
+            <Button onPress={()=>navigation.navigate('Coverage')} outlined style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: colors.WHITE_COLOR, borderWidth: 1, padding: 20, borderRadius: 12, height: 60}}>
+                <>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подробнее</IfgText>
+                    <ArrowRight />
+                </>
+            </Button>
+      </ImageBackground>}
+      <View style={gs.mt24} />
 
        <ActivityBlock />
        {/* : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />} */}
@@ -259,21 +290,7 @@ return <>
                 </Button>
             </CardContainer>}
         />
-        <View style={gs.mt24} />
-          <ImageBackground
-        resizeMode="stretch"
-         source={require('../../../assets/backgrounds/gradientCard3.png')}
-        style={[s.cardGradientContainer]}
-         >
-            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Финансовая защита заемщиков кредитов</IfgText>
-            <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Узнайте как защитить себя и своих близких на случай непредвиденных ситуаций с жизнью и здоровьем в совместном проекте АльфаСтрахование-Жизнь и ifeelgood!</IfgText>
-            <Button onPress={()=>navigation.navigate('Coverage')} outlined style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: colors.WHITE_COLOR, borderWidth: 1, padding: 20, borderRadius: 12, height: 60}}>
-                <>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подробнее</IfgText>
-                    <ArrowRight />
-                </>
-            </Button>
-         </ImageBackground>
+
 
         <View style={{height: 70}}/>
        {(currentCaregoryStoryPressed && storiesStore.storiesList[currentCaregoryStoryPressed].length > 0) && <StoryModal
@@ -375,6 +392,13 @@ const s = StyleSheet.create({
         flexDirection: 'column',
         gap: 10,
       },
-
+    circle:{
+        width: 16,
+        height: 16,
+        backgroundColor: colors.WHITE_COLOR,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 8,
+      },
   });
 
