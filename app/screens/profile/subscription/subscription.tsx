@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { NativeModules, StyleSheet, TouchableOpacity, View } from 'react-native';
 import colors from '../../../core/colors/colors';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
@@ -17,6 +17,10 @@ import { YookassaWidget } from './yookassaWidget';
 import paymentsStore from '../../../../store/state/paymentsStore/paymentsStore';
 import { CardModel } from '../../../../store/state/paymentsStore/models/models';
 import { LogoBankCard } from '../../../core/utils/bankCardsIcons';
+import userStore from '../../../../store/state/userStore/userStore';
+import { formatPhoneNumberToPlus } from '../../../core/utils/phoneFormatter';
+
+const { YookassaModule } = NativeModules;
 
 const backCardHeight = 180;
 
@@ -32,6 +36,13 @@ export const Subscription: FC = observer(() =>{
     }, []);
 
     const onAddCard = async () => {
+      console.log('AddCard', formatPhoneNumberToPlus(userStore.userInfo?.phone));
+      // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
+      // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
+      const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone);
+      YookassaModule.startTokenize(phone_number,(result) => {
+        console.log('Результат из нативного модуля:', result);
+      } );
       // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
     };
 

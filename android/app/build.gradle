@@ -78,14 +78,15 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.ifgapp"
     defaultConfig {
         applicationId "com.ifgapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         resValue 'string', 'build_config_package','com.reactnativeproject'
     }
     signingConfigs {
@@ -111,7 +112,7 @@ android {
 }
 repositories {
     flatDir {
-        dirs '../libs'  // Путь к папке, где находится ваш .aar файл
+        dirs("libs")  // Путь к папке, где находится ваш .aar файл
     }
     // другие репозитории, если необходимо
 }
@@ -120,6 +121,13 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-config')
     implementation("androidx.health.connect:connect-client:1.1.0-alpha10")
+    // implementation project(':yookassa-module')
+    // implementation 'ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.11.0'
+    // https://mavenlibs.com/maven/dependency/ru.yoomoney.sdk.kassa.payments/yookassa-android-sdk
+    implementation("ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.8.0")
+    implementation 'androidx.activity:activity-ktx:1.5.1'
+// implementation fileTree(dir: "../libs", include: ["*.aar"])
+//    implementation(name: 'yookassa-android-sdk-6.8.0', ext: 'aar')
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
