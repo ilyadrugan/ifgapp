@@ -61,7 +61,7 @@ export const IFGHome = observer(() => {
     const [refreshing, setRefreshing] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       getData();
     }, []);
     // useLayoutEffect(() => {
@@ -80,9 +80,8 @@ export const IFGHome = observer(() => {
     //   recommendationStore.getPersonalRecommendations();
     // }, []);
     const getData = async () => {
-      userStore.getProfile();
-
-      testingStore.getAllMyTest();
+      await testingStore.getAllMyTest();
+      await userStore.getProfile();
       storiesStore.getStories();
       ifgScoreStore.getScoreToday();
       if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
@@ -165,7 +164,8 @@ return <>
       />}
 
       <View style={gs.mt24} />
-      {!testingStore.testsList.some(test=>test.survey_id === 9) && !closeEndSetting ?
+     {testingStore.isLoading ? <ShimmerPlaceholder style={[{height: 200, width: '100%',  borderRadius: 16 }]}/> :
+     !testingStore.testsList.some(test=>test.survey_id === 9) && !closeEndSetting ?
       <CardContainer style={{borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
         <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
         <View style={[s.circle]}>

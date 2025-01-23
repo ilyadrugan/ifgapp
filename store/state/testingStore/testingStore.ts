@@ -23,6 +23,7 @@ class TestingStore {
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
     this.clearMyCurrentResultsTest();
+    this.getAllMyTest();
   }
   remapQuestions (pages: any) {
     return pages.map((element)=>{

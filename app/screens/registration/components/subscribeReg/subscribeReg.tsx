@@ -66,10 +66,7 @@ export const SubscribeReg: FC = observer(() => {
                 {tariffsStore.tariffs[activeDiscount].price} ₽
             </IfgText>}
       <View style={gs.mt4}/>
-      <IfgText color={colors.GRAY_COLOR} style={gs.fontCaption3}>
-      цена за месяц при оплате сразу за первый год*
-      </IfgText>
-      <View style={gs.mt16}/>
+      {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
       <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
         <Benefit />
         <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>

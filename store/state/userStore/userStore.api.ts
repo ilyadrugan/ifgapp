@@ -6,7 +6,7 @@ import userStore from './userStore';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 // import { LoginByUserPasswordModel } from './models/models';
 
-export const getProfile = async () => {
+export const getProfileApi = async () => {
     console.log('getProfile',`${BASE_URL}/lk`);
     return await HttpClient.get(`${BASE_URL}/lk`);
 };
