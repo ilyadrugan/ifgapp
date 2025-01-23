@@ -44,11 +44,11 @@ export const Subscription: FC = observer(() =>{
       const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone);
       YookassaModule.startTokenize(phone_number,async (result) => {
         console.log('Результат из нативного модуля:', result);
-        if (result.paymentToken) {
-         await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 11, token: result.paymentToken})
-          .then((res)=>console.log('payment-create data',res.data))
-          .catch(err=>console.log('payment-create error',err));
-        }
+        // if (result.paymentToken) {
+        //  await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 11, token: result.paymentToken})
+        //   .then((res)=>console.log('payment-create data',res.data))
+        //   .catch(err=>console.log('payment-create error',err));
+        // }
       } );
       // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
     };

@@ -47,7 +47,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     }
 
     override fun getName(): String = "YookassaModule"
-    fun start3DSecure() {
+    fun start3DSecure(confirmationUrl: String) {
         val activity = currentActivity
         if (activity == null) {
             callback?.invoke("Activity is null")
@@ -55,10 +55,10 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         }
         val intent = Checkout.createConfirmationIntent(
             reactApplicationContext,
-            "https://3dsurl.com/", 
+            confirmationUrl,
             PaymentMethodType.BANK_CARD,
             "test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw",
-//            "488632"
+//           "488632"
         )
         activity.startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
     }
@@ -74,8 +74,8 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
         val paymentMethodTypes = setOf(
             PaymentMethodType.BANK_CARD,
-            PaymentMethodType.YOO_MONEY,
-            PaymentMethodType.SBERBANK
+            // PaymentMethodType.YOO_MONEY,
+            // PaymentMethodType.SBERBANK
         )
         val paymentParameters = PaymentParameters(
             amount = Amount(BigDecimal.valueOf(10.0), Currency.getInstance("RUB")),
@@ -84,7 +84,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             clientApplicationKey = "test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw",
             shopId = "488632",
             savePaymentMethod = SavePaymentMethod.USER_SELECTS,
-            paymentMethodTypes = paymentMethodTypes,
+           paymentMethodTypes = paymentMethodTypes,
             authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
             userPhoneNumber = phoneNumber
         )
@@ -97,6 +97,8 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
     // Обработка результата активности
     override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i("Yookasssa", "onActivityResult " +requestCode + ' ' + resultCode)
+
         if (requestCode == REQUEST_CODE_TOKENIZE) {
             if (resultCode == Activity.RESULT_OK) {
                 val tokenResult = createTokenizationResult(data!!)
@@ -106,6 +108,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
                     putString("paymentMethodType", tokenResult.paymentMethodType.toString())
                 }
                 callback?.invoke(resultMap)
+                start3DSecure("https://custom.redirect.url")
                 val result = data?.let { createTokenizationResult(it) }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 val errorMap = WritableNativeMap().apply {
