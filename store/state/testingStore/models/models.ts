@@ -17,7 +17,10 @@ export type ChoiceModel = {
 }
 
 export type ResultsTestModel = {
+    id: number,
     survey_id: number,
+    device_id?: string,
+    user_id?: number,
     total_score: number,
     activiti_value_json: string,
     answers_json: string,

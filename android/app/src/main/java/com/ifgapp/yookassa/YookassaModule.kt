@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import ru.yoomoney.sdk.kassa.payments.Checkout
 import ru.yoomoney.sdk.kassa.payments.Checkout.createTokenizationResult
 import ru.yoomoney.sdk.kassa.payments.Checkout.createTokenizeIntent
 import ru.yoomoney.sdk.kassa.payments.checkoutParameters.Amount
@@ -46,7 +47,21 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     }
 
     override fun getName(): String = "YookassaModule"
-
+    fun start3DSecure() {
+        val activity = currentActivity
+        if (activity == null) {
+            callback?.invoke("Activity is null")
+            return
+        }
+        val intent = Checkout.createConfirmationIntent(
+            reactApplicationContext,
+            "https://3dsurl.com/", 
+            PaymentMethodType.BANK_CARD,
+            "test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw",
+//            "488632"
+        )
+        activity.startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
+    }
     @ReactMethod
     fun startTokenize(phoneNumber: String, callback: Callback) {
         Log.i("Yookasssa", "startTokenize" + phoneNumber)
@@ -58,11 +73,9 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         }
 
         val paymentMethodTypes = setOf(
-            PaymentMethodType.GOOGLE_PAY,
             PaymentMethodType.BANK_CARD,
-            PaymentMethodType.SBERBANK,
             PaymentMethodType.YOO_MONEY,
-            PaymentMethodType.SBP
+            PaymentMethodType.SBERBANK
         )
         val paymentParameters = PaymentParameters(
             amount = Amount(BigDecimal.valueOf(10.0), Currency.getInstance("RUB")),
@@ -72,7 +85,6 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             shopId = "488632",
             savePaymentMethod = SavePaymentMethod.USER_SELECTS,
             paymentMethodTypes = paymentMethodTypes,
-            googlePayParameters = GooglePayParameters(),
             authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
             userPhoneNumber = phoneNumber
         )
@@ -94,6 +106,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
                     putString("paymentMethodType", tokenResult.paymentMethodType.toString())
                 }
                 callback?.invoke(resultMap)
+                val result = data?.let { createTokenizationResult(it) }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 val errorMap = WritableNativeMap().apply {
                     putString("status", "RESULT_CANCELED")

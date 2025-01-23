@@ -15,6 +15,10 @@ import { observer } from 'mobx-react';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
 import { errorToast } from '../../core/components/toast/toast';
+import userStore from '../../../store/state/userStore/userStore';
+import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const data = [
     {
@@ -75,10 +79,15 @@ export const Testing = observer(() => {
         setActivitiValues(copyActivitiValues);
         setTotalScore(totalScore + Number(score));
         if (currentQuestion === testingStore.currentTest.questions.length){
-            testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}));
+            if (userStore.userInfo?.id) {testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), userStore.userInfo?.id);}
+            else  {
+              const fcm_token = await messaging().getToken();
+              testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), undefined, fcm_token);
+              saveScoreResultsInAsyncStorage();
+            }
             console.log('currentResultsTest',testingStore.currentResultsTest, {...currentAnswers, ...tmpObj});
             await testingStore.submitTest(testingStore.currentResultsTest)
-              .then(()=>navigation.navigate('ResultTest', {activiti_value_json: JSON.stringify(activitiValues)}))
+              .then(()=>navigation.navigate('ResultTest', {activiti_value_json: activitiValues}))
               .catch(()=>errorToast('Произошла ошибка отправки резульатов'));
             return;
         }
@@ -87,7 +96,9 @@ export const Testing = observer(() => {
         setPercentage((currentQuestion + 1) / testingStore.currentTest.questions.length * 100 + '%');
         setCurrentAnswer(-1);
     };
-
+    const saveScoreResultsInAsyncStorage = async () => {
+      await AsyncStorage.setItem('noAuthTestResults', JSON.stringify(testingStore.currentResultsTest));
+    };
     useEffect(()=>{
       testingStore.getTestById(9).then((res)=>{
         // data[0].text = `Тест включает ${testingStore.currentTest.testLength} вопросов.`;

@@ -14,7 +14,10 @@ import { observer } from 'mobx-react';
 
 export const Login = observer(() => {
     const navigation = useNavigation<any>();
-    const toRegistraition = () => navigation.replace('Registration');
+    const toRegistraition = () =>{
+      authStore.clearMessageError();
+      navigation.replace('Registration');
+    };
 
     const {
         control,

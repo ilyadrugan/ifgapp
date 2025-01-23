@@ -39,7 +39,10 @@ export const Registration = () => {
     const [phone, setPhone] = useState('');
     const navigation = useNavigation<any>();
 
-    const toLogin = () => navigation.replace('Login');
+    const toLogin = () => {
+        authStore.clearMessageError();
+        navigation.replace('Login');
+    };
     const onChecked = (type: string) => {
         switch (type) {
             case 'personal': setPersonalChecked(!personalChecked);
@@ -49,7 +52,8 @@ export const Registration = () => {
         }
     };
     const onTabClick = (id: number) => {
-
+        authStore.clearAllRegisterByNumDocInputError();
+        authStore.clearAllRegisterByPromocodeInputError();
         setActiveTab(id);
     };
     useEffect(() => {
@@ -108,8 +112,9 @@ export const Registration = () => {
       } = useForm<RegisterFormModel>();
 
     const onSubmit = handleSubmit(async (data) => {
-        // console.log(data);
+        console.log(data);
         if (activeTab === 1) {
+            authStore.clearAllRegisterByPromocodeInputError();
             if (!data.last_name) {authStore.fillRegisterByPromocodeInputError('last_name','Заполните поле');}
             if (!data.name) {authStore.fillRegisterByPromocodeInputError('name','Заполните поле');}
             if (!phone) {authStore.fillRegisterByPromocodeInputError('phone','Заполните поле');}
@@ -117,19 +122,47 @@ export const Registration = () => {
             if (!data.password) {authStore.fillRegisterByPromocodeInputError('password','Заполните поле');}
             if (!data.password_confirmation) {authStore.fillRegisterByPromocodeInputError('password_confirmation','Заполните поле');}
             if (!data.promocode) {authStore.fillRegisterByPromocodeInputError('promocode','Заполните поле');}
-            const password_equal = data.password_confirmation === data.password
+            const password_equal = data.password_confirmation === data.password;
             if (!password_equal) {
                 authStore.fillRegisterByPromocodeInputError('password_confirmation','Пароли не совпадают');
             }
             else if (data.last_name && data.name && phone && data.email && data.password && data.password_confirmation && data.promocode) {
                 const model: RegisterFormModel = {
-                    ...data,
+                    email: data.email,
+                    password: data.password,
+                    promocode: data.promocode,
                     phone: phone,
+                    name: data.name,
+                    last_name: data.last_name,
                 };
-                // console.log(model);
-                authStore.register(model, ()=>navigation.SuccessfulReg('Main'));
+                console.log(model);
+                if (!personalChecked || !infoChecked) {return;}
+                await authStore.register(model, ()=>navigation.navigate('SuccessfulReg'));
             }
-
+        }
+        else if (activeTab === 0) {
+            console.log(data);
+            authStore.clearAllRegisterByNumDocInputError();
+            if (!dateOfBirth) {authStore.fillRegisterByNumDocInputError('birthday','Заполните поле');}
+            if (!data.email) {authStore.fillRegisterByNumDocInputError('email','Заполните поле');}
+            if (!data.password) {authStore.fillRegisterByNumDocInputError('password','Заполните поле');}
+            if (!data.password_confirmation) {authStore.fillRegisterByNumDocInputError('password_confirmation','Заполните поле');}
+            if (!data.num_doc) {authStore.fillRegisterByNumDocInputError('num_doc','Заполните поле');}
+            const password_equal = data.password_confirmation === data.password;
+            if (!password_equal) {
+                authStore.fillRegisterByNumDocInputError('password_confirmation','Пароли не совпадают');
+            }
+            else if (dateOfBirth && data.email && data.password && data.password_confirmation && data.num_doc) {
+                const model: RegisterFormModel = {
+                    birthday: dateOfBirth,
+                    email: data.email,
+                    password: data.password,
+                    num_doc: data.num_doc,
+                };
+                console.log(model);
+                if (!personalChecked || !infoChecked) {return;}
+                await authStore.register(model, ()=>navigation.navigate('SuccessfulReg'));
+            }
         }
       });
       return (  <>
@@ -153,23 +186,18 @@ export const Registration = () => {
        {(activeTab === 1 || activeTab === 0) &&
        <View style={s.formCard}>
             {activeTab === 0 && <>
-                <Controller control={control} name={'name'}
+                <Controller control={control} name={'num_doc'}
                  render={({ field: { onChange, onBlur, value } }) => (
                 <Input
                 fullWidth
+                keyboardType="numeric"
                 value={value}
                 onChange={onChange}
                 placeholder="Номер договора"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                onFocus={()=>authStore.clearRegisterByNumDocInputError('num_doc')}
+                error={authStore.registerByNumDoc.num_docInputError}
             />
-                // fullWidth
-                // value={value}
-                // onChange={onChange}
-                // placeholder="Электронная почта"
-                // keyboardType="email-address"
-                // style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-                // error={authStore.loginByUserPassword.loginInputError}
-            // />
         )}/>
                 <Input
                     maxLength={10}
@@ -178,6 +206,8 @@ export const Registration = () => {
                     onChange={maskDateChange}
                     placeholder="Дата рождения"
                     style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                    error={authStore.registerByNumDoc.birthdayInputError}
+                    onFocus={()=>authStore.clearRegisterByPromocodeInputError('birthday')}
                 />
 
             </>}
@@ -232,9 +262,8 @@ export const Registration = () => {
                 placeholder="Электронная почта"
                 keyboardType="email-address"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-                error={authStore.registerByPromocode.emailInputError}
+                error={activeTab === 0 ? authStore.registerByNumDoc.emailInputError : authStore.registerByPromocode.emailInputError }
                 onFocus={()=>authStore.clearRegisterByPromocodeInputError('email')}
-
             />
                )}
                 />
@@ -247,7 +276,7 @@ export const Registration = () => {
                 placeholder="Пароль"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
-                error={authStore.registerByPromocode.passwordInputError}
+                error={activeTab === 0 ? authStore.registerByNumDoc.passwordInputError : authStore.registerByPromocode.passwordInputError }
                 onFocus={()=>authStore.clearRegisterByPromocodeInputError('password')}
 
             />
@@ -262,7 +291,7 @@ export const Registration = () => {
                 placeholder="Повторите пароль"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
-                error={authStore.registerByPromocode.password_confirmationInputError}
+                error={activeTab === 0 ? authStore.registerByNumDoc.password_confirmationInputError : authStore.registerByPromocode.password_confirmationInputError }
                 onFocus={()=>authStore.clearRegisterByPromocodeInputError('password_confirmation')}
 
             />
@@ -283,20 +312,30 @@ export const Registration = () => {
                 )}
                 />
             }
-            <View style={s.acceptsBlock}>
-                <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
-                <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
-                Согласие на обработку <IfgText onPress={()=> Linking.openURL(`${API_URL}policy`)} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
-                </IfgText>
+            <View style={s.acceptContainer}>
+                <View style={s.acceptsBlock}>
+                    <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    Согласие на обработку <IfgText onPress={()=> Linking.openURL(`${API_URL}policy`)} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
+                    </IfgText>
+                </View>
+                {!personalChecked &&
+                <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+                {'Вы должны дать согласие на обработку персональных данных'}</IfgText>}
             </View>
-            <View style={[s.acceptsBlock]}>
-                <CheckBox  onPress={()=>onChecked('info')} checked={infoChecked}/>
-                <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
-                Согласен на информационную рассылку
-                </IfgText>
+            <View style={s.acceptContainer}>
+                <View style={s.acceptsBlock}>
+                    <CheckBox  onPress={()=>onChecked('info')} checked={infoChecked}/>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    Согласен на информационную рассылку
+                    </IfgText>
+                </View>
+                {!infoChecked &&
+                <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+                {'Вы должны согласится на информационную рассылку'}</IfgText>}
             </View>
             <Button style={s.buttonLogin}
-                // disabled={!personalChecked && !infoChecked}
+                // disabled={!personalChecked || !infoChecked}
                 // onPress={()=>navigation.replace('SuccessfulReg')}
                 onPress={onSubmit}
                 >
@@ -391,8 +430,13 @@ const s = StyleSheet.create({
       acceptsBlock: {
         flexDirection :'row',
         justifyContent: 'flex-start',
-        width: '100%',
+        // width: '100%',
         alignItems: 'center',
+      },
+      acceptContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        width: '100%',
       },
 
   });

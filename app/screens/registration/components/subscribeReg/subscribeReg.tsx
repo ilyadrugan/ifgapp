@@ -8,8 +8,10 @@ import { Button } from '../../../../core/components/button/button';
 import ArrowRight from '../../../../../assets/icons/arrow-right.svg';
 import Benefit from '../../../../../assets/icons/benefit.svg';
 import { useNavigation } from '@react-navigation/native';
+import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
+import { observer } from 'mobx-react';
 
-export const SubscribeReg: FC = () => {
+export const SubscribeReg: FC = observer(() => {
   const navigation = useNavigation<any>();
 
   const discounts = [
@@ -31,18 +33,19 @@ export const SubscribeReg: FC = () => {
     const onSubscribe = () => setOnPayment(true);
 
     return <View>
-      {!onPayment && <><View style={s.discounts}>
+      {(!onPayment && tariffsStore.tariffs.length > 0)  && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChange(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
-          <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{discounts[0].name}</IfgText>
+          <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
           <View style={s.discountPercents}>
-            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>−{discounts[0].value}%</IfgText>
+            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%</IfgText>
           </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={()=>onChange(1)} style={[s.dicountValue, activeDiscount === 1 && s.discountValueActive]} >
-          <IfgText color={activeDiscount === 1 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{discounts[1].name}</IfgText>
-          <View style={s.discountPercents}>
-            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>−{discounts[1].value}%</IfgText>
-          </View>
+          <IfgText color={activeDiscount === 1 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[1].title}</IfgText>
+          {tariffsStore.tariffs[1].price_discount &&
+              <View style={s.discountPercents}>
+                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{(tariffsStore.tariffs[1].price - tariffsStore.tariffs[1].price_discount) / tariffsStore.tariffs[1].price * 100 }%</IfgText>
+              </View>}
       </TouchableOpacity>
       </View>
       <View style={gs.mt16}/>
@@ -50,18 +53,18 @@ export const SubscribeReg: FC = () => {
       <View style={gs.mt16}/>
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>
-          3500 ₽
+        {Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} ₽
         </IfgText>
-        <View style={[s.discountPercentsBig, gs.ml24]}>
+        {tariffsStore.tariffs[activeDiscount].description && <View style={[s.discountPercentsBig, gs.ml24]}>
             <IfgText color={colors.BLACK_COLOR} style={gs.fontCaption}>
-              −{discounts[activeDiscount].value}%
+            -{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%
             </IfgText>
-        </View>
+        </View>}
       </View>
       <View style={gs.mt12}/>
-        <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-          4 800 ₽
-        </IfgText>
+      {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
+                {tariffsStore.tariffs[activeDiscount].price} ₽
+            </IfgText>}
       <View style={gs.mt4}/>
       <IfgText color={colors.GRAY_COLOR} style={gs.fontCaption3}>
       цена за месяц при оплате сразу за первый год*
@@ -115,7 +118,7 @@ export const SubscribeReg: FC = () => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }}>
-                    <IfgText style={gs.fontBodyMedium}>Подписаться</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
                         <ArrowRight />
                     </View>
                     <View />
@@ -145,7 +148,7 @@ export const SubscribeReg: FC = () => {
             </Button>
       </> }
     </View>;
-  };
+  });
 
   const s = StyleSheet.create({
     discounts: {

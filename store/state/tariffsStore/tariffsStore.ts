@@ -8,6 +8,7 @@ class TariffsStore {
   tariffs: TariffModel[] = [];
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
+    this.getTariffs();
   }
 
   getTariffs = async () => {

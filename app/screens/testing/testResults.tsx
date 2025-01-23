@@ -18,20 +18,35 @@ import authStore from '../../../store/state/authStore/authStore';
 import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
 import { html } from './mocksHtmlResults/htmlResults';
 import testingStore from '../../../store/state/testingStore/testingStore';
+import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 // import VideoPlayer from 'react-native-video-player';
 
 export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
     const [balanceLvl, setBalanceLvl] = useState(0);
-    const {testId} = route.params;
+    const {testId, activiti_value_json} = route.params;
     const onBack = () => navigation.goBack();
     useEffect(()=>{
       console.log('authStore', authStore.access_token);
       if (testId) {
        testingStore.setMyCurrentResultsTest(testId);
         const summ = testingStore.myCurrentResultsTest.total_score;
-        console.log('testingStore.myCurrentResultsTest',testingStore.myCurrentResultsTest);
+        console.log('testingStore.myCurrentResultsTest',testingStore.myCurrentResultsTest.total_score);
+        if (summ <= 40) {setBalanceLvl(0);}
+        else if (summ <= 80) {setBalanceLvl(1);}
+        else if (summ <= 120) {setBalanceLvl(2);}
+        else if (summ <= 140) {setBalanceLvl(3);}
+        else if (summ <= 160) {setBalanceLvl(4);}
+        else {setBalanceLvl(5);}
+        testingStore.getAllMyTest();
+        recommendationStore.getPersonalRecommendations();
+      }
+      else if (activiti_value_json) {
+        console.log('no testId', 'activiti_value_json = ', activiti_value_json);
+        const summ = testingStore.currentResultsTest.total_score;
+        testingStore.setMyCurrentResultsTest(testingStore.currentResultsTest.id);
+        console.log('testingStore.currentResultsTest',testingStore.currentResultsTest);
         if (summ <= 40) {setBalanceLvl(0);}
         else if (summ <= 80) {setBalanceLvl(1);}
         else if (summ <= 120) {setBalanceLvl(2);}
@@ -39,7 +54,7 @@ export const ResultTest = ({route}) => {
         else if (summ <= 160) {setBalanceLvl(4);}
         else {setBalanceLvl(5);}
       }
-    }, [testId]);
+    }, [testId, activiti_value_json]);
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />

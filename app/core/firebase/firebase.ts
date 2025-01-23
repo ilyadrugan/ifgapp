@@ -6,6 +6,7 @@ import { FirebaseMessagingTokenUpdateModel, FirebaseMessagingTokenDeleteModel } 
 
 export async function updateFirebaseMessagingToken() {
   const fcm_token = await messaging().getToken();
+  console.log('fcm_token',fcm_token);
   const deviceName = getModel();
   const deviceId = await syncUniqueId();
   const os = Platform.OS === 'android' ? 0 : 1;

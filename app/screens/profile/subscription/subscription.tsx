@@ -19,6 +19,8 @@ import { CardModel } from '../../../../store/state/paymentsStore/models/models';
 import { LogoBankCard } from '../../../core/utils/bankCardsIcons';
 import userStore from '../../../../store/state/userStore/userStore';
 import { formatPhoneNumberToPlus } from '../../../core/utils/phoneFormatter';
+import { API_URL, BASE_URL } from '../../../core/hosts';
+import HttpClient from '../../../core/http-client/http-client';
 
 const { YookassaModule } = NativeModules;
 
@@ -40,8 +42,13 @@ export const Subscription: FC = observer(() =>{
       // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
       // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
       const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone);
-      YookassaModule.startTokenize(phone_number,(result) => {
+      YookassaModule.startTokenize(phone_number,async (result) => {
         console.log('Результат из нативного модуля:', result);
+        if (result.paymentToken) {
+         await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 11, token: result.paymentToken})
+          .then((res)=>console.log('payment-create data',res.data))
+          .catch(err=>console.log('payment-create error',err));
+        }
       } );
       // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
     };

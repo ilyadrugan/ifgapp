@@ -35,17 +35,34 @@ class TestingStore {
     });
   }
   setMyCurrentResultsTest(testId: number) {
+    console.log('setMyCurrentResultsTest', testId);
     this.disableRecommendationCheck = true;
     const test = this.testsList.find((test, index)=>{
       if (index === 0 && test.id === testId) {this.disableRecommendationCheck = false;}
       return (test.id === testId);});
+    console.log('setMyCurrentResultsTest', test);
     if (test) {
       this.myCurrentResultsTest = {
       id: test?.id,
       survey_id: test.survey_id,
       total_score: test.total_score,
       activiti_value_json: JSON.parse(test.activiti_value_json),
-    };}
+    };
+    }
+    else {
+      this.disableRecommendationCheck = false;
+      this.myCurrentResultsTest = {
+        id: this.currentResultsTest.id,
+        survey_id: this.currentResultsTest.survey_id,
+        total_score: this.currentResultsTest.total_score,
+        activiti_value_json: {
+          Сон: JSON.parse(this.currentResultsTest.activiti_value_json).sleep,
+          Антистресс: JSON.parse(this.currentResultsTest.activiti_value_json).anistres,
+          Питание: JSON.parse(this.currentResultsTest.activiti_value_json).pitaniye,
+          'Физическая активность': JSON.parse(this.currentResultsTest.activiti_value_json).fizact,
+        },
+    };
+  }
   }
   clearMyCurrentResultsTest() {
       this.myCurrentResultsTest = {
@@ -60,13 +77,16 @@ class TestingStore {
       },
     };
   }
-  setScoreToResult(total_score: number, activitiValues: ActivitiValueModel, answers: string) {
+  setScoreToResult(total_score: number, activitiValues: ActivitiValueModel, answers: string, user_id?: number | undefined, device_id?: string | undefined) {
     this.currentResultsTest = {
+      id: 0,
       survey_id: this.currentTest.id,
       total_score: total_score,
       activiti_value_json: JSON.stringify(activitiValues),
       answers_json: answers,
     };
+    if (device_id) {this.currentResultsTest = {...this.currentResultsTest, device_id: device_id};}
+    if (user_id) {this.currentResultsTest = {...this.currentResultsTest, user_id: user_id};}
   }
   async submitTest(results: ResultsTestModel) {
     this.isLoading = true;
@@ -74,7 +94,8 @@ class TestingStore {
     console.log('submitTest', results);
     await submitResultsTestApi(results)
       .then((result)=>{
-        console.log('result', result);
+        console.log('result', result.data.data);
+        this.currentResultsTest = {...this.currentResultsTest, id: result.data.data.id};
       }
       )
       .catch((err)=>{
