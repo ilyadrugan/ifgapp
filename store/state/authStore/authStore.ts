@@ -7,6 +7,7 @@ import { LoginByUserPasswordModel, LoginByUserPasswordState, RegisterFormModel, 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateFirebaseMessagingToken } from '../../../app/core/firebase/firebase';
 import { errorToast } from '../../../app/core/components/toast/toast';
+import { updateDeviceResultsTestApi } from '../testingStore/testingStore.api';
 
 class AuthStore {
   isAuthenticated = false; // Авторизован ли пользователь
@@ -144,11 +145,14 @@ class AuthStore {
     this.isLoading = true;
     this.errorMessage = '';
     await registration(model)
-      .then((result)=>{
+      .then(async (result)=>{
         console.log('THEN');
         console.log(result.data);
         if (result.data) {
         this.login({email: model.email, password: model.password}, callBack);
+        const token = await AsyncStorage.getItem('fcm_token') || '';
+        console.log('updateDeviceResultsTestApi',token);
+        await updateDeviceResultsTestApi(token);
         // this.setToken(result.data.access_token);
         // userStore.setUser(result.data.user);
         // this.setIsOnBoarded();

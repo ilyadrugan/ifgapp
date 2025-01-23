@@ -1,4 +1,4 @@
-import HttpClient from '../../../app/core/http-client/http-client';
+import HttpClient, { HttpClientWithoutHeaders } from '../../../app/core/http-client/http-client';
 import { BASE_URL } from '../../../app/core/hosts';
 import { ResultsTestModel } from './models/models';
 
@@ -13,3 +13,8 @@ export const submitResultsTestApi = async (model: ResultsTestModel) => {
 export const getAllMyTestApi = async () => {
     return await HttpClient.get(`${BASE_URL}/lk/surveys`);
 };
+
+export const updateDeviceResultsTestApi = async (device_id: string) => {
+    return await HttpClientWithoutHeaders.post(`${BASE_URL}/surveys/update-device`, {device_id: device_id});
+};
+

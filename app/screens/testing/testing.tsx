@@ -83,7 +83,7 @@ export const Testing = observer(() => {
             else  {
               const fcm_token = await messaging().getToken();
               testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), undefined, fcm_token);
-              saveScoreResultsInAsyncStorage();
+              saveScoreResultsInAsyncStorage(fcm_token);
             }
             console.log('currentResultsTest',testingStore.currentResultsTest, {...currentAnswers, ...tmpObj});
             await testingStore.submitTest(testingStore.currentResultsTest)
@@ -96,8 +96,8 @@ export const Testing = observer(() => {
         setPercentage((currentQuestion + 1) / testingStore.currentTest.questions.length * 100 + '%');
         setCurrentAnswer(-1);
     };
-    const saveScoreResultsInAsyncStorage = async () => {
-      await AsyncStorage.setItem('noAuthTestResults', JSON.stringify(testingStore.currentResultsTest));
+    const saveScoreResultsInAsyncStorage = async (token:string) => {
+      await AsyncStorage.setItem('fcm_token', token);
     };
     useEffect(()=>{
       testingStore.getTestById(9).then((res)=>{
