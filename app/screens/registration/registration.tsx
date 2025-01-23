@@ -33,7 +33,7 @@ const tabss: TabInterface[] = [
 ];
 export const Registration = () => {
     const [personalChecked, setPersonalChecked] = useState(true);
-    const [infoChecked, setInfoChecked] = useState(false);
+    const [infoChecked, setInfoChecked] = useState(true);
     const [activeTab, setActiveTab] = useState(1);
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [phone, setPhone] = useState('');
@@ -45,9 +45,9 @@ export const Registration = () => {
     };
     const onChecked = (type: string) => {
         switch (type) {
-            case 'personal': setPersonalChecked(!personalChecked);
+            case 'personal': setPersonalChecked((prev)=> !prev);
                 break;
-            case 'info': setInfoChecked(!infoChecked);
+            case 'info': setInfoChecked((prev)=> !prev);
                 break;
         }
     };
