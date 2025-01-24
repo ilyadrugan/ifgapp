@@ -55,3 +55,11 @@ export type MyTestModel = {
     activiti_value_json: string,
     created_at: string,
 }
+
+export type TestListModel = {
+    surveys: MyTestModel[],
+    total: number,
+    current_page: number,
+    isLoading: boolean,
+    hasMore: boolean
+};

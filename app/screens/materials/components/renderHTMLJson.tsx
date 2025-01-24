@@ -6,9 +6,11 @@ import gs from '../../../core/styles/global';
 // import { Text } from '../../../core/components/text/ifg-text';
 import colors from '../../../core/colors/colors';
 import { IfgText } from '../../../core/components/text/ifg-text';
+import { youtube_parser, YoutubeVideo } from '../../../core/components/youtubePlayer/youtubePlayer';
 
 const width = Dimensions.get('screen').width;
 export const RenderHTMLContent = ({ content, fromBodyJson }) => {
+  console.log('content', content);
   let styleText: StyleProp<ViewStyle | TextStyle> = {};
   const renderNode = (node, index) => {
     if (node.text) {
@@ -26,7 +28,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
 
     switch (node.tag) {
         case 'p':
-          if (node.children[0].tag === 'img') {return renderNode(node.children[0], 0);}
+          if (node.children[0].tag === 'img' || node.children[0].tag === 'iframe') {return renderNode(node.children[0], 0);}
           return (
             <Text style={styles.paragraph}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
@@ -137,6 +139,14 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
               />
             </View>
           );
+
+        case 'iframe':
+          const videoUrl = node.attributes?.src;
+          if (videoUrl) {
+            return <View  >
+            <YoutubeVideo videoId={youtube_parser(videoUrl) || ''} />
+            </View>;}
+          break;
         default:
           return null; // Для тегов, которые не обрабатываются
       }

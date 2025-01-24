@@ -80,9 +80,9 @@ export const IFGHome = observer(() => {
     //   recommendationStore.getPersonalRecommendations();
     // }, []);
     const getData = async () => {
+      storiesStore.getStories();
       await testingStore.getAllMyTest();
       await userStore.getProfile();
-      storiesStore.getStories();
       ifgScoreStore.getScoreToday();
       if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
       articlesStore.loadMainArticles();
@@ -115,7 +115,7 @@ export const IFGHome = observer(() => {
         </View>
     </CardContainer>;
     const StoryCard = (item: string, index)=>
-          <CardContainer onPress={() => {
+          storiesStore.storiesList[item].length > 0 && <CardContainer onPress={() => {
             setCurrentCaregoryStoryPressed(item);
             // setCurrentStoryPressed(index);
             setModalVisible(true);}} style={[{width: 124, overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, backgroundColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
@@ -145,7 +145,7 @@ return <>
         {storiesStore.isLoading ?
         <FlatList
         keyExtractor={(_, index) => index.toString()}
-        data={[0,1,2,3]}
+        data={[0,1,2]}
         horizontal
         style={{marginHorizontal: -16}}
         contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}

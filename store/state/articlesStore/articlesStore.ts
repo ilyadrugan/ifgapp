@@ -172,7 +172,7 @@ class ArticlesStore {
     this.errorMessage = '';
     await getArticleByIdApi(id)
       .then((result)=>{
-        console.log('result.data.data',result.data.data);
+        // console.log('result.data.data',result.data.data);
 
         this.currentArticle = result.data.data;
 

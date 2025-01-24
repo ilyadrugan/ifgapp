@@ -18,7 +18,7 @@ export const MyMaterials = observer(() =>{
     useEffect(() => {
 
         articlesStore.articlesUserList.length === 0 && articlesStore.getUserArticles();
-
+        console.log(articlesStore.articlesUserList)
     }, []);
     const CardMaterial: FC<{title: string, subtitle: string, img?: string, id: number}> = ({subtitle, title, img, id}) => {
         return <CardContainer onPress={()=> navigation.navigate('ArticleView', {articleId: id})} key={title} style={{overflow: 'hidden', gap: 18,padding: 0, borderRadius: 16, borderWidth: 1, borderTopWidth: 0, borderColor: '#E7E7E7', flexDirection: 'row'}}>

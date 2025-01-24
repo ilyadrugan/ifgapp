@@ -1,10 +1,17 @@
-import { makeAutoObservable } from 'mobx';
-import { ActivitiValueModel, MyCurrentResultsTestModel, MyTestModel, QuestionModel, ResultsTestModel, TestModel } from './models/models';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { ActivitiValueModel, MyCurrentResultsTestModel, MyTestModel, QuestionModel, ResultsTestModel, TestListModel, TestModel } from './models/models';
 import { getAllMyTestApi, getTestByIdApi, submitResultsTestApi } from './testingStore.api';
 
 class TestingStore {
   isLoading = false; // Состояние загрузки
   testsList: MyTestModel[] = [];
+  testList: TestListModel = {
+    current_page: 1,
+    surveys: [],
+    total: 0,
+    isLoading: false,
+    hasMore: true,
+  };
   currentTest: TestModel;
   currentResultsTest: ResultsTestModel;
   myCurrentResultsTest: MyCurrentResultsTestModel = {
@@ -78,6 +85,16 @@ class TestingStore {
       },
     };
   }
+  clearTests() {
+    this.testList = {
+      current_page: 1,
+      surveys: [],
+      total: 0,
+      isLoading: false,
+      hasMore: true,
+    };
+    // this.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
+  }
   setScoreToResult(total_score: number, activitiValues: ActivitiValueModel, answers: string, user_id?: number | undefined, device_id?: string | undefined) {
     this.currentResultsTest = {
       id: 0,
@@ -131,7 +148,7 @@ class TestingStore {
     this.errorMessage = '';
     await getAllMyTestApi()
       .then((result)=>{
-        // console.log('result.data.data.json', result.data.surveys);
+        // console.log('result.data.data', result.data.surveys.data);
         this.testsList = result.data.surveys.data.map((test)=>{
           // console.log(test.activiti_value_json);
           return {
@@ -153,6 +170,28 @@ class TestingStore {
       })
       .finally(()=>{this.isLoading = false;});
   }
+  async loadMoreTests(query?: string) {
+      console.log('loadMoreTests',this.testList );
+      if (this.testList.isLoading || !this.testList.hasMore) {return;}
+      this.testList.isLoading = true;
+      await getAllMyTestApi(query)
+        .then((result)=>{
+          // console.log(result.data.surveys);
+          runInAction(() => {
+            this.testList.surveys = [...this.testList.surveys, ...result.data.surveys.data],
+            this.testList.current_page += 1,
+            this.testList.total = result.data.surveys.total,
+            this.testList.hasMore = result.data.surveys.to < result.data.surveys.total;
+            });
+        }
+        )
+        .catch((err)=>{
+          console.log('ERROR',  err.message);
+          this.errorMessage = err.message;
+
+        })
+        .finally(()=>{this.testList.isLoading = false;});
+    }
 }
 
 const testingStore = new TestingStore();

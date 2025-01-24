@@ -5,8 +5,9 @@ import { IfgText } from '../../core/components/text/ifg-text';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import testingStore from '../../../store/state/testingStore/testingStore';
 export const SuccessfulReg = () => {
   const navigation = useNavigation<any>();
   const abilities = [
@@ -27,6 +28,10 @@ export const SuccessfulReg = () => {
             text: 'А также мы проводим конкурсы, в которых вы сможете выиграть полезные призы',
         },
     ];
+    useEffect(() => {
+      testingStore.getAllMyTest();
+    }, []);
+
     return (  <>
 
         <ImageBackground
@@ -69,7 +74,7 @@ export const SuccessfulReg = () => {
         <View style={s.footer}>
 
          <Button style={s.buttonNext}
-                onPress={()=>navigation.navigate('IndividualProgramm')}
+                onPress={()=>testingStore.testsList.length > 0 ? navigation.navigate('IndividualProgramm') : navigation.navigate('Main')}
                 >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>

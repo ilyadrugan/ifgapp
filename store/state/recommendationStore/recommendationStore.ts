@@ -24,6 +24,7 @@ class RecommendationStore {
       this.isLoading = true;
       await getRecommendationsApi(resultTestId)
         .then((result)=>{
+          console.log('recommendationList',result.data);
           this.recommendationList = result.data;
           // console.log('this.recommendationList', this.recommendationList);
         }

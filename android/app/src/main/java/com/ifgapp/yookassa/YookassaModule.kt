@@ -57,7 +57,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             reactApplicationContext,
             confirmationUrl,
             PaymentMethodType.BANK_CARD,
-            "test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw",
+            "test_wZQ22Ahg-C7xQv1hLfq0TR1EGSe7LNwXQ5z50XUnSUM",
 //           "488632"
         )
         activity.startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
@@ -81,11 +81,11 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             amount = Amount(BigDecimal.valueOf(10.0), Currency.getInstance("RUB")),
             title = "Title",
             subtitle = "Subtitle",
-            clientApplicationKey = "test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw",
-            shopId = "488632",
-            savePaymentMethod = SavePaymentMethod.USER_SELECTS,
-           paymentMethodTypes = paymentMethodTypes,
-            authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
+            clientApplicationKey = "test_wZQ22Ahg-C7xQv1hLfq0TR1EGSe7LNwXQ5z50XUnSUM",
+            shopId = "400208",
+            savePaymentMethod = SavePaymentMethod.ON,
+            paymentMethodTypes = paymentMethodTypes,
+//            authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
             userPhoneNumber = phoneNumber
         )
 
@@ -108,7 +108,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
                     putString("paymentMethodType", tokenResult.paymentMethodType.toString())
                 }
                 callback?.invoke(resultMap)
-                start3DSecure("https://custom.redirect.url")
+                start3DSecure("https://yoomoney.ru/checkout/payments/v2/contract?orderId=2f24313b-000f-5000-8000-1a992cf3f161")
                 val result = data?.let { createTokenizationResult(it) }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 val errorMap = WritableNativeMap().apply {

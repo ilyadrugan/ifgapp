@@ -10,8 +10,8 @@ export const submitResultsTestApi = async (model: ResultsTestModel) => {
     return await HttpClient.post(`${BASE_URL}/surveys/submit`, model);
 };
 
-export const getAllMyTestApi = async () => {
-    return await HttpClient.get(`${BASE_URL}/lk/surveys`);
+export const getAllMyTestApi = async (query?: string) => {
+    return await HttpClient.get(`${BASE_URL}/lk/surveys?${query || ''}`);
 };
 
 export const updateDeviceResultsTestApi = async (device_id: string) => {

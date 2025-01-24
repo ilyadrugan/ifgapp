@@ -26,15 +26,96 @@ import dailyActivityStore from '../../../store/state/activityGraphStore/activity
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
+import { Easing } from 'react-native-reanimated';
 
 export const CalendarScreen = observer(() =>{
+    const dropdowns = [
+    'Физическая активность',
+    'Питание',
+    'Сон',
+    'Антистресс',
+    ];
+    const [expandedIndexes, setExpandedIndexes] = useState(
+        dropdowns.map(() => true) // Изначально все списки раскрыты
+      );
+
+      const [contentHeights, setContentHeights] = useState<number[]>(
+        dropdowns.map(() => 0) // Высота контента для каждого списка
+      );
+
+      const animationValues = useRef(
+        dropdowns.map(() => new Animated.Value(0)) // Изначально высота 0
+      ).current;
+      const scaleYValues = useRef(
+        dropdowns.map(() => new Animated.Value(1))
+      ).current;
+      useEffect(() => {
+        // Устанавливаем анимации на высоту контента при первом рендере
+        contentHeights.forEach((height, index) => {
+          if (height > 0) {
+            animationValues[index].setValue(height); // Устанавливаем начальную высоту
+          }
+        });
+      }, [contentHeights]);
+      const onLayoutContent = (index: number, event: any) => {
+        const height = event.nativeEvent.layout.height;
+        setContentHeights((prev) => {
+          const newHeights = [...prev];
+          newHeights[index] = height; // Сохраняем высоту контента
+          return newHeights;
+        });
+      };
     const navigation = useNavigation<any>();
-  console.log(testingStore.myCurrentResultsTest);
-  useEffect(() => {
-    recommendationStore.getPersonalRecommendations();
-    dailyActivityStore.getDailyTodayActivity(formatDate());
-}, []);
-  const renderRecommendation = (rec:PersonalRecommendationModel) => {
+    useEffect(() => {
+        recommendationStore.getPersonalRecommendations();
+        dailyActivityStore.getDailyTodayActivity(formatDate());
+    }, []);
+    const toggleDropdown = (index: number) => {
+        const isExpanded = expandedIndexes[index];
+
+    if (isExpanded) {
+      // Скрыть
+      Animated.parallel([
+        Animated.timing(animationValues[index], {
+            toValue: 0,
+            duration: 300,
+            easing: Easing.ease,
+            useNativeDriver: false,
+        }),
+        Animated.timing(scaleYValues[index], {
+            toValue: -1,
+            duration: 200,
+            useNativeDriver: true,
+        }),
+    ]).start();
+
+      // Обновить состояние
+      setExpandedIndexes((prev) =>
+        prev.map((val, i) => (i === index ? false : val))
+      );
+    } else {
+      // Показать
+      Animated.parallel([
+        Animated.timing(animationValues[index], {
+            toValue: contentHeights[index], // Высота контента
+            duration: 300,
+            easing: Easing.ease,
+            useNativeDriver: false,
+         }),
+         Animated.timing(scaleYValues[index], {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true,
+        }),
+        ]).start();
+
+      // Обновить состояние
+      setExpandedIndexes((prev) =>
+        prev.map((val, i) => (i === index ? true : val))
+      );
+    }
+    };
+    const renderRecommendation = (rec:PersonalRecommendationModel) => {
     return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
     <ArticleHeader
       // isNew
@@ -53,7 +134,7 @@ export const CalendarScreen = observer(() =>{
     </View>
     {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}
   </CardContainer>;
-};
+    };
     return <>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -68,7 +149,7 @@ export const CalendarScreen = observer(() =>{
         <CalendarBlock/>
         <View style={gs.mt24} />
         {/* Питание */}
-        <CardContainer style={{borderRadius: 12}}>
+        <CardContainer onPress={() => toggleDropdown(0)} style={{borderRadius: 12}}>
             <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}
                 >
                 <View style={[gs.flexRow, gs.alignCenter]}>
@@ -78,20 +159,28 @@ export const CalendarScreen = observer(() =>{
                     <IfgText style={[gs.fontCaption, gs.bold, gs.ml12]}>Питание</IfgText>
                 </View>
                 <TouchableOpacity disabled
-                    // style={{ transform: [{ scaleY: scaleY }] }}
+                    style={{ transform: [{ scaleY: scaleYValues[0] }] }}
                 >
                     <Open />
                 </TouchableOpacity>
 
             </View>
         </CardContainer>
-        {dailyActivityStore.dailyTodayActivityData ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
-        : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />}
-        {recommendationStore.personalRecomendationList.filter((rec)=>(rec.category === 'Питание')).map((rec)=>
-        renderRecommendation(rec))}
+        <Animated.View
+              style={{ height: animationValues[0], overflow: 'hidden'}}
+            >
+            <View
+            style={s.content}
+            onLayout={(event) => onLayoutContent(0, event)}>
+               {dailyActivityStore.dailyTodayActivityData ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
+            : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />}
+            {recommendationStore.personalRecomendationList.filter((rec)=>(rec.category === 'Питание')).map((rec)=>
+            renderRecommendation(rec))}
+            </View>
+        </Animated.View>
         <View style={gs.mt24} />
         {/* Физическая активность */}
-        <CardContainer  style={[{borderRadius: 12}]} >
+        <CardContainer onPress={() => toggleDropdown(1)} style={[{borderRadius: 12}]} >
             <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}
                 >
                 <View style={[gs.flexRow, gs.alignCenter]}>
@@ -101,20 +190,26 @@ export const CalendarScreen = observer(() =>{
                     <IfgText style={[gs.fontCaption, gs.bold, gs.ml12]}>Физическая активность</IfgText>
                 </View>
                 <TouchableOpacity disabled
-                    // style={{ transform: [{ scaleY: scaleY }] }}
-                >
+                    style={{ transform: [{ scaleY: scaleYValues[1] }] }}
+                    >
                     <Open />
                 </TouchableOpacity>
 
             </View>
         </CardContainer>
-
+        <Animated.View
+              style={{ height: animationValues[1], overflow: 'hidden'}}
+            >
+            <View
+            style={s.content}
+            onLayout={(event) => onLayoutContent(1, event)}>
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.category === 'Физическая активность').map((rec)=>
         renderRecommendation(rec))}
-
+        </View>
+        </Animated.View>
         <View style={gs.mt24} />
         {/* Антистресс */}
-        <CardContainer style={{borderRadius: 12}}>
+        <CardContainer onPress={() => toggleDropdown(2)} style={{borderRadius: 12}}>
             <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
                 <View style={[gs.flexRow, gs.alignCenter]}>
                     <View style={[s.iconContainer, {backgroundColor: colors.OLIVE_COLOR}]}>
@@ -123,19 +218,27 @@ export const CalendarScreen = observer(() =>{
                     <IfgText style={[gs.fontCaption, gs.bold, gs.ml12]}>Антистресс</IfgText>
                 </View>
                 <TouchableOpacity disabled
-                    // style={{ transform: [{ scaleY: scaleY }] }}
-                >
+                    style={{ transform: [{ scaleY: scaleYValues[2] }] }}
+                    >
                     <Open />
                 </TouchableOpacity>
 
             </View>
         </CardContainer>
+        <Animated.View
+              style={{ height: animationValues[2], overflow: 'hidden'}}
+            >
+            <View
+            style={s.content}
+            onLayout={(event) => onLayoutContent(2, event)}>
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.category === 'Антистресс').map((rec)=>
         renderRecommendation(rec))}
+        </View>
+        </Animated.View>
 
         <View style={gs.mt24} />
         {/* Сон */}
-        <CardContainer style={{borderRadius: 12}}>
+        <CardContainer onPress={() => toggleDropdown(3)} style={{borderRadius: 12}}>
             <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
                 <View style={[gs.flexRow, gs.alignCenter]}>
                     <View style={[s.iconContainer, {backgroundColor: colors.ORANGE_COLOR}]}>
@@ -144,15 +247,23 @@ export const CalendarScreen = observer(() =>{
                     <IfgText style={[gs.fontCaption, gs.bold, gs.ml12]}>Сон</IfgText>
                 </View>
                 <TouchableOpacity disabled
-                    // style={{ transform: [{ scaleY: scaleY }] }}
-                >
+                    style={{ transform: [{ scaleY: scaleYValues[3] }] }}
+                    >
                     <Open />
                 </TouchableOpacity>
 
             </View>
         </CardContainer>
+        <Animated.View
+              style={{ height: animationValues[3], overflow: 'hidden'}}
+            >
+            <View
+            style={s.content}
+            onLayout={(event) => onLayoutContent(3, event)}>
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.category === 'Сон').map((rec)=>
         renderRecommendation(rec))}
+        </View>
+        </Animated.View>
         <View style={{height: 200}} />
     </ScrollView>
     <View style={s.footer}>
@@ -191,5 +302,11 @@ const s = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3,
         elevation: 5, // Для Android
+      },
+    content: {
+        position: 'absolute', // Контент позиционируется для замера высоты
+        top: 0,
+        left: 0,
+        right: 0,
       },
   });

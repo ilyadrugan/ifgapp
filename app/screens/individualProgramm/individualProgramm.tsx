@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
@@ -15,6 +15,7 @@ import Fish from '../../../assets/icons/fish.svg';
 import Moon from '../../../assets/icons/moon.svg';
 import Antistress from '../../../assets/icons/antistress.svg';
 import PhysicalActivity from '../../../assets/icons/physical-activity32.svg';
+import CheckConst from '../../../assets/icons/checkConst.svg';
 
 import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
@@ -54,25 +55,29 @@ export const IndividualProgramm = observer(() => {
       navigation.goBack();
     };
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
-    const [recommends, setRecommends] = useState(true);
     useEffect(() => {
+      getData();
+    }, []);
+
+    const getData = async () => {
       testingStore.getAllMyTest();
-      recommendationStore.getPersonalRecommendations();
-      if (!testingStore.myCurrentResultsTest) {
+      // recommendationStore.getPersonalRecommendations();
+      if (!testingStore.myCurrentResultsTest || testingStore.myCurrentResultsTest.id === 0) {
+        // console.log('testingStore.testsList', testingStore.testsList);
         testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
-        console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
+        // console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
       }
       getRecomendations(testingStore.myCurrentResultsTest.id);
       if (recommendationStore.personalRecomendationList.length === 0) {recommendationStore.getPersonalRecommendations();}
-      // setCheckBoxesValues();
-      // console.log(first)
-    }, []);
-
+      if (articlesStore.articlesMainList.articles.length === 0) {
+        articlesStore.loadMainArticles();
+      }
+    };
 
 
     const getRecomendations = async (testId: number) => await recommendationStore.getRecommendations(testId);
 
-    const onRecommendationCheck = (link: string, category: string, index: number) =>{
+    const onRecommendationCheck = async (link: string, category: string, index: number) =>{
       console.log('onRecommendationCheck', link, category);
       // const values = checkBoxes;
       if (!checkBoxes[category][index]) {
@@ -116,6 +121,21 @@ export const IndividualProgramm = observer(() => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
+    const RecommendHelper: FC<{bgColor: string}> = ({bgColor}) => {
+      const [isShow, setIsShow] = useState(true);
+      return isShow && <>
+      {/* <View style={gs.mt12} /> */}
+      <CardContainer style={{borderRadius: 16,paddingVertical: 8, backgroundColor: bgColor, justifyContent: 'space-between', flexDirection: 'row', alignItems:'center'}}>
+      <View style={[gs.flexRow, gs.alignCenter, gs.flex1]}>
+        <CheckConst />
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.ml8, {paddingRight: 12}]}>Выберите, какие рекомендации вы хотите получать в течение дня</IfgText>
+      </View>
+       <TouchableOpacity onPress={()=>setIsShow(prev=>!prev)} style={[s.circle]}>
+           <Delete />
+      </TouchableOpacity>
+    </CardContainer>
+    </>;
+    };
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -139,7 +159,7 @@ export const IndividualProgramm = observer(() => {
          >
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
             <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
-            <Button style={s.howItWorksButton}>
+            <Button onPress={()=>navigation.navigate('Main')} style={s.howItWorksButton}>
                 <>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>Начать заниматься</IfgText>
                     <ArrowRight />
@@ -152,15 +172,7 @@ export const IndividualProgramm = observer(() => {
          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваш персональный план</IfgText>
 
 
-         {recommends && <>
-          <View style={gs.mt16} />
-          <CardContainer style={{borderRadius: 12,paddingVertical: 8, backgroundColor: colors.BLUE_LIGHT_COLOR, justifyContent: 'space-between', flexDirection: 'row', alignItems:'center'}}>
-          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, {maxWidth: '80%'}]}>Выберите, какие рекомендации вы хотите получать в течение дня</IfgText>
-           <TouchableOpacity onPress={()=>setRecommends(false)} style={s.circle}>
-               <Delete />
-          </TouchableOpacity>
-        </CardContainer>
-        </>}
+
         <View style={gs.mt16} />
 
         {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList) && <><CardContainer>
@@ -171,6 +183,7 @@ export const IndividualProgramm = observer(() => {
             </View>
             <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Питание} maxValue={180 / 4} />
           </CardContainer>
+          <RecommendHelper  bgColor="#DDFFE3"/>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
@@ -194,6 +207,7 @@ export const IndividualProgramm = observer(() => {
             </View>
             <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Сон} maxValue={180 / 4} />
           </CardContainer>
+          <RecommendHelper bgColor="#FFEDDD"/>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
@@ -217,6 +231,7 @@ export const IndividualProgramm = observer(() => {
             </View>
             <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Антистресс} maxValue={180 / 4} />
           </CardContainer>
+          <RecommendHelper bgColor="#F2FFDD"/>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
@@ -240,6 +255,7 @@ export const IndividualProgramm = observer(() => {
             </View>
             <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json['Физическая активность']} maxValue={180 / 4} />
           </CardContainer>
+          <RecommendHelper bgColor="#DDF6FF"/>
           <View style={[gs.flexRow]}>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>

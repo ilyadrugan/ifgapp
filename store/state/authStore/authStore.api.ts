@@ -9,8 +9,8 @@ export const login = async (model: LoginByUserPasswordModel) => {
 };
 
 export const registration = async (model: RegisterFormModel) => {
-    console.log(Config,`${API_URL}/register`);
-    return await HttpClient.post(`${API_URL}/register`, model);
+    console.log(`${BASE_URL}/auth/register`, model);
+    return await HttpClient.post(`${BASE_URL}/auth/register`, model);
 };
 
 export const deleteProfile = async () => {

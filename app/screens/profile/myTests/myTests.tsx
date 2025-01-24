@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import gs from '../../../core/styles/global';
 import { IfgText } from '../../../core/components/text/ifg-text';
@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import testingStore from '../../../../store/state/testingStore/testingStore';
 import { formatDateWithMoment, formatTimeWithMoment } from '../../../core/utils/formatDateTime';
-import { ActivitiValueModel, ActivitiValueViewModel } from '../../../../store/state/testingStore/models/models';
+import { ActivitiValueModel, ActivitiValueViewModel, MyTestModel } from '../../../../store/state/testingStore/models/models';
 
 
 const CardTest: FC<{testId:number, dateTime: string, title: string, activities: ActivitiValueViewModel}> = ({testId, dateTime, title, activities}) => {
@@ -44,17 +44,44 @@ const CardTest: FC<{testId:number, dateTime: string, title: string, activities: 
 
 export const MyTests: FC = observer(() =>{
 
+    const [refreshing, setRefreshing] = useState(false);
     useEffect(() => {
-      testingStore.getAllMyTest();
-    //   console.log(testingStore.testsList[0]);
+        testingStore.getAllMyTest();
+      //   console.log(testingStore.testsList[0]);
     },[]);
+    const onLoadMore = async () => {
+        await testingStore.loadMoreTests(`page=${testingStore.testList.current_page}`);
+    };
+    const onRefresh = async () => {
+        setRefreshing(true);
+        testingStore.clearTests();
+        await onLoadMore();
+        setRefreshing(false);
+    };
 
+    const renderItem = (val: MyTestModel) => {
+        return <CardTest testId={val.id} activities={val.activiti_value_json} dateTime={val.created_at} title={val.name} />;
+    };
     return <>
+            {/* <FlatList
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            // style={s.container}
+            data={testingStore.testList.surveys}
+            ListFooterComponent={<>
+                <View style={gs.mt16} />
+                {testingStore.testList.isLoading && <ActivityIndicator animating size={'large'} />}
+                <View style={{height: 100}} /></>}
+
+            renderItem={({item})=>renderItem(item)}
+            onEndReached={onLoadMore}
+            onEndReachedThreshold={0.1}
+                  /> */}
 
     {testingStore.testsList.map((val, index)=><View key={index.toString()} style={gs.mb16} >
     <CardTest testId={val.id} activities={val.activiti_value_json} dateTime={val.created_at} title={val.name} />
     </View>
    )}
+
         <View style={{height: 70}}/>
     </>;
 });

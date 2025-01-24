@@ -34,6 +34,7 @@ const width = Dimensions.get('screen').width;
 export const ArticleView = observer(({route}) => {
     const navigation = useNavigation<any>();
     const onBack = () => {
+      articlesStore.clearCurrentArticle();
       navigation.goBack();
     };
     const { articleId } = route.params;
@@ -41,7 +42,7 @@ export const ArticleView = observer(({route}) => {
     const [isReaded, setIsReaded] = useState(false);
     const [personalRecommendation, setPersonalRecommendation] = useState<PersonalRecommendationModel>();
     useEffect(() => {
-      console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
+      // console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
 
      if (articleId !== undefined) {
         loadArticleById(articleId).then(()=>
@@ -60,7 +61,8 @@ export const ArticleView = observer(({route}) => {
     const likeArticle = async (action: number) => await articlesStore.changeLikeUserArticle(articleId, action);
 
     const addInFavorite = async () => await articlesStore.changeUserArticle(articleId).then(()=>
-      {console.log(articlesStore.articlesUserList.map((item)=>item.id));
+      {
+        // console.log(articlesStore.articlesUserList.map((item)=>item.id));
       setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId));});
 
       const MaterialCard = ({title, media, subtitle, id}, index)=>
@@ -81,10 +83,10 @@ export const ArticleView = observer(({route}) => {
     const onRead =  async () => {
      await ifgScoreStore.addScore(1);
      if (personalRecommendation) {
-      console.log('personalRecommendation.id',personalRecommendation.id);
+      // console.log('personalRecommendation.id',personalRecommendation.id);
       recommendationStore.completeRecommendation(`${personalRecommendation.id}`);
       const categoryEng = RecommendationCategoryToEng(personalRecommendation.category);
-      console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+      // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
       dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
       recommendationStore.getPersonalRecommendations();
     }

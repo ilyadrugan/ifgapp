@@ -118,7 +118,7 @@ class AuthStore {
         console.log('THEN');
         if (!model.email) {this.loginByUserPassword.loginInputError = 'Заполните поле';}
         if (!model.password) {this.loginByUserPassword.passwordInputError = 'Заполните поле';}
-        // console.log(result.data);
+        console.log(result.data);
         if (result.data) {
         this.setToken(result.data.access_token);
         userStore.setUser(result.data.user);
@@ -149,10 +149,11 @@ class AuthStore {
         console.log('THEN');
         console.log(result.data);
         if (result.data) {
-        this.login({email: model.email, password: model.password}, callBack);
+        this.setToken(result.data.token);
+        userStore.setUser(result.data.data.user);
         const token = await AsyncStorage.getItem('fcm_token') || '';
         console.log('updateDeviceResultsTestApi',token);
-        await updateDeviceResultsTestApi(token);
+        if (token) {await updateDeviceResultsTestApi(token);}
         // this.setToken(result.data.access_token);
         // userStore.setUser(result.data.user);
         // this.setIsOnBoarded();
@@ -162,11 +163,11 @@ class AuthStore {
         //     console.log('updateFirebaseMessagingToken Error',err.message);
         //     errorToast(err.message);
         //   });
-        // this.access_token && callBack();
+        this.access_token && callBack();
       }
       })
       .catch((err)=>{
-        console.log('registration ERROR',err);
+        console.log('registration ERROR',err.errors);
         this.errorMessage = err.message;
         errorToast(err.message);
       })
