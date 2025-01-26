@@ -15,7 +15,7 @@ import Trash16 from '../../../assets/icons/trash16.svg';
 import Trash18 from '../../../assets/icons/trash18.svg';
 import Visa from '../../../assets/icons/visa.svg';
 
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import { menuOptions } from './data/menuOptions';
 import { Subscription } from './subscription/subscription';
 import { MyTests } from './myTests/myTests';
@@ -32,6 +32,7 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import paymentsStore from '../../../store/state/paymentsStore/paymentsStore';
 import tariffsStore from '../../../store/state/tariffsStore/tariffsStore';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
@@ -175,7 +176,7 @@ return <>
       </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
       {currentMenu === 1 && <View style={s.footer}>
-    <Button style={s.buttonNext}
+    <AnimatedGradientButton style={s.buttonNext}
            onPress={()=>navigation.navigate('Testing')}
            >
            <View style={{
@@ -191,12 +192,12 @@ return <>
                    alignItems: 'center',
                }}>
                 <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Пройти тестирование'}</IfgText>
-                   <ArrowRight />
+                   <AnimatedArrow />
                </View>
 
                <View />
            </View>
-    </Button>
+    </AnimatedGradientButton>
     </View>}
     </>;
 

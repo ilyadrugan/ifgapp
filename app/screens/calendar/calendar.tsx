@@ -267,7 +267,7 @@ export const CalendarScreen = observer(() =>{
         <View style={{height: 200}} />
     </ScrollView>
     <View style={s.footer}>
-        <ButtonNext textStyle={gs.fontBodyMedium} onPress={()=>navigation.navigate('IndividualProgramm')} style={{height: 78}} title="Моя программа" />
+        <ButtonNext animated textStyle={gs.fontBodyMedium} onPress={()=>navigation.navigate('IndividualProgramm')} style={{height: 78}} title="Моя программа" />
     </View>
     <ShadowGradient opacity={0.3} />
     </>;

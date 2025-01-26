@@ -5,7 +5,7 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
 import { Input } from '../../../core/components/input/input';
-import { Button } from '../../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../../core/components/button/button';
 import ArrowRight from '../../../../assets/icons/arrow-right.svg';
 import { Controller, useForm } from 'react-hook-form';
 import userStore from '../../../../store/state/userStore/userStore';
@@ -13,6 +13,7 @@ import { UserChangeInfoModel } from '../../../../store/state/userStore/models/mo
 import { observer } from 'mobx-react';
 import authStore from '../../../../store/state/authStore/authStore';
 import { useNavigation } from '@react-navigation/native';
+import AnimatedArrow from '../../../core/components/animatedArrow/animatedArrow';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState('');
@@ -171,18 +172,18 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 secureTextEntry={true}
             />
-            <Button style={s.button}
+            <AnimatedGradientButton style={s.button}
                 onPress={onSubmit}
                 >
                  <View style={s.buttonContainer}>
                  <View style={s.buttonContent}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Сохранить</IfgText>
-                        <ArrowRight />
+                        <AnimatedArrow />
                     </View>
                     <View />
                 </View>
 
-            </Button>
+            </AnimatedGradientButton>
     </CardContainer>}
 
     {!onDeleting && <CardContainer style={gs.mt16}>

@@ -298,7 +298,7 @@ export const IndividualProgramm = observer(() => {
         />
     </ScrollView>
     <View style={s.footer}>
-    <ButtonNext style={s.buttonNext}
+    <ButtonNext animated style={s.buttonNext}
           textStyle={gs.fontBodyMedium}
           onPress={()=>navigation.replace('Main')}
           title={'Начать следовать'}

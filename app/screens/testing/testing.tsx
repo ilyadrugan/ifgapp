@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Benefit from '../../../assets/icons/benefit.svg';
@@ -19,6 +19,7 @@ import userStore from '../../../store/state/userStore/userStore';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 const data = [
     {
@@ -152,7 +153,7 @@ export const Testing = observer(() => {
         </IfgText>
     </CardContainer>))}
     <View style={gs.mt4} />
-    <Button disabled={inTest && currentAnswer === -1  } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion(currentAnswerScore) : ()=>{setPercentage(currentQuestion / testingStore.currentTest.questions.length * 100 + '%'); setInTest(true);}}>
+    <AnimatedGradientButton disabled={inTest && currentAnswer === -1  } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion(currentAnswerScore) : ()=>{setPercentage(currentQuestion / testingStore.currentTest.questions.length * 100 + '%'); setInTest(true);}}>
            <View style={{
                flexDirection: 'row',
                justifyContent: 'space-between',
@@ -165,12 +166,12 @@ export const Testing = observer(() => {
                    alignItems: 'center',
                }}>
                 <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{inTest ? 'Далее' : 'Пройти тестирование'}</IfgText>
-                   <ArrowRight />
+                   <AnimatedArrow />
                </View>
 
                <View />
            </View>
-    </Button>
+    </AnimatedGradientButton>
     <View style={gs.mt24} />
     {showEmail && <CardContainer style={s.emailBlock}>
         <View style={[gs.flexRow, gs.alignCenter]}>

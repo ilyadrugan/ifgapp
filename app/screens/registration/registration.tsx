@@ -3,7 +3,7 @@ import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
 import { Input } from '../../core/components/input/input';
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import Apple from '../../../assets/icons/apple.svg';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +17,7 @@ import { maskDateChange } from '../../core/utils/textFormatters';
 import { Controller, useForm } from 'react-hook-form';
 import { RegisterFormModel, RegisterFormState } from '../../../store/state/authStore/models/models';
 import authStore from '../../../store/state/authStore/authStore';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -334,7 +335,7 @@ export const Registration = () => {
                 <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
                 {'Вы должны согласится на информационную рассылку'}</IfgText>}
             </View>
-            <Button style={s.buttonLogin}
+            <AnimatedGradientButton style={s.buttonLogin}
                 // disabled={!personalChecked || !infoChecked}
                 // onPress={()=>navigation.replace('SuccessfulReg')}
                 onPress={onSubmit}
@@ -351,12 +352,12 @@ export const Registration = () => {
                         alignItems: 'center',
                     }}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Зарегистрироваться</IfgText>
-                        <ArrowRight />
+                        <AnimatedArrow />
                     </View>
                     <View />
                 </View>
 
-            </Button>
+            </AnimatedGradientButton>
             {/* <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
                 // onPress={}
                 >

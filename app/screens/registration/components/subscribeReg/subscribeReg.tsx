@@ -4,12 +4,13 @@ import colors from '../../../../core/colors/colors';
 import { IfgText } from '../../../../core/components/text/ifg-text';
 import gs from '../../../../core/styles/global';
 import React from 'react';
-import { Button } from '../../../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../../../core/components/button/button';
 import ArrowRight from '../../../../../assets/icons/arrow-right.svg';
 import Benefit from '../../../../../assets/icons/benefit.svg';
 import { useNavigation } from '@react-navigation/native';
 import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
 import { observer } from 'mobx-react';
+import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
 
 export const SubscribeReg: FC = observer(() => {
   const navigation = useNavigation<any>();
@@ -101,7 +102,7 @@ export const SubscribeReg: FC = observer(() => {
         </View>
       </View>
       <View style={gs.mt16} />
-      <Button style={s.buttonLogin}
+      <AnimatedGradientButton style={s.buttonLogin}
                 onPress={onSubscribe}
                 >
                 <View style={{
@@ -116,12 +117,12 @@ export const SubscribeReg: FC = observer(() => {
                         alignItems: 'center',
                     }}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
-                        <ArrowRight />
+                        <AnimatedArrow />
                     </View>
                     <View />
                 </View>
 
-      </Button>
+      </AnimatedGradientButton>
       </>
       }
       {onPayment && <>

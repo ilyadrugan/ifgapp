@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.th3rdwave.safeareacontext.getReactContext
 import ru.yoomoney.sdk.kassa.payments.Checkout
 import ru.yoomoney.sdk.kassa.payments.Checkout.createTokenizationResult
 import ru.yoomoney.sdk.kassa.payments.Checkout.createTokenizeIntent
@@ -57,7 +58,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             reactApplicationContext,
             confirmationUrl,
             PaymentMethodType.BANK_CARD,
-            "test_wZQ22Ahg-C7xQv1hLfq0TR1EGSe7LNwXQ5z50XUnSUM",
+            "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
 //           "488632"
         )
         activity.startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
@@ -81,12 +82,12 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             amount = Amount(BigDecimal.valueOf(10.0), Currency.getInstance("RUB")),
             title = "Title",
             subtitle = "Subtitle",
-            clientApplicationKey = "test_wZQ22Ahg-C7xQv1hLfq0TR1EGSe7LNwXQ5z50XUnSUM",
+            clientApplicationKey = "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
             shopId = "400208",
             savePaymentMethod = SavePaymentMethod.ON,
             paymentMethodTypes = paymentMethodTypes,
 //            authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
-            userPhoneNumber = phoneNumber
+//            userPhoneNumber = phoneNumber
         )
 
         val intent = createTokenizeIntent(reactApplicationContext, paymentParameters, TestParameters(showLogs = true))
@@ -109,7 +110,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
                 }
                 callback?.invoke(resultMap)
                 start3DSecure("https://yoomoney.ru/checkout/payments/v2/contract?orderId=2f24313b-000f-5000-8000-1a992cf3f161")
-                val result = data?.let { createTokenizationResult(it) }
+//                val result = data?.let { createTokenizationResult(it) }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 val errorMap = WritableNativeMap().apply {
                     putString("status", "RESULT_CANCELED")

@@ -1,12 +1,103 @@
-import React, { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import React, { FC, ReactNode, useEffect, useRef } from 'react';
+import { Animated, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 import gs from '../../styles/global';
 import { IfgText } from '../text/ifg-text';
 import ArrowRight from '../../../../assets/icons/arrow-right.svg';
 import ArrowRight12 from '../../../../assets/icons/arrow-right12.svg';
 import ArrowTo from '../../../../assets/icons/arrow-to.svg';
+import LinearGradient from 'react-native-linear-gradient';
+import AnimatedArrow from '../animatedArrow/animatedArrow';
 
+export const AnimatedGradientButton:FC<{
+  children?: ReactNode,
+  disabled?: boolean,
+  onPress?: () => void,
+  style?: StyleProp<ViewStyle>,
+  fullWidth?: boolean
+  outlined?: boolean
+}> = (
+  {
+    children,
+    onPress,
+    style,
+    disabled,
+    fullWidth,
+    outlined,
+  }) => {
+    const colorAnimation = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+      // Бесконечная анимация переливания цвета
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(colorAnimation, {
+            toValue: 1, // Переход ко второму цвету
+            duration: 1000, // Длительность переливания (в миллисекундах)
+            useNativeDriver: false, // Для анимации цвета false
+          }),
+          Animated.delay(500),
+          Animated.timing(colorAnimation, {
+            toValue: 0, // Возврат к первому цвету
+            duration: 1000,
+            useNativeDriver: false,
+          }),
+          Animated.delay(500),
+        ])
+      ).start();
+    }, []);
+
+    // Интерполяция для перехода между двумя цветами
+    const backgroundColor = colorAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['#54B676', 'rgb(80,232,132)'], // Начальный и конечный цвета
+    });
+  return (
+    <TouchableOpacity
+    disabled={disabled}
+    onPress={onPress}
+  >
+    <Animated.View style={[
+      s.button,
+      style,
+      fullWidth && s.fullWidth,
+      outlined && s.outline,
+      {backgroundColor: backgroundColor},
+    ]}
+   >
+
+            {children ? children : null}
+
+
+
+      </Animated.View>
+      </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  gradientButton: {
+    borderRadius: 25,
+    overflow: 'hidden', // Градиент не выходит за границы кнопки
+  },
+  gradientBackground: {
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
 
 export const ButtonNext:FC<{
   onPress?: ()=>void,
@@ -15,7 +106,8 @@ export const ButtonNext:FC<{
   style?: StyleProp<ViewStyle>,
   textStyle?: StyleProp<TextStyle>,
   disabled?: boolean
-}> = ({onPress, title, oliveTitle, style, textStyle, disabled}) =>
+  animated?: boolean
+}> = ({onPress, title, oliveTitle, style, textStyle, disabled, animated}) =>
         <Button disabled={disabled} style={[s.buttonNext, style && style]}
                 onPress={onPress}
                 >
@@ -34,7 +126,7 @@ export const ButtonNext:FC<{
                          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium, textStyle && textStyle]}>{title}</IfgText>
                          <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>
                     </View>
-                        <ArrowRight />
+                        {animated ? <AnimatedArrow/> : <ArrowRight />}
                     </View>
 
                     <View />

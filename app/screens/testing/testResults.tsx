@@ -4,7 +4,7 @@ import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Linki
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import Question from '../../../assets/icons/question.svg';
@@ -19,6 +19,7 @@ import { ActivitiValueModel } from '../../../store/state/testingStore/models/mod
 import { html } from './mocksHtmlResults/htmlResults';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 // import VideoPlayer from 'react-native-video-player';
 
 export const ResultTest = ({route}) => {
@@ -122,7 +123,7 @@ export const ResultTest = ({route}) => {
         />
         </ScrollView>
         <View style={s.footer}>
-        <Button style={s.buttonNext}
+        <AnimatedGradientButton style={s.buttonNext}
            onPress={()=> authStore.access_token ? navigation.replace('IndividualProgramm') : navigation.navigate('Registration')}
            >
            <View style={{
@@ -138,12 +139,12 @@ export const ResultTest = ({route}) => {
                    alignItems: 'center',
                }}>
                 <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Продолжить'}</IfgText>
-                   <ArrowRight />
+                   <AnimatedArrow />
                </View>
 
                <View />
            </View>
-        </Button>
+        </AnimatedGradientButton>
     </View>
 </>
     );

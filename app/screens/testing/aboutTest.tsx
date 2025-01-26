@@ -4,7 +4,7 @@ import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Touch
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Quotes from '../../../assets/icons/quotes.svg';
 import Quotes55 from '../../../assets/icons/quotes55x55.svg';
@@ -15,6 +15,7 @@ import { CardContainer } from '../../core/components/card/cardContainer';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import { VideoPlayer } from '../../core/components/videoplayer/videoplayer';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 const width = Dimensions.get('screen').width;
 const dataSteps = [
@@ -213,7 +214,7 @@ export const AboutTest = () => {
         />
     </ScrollView>
     <View style={s.footer}>
-    <Button style={s.buttonNext}
+    <AnimatedGradientButton style={s.buttonNext}
            onPress={()=>navigation.navigate('Testing')}
            >
            <View style={{
@@ -229,12 +230,12 @@ export const AboutTest = () => {
                    alignItems: 'center',
                }}>
                 <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Пройти тестирование'}</IfgText>
-                   <ArrowRight />
+                   <AnimatedArrow />
                </View>
 
                <View />
            </View>
-    </Button>
+    </AnimatedGradientButton>
     </View>
 </>
     );

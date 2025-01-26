@@ -1,13 +1,13 @@
 // import { useNavigation } from "@react-navigation/native";
-import { ImageBackground, StyleSheet, View} from 'react-native';
+import { Animated, ImageBackground, StyleSheet, View} from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { Step1 } from './steps/step1';
 import { Step2 } from './steps/step2';
 import { Step3 } from './steps/step3';
 
-import React, {useEffect, useState} from 'react';
-import { Button } from '../../core/components/button/button';
+import React, {useEffect, useRef, useState} from 'react';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import colors from '../../core/colors/colors';
 import { Dot } from '../../core/components/dot/dot';
@@ -15,6 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Step4 } from './steps/step4';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import authStore from '../../../store/state/authStore/authStore';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 
 export const Onboarding = () => {
@@ -31,6 +32,8 @@ export const Onboarding = () => {
           }
         }, [authStore.isOnBoarded])
       );
+
+
     return (  <>
 
         <ImageBackground
@@ -47,7 +50,7 @@ export const Onboarding = () => {
             style={s.shadowGradient}
         />
         <View style={s.footer}>
-         <Button style={s.buttonNext}
+         <AnimatedGradientButton style={s.buttonNext}
                 onPress={step === 2 ? toTest : nextStep}
                 >
                 <View style={{
@@ -65,13 +68,14 @@ export const Onboarding = () => {
                          <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{step < 2 ? 'Далее' : 'Начать знакомство'}</IfgText>
                          {step < 2 && <IfgText color={colors.OLIVE_COLOR} style={[gs.fontBody1, gs.ml12, { fontSize: 16 } ]}>Шаг {step + 1} из 3</IfgText>}
                     </View>
-                        <ArrowRight />
+                    <AnimatedArrow />
+                        {/* <ArrowRight /> */}
                     </View>
 
                     <View />
                 </View>
 
-            </Button>
+            </AnimatedGradientButton>
             {step === 2 &&
             <Button style={[gs.mt16,s.buttonOutline]}
                 onPress={toLogin}

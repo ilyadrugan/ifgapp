@@ -1,6 +1,6 @@
 import React from 'react';
 import { FC, ReactNode } from 'react';
-import { StyleProp, StyleSheet, TouchableOpacity, View, ViewProps, ViewStyle } from 'react-native';
+import { Animated, StyleProp, StyleSheet, TouchableOpacity, View, ViewProps, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 
 export const HashtagContainer: FC<{
@@ -19,6 +19,25 @@ export const HashtagContainer: FC<{
   >
     {children}
   </View>
+  </>;
+};
+
+export const AnimatedHashtagContainer: FC<{
+  children?: ReactNode,
+  style?: StyleProp<ViewStyle>,
+  bgcolor?: string
+}> = ({children, style, bgcolor }) => {
+
+  return <>
+  <Animated.View
+    style={[
+      s.hashtagContainer,
+      style,
+      bgcolor && {backgroundColor: bgcolor},
+    ]}
+  >
+    {children}
+  </Animated.View>
   </>;
 };
 
