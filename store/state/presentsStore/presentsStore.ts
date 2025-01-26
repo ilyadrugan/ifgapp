@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { PresentListModel, PresentViewModel } from './models/models';
-import { getPresentByIdApi, getPresentsApi } from './presentsStore.api';
+import { getPresentByIdApi, getPresentsApi, sendSuggestionApi } from './presentsStore.api';
+import { successToast } from '../../../app/core/components/toast/toast';
 
 class PresentsStore {
   presentsList: PresentListModel = {
@@ -86,6 +87,21 @@ class PresentsStore {
 
       })
       .finally(()=>{this.isLoading = false;});
+  }
+  async sendSuggestion(message: string) {
+    console.log('sendSuggestion',message );
+    // this.isLoading = true;
+    await sendSuggestionApi(message)
+      .then((result)=>{
+        // console.log(result.data);
+        successToast(result.data.message);
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR',  err.message);
+        this.errorMessage = err.message;
+      });
+      // .finally(()=>{this.isLoading = false;});
   }
 }
 

@@ -7,6 +7,8 @@ import colors from '../../../core/colors/colors';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../../../core/components/input/input';
 import { ButtonNext } from '../../../core/components/button/button';
+import { errorToast } from '../../../core/components/toast/toast';
+import presentsStore from '../../../../store/state/presentsStore/presentsStore';
 
 export const FeedBack = () => {
     const {
@@ -15,6 +17,15 @@ export const FeedBack = () => {
         setValue,
         formState: { errors },
       } = useForm<{feedback: string}>();
+    const onSubmit = handleSubmit(async (data) => {
+        console.log(data.feedback.trim().length);
+        if (data.feedback.trim().length<3) {
+            errorToast('Слишком короткий отзыв')
+        }
+        else {
+            await presentsStore.sendSuggestion(data.feedback.trim())
+        }
+      });
     return <CardContainer style={s.card}>
         <IfgText style={[gs.fontCaption, gs.bold]}>Написать лайфхак</IfgText>
         <IfgText style={gs.fontCaption2}>Вы знаете, как сделать наш портал лучше? Мы открыты для советов и честных отзывов, напишите, что мы можем изменить и улучшить в проекте!</IfgText>
@@ -29,7 +40,7 @@ export const FeedBack = () => {
                 // error={authStore.loginByUserPassword.loginInputError}
             />
         )}/>
-        <ButtonNext textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
+        <ButtonNext onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
         <Image
             resizeMode="cover"
             style={{width: 'auto', height: 180, right: -16}}

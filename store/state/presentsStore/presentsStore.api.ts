@@ -10,3 +10,8 @@ export const getPresentByIdApi = async (id: number) => {
     console.log(`${BASE_URL}/presents/${id}`);
     return await HttpClient.get(`${BASE_URL}/presents/${id}`);
 };
+
+export const sendSuggestionApi = async (message: string) => {
+    console.log(`${BASE_URL}/suggestion`);
+    return await HttpClient.post(`${BASE_URL}/suggestion`, {message: message});
+};
