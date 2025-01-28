@@ -23,10 +23,10 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 const data = [
     {
-        text: 'Тест включает 60 вопросов.',
+        text: 'Тест включает 12 вопросов.',
     },
     {
-        text: 'Время на прохождение ~ 5-7 минут.',
+        text: 'Время на прохождение ~ 1-3 минуты.',
     },
     {
         text: 'Отвечать необходимо честно, чтобы результаты были корректными и вы получили максимальную пользу.',
@@ -101,7 +101,7 @@ export const Testing = observer(() => {
       await AsyncStorage.setItem('fcm_token', token);
     };
     useEffect(()=>{
-      testingStore.getTestById(9).then((res)=>{
+      testingStore.getTestById(11).then((res)=>{
         // data[0].text = `Тест включает ${testingStore.currentTest.testLength} вопросов.`;
       });
     }

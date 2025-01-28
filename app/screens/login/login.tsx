@@ -11,6 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 import authStore from '../../../store/state/authStore/authStore';
 import { LoginByUserPasswordModel } from '../../../store/state/authStore/models/models';
 import { observer } from 'mobx-react';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 export const Login = observer(() => {
     const navigation = useNavigation<any>();
@@ -113,7 +114,7 @@ export const Login = observer(() => {
                         alignItems: 'center',
                     }}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Войти</IfgText>
-                        <ArrowRight />
+                        <AnimatedArrow />
                     </View>
                     <View />
                 </View>

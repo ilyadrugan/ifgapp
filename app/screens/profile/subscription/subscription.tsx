@@ -13,7 +13,6 @@ import { Input } from '../../../core/components/input/input';
 import { observer } from 'mobx-react';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../../hooks/useDimensions';
-import { YookassaWidget } from './yookassaWidget';
 import paymentsStore from '../../../../store/state/paymentsStore/paymentsStore';
 import { CardModel } from '../../../../store/state/paymentsStore/models/models';
 import { LogoBankCard } from '../../../core/utils/bankCardsIcons';
@@ -31,6 +30,7 @@ export const Subscription: FC = observer(() =>{
     const [activeDiscount, setActiveDiscount] = useState<number>(0);
     const [openYokassa, setOpenYokassa] = useState(false);
     const onChange = (id: number) => setActiveDiscount(id);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
       tariffsStore.getTariffs();
@@ -42,14 +42,44 @@ export const Subscription: FC = observer(() =>{
       // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
       // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
       const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone);
-      YookassaModule.startTokenize(phone_number,async (result) => {
-        console.log('Результат из нативного модуля:', result);
-        // if (result.paymentToken) {
-        //  await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 11, token: result.paymentToken})
-        //   .then((res)=>console.log('payment-create data',res.data))
-        //   .catch(err=>console.log('payment-create error',err));
-        // }
+      YookassaModule.startTokenize(phone_number, 'Добавление карты', '',async (result) => {
+        console.log('Результат из нативного модуля:', result.paymentToken);
+
+        if (result.paymentToken) {
+          setIsLoading(true);
+         await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 10, token: result.paymentToken})
+          .then(async (res)=>{
+            console.log('payment-create data',res.data);
+            if (res.data.status === 'succeeded') {
+              await HttpClient.get(`${API_URL}/api/lk/card-callback`)
+               .then((res)=>{
+                console.log(res);
+
+              });
+            }
+            else if (res.data.confirmation.confirmation_url) {
+              YookassaModule.start3DSecure(res.data.confirmation.confirmation_url, async (result) => {
+                console.log('res', result);
+                if (result.status === 'RESULT_OK') {
+                 await HttpClient.get(`${API_URL}/api/lk/card-callback`)
+                 .then((res)=>{
+                  console.log(res);
+
+                });
+                }
+              });
+            }
+
+
+          })
+          .catch(err=>console.log('payment-create error',err))
+          .finally(()=>{
+            paymentsStore.getPaymentCards();
+            setIsLoading(false);
+          });
+        }
       } );
+      setIsLoading(false);
       // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
     };
 
@@ -122,7 +152,7 @@ export const Subscription: FC = observer(() =>{
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>
             <IfgText color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline]}>Изменить метод оплаты</IfgText>
           </View>
-          {paymentsStore.cards.map((card:CardModel)=>
+          {!paymentsStore.isLoading && paymentsStore.cards.map((card:CardModel)=>
                     <CardContainer style={s.bankCardContainer}>
                     <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
                       {LogoBankCard(card.card_type)}
@@ -141,7 +171,7 @@ export const Subscription: FC = observer(() =>{
                     </View>
                   </CardContainer>
           )}
-          <CardContainer onPress={onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
+          <CardContainer  onPress={isLoading ? null : onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
           <View style={gs.mt4}>
               <View style={s.container}>
                 <View style={s.horizontal} />
@@ -151,12 +181,6 @@ export const Subscription: FC = observer(() =>{
             <IfgText color={colors.GRAY_COLOR5} style={gs.fontCaption}>Добавить карту</IfgText>
           </CardContainer>
         </CardContainer>
-        {/* {paymentsStore.paymentData && <YookassaWidget
-        isVisible={openYokassa}
-        onClose={()=>setOpenYokassa((prev)=>!prev)}
-        ctToken={paymentsStore.paymentData.confirmation.confirmation_token}
-        // postMessengerConnectionId="2722141632791544"
-        />} */}
         </>;
 });
 

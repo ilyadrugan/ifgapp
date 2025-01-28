@@ -61,7 +61,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boole
             <View style={{gap: 6}}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{'Шаги'}</IfgText>
                 <IfgText color={colors.GREEN_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>
-                {(today ? healthData.steps : dailyValues?.steps ||  0)}
+                {(today ? Math.round(healthData.steps) : dailyValues?.steps ||  0)}
                 </IfgText>
             </View>
             <View style={gs.ml12} />
@@ -71,7 +71,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boole
             <View style={[gs.ml12, {gap: 6}]}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{'Калории'}</IfgText>
                 <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>
-                {(today ? healthData.caloriesBurned : dailyValues?.calories || 0)}
+                {(today ? Math.round(healthData.caloriesBurned) : dailyValues?.calories || 0)}
                 </IfgText>
             </View>
             <View style={gs.ml12} />
@@ -81,7 +81,7 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boole
             <View style={[gs.ml12, {gap: 6}]}>
                 <IfgText style={[gs.fontCaptionSmall, gs.medium]}>{'Пролеты'}</IfgText>
                 <IfgText color={colors.ORANGE_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>
-                {(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0)}
+                {(today ? Math.round(healthData.flightsClimbed) : dailyValues?.floor_spans ||  0)}
                 </IfgText>
             </View>
         </View>

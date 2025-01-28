@@ -19,7 +19,7 @@ LogBox.ignoreLogs(['Require cycle:']);
 requestNotificationPermission();
 
 const App = () => {
-  AsyncStorage.clear();
+  // AsyncStorage.clear();
   useEffect(() => {
     // handles deep link when app is already open
     Linking.addEventListener('url', evt => {

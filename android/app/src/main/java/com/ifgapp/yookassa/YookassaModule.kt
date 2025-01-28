@@ -40,6 +40,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
     companion object {
         private const val REQUEST_CODE_TOKENIZE = 1
+        private const val REQUEST_CODE_CONFIRM = 2
     }
 
     init {
@@ -48,8 +49,10 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     }
 
     override fun getName(): String = "YookassaModule"
-    fun start3DSecure(confirmationUrl: String) {
+    @ReactMethod
+    fun start3DSecure(confirmationUrl: String, callback: Callback) {
         val activity = currentActivity
+        this.callback = callback
         if (activity == null) {
             callback?.invoke("Activity is null")
             return
@@ -61,10 +64,10 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
 //           "488632"
         )
-        activity.startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
+        activity.startActivityForResult(intent, REQUEST_CODE_CONFIRM)
     }
     @ReactMethod
-    fun startTokenize(phoneNumber: String, callback: Callback) {
+    fun startTokenize(phoneNumber: String, title: String, subtitle: String, callback: Callback) {
         Log.i("Yookasssa", "startTokenize" + phoneNumber)
         this.callback = callback
         val activity = currentActivity
@@ -80,8 +83,8 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         )
         val paymentParameters = PaymentParameters(
             amount = Amount(BigDecimal.valueOf(10.0), Currency.getInstance("RUB")),
-            title = "Title",
-            subtitle = "Subtitle",
+            title = title,
+            subtitle = subtitle,
             clientApplicationKey = "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
             shopId = "400208",
             savePaymentMethod = SavePaymentMethod.ON,
@@ -102,16 +105,37 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
         if (requestCode == REQUEST_CODE_TOKENIZE) {
             if (resultCode == Activity.RESULT_OK) {
-                val tokenResult = createTokenizationResult(data!!)
-                val resultMap = WritableNativeMap().apply {
-                    putString("status", "RESULT_OK")
-                    putString("paymentToken", tokenResult.paymentToken)
-                    putString("paymentMethodType", tokenResult.paymentMethodType.toString())
-                }
-                callback?.invoke(resultMap)
-                start3DSecure("https://yoomoney.ru/checkout/payments/v2/contract?orderId=2f24313b-000f-5000-8000-1a992cf3f161")
+                Log.i("Yookasssa", "Activity.RESULT_OK " + resultCode)
+
+                  val tokenResult = createTokenizationResult(data!!)
+                    val resultMap = WritableNativeMap().apply {
+                        putString("status", "RESULT_OK")
+                        putString("paymentToken", tokenResult.paymentToken)
+                        putString("paymentMethodType", tokenResult.paymentMethodType.toString())
+                    }
+                    callback?.invoke(resultMap)
+
+//                start3DSecure("https://3ds-gate.yoomoney.ru/card-auth?acsUri=https%3A%2F%2Fyookassa.ru%3A443%2Fsandbox%2Fbank-card%2F3ds&PaReq=Q1VSUkVOQ1k9UlVCJk9SREVSPTJmMjkyZmM4LTAwMGYtNTAwMC05MDAwLTFjM2Y3YTc5ZmNlMiZURVJNSU5BTD05OTk5OTgmRVhQX1lFQVI9MjUmQU1PVU5UPTEwLjAwJlJFQ1VSUkVOVF9PUEVSQVRJT05fVFlQRT1Jbml0aWFsJkNBUkRfVFlQRT1QQU4mVFJUWVBFPTAmRVhQPTAyJkNWQzI9NDU2JkNBUkQ9NTU1NTU1NTU1NTU1NDQ3NyZOQU1FPQ%3D%3D&TermUrl=https%3A%2F%2Fpaymentcard.yoomoney.ru%3A443%2F3ds%2Fchallenge%2F241%2F1DM6T20i3QJ46o6lp2cbz1Fh4AcZ..001.202501&MD=1737956361129-22871370505732618456")
 //                val result = data?.let { createTokenizationResult(it) }
             } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i("Yookasssa", "Activity.RESULT_CANCELED " + resultCode)
+                val errorMap = WritableNativeMap().apply {
+                    putString("status", "RESULT_CANCELED")
+                }
+                callback?.invoke(errorMap)
+            }
+        }
+        else if (requestCode === REQUEST_CODE_CONFIRM) {
+            Log.i("Yookasssa", "REQUEST_CODE_CONFIRM " + requestCode)
+
+            if (resultCode == Activity.RESULT_OK) {
+                Log.i("Yookasssa", "Activity.RESULT_OK " + resultCode)
+                val resultMap = WritableNativeMap().apply {
+                    putString("status", "RESULT_OK")
+                }
+                callback?.invoke(resultMap)
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i("Yookasssa", "Activity.RESULT_CANCELED " + resultCode)
                 val errorMap = WritableNativeMap().apply {
                     putString("status", "RESULT_CANCELED")
                 }

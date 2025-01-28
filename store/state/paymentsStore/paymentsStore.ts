@@ -27,11 +27,12 @@ class PaymentsStore {
         .finally(()=>{this.isLoading = false;});
   };
   getPaymentCards = async () => {
+    console.log('getPaymentCards');
     this.isLoading = true;
     //   this.errorMessage = '';
       await getCardsApi()
         .then((result)=>{
-          // console.log('PaymentCards', result.data);
+          console.log('PaymentCards', result.data);
           this.cards = [...result.data.data.filter((card)=>card.default), ...result.data.data.filter((card)=>!card.default)];
         }
         )
