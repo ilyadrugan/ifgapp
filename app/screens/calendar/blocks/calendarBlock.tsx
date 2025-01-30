@@ -29,7 +29,7 @@ export const CalendarBlock: FC = observer(() =>{
     return <CardContainer>
         <CustomCalendar />
         {!dailyActivityStore.isLoading ? <>
-        <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'IFG-баллы'} />
+        <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} />
          <IFGActivity today={false} dailyActivities={dailyActivityStore.dailyActivityData}/>
          </> :
          <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />}

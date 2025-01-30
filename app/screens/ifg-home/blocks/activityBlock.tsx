@@ -156,7 +156,7 @@ return <CardContainer >
   </Animated.View>
 
   </CardContainer>
-  <IFGScoreLine score={ifgScoreStore.todayScore} title={'IFG-баллы за сегодня'} />
+  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} />
   <IFGActivity today />
   </>
   :
