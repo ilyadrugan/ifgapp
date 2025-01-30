@@ -4,7 +4,7 @@ import { Button, ButtonTo } from '../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../../core/colors/colors';
 import { CardContainer } from '../../core/components/card/cardContainer';
-import { IfgText } from '../../core/components/text/ifg-text';
+import { IfgText, IfgTextWithLinks } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { ContestType } from './models/models';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
@@ -59,6 +59,7 @@ export const ContestView = observer(({route}) => {
             <CardContainer style={s.winnerCard}>
                 <Winner />
                 <IfgText style={[gs.fontCaption2, gs.medium, gs.ml16]}>{winner.name}</IfgText>
+                <IfgText style={[gs.fontCaption2, gs.medium, gs.ml4]}>{winner.last}</IfgText>
             </CardContainer>)}
 
         </CardContainer>
@@ -78,12 +79,12 @@ export const ContestView = observer(({route}) => {
         <View style={gs.mt24} />
         <CardContainer>
             <IfgText style={[gs.fontCaption, gs.bold]}>Описание приза</IfgText>
-            <IfgText style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.subtitle)}</IfgText>
+            <IfgTextWithLinks style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.subtitle)}</IfgTextWithLinks>
         </CardContainer>
         <View style={gs.mt24} />
         <CardContainer>
             <IfgText style={[gs.fontCaption, gs.bold]}>Описание конкурса</IfgText>
-            <IfgText style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.desc)}</IfgText>
+            <IfgTextWithLinks style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.desc)}</IfgTextWithLinks>
         </CardContainer>
         <View style={gs.mt24}/>
         <FeedBack />

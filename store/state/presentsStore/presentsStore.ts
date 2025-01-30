@@ -76,7 +76,6 @@ class PresentsStore {
     this.isLoading = true;
     await getPresentByIdApi(id)
       .then((result)=>{
-        console.log(result.data.present);
         // runInAction(() => {
           this.currentPresent = result.data.present;
           // });

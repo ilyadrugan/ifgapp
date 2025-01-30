@@ -29,4 +29,5 @@ export type PresentViewModel = {
 export type WinnerModel = {
     id: number,
     name: string,
+    last: string,
 }

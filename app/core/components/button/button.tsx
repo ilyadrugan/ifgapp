@@ -125,7 +125,7 @@ export const ButtonNext:FC<{
                     }}>
                     <View style={{flexDirection: 'row', alignItems:'center'}}>
                          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium, textStyle && textStyle]}>{title}</IfgText>
-                         <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>
+                         {oliveTitle && <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>}
                     </View>
                     {isLoading ? <ActivityIndicator/> :
                       animated ? <AnimatedArrow/> : <ArrowRight />}
