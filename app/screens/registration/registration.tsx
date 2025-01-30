@@ -325,7 +325,7 @@ export const Registration = observer(() => {
                 <View style={s.acceptsBlock}>
                     <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
                     <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
-                    Согласие на обработку <IfgText onPress={()=> Linking.openURL(`${API_URL}policy`)} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
+                    Согласие на обработку <IfgText onPress={()=> Linking.openURL('https://ifeelgood.life/Согласие_на_обработку_персональных_данных.pdf')} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
                     </IfgText>
                 </View>
                 {!personalChecked &&
