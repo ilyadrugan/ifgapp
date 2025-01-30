@@ -22,6 +22,7 @@ class PresentsStore {
   };
   errorMessage: string = '';
   isLoading: boolean = false;
+  isLoadingSuggestion: boolean = false;
   constructor() {
    makeAutoObservable(this); // Делаем объект реактивным
   }
@@ -90,7 +91,7 @@ class PresentsStore {
   }
   async sendSuggestion(message: string) {
     console.log('sendSuggestion',message );
-    // this.isLoading = true;
+    this.isLoadingSuggestion = true;
     await sendSuggestionApi(message)
       .then((result)=>{
         // console.log(result.data);
@@ -100,8 +101,8 @@ class PresentsStore {
       .catch((err)=>{
         console.log('ERROR',  err.message);
         this.errorMessage = err.message;
-      });
-      // .finally(()=>{this.isLoading = false;});
+      })
+      .finally(()=>{this.isLoadingSuggestion = false;});
   }
 }
 

@@ -19,7 +19,7 @@ export const Tabs: FC<{
     onTabClicked,
     activeTab,
   }) => {
-
+    console.log('activeTab', activeTab);
     useEffect(() => {
 
     }, [tabs]);

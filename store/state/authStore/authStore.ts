@@ -167,7 +167,7 @@ class AuthStore {
       }
       })
       .catch((err)=>{
-        console.log('registration ERROR',err.errors);
+        console.log('registration ERROR',err);
         this.errorMessage = err.message;
         errorToast(err.message);
       })

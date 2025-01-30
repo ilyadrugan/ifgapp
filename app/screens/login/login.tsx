@@ -1,9 +1,9 @@
-import { ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
 import { Input } from '../../core/components/input/input';
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
@@ -98,8 +98,8 @@ export const Login = observer(() => {
             )}/>
           {authStore.errorMessage && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
           {authStore.errorMessage || 'Что-то пошло не так'}</IfgText>}
-            <Button style={s.buttonLogin}
-            disabled={authStore.isLoading}
+            <AnimatedGradientButton style={s.buttonLogin}
+                disabled={authStore.isLoading}
                 onPress={onSubmit}
                 >
                 <View style={{
@@ -114,12 +114,12 @@ export const Login = observer(() => {
                         alignItems: 'center',
                     }}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Войти</IfgText>
-                        <AnimatedArrow />
+                        {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>
 
-            </Button>
+            </AnimatedGradientButton>
             {/* <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
                 // onPress={}
                 >

@@ -17,7 +17,6 @@ import Share from '../../../assets/icons/share.svg';
 import VerifiedExpert from '../../../assets/icons/articleTypes/verified_expert.svg';
 import VerifiedResearcher from '../../../assets/icons/articleTypes/verified_researcher.svg';
 import VerifiedScience from '../../../assets/icons/articleTypes/verified_science.svg';
-import RenderHTML from 'react-native-render-html';
 import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
 import { onShare } from '../../core/components/share/share';
 import RenderHTMLContent from './components/renderHTMLJson';
@@ -49,9 +48,13 @@ export const ArticleView = observer(({route}) => {
         setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
         // console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
         const persRec = recommendationStore.personalRecomendationList.find((rec)=> rec.article.id === articleId);
+        console.log('persRec', persRec);
         if (persRec) {
           setPersonalRecommendation(persRec);
           setIsReaded(persRec.status === 'completed');
+        }
+        else {
+          setIsReaded(true);
         }
       }
     }, [articleId]);
@@ -84,11 +87,11 @@ export const ArticleView = observer(({route}) => {
      await ifgScoreStore.addScore(1);
      if (personalRecommendation) {
       // console.log('personalRecommendation.id',personalRecommendation.id);
-      recommendationStore.completeRecommendation(`${personalRecommendation.id}`);
+      await recommendationStore.completeRecommendation(`${personalRecommendation.id}`);
       const categoryEng = RecommendationCategoryToEng(personalRecommendation.category);
       // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
       dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
-      recommendationStore.getPersonalRecommendations();
+      await recommendationStore.getPersonalRecommendations();
     }
      setIsReaded(true);
     };
@@ -171,10 +174,10 @@ export const ArticleView = observer(({route}) => {
           </Button>
 
           <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
-          <View >
-          <Star />
-          </View>
-          <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
+            <View >
+            <Star />
+            </View>
+            {articlesStore.isUserArticleLoading ? <View style={{width: 100}}><ActivityIndicator/></View> : <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>}
           </Button>
           <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
           style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
@@ -201,7 +204,7 @@ export const ArticleView = observer(({route}) => {
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={articlesStore.articlesMainList.articles}
+                data={articlesStore.articlesMainList.articles.filter((article)=>article.id !== articlesStore.currentArticle.id)}
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={{height: 100}} />

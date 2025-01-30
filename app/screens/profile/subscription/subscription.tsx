@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { NativeModules, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, NativeModules, StyleSheet, TouchableOpacity, View } from 'react-native';
 import colors from '../../../core/colors/colors';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
@@ -31,6 +31,7 @@ export const Subscription: FC = observer(() =>{
     const [openYokassa, setOpenYokassa] = useState(false);
     const onChange = (id: number) => setActiveDiscount(id);
     const [isLoading, setIsLoading] = useState(false);
+    const [changeFavCard, setChangeFavCard] = useState(false);
 
     useEffect(() => {
       tariffsStore.getTariffs();
@@ -73,14 +74,20 @@ export const Subscription: FC = observer(() =>{
 
           })
           .catch(err=>console.log('payment-create error',err))
-          .finally(()=>{
-            paymentsStore.getPaymentCards();
+          .finally(async()=>{
+
             setIsLoading(false);
           });
         }
+       await paymentsStore.getPaymentCards();
       } );
+
       setIsLoading(false);
       // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
+    };
+
+    const changeFavoriteCard = async () => {
+      setChangeFavCard((prev)=>!prev);
     };
 
     return <>
@@ -150,17 +157,33 @@ export const Subscription: FC = observer(() =>{
 
           <View style={gs.mt4}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>
-            <IfgText color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline]}>Изменить метод оплаты</IfgText>
+            <IfgText onPress={changeFavoriteCard} color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline, {padding:12, margin: -12}]}>{changeFavCard ? 'Отменить' : 'Изменить метод оплаты'}</IfgText>
           </View>
-          {!paymentsStore.isLoading && paymentsStore.cards.map((card:CardModel)=>
+          {!paymentsStore.isLoading ?  paymentsStore.cards.map((card:CardModel)=>
                     <CardContainer style={s.bankCardContainer}>
                     <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
                       {LogoBankCard(card.card_type)}
-                      <Button outlined style={s.deleteCardButton}>
+                      <Button
+                          disabled={paymentsStore.isCardLoadingObj.isLoading}
+                          onPress={()=>(changeFavCard && !card.default) ? paymentsStore.changeFavoritePaymentCard(card.id) : paymentsStore.deletePaymentCard(card.id)}
+                          outlined
+                          style={s.deleteCardButton}>
                         <View style={gs.flexRow}>
-                        <Trash16/>
-                        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>
-                        </View>
+                          {(changeFavCard && !card.default) ?
+                          paymentsStore.isCardLoadingObj.cardId === card.id ?
+                            <View style={{width: 100}}>
+                              <ActivityIndicator />
+                            </View> : <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.ml4]}>Сделать основной</IfgText>
+                          :
+                          <>
+                          <Trash16/>
+                          {paymentsStore.isCardLoadingObj.cardId === card.id ?
+                          <View style={{width: 90}}>
+                            <ActivityIndicator />
+                          </View> :
+                          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.ml4]}>Удалить карту</IfgText>}
+                          </>}
+                          </View>
                       </Button>
                     </View>
                     <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
@@ -170,7 +193,8 @@ export const Subscription: FC = observer(() =>{
                       </Button> */}
                     </View>
                   </CardContainer>
-          )}
+          ) :
+          <ShimmerPlaceholder style={[s.bankCardContainer, {width: '100%'}]} />}
           <CardContainer  onPress={isLoading ? null : onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
           <View style={gs.mt4}>
               <View style={s.container}>

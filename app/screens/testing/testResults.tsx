@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Linking } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Linking, ActivityIndicator } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -15,31 +15,47 @@ import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
 import { individualProgramm, IndividualProgrammData } from './testData/individualProgramm';
 import authStore from '../../../store/state/authStore/authStore';
-import { ActivitiValueModel } from '../../../store/state/testingStore/models/models';
+import { ActivitiValueModel, HtmlOnConditionScore } from '../../../store/state/testingStore/models/models';
 import { html } from './mocksHtmlResults/htmlResults';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 // import VideoPlayer from 'react-native-video-player';
+import RenderHTMLContent from '../../screens/materials/components/renderHTMLJson';
 
 export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
-    const [balanceLvl, setBalanceLvl] = useState(0);
+    const [balanceLvlData, setBalanceLvlData] = useState<HtmlOnConditionScore>();
     const {testId, activiti_value_json} = route.params;
     const onBack = () => navigation.goBack();
+
+    const createBalanceLvls = (summScore: number, completedHtmlScore: HtmlOnConditionScore[]) => {
+        const colorKoef = completedHtmlScore.length / 3;
+        const completedHtmlWithColors = completedHtmlScore.map((score, index)=>{
+          if (index < colorKoef) {
+            return { ...score, color: '#EE5E24' };
+          } else if (index < 2 * colorKoef) {
+            return { ...score, color: '#EE8624' };
+          } else {
+            return { ...score, color: '#54B676' };
+          }
+        });
+        const HtmlScore = completedHtmlWithColors.filter((score)=>summScore >= Number(score.score_on) && summScore <= Number(score.score_to));
+        const HtmlScoreIdx = completedHtmlScore.findIndex((score)=>summScore >= Number(score.score_on) && summScore <= Number(score.score_to));
+        console.log('HtmlScore', HtmlScore, HtmlScoreIdx);
+        if (HtmlScore.length > 0) {
+          setBalanceLvlData(HtmlScore[0]);
+        }
+      };
+
     useEffect(()=>{
       console.log('authStore', authStore.access_token);
       if (testId) {
        testingStore.setMyCurrentResultsTest(testId);
         const summ = testingStore.myCurrentResultsTest.total_score;
-        console.log('testingStore.myCurrentResultsTest',testingStore.myCurrentResultsTest.total_score);
-        if (summ <= 40) {setBalanceLvl(0);}
-        else if (summ <= 80) {setBalanceLvl(1);}
-        else if (summ <= 120) {setBalanceLvl(2);}
-        else if (summ <= 140) {setBalanceLvl(3);}
-        else if (summ <= 160) {setBalanceLvl(4);}
-        else {setBalanceLvl(5);}
+        console.log('testingStore.myCurrentResultsTest',testingStore.myCurrentResultsTest);
+        createBalanceLvls(summ, testingStore.myCurrentResultsTest.completedHtmlOnConditionScore);
         testingStore.getAllMyTest();
         recommendationStore.getPersonalRecommendations();
       }
@@ -48,15 +64,10 @@ export const ResultTest = ({route}) => {
         const summ = testingStore.currentResultsTest.total_score;
         testingStore.setMyCurrentResultsTest(testingStore.currentResultsTest.id);
         console.log('testingStore.currentResultsTest',testingStore.currentResultsTest);
-        if (summ <= 40) {setBalanceLvl(0);}
-        else if (summ <= 80) {setBalanceLvl(1);}
-        else if (summ <= 120) {setBalanceLvl(2);}
-        else if (summ <= 140) {setBalanceLvl(3);}
-        else if (summ <= 160) {setBalanceLvl(4);}
-        else {setBalanceLvl(5);}
+        createBalanceLvls(summ, testingStore.currentResultsTest.completedHtmlOnConditionScore);
       }
     }, [testId, activiti_value_json]);
-    return (<>
+    return balanceLvlData ? <>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
         <Button style={s.buttonBack} onPress={onBack}>
@@ -71,31 +82,32 @@ export const ResultTest = ({route}) => {
         Результаты тестирования
         </IfgText>
         <View style={gs.mt16} />
-        <CardContainer style={[s.cardContainer, {borderColor: html[balanceLvl].color}]} >
+        <CardContainer style={[s.cardContainer, {borderColor: balanceLvlData?.color}]} >
             <View style={[gs.flexRow, gs.alignCenter, {gap: 6}]}>
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>Ваш ifg-уровень</IfgText>
                 <Question />
             </View>
             <View style={[gs.flexRow, gs.alignCenter, {gap: 6}]}>
-                <View style={[s.circle, {backgroundColor: html[balanceLvl].color}]} >
+                <View style={[s.circle, {backgroundColor: balanceLvlData?.color}]} >
                     <Accept />
                 </View>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{html[balanceLvl].title}</IfgText>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{balanceLvlData ? balanceLvlData.title : ''}</IfgText>
             </View>
         </CardContainer>
         <View style={gs.mt16} />
         <CardContainer>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваша ключевая задача</IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>{html[balanceLvl].quote}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>{balanceLvlData ? balanceLvlData.quote : ''}</IfgText>
         </CardContainer>
         <View style={gs.mt16} />
         <CardContainer>
             <IfgText style={[gs.fontBodyMedium, gs.bold]}>Что означает?</IfgText>
-            <IfgText style={[gs.fontCaption2]}><IfgText style={gs.bold}>{html[balanceLvl].html[0]}</IfgText>{html[balanceLvl].html[1]}</IfgText>
-            <IfgText style={[gs.fontCaption2]}>{html[balanceLvl].html[2]}</IfgText>
+            <RenderHTMLContent content={balanceLvlData?.html} fromBodyJson={false} />
+            {/* <IfgText style={[gs.fontCaption2]}><IfgText style={gs.bold}>{html[balanceLvl].html[0]}</IfgText>{html[balanceLvl].html[1]}</IfgText>
+            <IfgText style={[gs.fontCaption2]}>{html[balanceLvl].html[2]}</IfgText> */}
         </CardContainer>
         <View style={gs.mt16} />
-        <ImageBackground
+       {authStore.access_token && <ImageBackground
         resizeMode="stretch"
          source={require('../../../assets/backgrounds/gradientCard2.png')}
         style={[s.cardGradientContainer]}
@@ -108,7 +120,7 @@ export const ResultTest = ({route}) => {
                     <Play />
                 </>
             </Button>
-         </ImageBackground>
+         </ImageBackground>}
          <View style={gs.mt16} />
          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>
          Индивидуальная ifeelgood программа
@@ -146,9 +158,8 @@ export const ResultTest = ({route}) => {
            </View>
         </AnimatedGradientButton>
     </View>
-</>
-    );
-  };
+</> : <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><ActivityIndicator /></View>;};
+
 
 const s = StyleSheet.create({
     container: {

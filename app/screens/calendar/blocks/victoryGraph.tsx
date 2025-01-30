@@ -7,6 +7,8 @@ import gs from '../../../core/styles/global';
 import { GraphDataType } from '../../../../store/state/activityGraphStore/models/models';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+import { useFocusEffect } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 
 const width = Dimensions.get('screen').width;
 const dataWeekNames = ['Вс','Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
@@ -36,7 +38,7 @@ const CustomDoubleCircle = ({ x, y }) => {
       </Svg>
     );
   };
-const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({monthly, graphData}) => {
+const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observer(({monthly, graphData}) => {
   const [selectedPoint, setSelectedPoint] = useState<DotType | null>();
   const [data, setData] = useState<DotDataType[]>([]);
   const [maxValue, setMaxValue] = useState<number>(0);
@@ -87,7 +89,30 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     console.log();
     // setIsGraphLoading(false);
   }, [graphData, monthly]);
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log('useFocusEffect, victoryGraph');
+  //     setRendered(false);
+  //     if (graphData.length === 0) {return;}
+  //     setSelectedPoint(null);
 
+  //     const  convertedData = convertGraphData();
+  //     const convertedDataLen = convertedData.length;
+
+  //     const today = new Date().getDay();
+  //     const todayDot: DotType = {
+  //         _x: convertedData.length,
+  //         _y: convertedData[convertedDataLen - 1].y,
+  //         x:  convertedData[convertedDataLen - 1].x,
+  //         xName: convertedData[convertedDataLen - 1].x,
+  //         y: convertedData[convertedDataLen - 1].y,
+  //     };
+  //     setSelectedPoint(todayDot);
+  //     // setMaxValue(findMaxValue(convertedData));
+  //     setData(convertedData);
+  //     return () => console.log('Ушли с графика'); // Опционально: Cleanup при уходе со страницы
+  //   }, [monthly, graphData])
+  // );
   return (
     (((data.length === 7 && !monthly) || (data.length > 0 && monthly)  && !dailyActivityStore.isGraphLoading)) ? <View
     // onLayout={() => {
@@ -213,7 +238,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = ({month
     </View> :
     <ShimmerPlaceholder style={{borderRadius: 22}} height={200} width={width - (32 * 2)} />
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

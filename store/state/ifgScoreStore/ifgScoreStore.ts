@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { addIfgScoreApi, getIfgScoreApi, getTodayIfgScoreApi } from './ifgScoreStore.api';
+import { successToast } from '../../../app/core/components/toast/toast';
 
 
 class IfgScoreStore {
@@ -45,6 +46,7 @@ class IfgScoreStore {
         .then((result)=>{
           console.log('result.data', result.data);
           this.todayScore = Number(score) + Number(this.todayScore);
+          successToast(`Зачислено баллов: +${score}`);
         }
         )
         .catch((err)=>{

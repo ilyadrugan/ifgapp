@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity, ActivityIndicator } from 'react-native';
 import colors from '../../core/colors/colors';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -20,23 +20,14 @@ import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
-
-const data = [
-    {
-        text: 'Тест включает 12 вопросов.',
-    },
-    {
-        text: 'Время на прохождение ~ 1-3 минуты.',
-    },
-    {
-        text: 'Отвечать необходимо честно, чтобы результаты были корректными и вы получили максимальную пользу.',
-    },
-];
+import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
+import authStore from '../../../store/state/authStore/authStore';
 
 export const Testing = observer(() => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
+    const [aboutData, setAboutData] = useState<{text: string}[]>([]);
     const [inTest, setInTest] = useState(false);
     const [showEmail, setShowEmail] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState<number>(1);
@@ -101,7 +92,15 @@ export const Testing = observer(() => {
       await AsyncStorage.setItem('fcm_token', token);
     };
     useEffect(()=>{
-      testingStore.getTestById(11).then((res)=>{
+      testingStore.getTestById(authStore.access_token ? 9 : 11).then((res)=>{
+        console.log(stripHtmlTags(testingStore.currentTest.startHtml).split('.'));
+        const startHtml = stripHtmlTags(testingStore.currentTest.startHtml).split('.').filter((text)=>text.length > 3);
+        const dataAbout = startHtml.map((text)=>{
+          const obj = {text: text.trim()};
+          return obj;
+        });
+        console.log('dataAbout', dataAbout);
+        if (dataAbout.length > 0) {setAboutData([...dataAbout]);}
         // data[0].text = `Тест включает ${testingStore.currentTest.testLength} вопросов.`;
       });
     }
@@ -118,35 +117,37 @@ export const Testing = observer(() => {
         <View style={gs.mt16} />
 
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold ]}>
-        {inTest ? 'Ifg-тестирование' : 'Пройдите тестирование для получения индивидуального ifg-плана'}
+        {inTest ? 'Ifg-тестирование' : aboutData.length > 0 ? aboutData[0].text : ''}
         </IfgText>
+        {(testingStore.isLoading || aboutData.length === 0) ? <ActivityIndicator /> :
+        <>
+        <View style={gs.mt16} />
+      {inTest ?
+      <CardContainer style={s.cardQuestionsContainer} >
+          <IfgText color={colors.SECONDARY_COLOR} style={gs.fontCaption3}><IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.semiBold]}>Вопрос {currentQuestion}</IfgText> из {testingStore.currentTest.questions.length}</IfgText>
 
-    <View style={gs.mt16} />
-    {inTest ?
-    <CardContainer style={s.cardQuestionsContainer} >
-        <IfgText color={colors.SECONDARY_COLOR} style={gs.fontCaption3}><IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.semiBold]}>Вопрос {currentQuestion}</IfgText> из {testingStore.currentTest.questions.length}</IfgText>
+              {/* <ProgressBar
+                  backgroundColor={colors.WHITE_COLOR}
+                  completedColor={colors.GREEN_LIGHT_COLOR}
+                  height={8}
+                  percentage={percentage}/> */}
 
-            {/* <ProgressBar
-                backgroundColor={colors.WHITE_COLOR}
-                completedColor={colors.GREEN_LIGHT_COLOR}
-                height={8}
-                percentage={percentage}/> */}
-
-        <View>
-      <View style={{justifyContent: 'center'}}>
-        <View style={s.progressBar}/>
-        <View style={[s.filledProgressBar, {width: percentage ? percentage : 0}]}/>
+          <View>
+        <View style={{justifyContent: 'center'}}>
+          <View style={s.progressBar}/>
+          <View style={[s.filledProgressBar, {width: percentage ? percentage : 0}]}/>
+        </View>
       </View>
-    </View>
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{testingStore.currentTest.questions[currentQuestion - 1].name}</IfgText>
-        {testingStore.currentTest.questions[currentQuestion - 1].choices.map((val, index)=><TouchableOpacity key={index.toString()} onPress={()=>{setCurrentAnswer(index), setCurrentAnswerScore(val.score);}}>
-            <CardContainer style={[gs.flexRow, gs.alignCenter, {borderRadius: 16, backgroundColor: (currentAnswer === index) ? '#DCF2E4' : colors.WHITE_COLOR}]}>
-        <View style={currentAnswer === index ? s.radioButtonActive : s.radioButton}/>
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>{val.value}</IfgText>
-        </CardContainer>
-        </TouchableOpacity>)}
-    </CardContainer>
-    : (data.map(({text}, index)=><CardContainer key={index.toString()} style={s.cardContainer}  >
+
+          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{testingStore.currentTest.questions[currentQuestion - 1].name}</IfgText>
+          {testingStore.currentTest.questions[currentQuestion - 1].choices.map((val, index)=><TouchableOpacity key={index.toString()} onPress={()=>{setCurrentAnswer(index), setCurrentAnswerScore(val.score);}}>
+              <CardContainer style={[gs.flexRow, gs.alignCenter, {borderRadius: 16, backgroundColor: (currentAnswer === index) ? '#DCF2E4' : colors.WHITE_COLOR}]}>
+          <View style={currentAnswer === index ? s.radioButtonActive : s.radioButton}/>
+          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.flex1]}>{val.value}</IfgText>
+          </CardContainer>
+          </TouchableOpacity>)}
+      </CardContainer>
+    : (aboutData.slice(1, aboutData.length).map(({text}, index)=><CardContainer key={index.toString()} style={s.cardContainer}  >
         <Benefit />
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, {maxWidth: '90%'}]}>
             {text}
@@ -184,6 +185,8 @@ export const Testing = observer(() => {
               </View>
         </TouchableOpacity>
     </CardContainer>}
+
+        </> }
     </ScrollView>
     );
   });

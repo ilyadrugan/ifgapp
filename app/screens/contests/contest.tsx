@@ -99,9 +99,9 @@ export const ContestView = observer(({route}) => {
                 style={{marginHorizontal: -16}}
                 contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
                 showsHorizontalScrollIndicator={false}
-                data={presentsStore.presentsList.presents}
-                renderItem={({item, index})=>
-                item.id !== presentsStore.currentPresent.id && <CardContainer style={[{width: 190, height: 236, padding:14, borderWidth: 1, borderColor: '#E7E7E7', justifyContent: 'space-between' }, gs.mr12, index === 0 && gs.ml16 ]} >
+                data={presentsStore.presentsList.presents.filter((item)=>item.id !== presentsStore.currentPresent.id)}
+                renderItem={({item, index})=>{
+               return <CardContainer style={[{width: 190, height: 236, padding:14, borderWidth: 1, borderColor: '#E7E7E7', justifyContent: 'space-between' }, gs.mr12, index === 0 && gs.ml16 ]} >
                     <IfgText numberOfLines={2} style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
                     <Image resizeMode="contain"  source={{uri: `https://ifeelgood.life${item.media[0].full_path[1]}`}}
                     style={{ height: 114, width: '100%' }}
@@ -115,7 +115,7 @@ export const ContestView = observer(({route}) => {
                   </>
 
                 </Button>
-            </CardContainer>}
+            </CardContainer>;}}
         />
         <View style={{height: 100}} />
     </ScrollView>}</>

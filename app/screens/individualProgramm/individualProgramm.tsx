@@ -4,7 +4,7 @@ import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity,
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { Button, ButtonNext, ButtonTo } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button, ButtonNext, ButtonTo } from '../../core/components/button/button';
 
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
@@ -22,7 +22,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { VideoPlayer } from '../../core/components/videoplayer/videoplayer';
 import { IndividualProgrammData } from '../testing/testData/individualProgramm';
 import { CircularProgress } from '../../core/components/circularProgress/circularProgress';
-import { Materials, Plan } from './recomendationData/recomendationData';
 import {CheckBox} from '../../core/components/checkbox/checkbox';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
@@ -31,6 +30,7 @@ import { ActivitiValueModel } from '../../../store/state/testingStore/models/mod
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import { StoreRecommendationModel } from '../../../store/state/recommendationStore/models/models';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 export const IndividualProgramm = observer(() => {
     const navigation = useNavigation<any>();
@@ -298,11 +298,27 @@ export const IndividualProgramm = observer(() => {
         />
     </ScrollView>
     <View style={s.footer}>
-    <ButtonNext animated style={s.buttonNext}
-          textStyle={gs.fontBodyMedium}
-          onPress={()=>navigation.replace('Main')}
-          title={'Начать следовать'}
-           />
+     <AnimatedGradientButton style={s.buttonNext}
+                onPress={()=>navigation.replace('Main')}
+                >
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    }}>
+                    <View style={{
+                        width:'100%',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium]}>Начать следовать</IfgText>
+                       <AnimatedArrow />
+                    </View>
+                    <View />
+                </View>
+
+      </AnimatedGradientButton>
     </View>
 </>
     );
@@ -395,6 +411,9 @@ shadowGradient: {
     marginHorizontal: -16,
   },
   buttonNext: {
+    backgroundColor: colors.GREEN_COLOR,
+    borderRadius: 16,
+    paddingHorizontal: 24,
     height: 78,
     width: '86%',
   },

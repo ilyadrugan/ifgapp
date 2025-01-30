@@ -24,6 +24,7 @@ class TestingStore {
       'Питание': 0,
       'Физическая активность': 0,
     },
+    completedHtmlOnConditionScore: [],
   };
   errorMessage: string = '';
   disableRecommendationCheck: boolean = true;
@@ -55,6 +56,7 @@ class TestingStore {
       survey_id: test.survey_id,
       total_score: test.total_score,
       activiti_value_json: JSON.parse(test.activiti_value_json),
+      completedHtmlOnConditionScore: test.completedHtmlOnConditionScore,
     };
     }
     else {
@@ -69,6 +71,7 @@ class TestingStore {
           Питание: JSON.parse(this.currentResultsTest.activiti_value_json).pitaniye,
           'Физическая активность': JSON.parse(this.currentResultsTest.activiti_value_json).fizact,
         },
+        completedHtmlOnConditionScore: this.currentResultsTest.completedHtmlOnConditionScore,
     };
   }
   }
@@ -83,6 +86,7 @@ class TestingStore {
         'Питание': 0,
         'Физическая активность': 0,
       },
+      completedHtmlOnConditionScore: [],
     };
   }
   clearTests() {
@@ -102,6 +106,8 @@ class TestingStore {
       total_score: total_score,
       activiti_value_json: JSON.stringify(activitiValues),
       answers_json: answers,
+      completedHtmlOnConditionScore: this.currentTest.completedHtmlOnConditionScore,
+      startHtml: this.currentTest.startHtml,
     };
     if (device_id) {this.currentResultsTest = {...this.currentResultsTest, device_id: device_id};}
     if (user_id) {this.currentResultsTest = {...this.currentResultsTest, user_id: user_id};}
@@ -133,6 +139,8 @@ class TestingStore {
           name: result.data.data.name,
           testLength: result.data.data.json.pages.length,
           questions: this.remapQuestions(result.data.data.json.pages),
+          completedHtmlOnConditionScore: result.data.data.json.completedHtmlOnConditionScore,
+          startHtml: result.data.data.json.startHtml,
         };
       }
       )
@@ -150,7 +158,6 @@ class TestingStore {
       .then((result)=>{
         // console.log('result.data.data', result.data.surveys.data);
         this.testsList = result.data.surveys.data.map((test)=>{
-          // console.log(test.activiti_value_json);
           return {
             id: test.id,
             total_score: test.total_score,
@@ -158,6 +165,7 @@ class TestingStore {
             activiti_value_json: test.activiti_value_json,
             created_at: test.created_at,
             name: test.survey.name,
+            completedHtmlOnConditionScore: test.survey.json.completedHtmlOnConditionScore,
           } as MyTestModel;
         });
         // console.log( this.testsList);

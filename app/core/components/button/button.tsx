@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useRef } from 'react';
-import { Animated, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, Animated, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 import gs from '../../styles/global';
 import { IfgText } from '../text/ifg-text';
@@ -16,6 +16,7 @@ export const AnimatedGradientButton:FC<{
   style?: StyleProp<ViewStyle>,
   fullWidth?: boolean
   outlined?: boolean
+  isLoading?: boolean,
 }> = (
   {
     children,
@@ -24,6 +25,7 @@ export const AnimatedGradientButton:FC<{
     disabled,
     fullWidth,
     outlined,
+    isLoading,
   }) => {
     const colorAnimation = useRef(new Animated.Value(0)).current;
 
@@ -66,9 +68,7 @@ export const AnimatedGradientButton:FC<{
     ]}
    >
 
-            {children ? children : null}
-
-
+           {children ? children : null}
 
       </Animated.View>
       </TouchableOpacity>
@@ -105,9 +105,10 @@ export const ButtonNext:FC<{
   oliveTitle?: string,
   style?: StyleProp<ViewStyle>,
   textStyle?: StyleProp<TextStyle>,
-  disabled?: boolean
-  animated?: boolean
-}> = ({onPress, title, oliveTitle, style, textStyle, disabled, animated}) =>
+  disabled?: boolean,
+  isLoading?: boolean,
+  animated?: boolean,
+}> = ({onPress, title, oliveTitle, style, textStyle, disabled, animated, isLoading}) =>
         <Button disabled={disabled} style={[s.buttonNext, style && style]}
                 onPress={onPress}
                 >
@@ -126,7 +127,8 @@ export const ButtonNext:FC<{
                          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium, textStyle && textStyle]}>{title}</IfgText>
                          <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>
                     </View>
-                        {animated ? <AnimatedArrow/> : <ArrowRight />}
+                    {isLoading ? <ActivityIndicator/> :
+                      animated ? <AnimatedArrow/> : <ArrowRight />}
                     </View>
 
                     <View />

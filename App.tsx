@@ -20,22 +20,22 @@ requestNotificationPermission();
 
 const App = () => {
   // AsyncStorage.clear();
-  useEffect(() => {
-    // handles deep link when app is already open
-    Linking.addEventListener('url', evt => {
-      console.log('evt.url', evt.url);
-    });
+//   useEffect(() => {
+//     // handles deep link when app is already open
+//     Linking.addEventListener('url', evt => {
+//       console.log('evt.url', evt.url);
+//     });
 
-    // handles deep link when app is not already open
-    Linking.getInitialURL()
-      .then(url => console.log('Initial URL:', url))
-      .catch(console.warn);
+//     // handles deep link when app is not already open
+//     Linking.getInitialURL()
+//       .then(url => console.log('Initial URL:', url))
+//       .catch(console.warn);
 
-  return () => {
-    // clears listener when component unmounts
-    Linking.removeAllListeners('url');
-  };
-}, []);
+//   return () => {
+//     // clears listener when component unmounts
+//     Linking.removeAllListeners('url');
+//   };
+// }, []);
   return (<>
   <Provider {...stores}>
     <GestureHandlerRootView style={{ flex: 1 }}>

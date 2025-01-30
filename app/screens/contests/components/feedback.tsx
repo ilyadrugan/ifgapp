@@ -9,8 +9,9 @@ import { Input } from '../../../core/components/input/input';
 import { ButtonNext } from '../../../core/components/button/button';
 import { errorToast } from '../../../core/components/toast/toast';
 import presentsStore from '../../../../store/state/presentsStore/presentsStore';
+import { observer } from 'mobx-react';
 
-export const FeedBack = () => {
+export const FeedBack = observer(() => {
     const {
         control,
         handleSubmit,
@@ -19,11 +20,11 @@ export const FeedBack = () => {
       } = useForm<{feedback: string}>();
     const onSubmit = handleSubmit(async (data) => {
         console.log(data.feedback.trim().length);
-        if (data.feedback.trim().length<3) {
-            errorToast('Слишком короткий отзыв')
+        if (data.feedback.trim().length < 3) {
+            errorToast('Слишком короткий отзыв');
         }
         else {
-            await presentsStore.sendSuggestion(data.feedback.trim())
+            await presentsStore.sendSuggestion(data.feedback.trim());
         }
       });
     return <CardContainer style={s.card}>
@@ -40,14 +41,14 @@ export const FeedBack = () => {
                 // error={authStore.loginByUserPassword.loginInputError}
             />
         )}/>
-        <ButtonNext onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
+        <ButtonNext isLoading={presentsStore.isLoadingSuggestion} onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
         <Image
             resizeMode="cover"
             style={{width: 'auto', height: 180, right: -16}}
             source={require('../../../../assets/backgrounds/feedback.png')}
         />
     </CardContainer>;
-};
+});
 
 const s = StyleSheet.create({
     card: {

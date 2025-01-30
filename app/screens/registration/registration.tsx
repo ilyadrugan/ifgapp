@@ -1,4 +1,4 @@
-import { ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -8,7 +8,7 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import Apple from '../../../assets/icons/apple.svg';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from '../../core/components/checkbox/checkbox';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { TabInterface, Tabs } from './components/tabs';
 import { SubscribeReg } from './components/subscribeReg/subscribeReg';
@@ -18,6 +18,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { RegisterFormModel, RegisterFormState } from '../../../store/state/authStore/models/models';
 import authStore from '../../../store/state/authStore/authStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import { observer } from 'mobx-react';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -32,14 +33,20 @@ const tabss: TabInterface[] = [
         name: 'По подписке',
     },
 ];
-export const Registration = () => {
+export const Registration = observer(() => {
     const [personalChecked, setPersonalChecked] = useState(true);
     const [infoChecked, setInfoChecked] = useState(true);
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState(2);
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [phone, setPhone] = useState('');
     const navigation = useNavigation<any>();
+    const scrollViewRef = useRef(null);
 
+    const scrollToBottom = () => {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollToEnd({ animated: false });
+      }
+    };
     const toLogin = () => {
         authStore.clearMessageError();
         navigation.replace('Login');
@@ -58,7 +65,8 @@ export const Registration = () => {
         setActiveTab(id);
     };
     useEffect(() => {
-        onTabClick(1);
+        onTabClick(2);
+        scrollToBottom();
     }, []);
 
     const maskDateChange = (text) => {
@@ -171,7 +179,7 @@ export const Registration = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={gs.flex1}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <ScrollView>
+    <ScrollView ref={scrollViewRef}>
     <ImageBackground
         source={require('../../../assets/backgrounds/imageLong.png')}
         style={[s.container]}>
@@ -336,7 +344,7 @@ export const Registration = () => {
                 {'Вы должны согласится на информационную рассылку'}</IfgText>}
             </View>
             <AnimatedGradientButton style={s.buttonLogin}
-                // disabled={!personalChecked || !infoChecked}
+                disabled={authStore.isLoading}
                 // onPress={()=>navigation.replace('SuccessfulReg')}
                 onPress={onSubmit}
                 >
@@ -352,7 +360,8 @@ export const Registration = () => {
                         alignItems: 'center',
                     }}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Зарегистрироваться</IfgText>
-                        <AnimatedArrow />
+                    {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
+
                     </View>
                     <View />
                 </View>
@@ -387,7 +396,7 @@ export const Registration = () => {
     </KeyboardAvoidingView>
     </>
     );
-  };
+  });
 const s = StyleSheet.create({
     container: {
         flex: 1,

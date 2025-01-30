@@ -15,6 +15,7 @@ export type PaymentDataModel = {
 };
 
 export type CardModel = {
+    id: number,
     card_type: string,
     last4: string,
     default: boolean

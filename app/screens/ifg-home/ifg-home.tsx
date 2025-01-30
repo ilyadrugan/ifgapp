@@ -89,7 +89,7 @@ export const IFGHome = observer(() => {
       articlesStore.clearCurrentArticle();
       presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-      dailyActivityStore.getDailyTodayActivity(formatDate());
+      await dailyActivityStore.getDailyTodayActivity(formatDate());
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
       recommendationStore.getPersonalRecommendations();
     };

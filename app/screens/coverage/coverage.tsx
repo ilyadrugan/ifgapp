@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, FlatList, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, FlatList, ActivityIndicator, Dimensions, TouchableOpacity, Animated } from 'react-native';
 import { Button, ButtonTo } from '../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../../core/colors/colors';
@@ -115,6 +115,30 @@ export const Coverage = observer(() => {
     const [expandedId, setExpandedId] = useState(null); // Состояние для хранения раскрытого вопроса
     const [showMore, setShowMore] = useState(false); // Состояние для хранения раскрытого вопроса
 
+    //for animatedDropDowns
+    // const [expandedIndexes, setExpandedIndexes] = useState(
+    //   faqData.map(() => false) // Изначально все списки раскрыты
+    //   );
+
+    //   const [contentHeights, setContentHeights] = useState<number[]>(
+    //     faqData.map(() => 0) // Высота контента для каждого списка
+    //   );
+
+    //   const animationValues = useRef(
+    //     faqData.map(() => new Animated.Value(0)) // Изначально высота 0
+    //   ).current;
+    //   const scaleYValues = useRef(
+    //     faqData.map(() => new Animated.Value(1))
+    //   ).current;
+    //   useEffect(() => {
+    //     // Устанавливаем анимации на высоту контента при первом рендере
+    //     contentHeights.forEach((height, index) => {
+    //       if (height > 0) {
+    //         animationValues[index].setValue(height); // Устанавливаем начальную высоту
+    //       }
+    //     });
+    //   }, [contentHeights]);
+
     const onBack = () => {
       navigation.goBack();
     };
@@ -177,9 +201,9 @@ export const Coverage = observer(() => {
         return (
           <View style={s.itemContainer}>
             <View style={s.questionContainer}>
-            <IfgText style={[gs.fontCaption, gs.bold, {maxWidth: '90%'}]}>{item.question}</IfgText>
+            <IfgText style={[gs.fontCaption, gs.bold, {maxWidth: '86%'}]}>{item.question}</IfgText>
             <TouchableOpacity style={s.toggleButton} onPress={() => toggleExpand(item.id)}>
-              <IfgText color={colors.GREEN_COLOR} style={[gs.fontBody1, {top:1}]}>{isExpanded ? '−' : '+'}</IfgText>
+              <IfgText color={colors.GREEN_COLOR} style={[gs.fontBody1, {top:2}]}>{isExpanded ? '−' : '+'}</IfgText>
             </TouchableOpacity>
             </View>
             {isExpanded && <IfgText style={[gs.fontCaption2, gs.mt12]}>{item.answer}</IfgText>}

@@ -12,9 +12,20 @@ import dailyActivityStore from '../../../../store/state/activityGraphStore/activ
 import { observer } from 'mobx-react';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { Dimensions } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import recommendationStore from '../../../../store/state/recommendationStore/recommendationStore';
+import { formatDate } from '../../../core/utils/formatDateTime';
 const width = Dimensions.get('screen').width;
 
 export const CalendarBlock: FC = observer(() =>{
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log('CalendarBlock');
+            recommendationStore.getPersonalRecommendations();
+            dailyActivityStore.getDailyTodayActivity(formatDate());
+          return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
+        }, [])
+      );
     return <CardContainer>
         <CustomCalendar />
         {!dailyActivityStore.isLoading ? <>

@@ -10,13 +10,13 @@ import { CardContainer } from '../../core/components/card/cardContainer';
 import Open from '../../../assets/icons/open-down.svg';
 import { TimeToDrinkBlock } from '../ifg-home/blocks/timeToDrink';
 import { ArticleHeader } from '../ifg-home/components/articleHeader';
-import { ButtonNext } from '../../core/components/button/button';
+import { AnimatedGradientButton, ButtonNext } from '../../core/components/button/button';
 import Fish18 from '../../../assets/icons/fish18.svg';
 import Moon18 from '../../../assets/icons/moon18.svg';
 import Antistress18 from '../../../assets/icons/antistress18.svg';
 import PhysicalActivity18 from '../../../assets/icons/physical-activity.svg';
 import { ShadowGradient } from '../../core/components/gradient/shadow-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import { observer } from 'mobx-react';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
@@ -27,6 +27,7 @@ import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
 import { Easing } from 'react-native-reanimated';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 
 export const CalendarScreen = observer(() =>{
     const dropdowns = [
@@ -66,10 +67,17 @@ export const CalendarScreen = observer(() =>{
         });
       };
     const navigation = useNavigation<any>();
-    useEffect(() => {
+    // useEffect(() => {
+
+    // }, []);
+
+    useFocusEffect(
+      React.useCallback(() => {
         recommendationStore.getPersonalRecommendations();
         dailyActivityStore.getDailyTodayActivity(formatDate());
-    }, []);
+        return () => console.log('Ушли со страницы'); // Опционально: Cleanup при уходе со страницы
+      }, []));
+
     const toggleDropdown = (index: number) => {
         const isExpanded = expandedIndexes[index];
 
@@ -116,24 +124,24 @@ export const CalendarScreen = observer(() =>{
     }
     };
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-    return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
-    <ArticleHeader
-      // isNew
-      time={'10:00'}
-      hashTagColor={categoryColors[rec.category]}
-      hashTagText={'#' + rec.category}
-    />
-    <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
-    <View style={[gs.flexRow, gs.alignCenter]}>
-      <Image
-      resizeMode="cover"
-      style={{width: 44, height: 44}}
-      source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
-      />
-     {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
-    </View>
-    {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}
-  </CardContainer>;
+      return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
+                <ArticleHeader
+                  // isNew
+                  time={'10:00'}
+                  hashTagColor={categoryColors[rec.category]}
+                  hashTagText={'#' + rec.category}
+                />
+                <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
+                <View style={[gs.flexRow, gs.alignCenter]}>
+                  <Image
+                  resizeMode="cover"
+                  style={{width: 44, height: 44}}
+                  source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
+                  />
+                {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
+                </View>
+                {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}
+            </CardContainer>;
     };
     return <>
     <ScrollView style={s.container}>
@@ -267,7 +275,27 @@ export const CalendarScreen = observer(() =>{
         <View style={{height: 200}} />
     </ScrollView>
     <View style={s.footer}>
-        <ButtonNext animated textStyle={gs.fontBodyMedium} onPress={()=>navigation.navigate('IndividualProgramm')} style={{height: 78}} title="Моя программа" />
+        <AnimatedGradientButton style={s.buttonNext}
+                onPress={()=>navigation.navigate('IndividualProgramm')}
+                >
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    }}>
+                    <View style={{
+                        width:'100%',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium]}>{'Моя программа'}</IfgText>
+                       <AnimatedArrow />
+                    </View>
+                    <View />
+                </View>
+
+      </AnimatedGradientButton>
     </View>
     <ShadowGradient opacity={0.3} />
     </>;
@@ -308,5 +336,12 @@ const s = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
+      },
+      buttonNext: {
+        backgroundColor: colors.GREEN_COLOR,
+        borderRadius: 16,
+        paddingHorizontal: 24,
+        height: 78,
+        width: '100%',
       },
   });

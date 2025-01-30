@@ -120,6 +120,7 @@ class DailyActivityStore {
         await addDailyActivityApi(model)
           .then((result)=>{
             this.dailyTodayActivityData[field] = result.data.data[field];
+            console.log('addDailyActivityApi, result', result.data);
           }
           )
           .catch((err)=>{

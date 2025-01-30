@@ -1,6 +1,6 @@
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import React, { FC, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
@@ -173,12 +173,13 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 secureTextEntry={true}
             />
             <AnimatedGradientButton style={s.button}
+                disabled={userStore.isLoading}
                 onPress={onSubmit}
                 >
                  <View style={s.buttonContainer}>
                  <View style={s.buttonContent}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Сохранить</IfgText>
-                        <AnimatedArrow />
+                        {userStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>
@@ -194,7 +195,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 <View style={s.buttonContainer}>
                     <View style={s.buttonContent}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Удалить свой профиль?</IfgText>
-                        <ArrowRight />
+                    <ArrowRight />
                     </View>
                     <View />
                 </View>

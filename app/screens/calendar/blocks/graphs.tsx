@@ -10,6 +10,7 @@ import dailyActivityStore from '../../../../store/state/activityGraphStore/activ
 import { observer } from 'mobx-react';
 import { DailyCaloriesModel, DailyCommonModel, DailyIfgScoreModel, GraphDataType } from '../../../../store/state/activityGraphStore/models/models';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import { useFocusEffect } from '@react-navigation/native';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -45,7 +46,15 @@ export const Graphs = observer(() =>{
         dailyActivityStore.getGraphCaloriesActivity('week');
         dailyActivityStore.getGraphStepsActivity('week');
     }, []);
-
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         console.log('Graphs', activeTab);
+    //         dailyActivityStore.getIfgScoreActivity(activeTab === 0 ? 'week' : 'month').then(()=>convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities));
+    //         dailyActivityStore.getGraphCaloriesActivity(activeTab === 0 ? 'week' : 'month');
+    //         dailyActivityStore.getGraphStepsActivity(activeTab === 0 ? 'week' : 'month');
+    //       return () => console.log('Ушли с Graphs'); // Опционально: Cleanup при уходе со страницы
+    //     }, [])
+    //   );
     const convertToGraphDataType = (graphsData: DailyCommonModel[]) => {
         // console.log('convertToGraphDataType', graphsData);
         setGraphData(graphsData.map((el)=>{
@@ -58,7 +67,6 @@ export const Graphs = observer(() =>{
     };
 
     const onSwitch = (id: number) => {
-        console.log('onSwitch');
         if (id !== activeSwitch){
             if (id === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
             if (id === 1) {convertToGraphDataType(dailyActivityStore.graphStepsActivities);}
@@ -67,7 +75,6 @@ export const Graphs = observer(() =>{
         }
     };
     const onTabClick = (id: number) => {
-        console.log('onTabClick', id);
 
         if (id !== activeTab){
             dailyActivityStore.getIfgScoreActivity(id === 0 ? 'week' : 'month').then(()=>{
