@@ -92,7 +92,7 @@ export const Graphs = observer(() =>{
 
     return <CardContainer>
         <IfgText style={[gs.fontBodyMedium, gs.bold]}>График активности</IfgText>
-        <IfgText style={gs.fontCaptionSmall}>Мои результаты за последнюю:</IfgText>
+        <IfgText style={gs.fontCaptionSmall}>Мои результаты:</IfgText>
         <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
         <VictoryGraph graphData={graphData} monthly={activeTab === 1} />
         <IfgText style={gs.fontCaptionSmall}>Активность</IfgText>
