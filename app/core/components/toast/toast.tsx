@@ -9,6 +9,7 @@ import colors from '../../colors/colors';
 import { IfgText } from '../text/ifg-text';
 import Checked from '../../../../assets/icons/checkedInvert.svg';
 const toast = (props: ToastShowParams, type: string) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const insets = useSafeAreaInsets();
   return (<>
     <View style={[s.container, { marginBottom: insets.bottom }]}>
@@ -52,21 +53,23 @@ export const Toast: FC = () => {
   </>);
 };
 
-export const successToast = (text: string, bottomText?: string) => {
+export const successToast = (text: string, bottomText?: string, visibilityTime?: number) => {
   ReactNativeToast.show({
     type: 'success',
     text1: text,
     text2: bottomText,
     bottomOffset: 0,
+    visibilityTime: visibilityTime || 4000,
   });
 };
 
-export const errorToast = (text: string, bottomText?: string) => {
+export const errorToast = (text: string, bottomText?: string, visibilityTime?: number) => {
   ReactNativeToast.show({
     type: 'error',
     text1: text,
     text2: bottomText,
     bottomOffset: 0,
+    visibilityTime: visibilityTime || 4000,
   });
 };
 

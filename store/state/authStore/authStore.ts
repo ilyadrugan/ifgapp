@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateFirebaseMessagingToken } from '../../../app/core/firebase/firebase';
 import { errorToast } from '../../../app/core/components/toast/toast';
 import { updateDeviceResultsTestApi } from '../testingStore/testingStore.api';
+import { stripHtmlTags } from '../../../app/core/utils/stripHtmlTags';
 
 class AuthStore {
   isAuthenticated = false; // Авторизован ли пользователь
@@ -134,9 +135,24 @@ class AuthStore {
       }
       })
       .catch((err)=>{
-        console.log('login ERROR');
-        this.errorMessage = err.message;
-        errorToast(err.message);
+        console.log('login ERROR',err.response.data);
+
+        if (err.response.data.errors.promocode) {
+          console.log('Full error response:', err.response.data); // Полный JSON ошибки
+          console.log('Error message:', err.response.data.message); // Текст ошибки
+          console.log('Validation errors:', err.response.data.errors); // Детали ошибок
+
+          this.errorMessage = err.response.data.errors.promocode[0];
+          errorToast(this.errorMessage);
+        }
+        else if (err.response.data.errors.num_doc){
+          this.errorMessage = err.response.data.errors.num_doc[0].replace('<br>', '\n');
+          errorToast(this.errorMessage);
+        }
+        else {
+          this.errorMessage = 'Неизвестная ошибка';
+          errorToast('Неизвестная ошибка');
+        }
       })
       .finally(()=>{this.isLoading = false;});
       // this.isLoading = false;
@@ -154,22 +170,27 @@ class AuthStore {
         const token = await AsyncStorage.getItem('fcm_token') || '';
         console.log('updateDeviceResultsTestApi',token);
         if (token) {await updateDeviceResultsTestApi(token);}
-        // this.setToken(result.data.access_token);
-        // userStore.setUser(result.data.user);
-        // this.setIsOnBoarded();
-        // updateFirebaseMessagingToken()
-        //   .then(res=> console.log(res.data))
-        //   .catch((err)=>{
-        //     console.log('updateFirebaseMessagingToken Error',err.message);
-        //     errorToast(err.message);
-        //   });
         this.access_token && callBack();
       }
       })
       .catch((err)=>{
-        console.log('registration ERROR',err);
-        this.errorMessage = err.message;
-        errorToast(err.message);
+        console.log('registration ERROR',err.response.data.errors);
+        if (err.response.data.errors.promocode) {
+          console.log('Full error response:', err.response.data); // Полный JSON ошибки
+          console.log('Error message:', err.response.data.message); // Текст ошибки
+          console.log('Validation errors:', err.response.data.errors); // Детали ошибок
+
+          this.errorMessage = err.response.data.errors.promocode[0];
+          errorToast(this.errorMessage);
+        }
+        else if (err.response.data.errors.num_doc){
+          this.errorMessage = err.response.data.errors.num_doc[0].replaceAll('<br>', '\n');
+          errorToast(this.errorMessage, '', 8000);
+        }
+        else {
+          this.errorMessage = 'Неизвестная ошибка';
+          errorToast('Неизвестная ошибка');
+        }
       })
       .finally(()=>{this.isLoading = false;});
       // this.isLoading = false;

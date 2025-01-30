@@ -44,6 +44,7 @@ export const Input: FC<{
         s.input,
         style,
         fullWidth && s.fullWidth,
+        error && s.error,
       ]}
       editable={editable}
       onChangeText={onChange}
@@ -83,6 +84,9 @@ const s = StyleSheet.create({
       width: '100%',
     },
     required: {
+      borderColor: colors.RED_COLOR,
+    },
+    error: {
       borderColor: colors.RED_COLOR,
     },
   });

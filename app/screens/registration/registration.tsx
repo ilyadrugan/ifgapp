@@ -18,6 +18,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { RegisterFormModel, RegisterFormState } from '../../../store/state/authStore/models/models';
 import authStore from '../../../store/state/authStore/authStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import {isValidEmail} from '../../core/utils/isValidEmail';
 import { observer } from 'mobx-react';
 const tabss: TabInterface[] = [
     {
@@ -128,6 +129,9 @@ export const Registration = observer(() => {
             if (!data.name) {authStore.fillRegisterByPromocodeInputError('name','Заполните поле');}
             if (!phone) {authStore.fillRegisterByPromocodeInputError('phone','Заполните поле');}
             if (!data.email) {authStore.fillRegisterByPromocodeInputError('email','Заполните поле');}
+            else if (!isValidEmail(data.email)){
+                authStore.fillRegisterByPromocodeInputError('email','Некорректный Email');
+            }
             if (!data.password) {authStore.fillRegisterByPromocodeInputError('password','Заполните поле');}
             if (!data.password_confirmation) {authStore.fillRegisterByPromocodeInputError('password_confirmation','Заполните поле');}
             if (!data.promocode) {authStore.fillRegisterByPromocodeInputError('promocode','Заполните поле');}
@@ -135,7 +139,7 @@ export const Registration = observer(() => {
             if (!password_equal) {
                 authStore.fillRegisterByPromocodeInputError('password_confirmation','Пароли не совпадают');
             }
-            else if (data.last_name && data.name && phone && data.email && data.password && data.password_confirmation && data.promocode) {
+            else if (isValidEmail(data.email) && data.last_name && data.name && phone && data.email && data.password && data.password_confirmation && data.promocode) {
                 const model: RegisterFormModel = {
                     email: data.email,
                     password: data.password,
@@ -154,6 +158,9 @@ export const Registration = observer(() => {
             authStore.clearAllRegisterByNumDocInputError();
             if (!dateOfBirth) {authStore.fillRegisterByNumDocInputError('birthday','Заполните поле');}
             if (!data.email) {authStore.fillRegisterByNumDocInputError('email','Заполните поле');}
+            else if (!isValidEmail(data.email)){
+                authStore.fillRegisterByNumDocInputError('email','Некорректный Email');
+            }
             if (!data.password) {authStore.fillRegisterByNumDocInputError('password','Заполните поле');}
             if (!data.password_confirmation) {authStore.fillRegisterByNumDocInputError('password_confirmation','Заполните поле');}
             if (!data.num_doc) {authStore.fillRegisterByNumDocInputError('num_doc','Заполните поле');}
@@ -161,7 +168,7 @@ export const Registration = observer(() => {
             if (!password_equal) {
                 authStore.fillRegisterByNumDocInputError('password_confirmation','Пароли не совпадают');
             }
-            else if (dateOfBirth && data.email && data.password && data.password_confirmation && data.num_doc) {
+            else if (isValidEmail(data.email) && dateOfBirth && data.email && data.password && data.password_confirmation && data.num_doc) {
                 const model: RegisterFormModel = {
                     birthday: dateOfBirth,
                     email: data.email,
