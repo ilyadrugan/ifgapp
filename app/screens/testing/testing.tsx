@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import colors from '../../core/colors/colors';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -177,7 +177,7 @@ export const Testing = observer(() => {
     {showEmail && <CardContainer style={s.emailBlock}>
         <View style={[gs.flexRow, gs.alignCenter]}>
             <Email />
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12, {maxWidth: '80%'}]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
+            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12, {maxWidth: '80%'}]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText onPress={async()=>await Linking.openURL('mailto:ask@ifeelgood.life')} color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
         </View>
         <TouchableOpacity onPress={()=>setShowEmail(false)} style={gs.tapArea}>
               <View style={s.circle}>

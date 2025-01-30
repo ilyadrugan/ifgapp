@@ -31,8 +31,10 @@ import recommendationStore from '../../../store/state/recommendationStore/recomm
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import { StoreRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 
 export const IndividualProgramm = observer(() => {
+    const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
     const navigation = useNavigation<any>();
     const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
     const setCheckBoxesValues = () =>{
@@ -54,7 +56,6 @@ export const IndividualProgramm = observer(() => {
       testingStore.clearMyCurrentResultsTest();
       navigation.goBack();
     };
-    const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     useEffect(() => {
       getData();
     }, []);
@@ -174,7 +175,11 @@ export const IndividualProgramm = observer(() => {
 
 
         <View style={gs.mt16} />
-
+        {/* <RutubeView
+            url={url}
+            width={400}
+            height={200}
+          /> */}
         {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
