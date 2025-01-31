@@ -4,6 +4,6 @@ export type TariffModel = {
     title: string,
     description: string,
     price: number,
-    price_discount: number,
+    price_discount: number | null,
     period: string,
 };

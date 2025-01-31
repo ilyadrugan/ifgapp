@@ -15,6 +15,7 @@ import { ArticleView } from './materials/article';
 import { InterviewView } from './materials/interview';
 import { Coverage } from './coverage/coverage';
 import { PersonalRecommendations } from './personalRecomendations/personalRecommendations';
+import { SubscribeEmailConfirm } from './registration/components/subscribeReg/subscribeEmailConfirm';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,11 @@ export const MainNavigation: FC = () => {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SubscribeEmailConfirm"
+        component={SubscribeEmailConfirm}
         options={{ headerShown: false }}
       />
       <Stack.Screen

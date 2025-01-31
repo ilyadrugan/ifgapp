@@ -43,7 +43,7 @@ export const Subscription: FC = observer(() =>{
       // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
       // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
       const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone);
-      YookassaModule.startTokenize(phone_number, 'Добавление карты', '',async (result) => {
+      YookassaModule.startTokenize(phone_number, 'Добавление карты', '', 10,async (result) => {
         console.log('Результат из нативного модуля:', result.paymentToken);
 
         if (result.paymentToken) {

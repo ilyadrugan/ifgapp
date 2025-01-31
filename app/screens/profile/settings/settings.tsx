@@ -15,9 +15,10 @@ import authStore from '../../../../store/state/authStore/authStore';
 import { useNavigation } from '@react-navigation/native';
 import AnimatedArrow from '../../../core/components/animatedArrow/animatedArrow';
 import { isValidEmail } from '../../../core/utils/isValidEmail';
+import { isValidPhoneNumber } from '../../../core/utils/isValidPhoneNumber';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState(userStore.userInfo?.phone || '');
     const navigation = useNavigation<any>();
     const [onDeleting, setOnDeleting] = useState(false);
 
@@ -25,43 +26,47 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
         control,
         handleSubmit,
         setValue,
+        getValues,
         formState: { errors },
       } = useForm<UserChangeInfoModel>();
-    //   const handlePhoneChange = (text) => {
-    //     const cleaned = text.replace(/\D/g, '');
+      const handlePhoneChange = (text) => {
+        const cleaned = text.replace(/\D/g, '');
 
-    //     let formatted = cleaned;
+        let formatted = cleaned;
 
-    //     if (cleaned.length > 0) {
-    //       formatted = `+${cleaned.slice(0, 1)}`;
-    //     }
-    //     if (cleaned.length > 1) {
-    //       formatted += ` (${cleaned.slice(1, 4)}`;
-    //     }
-    //     if (cleaned.length > 4) {
-    //       formatted += `) ${cleaned.slice(4, 7)}`;
-    //     }
-    //     if (cleaned.length > 7) {
-    //       formatted += `-${cleaned.slice(7, 9)}`;
-    //     }
-    //     if (cleaned.length > 9) {
-    //       formatted += `-${cleaned.slice(9, 11)}`;
-    //     }
+        if (cleaned.length > 0) {
+          formatted = `+${cleaned.slice(0, 1)}`;
+        }
+        if (cleaned.length > 1) {
+          formatted += ` (${cleaned.slice(1, 4)}`;
+        }
+        if (cleaned.length > 4) {
+          formatted += `) ${cleaned.slice(4, 7)}`;
+        }
+        if (cleaned.length > 7) {
+          formatted += `-${cleaned.slice(7, 9)}`;
+        }
+        if (cleaned.length > 9) {
+          formatted += `-${cleaned.slice(9, 11)}`;
+        }
 
-    //     setPhone(formatted);
-    //   };
+        setPhone(formatted);
+      };
     useEffect(() => {
     //  handlePhoneChange(userStore.userInfo?.phone || '');
-     setValue('email', userStore.userInfo?.email || '');
-     setValue('phone', userStore.userInfo?.phone || '');
-     setValue('name', userStore.userInfo?.name || '');
-     setValue('last_name', userStore.userInfo?.last_name || '');
+     setValue('email', userStore.userInfo?.email || getValues('email') || '');
+     setValue('phone', userStore.userInfo?.phone || phone || '');
+     setValue('name', userStore.userInfo?.name || getValues('name') ||  '');
+     setValue('last_name', userStore.userInfo?.last_name || getValues('last_name') || '');
     }, []);
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
+        console.log(data, phone);
             if (!data.last_name) {userStore.fillChangeInputError('last_name','Заполните поле');}
             if (!data.name) {userStore.fillChangeInputError('name','Заполните поле');}
-            if (!data.phone) {userStore.fillChangeInputError('phone','Заполните поле');}
+            if (!phone) {userStore.fillChangeInputError('phone','Заполните поле');}
+            else if (!isValidPhoneNumber(phone)){
+                userStore.fillChangeInputError('phone','Неверный формат номера телефона');
+            }
             if (!data.email) {userStore.fillChangeInputError('email','Заполните поле');}
             else if (!isValidEmail(data.email)){
                 userStore.fillChangeInputError('email','Некорректный Email');
@@ -69,10 +74,10 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             // if (!password_equal) {
             //     authStore.fillRegisterByPromocodeInputError('password_confirmation','Пароли не совпадают');
             // }
-            else if (isValidEmail(data.email) && data.last_name && data.name && data.phone && data.email) {
+            else if (isValidEmail(data.email) && isValidPhoneNumber(phone) && data.last_name && data.name && data.email) {
                 const model: UserChangeInfoModel = {
                     ...data,
-                    // phone: phone.replace(/[^0-9]/g, ''),
+                    phone: phone,
                 };
                 console.log('model', model);
                 userStore.changeProfile(model);
@@ -125,20 +130,18 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 keyboardType="numeric"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
             /> */}
-        <Controller control={control} name={'phone'}
-            render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+        <Input
                 fullWidth
-                placeholder="Телефон"
                 defaultValue={userStore.userInfo?.phone}
-                value={value}
-                onChange={onChange}
+                value={phone}
                 keyboardType="phone-pad"
+                onChange={handlePhoneChange}
+                placeholder="Телефон"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={userStore.userChangeInfoState.phoneInputError}
                 onFocus={()=>userStore.clearChangeInputError('phone')}
+
             />
-        )}/>
         {/* <Input
                 fullWidth
                 defaultValue={userStore.userInfo?.phone}

@@ -1,4 +1,4 @@
-import { ActivityIndicator, ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -20,6 +20,7 @@ import authStore from '../../../store/state/authStore/authStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
 import { observer } from 'mobx-react';
+const height = Dimensions.get('screen').height;
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -189,7 +190,7 @@ export const Registration = observer(() => {
     <ScrollView ref={scrollViewRef}>
     <ImageBackground
         source={require('../../../assets/backgrounds/imageLong.png')}
-        style={[s.container]}>
+        style={s.container}>
         <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
               Регистрация
         </IfgText>
@@ -408,7 +409,7 @@ const s = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        // height: '100%',
+        minHeight: height,
         flexDirection:'column',
         alignItems: 'center',
 

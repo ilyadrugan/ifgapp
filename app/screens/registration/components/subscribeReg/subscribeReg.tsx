@@ -11,121 +11,41 @@ import { useNavigation } from '@react-navigation/native';
 import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
 import { observer } from 'mobx-react';
 import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
+import { SubscribeTariffs } from './subscribeTariffs';
+import { SubscribeInputs } from './subscribeInputs';
+import { SubscribeEmailConfirm } from './subscribeEmailConfirm';
+import ConfirmEmailGirl from '../../../../../assets/icons/images/confirmEmailGirl.svg';
 
 export const SubscribeReg: FC = observer(() => {
-  const navigation = useNavigation<any>();
+    const navigation = useNavigation<any>();
 
-  const discounts = [
-    {
-      id: 0,
-      name: 'Год',
-      value: 76,
-    },
-    {
-      id: 1,
-      name: 'Месяц',
-      value: 14,
-    },
-  ];
-    const [onPayment, setOnPayment] = useState<boolean>(false);
+    const [onStep, setOnStep] = useState<number>(0);
     const [activeDiscount, setActiveDiscount] = useState<number>(0);
 
+    const onNext = () => {
+      setOnStep((prev)=>prev + 1);
+    };
+    const onBack = () => {
+      setOnStep((prev)=>prev - 1);
+    };
     const onChange = (id: number) => setActiveDiscount(id);
-    const onSubscribe = () => setOnPayment(true);
 
     return <View>
-      {(!onPayment && tariffsStore.tariffs.length > 0)  && <><View style={s.discounts}>
-      <TouchableOpacity onPress={()=>onChange(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
-          <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
-          <View style={s.discountPercents}>
-            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%</IfgText>
-          </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={()=>onChange(1)} style={[s.dicountValue, activeDiscount === 1 && s.discountValueActive]} >
-          <IfgText color={activeDiscount === 1 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[1].title}</IfgText>
-          {tariffsStore.tariffs[1].price_discount &&
-              <View style={s.discountPercents}>
-                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{(tariffsStore.tariffs[1].price - tariffsStore.tariffs[1].price_discount) / tariffsStore.tariffs[1].price * 100 }%</IfgText>
-              </View>}
-      </TouchableOpacity>
-      </View>
-      <View style={gs.mt16}/>
-      <IfgText color={colors.SECONDARY_COLOR} style={gs.h2}>Подписка IFeelGood Pro</IfgText>
-      <View style={gs.mt16}/>
-      <View style={[gs.flexRow, gs.alignCenter]}>
-        <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>
-        {Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} ₽
-        </IfgText>
-        {tariffsStore.tariffs[activeDiscount].description && <View style={[s.discountPercentsBig, gs.ml24]}>
-            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaption}>
-            -{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%
-            </IfgText>
-        </View>}
-      </View>
-      <View style={gs.mt12}/>
-      {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-                {tariffsStore.tariffs[activeDiscount].price} ₽
-            </IfgText>}
-      <View style={gs.mt4}/>
-      {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
-      <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
-        <Benefit />
-        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>
-        Эксклюзивные материалы
-        </IfgText>
-      </View>
-      <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
-        <Benefit />
-        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>
-        Интервью с экспертами
-        </IfgText>
-      </View>
-      <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
-        <Benefit />
-        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>
-        Участие в конкурсах
-        </IfgText>
-      </View>
-      <View style={s.personalRecommendation} >
-        <View style={[gs.flexRow, gs.alignCenter]}>
-          <View style={s.plusContainer}>
-            <IfgText color={colors.GREEN_LIGHT_COLOR} style={[gs.fontBody1, gs.mt4]}>+</IfgText>
-          </View>
-          <View style={[gs.flexColumn, gs.ml16]}>
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, {width: 160}]}>
-            Персональные рекомендации по ЗОЖ
-            </IfgText>
-            <IfgText color={colors.GRAY_COLOR} style={[gs.fontCaption3, {width: 160}]}>
-            после IFG-тестирования
-            </IfgText>
-          </View>
-        </View>
-      </View>
-      <View style={gs.mt16} />
-      <AnimatedGradientButton style={s.buttonLogin}
-                onPress={onSubscribe}
-                >
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    }}>
-                    <View style={{
-                        width:'100%',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
-                        <AnimatedArrow />
-                    </View>
-                    <View />
-                </View>
+      {onStep === 0 &&
+        <SubscribeTariffs
+          activeDiscount={activeDiscount}
+          onChangeDiscount={onChange}
+          onNext={onNext} />}
 
-      </AnimatedGradientButton>
-      </>
-      }
-      {onPayment && <>
+      {onStep === 1 && <SubscribeInputs onNext={onNext} tarrif_id={tariffsStore.tariffs[activeDiscount].id} />}
+      {/* {onStep === 2 && <>
+        <View style={{zIndex: -1000, elevation: -20}}>
+                <ConfirmEmailGirl />
+            </View>
+            <SubscribeEmailConfirm onNext={onNext} />
+      </>} */}
+
+      {onStep === -1 && <>
         <View
       style={{height: 400, marginBottom: 100}}
     />

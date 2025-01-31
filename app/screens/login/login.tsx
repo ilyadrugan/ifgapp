@@ -1,4 +1,4 @@
-import { ActivityIndicator, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -13,6 +13,7 @@ import { LoginByUserPasswordModel } from '../../../store/state/authStore/models/
 import { observer } from 'mobx-react';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
+const height = Dimensions.get('screen').height;
 
 export const Login = observer(() => {
     const navigation = useNavigation<any>();
@@ -148,7 +149,7 @@ const s = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '100%',
+        minHeight: height,
         flexDirection:'column',
         alignItems: 'center',
       },

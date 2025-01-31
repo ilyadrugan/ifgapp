@@ -108,7 +108,9 @@ return <CardContainer >
         </TouchableOpacity>
       <View style={[gs.ml12]}>
 
-      {userStore.userInfo?.name && <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}</IfgText>}
+      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}</IfgText>
+      :
+      <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.email}</IfgText>}
       </View>
   </View>
   <Button style={s.buttonBack} onPress={()=> navigation.navigate('Профиль')}>

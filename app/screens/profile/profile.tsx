@@ -125,7 +125,7 @@ return <>
         <View style={gs.mt16} />
 
         <CardContainer style={{gap: 0}}>
-          {userStore.userInfo?.name && <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
+           <View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
             <View style={[gs.flexRow, gs.alignCenter]}>
             <View style={s.photo}>
         {userStore.userInfo?.profile_photo_url ?
@@ -138,14 +138,17 @@ return <>
                     <Plus />
                   </TouchableOpacity>
                  <View style={gs.ml12}>
-                  <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name} {userStore.userInfo?.last_name}</IfgText>
+                 {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <>
+                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name} {userStore.userInfo?.last_name}</IfgText>
                   <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption3}>{userStore.userInfo?.email}</IfgText>
+                  </> :
+                  <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.email}</IfgText>}
                 </View>
             </View>
             <TouchableOpacity style={gs.tapArea} onPress={toggleExpand}>
               <BurgerMenu />
             </TouchableOpacity>
-          </View>}
+          </View>
           <Animated.View style={{ opacity: opacity,  height: height}}>
 
           {expanded &&

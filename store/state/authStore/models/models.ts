@@ -23,9 +23,11 @@ export interface RegisterFormModel {
     password: string,
     password_confirmation?: string,
     email: string,
-    birthday?: string;
-    num_doc?: string;
+    birthday?: string,
+    num_doc?: string,
     promocode?: string,
+    sale?: boolean,
+    tariff_id?: number
 }
 
 export interface RegisterFormState {

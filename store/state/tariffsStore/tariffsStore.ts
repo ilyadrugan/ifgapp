@@ -6,10 +6,16 @@ import { TariffModel } from './models/models';
 class TariffsStore {
   isLoading = false; // Состояние загрузки
   tariffs: TariffModel[] = [];
+  tariffChoosed: TariffModel;
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
     this.getTariffs();
   }
+
+  setChoosedTariff = (tariff: TariffModel | undefined) => {
+    if (tariff)
+    {this.tariffChoosed = tariff;}
+  };
 
   getTariffs = async () => {
       this.isLoading = true;

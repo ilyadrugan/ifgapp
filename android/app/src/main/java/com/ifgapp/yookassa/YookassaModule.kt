@@ -67,7 +67,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         activity.startActivityForResult(intent, REQUEST_CODE_CONFIRM)
     }
     @ReactMethod
-    fun startTokenize(phoneNumber: String, title: String, subtitle: String, callback: Callback) {
+    fun startTokenize(phoneNumber: String, title: String, subtitle: String, amount: Double, callback: Callback) {
         Log.i("Yookasssa", "startTokenize" + phoneNumber)
         this.callback = callback
         val activity = currentActivity
@@ -82,7 +82,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             // PaymentMethodType.SBERBANK
         )
         val paymentParameters = PaymentParameters(
-            amount = Amount(BigDecimal.valueOf(10.0), Currency.getInstance("RUB")),
+            amount = Amount(BigDecimal.valueOf(amount), Currency.getInstance("RUB")),
             title = title,
             subtitle = subtitle,
             clientApplicationKey = "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
