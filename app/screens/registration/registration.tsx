@@ -20,6 +20,7 @@ import authStore from '../../../store/state/authStore/authStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
 import { observer } from 'mobx-react';
+import { isValidPhoneNumber } from '../../core/utils/isValidPhoneNumber';
 const height = Dimensions.get('screen').height;
 const tabss: TabInterface[] = [
     {
@@ -129,7 +130,9 @@ export const Registration = observer(() => {
             if (!data.last_name) {authStore.fillRegisterByPromocodeInputError('last_name','Заполните поле');}
             if (!data.name) {authStore.fillRegisterByPromocodeInputError('name','Заполните поле');}
             if (!phone) {authStore.fillRegisterByPromocodeInputError('phone','Заполните поле');}
-            if (!data.email) {authStore.fillRegisterByPromocodeInputError('email','Заполните поле');}
+            else if (!isValidPhoneNumber(phone)){
+                authStore.fillRegisterByPromocodeInputError('phone','Неверный формат номера телефона');
+            }if (!data.email) {authStore.fillRegisterByPromocodeInputError('email','Заполните поле');}
             else if (!isValidEmail(data.email)){
                 authStore.fillRegisterByPromocodeInputError('email','Некорректный Email');
             }
@@ -140,7 +143,7 @@ export const Registration = observer(() => {
             if (!password_equal) {
                 authStore.fillRegisterByPromocodeInputError('password_confirmation','Пароли не совпадают');
             }
-            else if (isValidEmail(data.email) && data.last_name && data.name && phone && data.email && data.password && data.password_confirmation && data.promocode) {
+            else if (isValidEmail(data.email) && data.last_name && data.name && isValidPhoneNumber(phone) && data.email && data.password && data.password_confirmation && data.promocode) {
                 const model: RegisterFormModel = {
                     email: data.email,
                     password: data.password,
