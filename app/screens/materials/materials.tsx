@@ -136,7 +136,7 @@ return <>
        ListFooterComponent={<>
        <View style={gs.mt16} />
        {(articlesStore.interViewsFinished.isLoading || articlesStore.interViewsActual.isLoading || articlesStore.articlesList.isLoading) && <ActivityIndicator animating size={'large'} />}
-       <View style={{height: 100}} /></>}
+       <View style={{height: 140}} /></>}
        ListEmptyComponent={(!articlesStore.interViewsActual.isLoading && !articlesStore.interViewsFinished.isLoading && !articlesStore.articlesList.isLoading) &&
        <View style={[gs.mt16, {justifyContent: 'center'}]}>
         <IfgText>Ничего не найдено</IfgText>

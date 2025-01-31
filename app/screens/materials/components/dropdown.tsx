@@ -9,10 +9,12 @@ import {
   UIManager,
   Animated,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import Open from '../../../../assets/icons/open-up.svg';
+import OpenDown from '../../../../assets/icons/open-down.svg';
 import articlesStore from '../../../../store/state/articlesStore/articlesStore';
 import { ArticleSortModel, ArticleThemeModel, ArticleThemesModel } from '../../../../store/state/articlesStore/models/models';
 import colors from '../../../core/colors/colors';
@@ -33,11 +35,13 @@ const DropdownBlock: FC<{
   const [themeOptions, setThemeOptions] = useState<ArticleThemesModel[]>([ {title: 'Показать все'} as ArticleThemesModel,...themes]);
   const [sortOption, setSortOption] = useState<ArticleSortModel>();
   const [themeOption, setThemeOption] = useState<ArticleThemesModel>();
+  const [themeParentThemeOption, setParentThemeOption] = useState<ArticleThemesModel | null>();
+  const [openParent, setOpenParent] = useState<number>(0);
   // const [activeHashTag, setActiveHashTag] = useState<number>(0);
 
   const sortOptions:ArticleSortModel[] = [
     {
-      tag_id: 100,
+      tag_id: 1000,
       title: 'По умолчанию',
       sort_field: '',
       order: 0,
@@ -80,7 +84,7 @@ const DropdownBlock: FC<{
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     scaleThemeY.setValue(-1);
     setThemeOpen(false);
-    setSortOpen(!sortOpen);
+    setSortOpen((prev)=>!prev);
     Animated.timing(scaleSortY, {
       toValue: sortOpen ? -1 : 1,
       duration: 200,
@@ -90,9 +94,9 @@ const DropdownBlock: FC<{
 
   const toggleThemeDropdown = () => {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setSortOpen(false);
+    setSortOpen((false));
     scaleSortY.setValue(-1);
-    setThemeOpen(!themeOpen);
+    setThemeOpen((prev)=>!prev);
     Animated.timing(scaleThemeY, {
       toValue: themeOpen ? -1 : 1,
       duration: 200,
@@ -101,12 +105,22 @@ const DropdownBlock: FC<{
   };
 
   useEffect(()=>{
+    setSortOpen(false);
+    setThemeOpen(false);
+    setOpenParent(0);
     if (activeTab === 0) {
-      setThemeOption(!articlesStore.articlesQueryParams.tag ?
-        {tag_id: 0, title: 'Показать все'} as ArticleThemesModel
-        :
-        articlesStore.articleThemesList.find((filter)=>filter.tag_id === Number(articlesStore.articlesQueryParams.tag)) as ArticleThemesModel
-      );
+      if (articlesStore.articlesQueryParams.tag) {
+        const parent = articlesStore.articleThemesList.find((filter)=> filter.children?.some((child)=>child.tag_id === Number(articlesStore.articlesQueryParams.tag)));
+        if (parent) {
+          console.log('parent', parent);
+          setParentThemeOption(parent);
+          setThemeOption(parent.children?.find((child)=>child.tag_id === Number(articlesStore.articlesQueryParams.tag)));
+        }
+      }
+      else {
+        setParentThemeOption(null);
+        setThemeOption({tag_id: 0, title: 'Показать все'} as ArticleThemesModel);
+      }
       // setActiveHashTag(!articlesStore.articlesQueryParams.populate_tags ?
       //   0
       //   :
@@ -119,11 +133,18 @@ const DropdownBlock: FC<{
     );
     }
     else {
-      setThemeOption(!articlesStore.interViewsQueryParams.tag ?
-        {tag_id: 0, title: 'Показать все'} as ArticleThemesModel
-        :
-        articlesStore.articleThemesList.find((filter)=>filter.tag_id === Number(articlesStore.interViewsQueryParams.tag)) as ArticleThemesModel
-      );
+      if (articlesStore.interViewsQueryParams.tag) {
+        const parent = articlesStore.articleThemesList.find((filter)=> filter.children?.some((child)=>child.tag_id === Number(articlesStore.interViewsQueryParams.tag)));
+        if (parent) {
+          console.log('parent', parent);
+          setParentThemeOption(parent);
+          setThemeOption(parent.children?.find((child)=>child.tag_id === Number(articlesStore.interViewsQueryParams.tag)));
+        }
+      }
+      else {
+        setParentThemeOption(null);
+        setThemeOption({tag_id: 0, title: 'Показать все'} as ArticleThemesModel);
+      }
       const condition = !articlesStore.interViewsQueryParams['sort[date]'] && !articlesStore.interViewsQueryParams['sort[likes]'] && !articlesStore.interViewsQueryParams['sort[popular]'];
       setSortOption(condition ? sortOptions[0]
       :
@@ -133,10 +154,13 @@ const DropdownBlock: FC<{
 
   },[activeTab]);
 
-  const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number) => {
+  const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number, parent?: ArticleThemesModel) => {
     // if (activeTab === 0) {articlesStore.clearArticles();}
     // if (activeTab === 1) {articlesStore.clearInterViews('finished'); articlesStore.clearInterViews('actual');}
-    if (option.tag_id !== 100 && (option.sort_value || sortOption.sort_value)) {
+    console.log('getMaterialsBySortTheme',option, parent);
+
+
+    if (option.tag_id !== 1000 && (option.sort_value || sortOption.sort_value)) {
       const value = option.sort_value || sortOption.sort_value;
       const order = option.order || sortOption.order;
       if (activeTab === 0) {
@@ -152,8 +176,14 @@ const DropdownBlock: FC<{
         articlesStore.setInterViewsQueryParam(`sort[${value}]`, `${order}`);
       }
     }
-    if (option.title !== 'Показать все' && (option.children !== undefined || themeOption.children !== undefined)){
-      const tagId = option.children !== undefined ? option.tag_id : themeOption.tag_id;
+    if (option.title !== 'Показать все' && (parent || option.children !== undefined || themeOption.children !== undefined )){
+      if (parent){
+        setParentThemeOption(parent);
+      }
+      else {
+        setParentThemeOption(null);
+      }
+      const tagId = (option.children !== undefined || parent) ? option.tag_id : themeOption.tag_id;
       if (activeTab === 0) {articlesStore.setArticleQueryParam('tag', `${tagId}`);}
       if (activeTab === 1) {articlesStore.setInterViewsQueryParam('tag', `${tagId}`);}
     }
@@ -190,9 +220,10 @@ const DropdownBlock: FC<{
   // }, [themeOption, sortOption])
 
 
-  const getQuery = async (option: ArticleSortModel | ArticleThemesModel | number) => {
+  const getQuery = async (option: ArticleSortModel | ArticleThemesModel | number, parent?: ArticleThemesModel) => {
     // const sortQuery = getMaterialsBySort(option)
-    getMaterialsBySortTheme(option);
+
+    getMaterialsBySortTheme(option, parent);
 
     // setCurrentQuery(finalQuery);
     console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
@@ -213,11 +244,31 @@ const DropdownBlock: FC<{
     }
     // onRefresh(finalQuery);
   };
+  const renderOptionTheme = (option: ArticleThemeModel, parent: ArticleThemesModel, index: number, onSelect) => {
+    console.log('option', option);
+    return (<>
+    <View
+      key={index.toString()}
+      style={[styles.option, {paddingHorizontal: 26}]}>
+      <IfgText onPress={() => {
+        if (option.tag_id === themeOption?.tag_id) {return;}
+        onSelect(option);
+        toggleThemeDropdown();
+        getQuery(option, parent);
+      }} style={gs.fontCaptionSmall}>{option.title}</IfgText>
+    </View>
 
-  const renderOption = (option: ArticleSortModel | ArticleThemesModel, onSelect, type) => (
-    <TouchableOpacity
-      key={option.tag_id}
-      onPress={() => {
+    </>
+  );};
+  const renderOption = (option: ArticleSortModel | ArticleThemesModel, index: number, onSelect, type) => {
+    console.log('option', option);
+    const isOpen = openParent === option.tag_id;
+    return (<>
+    <View
+      key={index.toString()}
+      style={styles.option}>
+      <IfgText onPress={() => {
+        if (option.tag_id === themeOption?.tag_id || option.tag_id === sortOption?.tag_id) {return;}
         onSelect(option);
         switch (type){
           case 'sort':
@@ -228,11 +279,21 @@ const DropdownBlock: FC<{
             break;
         }
         getQuery(option);
-      }}
-      style={styles.option}>
-      <IfgText style={gs.fontCaptionSmall}>{option.title}</IfgText>
-    </TouchableOpacity>
-  );
+      }} style={gs.fontCaptionSmall}>{option.title}</IfgText>
+       {option.children && <TouchableOpacity
+        onPress={()=>setOpenParent((tag_id)=>{
+          if (tag_id === option.tag_id) {return 0;}
+          return option.tag_id;
+        })}
+        style={{padding: 16, margin: -16}}
+        >
+            {isOpen ? <Open /> : <OpenDown />}
+        </TouchableOpacity>}
+    </View>
+    {(option.children && isOpen) && option.children.map((child, index)=>
+      renderOptionTheme(child as ArticleThemeModel, option, index, (selectedOption) => setThemeOption(selectedOption)))}
+    </>
+  );};
   const onHashTag = (populate_tag: number) => {
 
     // setActiveHashTag(populate_tag === activeHashTag ? 0 : populate_tag);
@@ -254,8 +315,8 @@ const DropdownBlock: FC<{
         </TouchableOpacity>
         {sortOpen && (
           <View style={styles.dropdownBody}>
-            {sortOptions.map((sort) =>
-              renderOption(sort, (selectedOption) => setSortOption(selectedOption), 'sort')
+            {sortOptions.map((sort, index) =>
+              renderOption(sort, index, (selectedOption) => setSortOption(selectedOption), 'sort')
             )}
           </View>
         )}
@@ -266,16 +327,16 @@ const DropdownBlock: FC<{
         <TouchableOpacity onPress={toggleThemeDropdown} style={[styles.dropdownHeader]}>
         <View>
             <IfgText color="#A0A0A0" style={gs.fontCaptionSmallSmall}>Выбрать тему</IfgText>
-            {themeOption && <IfgText style={gs.fontCaptionSmall}>{themeOption.title}</IfgText>}
+            {themeOption && <IfgText style={gs.fontCaptionSmall}>{(themeParentThemeOption) ? `${themeParentThemeOption.title}, ${themeOption.title}` : themeOption.title}</IfgText>}
         </View>
         <TouchableOpacity disabled style={{ transform: [{ scaleY: scaleThemeY }] }}>
             <Open />
         </TouchableOpacity>
         </TouchableOpacity>
         {themeOpen && (
-          <View style={styles.dropdownBody}>
-            {themeOptions.map((theme) =>
-              renderOption(theme, async (selectedOption) =>await setThemeOption(selectedOption), 'theme')
+          <View style={[styles.dropdownBody]}>
+            {themeOptions.map((theme, index) =>
+              renderOption(theme, index, (selectedOption) => setThemeOption(selectedOption), 'theme')
             )}
           </View>
         )}
@@ -305,6 +366,7 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     // borderBottomWidth: 1,
     borderBottomColor: '#E4E4E4',
+
   },
   dropdownHeader: {
     flexDirection: 'row',
@@ -316,24 +378,28 @@ const styles = StyleSheet.create({
     // elevation: -100,
   },
   dropdownBody: {
-    paddingVertical: 8,
-    position: 'absolute',
-    top: 56,
-    backgroundColor: '#f1f1f1',
-    borderBottomRightRadius: 8,
-    borderBottomLeftRadius: 8,
-    borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    paddingBottom: 8,
+    // position: 'absolute',
+    // top: 56,
+    // backgroundColor: '#f1f1f1',
+    // borderBottomRightRadius: 8,
+    // borderBottomLeftRadius: 8,
+    // borderBottomWidth: 1,
+    // borderLeftWidth: 1,
+    // borderRightWidth: 1,
     borderColor: '#E4E4E4',
-    zIndex: 1000,
-    elevation: 100,
+    // zIndex: 1000,
+    // elevation: 100,
   },
   option: {
     paddingVertical: 8,
-    paddingLeft: 12,
+    paddingHorizontal: 18,
     // width: '100%',
     width: width - 35,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+
   },
   hashtagsContainer: {
     flexDirection: 'row',
