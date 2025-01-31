@@ -14,6 +14,7 @@ import { observer } from 'mobx-react';
 import authStore from '../../../../store/state/authStore/authStore';
 import { useNavigation } from '@react-navigation/native';
 import AnimatedArrow from '../../../core/components/animatedArrow/animatedArrow';
+import { isValidEmail } from '../../../core/utils/isValidEmail';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState('');
@@ -62,11 +63,13 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             if (!data.name) {userStore.fillChangeInputError('name','Заполните поле');}
             if (!data.phone) {userStore.fillChangeInputError('phone','Заполните поле');}
             if (!data.email) {userStore.fillChangeInputError('email','Заполните поле');}
-            // const password_equal = data.password_confirmation === data.password
+            else if (!isValidEmail(data.email)){
+                userStore.fillChangeInputError('email','Некорректный Email');
+            }// const password_equal = data.password_confirmation === data.password
             // if (!password_equal) {
             //     authStore.fillRegisterByPromocodeInputError('password_confirmation','Пароли не совпадают');
             // }
-            else if (data.last_name && data.name && data.phone && data.email) {
+            else if (isValidEmail(data.email) && data.last_name && data.name && data.phone && data.email) {
                 const model: UserChangeInfoModel = {
                     ...data,
                     // phone: phone.replace(/[^0-9]/g, ''),
@@ -99,6 +102,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 onChange={onChange}
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={userStore.userChangeInfoState.last_nameInputError}
+                onFocus={()=>userStore.clearChangeInputError('last_name')}
             />
         )}/>
 
@@ -112,6 +116,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 onChange={onChange}
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={userStore.userChangeInfoState.nameInputError}
+                onFocus={()=>userStore.clearChangeInputError('name')}
             />
         )}/>
         {/* <Input
@@ -131,6 +136,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 keyboardType="phone-pad"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={userStore.userChangeInfoState.phoneInputError}
+                onFocus={()=>userStore.clearChangeInputError('phone')}
             />
         )}/>
         {/* <Input
@@ -143,13 +149,19 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={userStore.userChangeInfoState.phoneInputError}
             /> */}
-        <Input
+        <Controller control={control} name={'email'}
+            render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                onFocus={()=>userStore.clearChangeInputError('email')}
                 fullWidth
+                value={value}
+                onChange={onChange}
                 placeholder="Электронная почта"
                 keyboardType="email-address"
-                value={userStore.userInfo?.email}
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                error={userStore.userChangeInfoState.emailInputError}
             />
+        )}/>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>
         Сменить пароль
         </IfgText>

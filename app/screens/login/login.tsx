@@ -12,6 +12,7 @@ import authStore from '../../../store/state/authStore/authStore';
 import { LoginByUserPasswordModel } from '../../../store/state/authStore/models/models';
 import { observer } from 'mobx-react';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import {isValidEmail} from '../../core/utils/isValidEmail';
 
 export const Login = observer(() => {
     const navigation = useNavigation<any>();
@@ -41,8 +42,11 @@ export const Login = observer(() => {
       const onSubmit = handleSubmit(async (data) => {
         console.log(data);
         if (!data.email) {authStore.fillEmailError('Заполните поле');}
+        else if (!isValidEmail(data.email)){
+          authStore.fillEmailError('Некорректный Email');
+      }
         if (!data.password) {authStore.fillPasswordError('Заполните поле');}
-        if (data.email && data.password) {authStore.login(data, ()=>navigation.replace('Main'));}
+        if (isValidEmail(data.email) && data.email && data.password) {authStore.login(data, ()=>navigation.replace('Main'));}
       });
 
       const clearLogin = () => {
@@ -96,8 +100,8 @@ export const Login = observer(() => {
                 error={authStore.loginByUserPassword.passwordInputError}
             />
             )}/>
-          {authStore.errorMessage && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
-          {authStore.errorMessage || 'Что-то пошло не так'}</IfgText>}
+          {/* {authStore.errorMessage && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+          {authStore.errorMessage || 'Что-то пошло не так'}</IfgText>} */}
             <AnimatedGradientButton style={s.buttonLogin}
                 disabled={authStore.isLoading}
                 onPress={onSubmit}

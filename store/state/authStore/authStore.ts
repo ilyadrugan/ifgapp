@@ -137,17 +137,10 @@ class AuthStore {
       .catch((err)=>{
         console.log('login ERROR',err.response.data);
 
-        if (err.response.data.errors.promocode) {
-          console.log('Full error response:', err.response.data); // Полный JSON ошибки
-          console.log('Error message:', err.response.data.message); // Текст ошибки
-          console.log('Validation errors:', err.response.data.errors); // Детали ошибок
+        if (err.response.data.error || err.response.data.message) {
 
-          this.errorMessage = err.response.data.errors.promocode[0];
-          errorToast(this.errorMessage);
-        }
-        else if (err.response.data.errors.num_doc){
-          this.errorMessage = err.response.data.errors.num_doc[0].replace('<br>', '\n');
-          errorToast(this.errorMessage);
+          this.errorMessage = err.response.data.error;
+          errorToast('Неправильно введён логин или пароль');
         }
         else {
           this.errorMessage = 'Неизвестная ошибка';

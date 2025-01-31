@@ -18,11 +18,7 @@ export type UserChangeInfoModel = {
     last_name: string;
     // birthday: string;
     email: string;
-    // passwordData: {
-    //     old: string;
-    //     new: string;
-    //     repeat: string;
-    // }
+    passwordData: UserPasswordChangeModel
 }
 export type UserPasswordChangeModel = {
     current_password: string;
@@ -35,6 +31,9 @@ export type UserChangeInfoState = {
     last_nameInputError?: string,
     phoneInputError?: string,
     emailInputError?: string,
+    current_passwordInputError?: string;
+    passwordInputError?: string;
+    password_confirmitionInputError?: string,
     errors?: UserChangeInfoErrors
 }
 

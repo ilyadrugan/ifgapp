@@ -26,6 +26,9 @@ class UserStore {
   fillChangeInputError = (field: string, error: string) => {
       this.userChangeInfoState[`${field}InputError`] =  error;
   };
+  clearChangeInputError = (field: string) => {
+    this.userChangeInfoState[`${field}InputError`] =  '';
+  };
   getProfile = async () => {
     this.isLoading = true;
     await getProfileApi()
