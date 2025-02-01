@@ -107,17 +107,8 @@ export const Login = observer(() => {
                 disabled={authStore.isLoading}
                 onPress={onSubmit}
                 >
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    }}>
-                    <View style={{
-                        width:'100%',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
+                <View style={gs.buttonContent}>
+                <View style={gs.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Войти</IfgText>
                         {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
                     </View>

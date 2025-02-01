@@ -226,6 +226,17 @@ const gs = StyleSheet.create({
     padding: 16,
     margin: -16,
   },
+  buttonContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  buttonContentRow: {
+    width:'100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+},
 });
 
 export default gs;

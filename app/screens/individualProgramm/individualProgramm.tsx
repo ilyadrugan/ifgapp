@@ -1,14 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { AnimatedGradientButton, Button, ButtonNext, ButtonTo } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button,  ButtonTo } from '../../core/components/button/button';
 
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
-import ArrowTo from '../../../assets/icons/arrow-to.svg';
 
 import Delete from '../../../assets/icons/delete.svg';
 import Fish from '../../../assets/icons/fish.svg';
@@ -19,7 +18,6 @@ import CheckConst from '../../../assets/icons/checkConst.svg';
 
 import { CardContainer } from '../../core/components/card/cardContainer';
 import LinearGradient from 'react-native-linear-gradient';
-import { VideoPlayer } from '../../core/components/videoplayer/videoplayer';
 import { IndividualProgrammData } from '../testing/testData/individualProgramm';
 import { CircularProgress } from '../../core/components/circularProgress/circularProgress';
 import {CheckBox} from '../../core/components/checkbox/checkbox';
@@ -35,6 +33,7 @@ import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 
 export const IndividualProgramm = observer(() => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
+    const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
     const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
     const setCheckBoxesValues = () =>{
@@ -166,8 +165,11 @@ export const IndividualProgramm = observer(() => {
                     <ArrowRight />
                 </>
             </Button>
-        <VideoPlayer thumbnailName="thumbnail1" source={url} title={'О платформе ifeelgood'}/>
-
+            <RutubeView
+              url={url}
+              thumbnailUrl={thumbnail1}
+              title="О платформе ifeelgood"
+            />
          </ImageBackground>
          <View style={gs.mt24} />
          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваш персональный план</IfgText>
@@ -175,11 +177,6 @@ export const IndividualProgramm = observer(() => {
 
 
         <View style={gs.mt16} />
-        {/* <RutubeView
-            url={url}
-            width={400}
-            height={200}
-          /> */}
         {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
@@ -306,17 +303,8 @@ export const IndividualProgramm = observer(() => {
      <AnimatedGradientButton style={s.buttonNext}
                 onPress={()=>navigation.replace('Main')}
                 >
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    }}>
-                    <View style={{
-                        width:'100%',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
+                <View style={gs.buttonContent}>
+                <View style={gs.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium]}>Начать следовать</IfgText>
                        <AnimatedArrow />
                     </View>

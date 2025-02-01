@@ -20,7 +20,6 @@ import { html } from './mocksHtmlResults/htmlResults';
 import testingStore from '../../../store/state/testingStore/testingStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
-// import VideoPlayer from 'react-native-video-player';
 import RenderHTMLContent from '../../screens/materials/components/renderHTMLJson';
 
 export const ResultTest = ({route}) => {

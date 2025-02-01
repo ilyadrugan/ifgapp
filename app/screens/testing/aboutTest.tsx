@@ -14,8 +14,8 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { CardContainer } from '../../core/components/card/cardContainer';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-import { VideoPlayer } from '../../core/components/videoplayer/videoplayer';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 
 const width = Dimensions.get('screen').width;
 const dataSteps = [
@@ -68,8 +68,8 @@ const carouselItems = [
     },
   ];
 export const AboutTest = () => {
-    const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
-    const navigation = useNavigation<any>();
+    const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
+    const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');    const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [activeSlide, setActiveSlide] = useState(0);
 
@@ -127,7 +127,12 @@ export const AboutTest = () => {
             source={require('../../../assets/backgrounds/smallPhone0.5.png')}/>
          </ImageBackground>
          <View style={gs.mt16} />
-        <VideoPlayer thumbnailName="thumbnail1" source={url} title={'О платформе ifeelgood'}/>
+         <RutubeView
+              url={url}
+              
+              thumbnailUrl={thumbnail1}
+              title="О платформе ifeelgood"
+            />
     <View style={gs.mt16} />
     <CardContainer>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>

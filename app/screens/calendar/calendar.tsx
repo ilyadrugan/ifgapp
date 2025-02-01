@@ -278,17 +278,8 @@ export const CalendarScreen = observer(() =>{
         <AnimatedGradientButton style={s.buttonNext}
                 onPress={()=>navigation.navigate('IndividualProgramm')}
                 >
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    }}>
-                    <View style={{
-                        width:'100%',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
+                <View style={gs.buttonContent}>
+                    <View style={gs.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium]}>{'Моя программа'}</IfgText>
                        <AnimatedArrow />
                     </View>
