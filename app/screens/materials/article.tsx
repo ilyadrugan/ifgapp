@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState, useRef } from 'react';
-import { Image,  View, ActivityIndicator, ScrollView, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { Image, View, ActivityIndicator, ScrollView, StyleSheet, FlatList, Dimensions } from 'react-native';
 import colors from '../../core/colors/colors';
 import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -9,7 +9,7 @@ import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { parseHTMLToSequentialObjects, stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
-import ArrowBack from '../../../assets/icons/arrow-back.svg';
+import ArrowBack from '../../../assets/icons/arrow-back-black.svg';
 import Like from '../../../assets/icons/like.svg';
 import EyeViews from '../../../assets/icons/eye-views.svg';
 import Star from '../../../assets/icons/star.svg';
@@ -99,16 +99,11 @@ export const ArticleView = observer(({route}) => {
     {articlesStore.isLoading && <View style={{justifyContent: 'center', alignItems: 'center', height: '100%' }}>
       <ActivityIndicator size={'large'} animating/>
       </View>}
+
       {articlesStore.currentArticle.id !== 0 && <IOScrollView
       style={s.container}
       >
-        <Button style={s.buttonBack} onPress={onBack}>
-            <>
-                <ArrowBack />
-                <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
-            </>
-        </Button>
-        <View style={gs.mt16} />
+        <View style={gs.mt48} />
         <IfgText style={[gs.h2, gs.bold]}>{articlesStore.currentArticle?.title}</IfgText>
         <View style={gs.mt16} />
         <Image
@@ -208,7 +203,11 @@ export const ArticleView = observer(({route}) => {
                 renderItem={({item, index})=>MaterialCard(item, index)}
         />
         <View style={{height: 100}} />
-    </IOScrollView>}</>;
+    </IOScrollView>}
+    <Button onPress={onBack} style={[s.roundButton]}>
+      <ArrowBack />
+        </Button>
+    </>;
     });
 
 const s = StyleSheet.create({
@@ -231,12 +230,30 @@ const s = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 6,
+        // position: 'absolute',
+        // backgroundColor: colors.WHITE_COLOR,
         backgroundColor: 'transparent',
         borderColor: colors.BORDER_COLOR2,
         borderWidth: 0.75,
         borderRadius: 8,
         width: 84,
         height: 26,
+      },
+      roundButton: {
+        position: 'absolute',
+        top: 16,
+        left: 16,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.WHITE_COLOR,
+        shadowColor: '#000000',
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 10, height: 2},
+        shadowRadius: 20,
+        elevation: 8,
       },
       winnerCard: {
         borderRadius: 12,

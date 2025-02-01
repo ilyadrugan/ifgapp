@@ -124,7 +124,7 @@ export const Registration = observer(() => {
       } = useForm<RegisterFormModel>();
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
+        // console.log(data);
         if (activeTab === 1) {
             authStore.clearAllRegisterByPromocodeInputError();
             if (!data.last_name) {authStore.fillRegisterByPromocodeInputError('last_name','Заполните поле');}
@@ -158,7 +158,7 @@ export const Registration = observer(() => {
             }
         }
         else if (activeTab === 0) {
-            console.log(data);
+            // console.log(data);
             authStore.clearAllRegisterByNumDocInputError();
             if (!dateOfBirth) {authStore.fillRegisterByNumDocInputError('birthday','Заполните поле');}
             if (!data.email) {authStore.fillRegisterByNumDocInputError('email','Заполните поле');}

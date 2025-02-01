@@ -157,7 +157,7 @@ const DropdownBlock: FC<{
   const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number, parent?: ArticleThemesModel) => {
     // if (activeTab === 0) {articlesStore.clearArticles();}
     // if (activeTab === 1) {articlesStore.clearInterViews('finished'); articlesStore.clearInterViews('actual');}
-    console.log('getMaterialsBySortTheme',option, parent);
+    // console.log('getMaterialsBySortTheme',option, parent);
 
 
     if (option.tag_id !== 1000 && (option.sort_value || sortOption.sort_value)) {
@@ -226,8 +226,8 @@ const DropdownBlock: FC<{
     getMaterialsBySortTheme(option, parent);
 
     // setCurrentQuery(finalQuery);
-    console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
-    console.log('interviewsQueryParams',articlesStore.getInterViewsQueryParamsString());
+    // console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
+    // console.log('interviewsQueryParams',articlesStore.getInterViewsQueryParamsString());
     if (activeTab === 0) {
       await articlesStore.clearArticles();
       await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
@@ -245,7 +245,6 @@ const DropdownBlock: FC<{
     // onRefresh(finalQuery);
   };
   const renderOptionTheme = (option: ArticleThemeModel, parent: ArticleThemesModel, index: number, onSelect) => {
-    console.log('option', option);
     return (<>
     <View
       key={index.toString()}
@@ -261,7 +260,6 @@ const DropdownBlock: FC<{
     </>
   );};
   const renderOption = (option: ArticleSortModel | ArticleThemesModel, index: number, onSelect, type) => {
-    console.log('option', option);
     const isOpen = openParent === option.tag_id;
     return (<>
     <View
