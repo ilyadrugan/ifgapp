@@ -9,6 +9,9 @@ import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import Quotes from '../../../assets/icons/quotes.svg';
 import Quotes55 from '../../../assets/icons/quotes55x55.svg';
 import Clocks from '../../../assets/icons/clocks.svg';
+import Postepennost from '../../../assets/icons/postepennost.svg';
+import Note from '../../../assets/icons/note.svg';
+import Monitoring from '../../../assets/icons/monitoring.svg';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -49,22 +52,34 @@ const carouselItems = [
         description: 'Главная задача — выполнение плана должно войти в вашу привычку. Что такое привычка? Это действия, которые вы выполняете регулярно без напряжения. Добиться этого можно с помощью контроля за уровнем нагрузки — важно, чтобы он был оптимальным и не вызывал перегрузку и сопротивление к изменениям. ',
         description2: 'Придерживайтесь принципа: «Лучше делать хоть что-то, но каждый день!». Выберете для регулярных действий небольшой шаг (облегчите рекомендацию), которому точно сможете следовать. Если вы всё-таки срываетесь, главное не бросать занятия полностью, а после перерыва начинать снова и снова, возвращаясь в зону своих возможностей за счёт снижения нагрузки.',
         icon: <Clocks />,
+        color: '#ffffff',
     },
     {
         number: '02',
-        title: 'Регулярность',
-        subTitle: 'Сформируйте привычку через управление нагрузкой',
-        description: 'Главная задача — выполнение плана должно войти в вашу привычку. Что такое привычка? Это действия, которые вы выполняете регулярно без напряжения. Добиться этого можно с помощью контроля за уровнем нагрузки — важно, чтобы он был оптимальным и не вызывал перегрузку и сопротивление к изменениям. ',
-        description2: 'Придерживайтесь принципа: «Лучше делать хоть что-то, но каждый день!». Выберете для регулярных действий небольшой шаг (облегчите рекомендацию), которому точно сможете следовать. Если вы всё-таки срываетесь, главное не бросать занятия полностью, а после перерыва начинать снова и снова, возвращаясь в зону своих возможностей за счёт снижения нагрузки.',
-        icon: <Clocks />,
+        title: 'Постепенность',
+        subTitle: 'Двигаетесь к своей цели шаг за шагом',
+        description: 'Важно увеличивать нагрузку постепенно. Её резкое повышение может привести к сильному дискомфорту и отказу от занятий. Ознакомившись с планом, начинайте с того, что вам легко выполнить — формируйте привычку и только после этого добавляйте новые практики.',
+        description2: 'Если вам становится тяжело, и вы чувствуете, что можете сорваться, сделайте шаг назад по нагрузке, сохранив регулярность. Когда вы почувствуете, что можете сделать больше, попробуйте снова повысить нагрузку. Управляйте нагрузкой так, чтобы с одной стороны не снижать регулярность, а с другой, чтобы она постепенно увеличивалась.',
+        icon: <Postepennost />,
+        color: '#DAEBFF',
     },
     {
         number: '03',
-        title: 'Регулярность',
-        subTitle: 'Сформируйте привычку через управление нагрузкой',
-        description: 'Главная задача — выполнение плана должно войти в вашу привычку. Что такое привычка? Это действия, которые вы выполняете регулярно без напряжения. Добиться этого можно с помощью контроля за уровнем нагрузки — важно, чтобы он был оптимальным и не вызывал перегрузку и сопротивление к изменениям. ',
-        description2: 'Придерживайтесь принципа: «Лучше делать хоть что-то, но каждый день!». Выберете для регулярных действий небольшой шаг (облегчите рекомендацию), которому точно сможете следовать. Если вы всё-таки срываетесь, главное не бросать занятия полностью, а после перерыва начинать снова и снова, возвращаясь в зону своих возможностей за счёт снижения нагрузки.',
-        icon: <Clocks />,
+        title: 'Комплексный подход',
+        subTitle: 'Развивайте все области жизни',
+        description: 'После того как вы сформировали привычку в одном направлении, важно добавить новую привычку из другой сферы жизни. Наше хорошее самочувствие — это баланс! Для хорошего самочувствия необходимо внедрять практики из всех областей: сон, питание, снижение стресса и физические активности.',
+        description2: 'Выполнение персонального плана в нескольких областях даёт усиливающий эффект на отдельные привычки, улучшая результат от них в несколько раз. Главное помнить о принципе постепенности, избегая выхода из зоны своих возможностей, сохранить регулярность и не бросить выполнение персонального плана.',
+        icon: <Note />,
+        color: '#C3DECB',
+    },
+    {
+        number: '04',
+        title: 'Отслеживание',
+        subTitle: 'Следите за своими успехами и поддерживайте мотивацию',
+        description: 'Мы подготовили календарь и дневник для отслеживания ваших успехов. Ежедневно фиксируя свои действия и практики, вы придёте к осознанному подходу к здоровью.Это поможет сохранить высокий уровень мотивации и находить силы для регулярных занятий. Будьте с нами на связи и читайте полезные советы тут',
+        description2: '',
+        icon: <Monitoring />,
+        color: '#F5E6D1',
     },
   ];
 export const AboutTest = () => {
@@ -75,25 +90,25 @@ export const AboutTest = () => {
 
       const Card = ({ item }) => {
         return (
-          <View style={s.card}>
+          <View style={[s.card, {paddingBottom: 16,backgroundColor: item.color, height: '100%'}]}>
             <View style={gs.mt32} />
 
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption,  {textAlign: 'center', alignSelf:'center'}]}>
                 {item.number}
             </IfgText>
 
-            <View style={gs.mt12} />
+            <View style={gs.mt20} />
             <View style={s.icon}>
             {item.icon}
             </View>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold, gs.mt12,  {textAlign: 'center' , alignSelf:'center' }]}>
                 {item.title}
             </IfgText>
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.mt12,  {textAlign: 'center' , alignSelf:'center', maxWidth: '70%' }]}>
+            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.mt12,  {textAlign: 'center' , alignSelf:'center', maxWidth: '80%' }]}>
                 {item.subTitle}
             </IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.mt12, {textAlign: 'center', alignSelf:'center'}]}>{item.description}</IfgText>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.mt12, {textAlign: 'center', alignSelf:'center'}]}>{item.description2}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.mt12, {textAlign: 'left' }]}>{item.description}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.mt12, {textAlign: 'left' }]}>{item.description2}</IfgText>
           </View>
         );
       };
@@ -129,7 +144,7 @@ export const AboutTest = () => {
          <View style={gs.mt16} />
          <RutubeView
               url={url}
-              
+
               thumbnailUrl={thumbnail1}
               title="О платформе ifeelgood"
             />
@@ -180,7 +195,7 @@ export const AboutTest = () => {
     Придерживайтесь принципов ниже и всё получится!
     </IfgText>
     <View style={gs.mt16} />
-    <CardContainer style={{padding: 0,paddingBottom: 16, overflow: 'hidden',  alignItems:'center'}} >
+    <CardContainer style={{padding: 0, overflow: 'hidden',  alignItems:'center'}} >
             <Pagination
               dotsLength={carouselItems.length}
               activeDotIndex={activeSlide}
@@ -317,7 +332,7 @@ const s = StyleSheet.create({
       },
       card: {
         alignSelf: 'center',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignContent: 'center',
         paddingHorizontal: 16,
         // backgroundColor: colors.WHITE_COLOR,

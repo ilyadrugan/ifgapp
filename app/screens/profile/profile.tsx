@@ -33,6 +33,7 @@ import testingStore from '../../../store/state/testingStore/testingStore';
 import paymentsStore from '../../../store/state/paymentsStore/paymentsStore';
 import tariffsStore from '../../../store/state/tariffsStore/tariffsStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import { navigateAndReset } from '../../core/utils/navigateAndReset';
 
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
@@ -58,7 +59,7 @@ export const ProfileScreen = observer(() => {
     const animation = useRef(new Animated.Value(0)).current;
     const exit = async() => {
       await authStore.logout().then(()=>{
-        navigation.replace('Login');
+        navigateAndReset(navigation, 'Login');
       });
 
     };
