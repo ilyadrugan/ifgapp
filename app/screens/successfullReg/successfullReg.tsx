@@ -43,10 +43,10 @@ export const SuccessfulReg = () => {
             source={require('../../../assets/backgrounds/imageShort.png')}
             style={[s.container]} >
 
-        <LinearGradient
+        {/* <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
             style={s.shadowGradient}
-        />
+        /> */}
       <View style={s.imageContainerStyle}>
 
         <Image

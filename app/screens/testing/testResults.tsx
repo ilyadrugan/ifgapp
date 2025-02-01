@@ -93,11 +93,11 @@ export const ResultTest = ({route}) => {
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>{balanceLvlData ? balanceLvlData.title : ''}</IfgText>
             </View>
         </CardContainer>
-        <View style={gs.mt16} />
+        {/* <View style={gs.mt16} />
         <CardContainer>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваша ключевая задача</IfgText>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>{balanceLvlData ? balanceLvlData.quote : ''}</IfgText>
-        </CardContainer>
+        </CardContainer> */}
         <View style={gs.mt16} />
         <CardContainer>
             <IfgText style={[gs.fontBodyMedium, gs.bold]}>Что означает?</IfgText>
