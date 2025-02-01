@@ -4,6 +4,7 @@ import colors from '../../colors/colors';
 import React from 'react';
 import { IfgText } from '../text/ifg-text';
 import gs from '../../styles/global';
+import Search from '../../../../assets/icons/search.svg';
 
 
 export const Input: FC<{
@@ -15,6 +16,7 @@ export const Input: FC<{
     children?: ReactNode,
     maxLength?: number,
     placeholder?: string,
+    placeholderTextColor?: string,
     keyboardType?:KeyboardTypeOptions | undefined,
     secureTextEntry?: boolean
     value?: string,
@@ -31,6 +33,7 @@ export const Input: FC<{
       children,
       maxLength,
       placeholder,
+      placeholderTextColor,
       keyboardType,
       secureTextEntry,
       value,
@@ -50,12 +53,13 @@ export const Input: FC<{
       onChangeText={onChange}
       maxLength={maxLength}
       placeholder={placeholder}
-      placeholderTextColor={colors.PLACEHOLDER_COLOR}
+      placeholderTextColor={placeholderTextColor || colors.PLACEHOLDER_COLOR}
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
       value={value}
       onFocus={onFocus}
       defaultValue={defaultValue}
+
      />
     {children ? children : null }
       </View>
@@ -65,6 +69,35 @@ export const Input: FC<{
     </View>;
 };
 
+export const TextInputWithIcon: FC<{
+  onChange?: (text: string) => void,
+  onFocus?: () => void,
+  style?: StyleProp<ViewStyle | TextStyle>,
+  placeholder?: string,
+  placeholderTextColor?: string,
+}> = (
+  {
+    onChange,
+    onFocus,
+    style,
+    placeholder,
+    placeholderTextColor,
+  }) => {
+  return (
+    <View style={[s.inputContainer, style]}>
+      <TextInput
+        style={s.input2}
+        placeholder={placeholder}
+        placeholderTextColor={placeholderTextColor || colors.PLACEHOLDER_COLOR}
+        onFocus={onFocus}
+        onChangeText={onChange}
+      />
+      <View style={s.icon} >
+        <Search />
+      </View>
+    </View>
+  );
+};
 
 const s = StyleSheet.create({
     input: {
@@ -88,5 +121,23 @@ const s = StyleSheet.create({
     },
     error: {
       borderColor: colors.RED_COLOR,
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#E4E4E4',
+      borderRadius: 12,
+      paddingHorizontal: 10,
+      height: 56,
+      backgroundColor: 'rgba(255,255,255, 0.35)',
+    },
+    input2: {
+      flex: 1, // Расширяет TextInput, чтобы занимать все доступное пространство
+      ...gs.fontCaption2,
+    },
+    icon: {
+      marginLeft: 6, // Отступ между TextInput и иконкой
+      marginRight: 4,
     },
   });

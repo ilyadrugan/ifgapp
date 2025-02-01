@@ -16,6 +16,9 @@ import { observer } from 'mobx-react';
 import {stripHtmlTags} from '../../core/utils/stripHtmlTags';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
+import { Input, TextInputWithIcon } from '../../core/components/input/input';
+import Search from '../../../assets/icons/search.svg';
+
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -148,11 +151,15 @@ return <>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
                 <View style={gs.mt16} />
+                <TextInputWithIcon
+                placeholderTextColor="rgba(55, 55, 55, 0.45)"
+                placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/>
+                <View style={gs.mt16} />
             {(articlesStore.articleThemesList.length > 0) ?
                     <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} /> :
                     <ShimmerPlaceholder height={200} width={ScreenWidth - 32} />
                     }
-            <View style={s.hashtagsContainer}>
+                <View style={s.hashtagsContainer}>
 
                 {activeTab === 1 && switchs.map(item => <TouchableOpacity key={item.id.toString() + 'l'} onPress={()=>onSwitch(item.id)} style={[s.interview, activeSwitch === item.id && {backgroundColor: colors.GREEN_COLOR}]}>
                         <IfgText color={activeSwitch === item.id ? colors.WHITE_COLOR : '#878787'} style={gs.fontLightSmall}>{item.name}</IfgText>
@@ -184,7 +191,7 @@ const s = StyleSheet.create({
         flexWrap: 'wrap',
         gap: 6,
         zIndex: -100,
-    elevation: -100,
+        elevation: -100,
     },
     hashtag: {
         padding: 8,
