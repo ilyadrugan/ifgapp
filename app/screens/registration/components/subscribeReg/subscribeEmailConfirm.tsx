@@ -58,12 +58,12 @@ export const SubscribeEmailConfirm:
         };
         const onCheckConfirm = () => {
             console.log('Проверить');
+            setIsLoading(true);
             successToast('Ваш профиль активирован!');
             setTimeout(()=>paymentCreate(), 1000);
         };
         const paymentCreate = async () => {
             console.log('paymentCreate');
-            setIsLoading(true);
             // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
             // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
             const price = tariffsStore.tariffChoosed.price_discount || tariffsStore.tariffChoosed.price;

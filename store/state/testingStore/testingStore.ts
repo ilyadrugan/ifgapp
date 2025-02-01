@@ -43,14 +43,22 @@ class TestingStore {
       return question;
     });
   }
+
+  countMaxValuesInTestByGroup(group: string, questions: QuestionModel[]) {
+    const groupQuestions = questions.filter((question)=>question.group === group);
+    return groupQuestions.reduce((summ, item)=>{
+      return Math.max(...item.choices.map((choice)=>Number(choice.score))) + summ;
+    }, 0);
+  }
+
   setMyCurrentResultsTest(testId: number) {
     console.log('setMyCurrentResultsTest', testId);
     this.disableRecommendationCheck = true;
     const test = this.testsList.find((test, index)=>{
       if (index === 0 && test.id === testId) {this.disableRecommendationCheck = false;}
       return (test.id === testId);});
-    console.log('setMyCurrentResultsTest', test);
     if (test) {
+      this.getTestById(test.survey_id);
       this.myCurrentResultsTest = {
       id: test?.id,
       survey_id: test.survey_id,
@@ -58,6 +66,7 @@ class TestingStore {
       activiti_value_json: JSON.parse(test.activiti_value_json),
       completedHtmlOnConditionScore: test.completedHtmlOnConditionScore,
     };
+    console.log('this.myCurrentResultsTest', this.myCurrentResultsTest.maxValues);
     }
     else {
       this.disableRecommendationCheck = false;
@@ -129,19 +138,28 @@ class TestingStore {
       .finally(()=>{this.isLoading = false;});
   }
   async getTestById(id: number) {
+    console.log('getTestById', id);
     this.isLoading = true;
     this.errorMessage = '';
     await getTestByIdApi(id)
       .then((result)=>{
+        const questions = this.remapQuestions(result.data.data.json.pages);
         // console.log('result.data.data.json', result.data.data.json.pages[0]);
         this.currentTest = {
           id: result.data.data.id,
           name: result.data.data.name,
           testLength: result.data.data.json.pages.length,
-          questions: this.remapQuestions(result.data.data.json.pages),
+          questions: questions,
           completedHtmlOnConditionScore: result.data.data.json.completedHtmlOnConditionScore,
           startHtml: result.data.data.json.startHtml,
+          maxValues: {
+            Сон: this.countMaxValuesInTestByGroup('Сон', questions),
+            Питание: this.countMaxValuesInTestByGroup('Питание', questions),
+            Антистресс: this.countMaxValuesInTestByGroup('Антистресс', questions),
+            'Физическая активность': this.countMaxValuesInTestByGroup('Физическая активность', questions),
+          },
         };
+        console.log('this.currentTest',this.currentTest.maxValues);
       }
       )
       .catch((err)=>{
@@ -166,6 +184,7 @@ class TestingStore {
             created_at: test.created_at,
             name: test.survey.name,
             completedHtmlOnConditionScore: test.survey.json.completedHtmlOnConditionScore,
+            questions: test.survey.json.pages.map(page=>page.elements[0]),
           } as MyTestModel;
         });
         // console.log( this.testsList);

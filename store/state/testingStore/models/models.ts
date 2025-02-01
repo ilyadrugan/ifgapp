@@ -7,6 +7,7 @@ export type TestModel = {
     questions: QuestionModel[],
     completedHtmlOnConditionScore: HtmlOnConditionScore[],
     startHtml: string,
+    maxValues: ActivitiValueViewModel,
 }
 
 export type HtmlOnConditionScore = {
