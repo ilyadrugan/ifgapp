@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground, ScrollView, Dimensions, NativeModules } from 'react-native';
+import { View, StyleSheet, ImageBackground, ScrollView, Dimensions, NativeModules, ActivityIndicator } from 'react-native';
 import colors from '../../../../core/colors/colors';
 import { IfgText } from '../../../../core/components/text/ifg-text';
 import gs from '../../../../core/styles/global';
@@ -25,6 +25,7 @@ export const SubscribeEmailConfirm:
         const [timeLeft, setTimeLeft] = useState(30); // Начальные 30 секунд
         const [isRunning, setIsRunning] = useState(true);
         const scrollViewRef = useRef(null);
+        const [isLoading, setIsLoading] = useState(false);
 
         const scrollToBottom = () => {
         if (scrollViewRef.current) {
@@ -62,13 +63,13 @@ export const SubscribeEmailConfirm:
         };
         const paymentCreate = async () => {
             console.log('paymentCreate');
+            setIsLoading(true);
             // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
             // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
             const price = tariffsStore.tariffChoosed.price_discount || tariffsStore.tariffChoosed.price;
             YookassaModule.startTokenize('', 'Оплата подписки IFeelGood Pro', '', price,
                 async (result) => {
               console.log('Результат из нативного модуля:', result.paymentToken);
-
               if (result.paymentToken) {
                await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 10, token: result.paymentToken})
                 .then(async (res)=>{
@@ -97,9 +98,12 @@ export const SubscribeEmailConfirm:
                 })
                 .catch(err=>console.log('payment-create error',err))
                 .finally(async()=>{
+                    setIsLoading(false);
 
                 });
               }
+              setIsLoading(false);
+
             } );
 
             // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
@@ -123,13 +127,16 @@ export const SubscribeEmailConfirm:
                 <View style={gs.mt12} />
                 <IfgText style={gs.fontCaption}>Для активации вашего профиля необходимо подтверждение электронной почты, мы отправили письмо с активационной ссылкой на <IfgText color={colors.GREEN_COLOR} style={[gs.fontCaption, gs.underline, gs.bold]}>{userStore.userInfo?.email || 'gmail@gmail.com'}</IfgText>, после перехода по ссылке нажмите кнопку «Проверить» ниже</IfgText>
                 <View style={gs.mt18} />
-                <AnimatedGradientButton style={s.buttonLogin}
-                onPress={onCheckConfirm}
-                >
+                <AnimatedGradientButton
+                    isLoading={isLoading}
+                    disabled={isLoading}
+                    style={s.buttonLogin}
+                    onPress={onCheckConfirm}
+                    >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Проверить</IfgText>
-                        <AnimatedArrow />
+                    {isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>

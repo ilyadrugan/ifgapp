@@ -1,6 +1,6 @@
-import { Image, ImageBackground, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { Button } from '../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import { IfgText } from '../../core/components/text/ifg-text';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import colors from '../../core/colors/colors';
@@ -8,6 +8,11 @@ import gs from '../../core/styles/global';
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import testingStore from '../../../store/state/testingStore/testingStore';
+import authStore from '../../../store/state/authStore/authStore';
+import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import { CommonActions } from '@react-navigation/native';
+import { navigateAndReset } from '../../core/utils/navigateAndReset';
+
 export const SuccessfulReg = () => {
   const navigation = useNavigation<any>();
   const abilities = [
@@ -73,22 +78,21 @@ export const SuccessfulReg = () => {
         </View>
         <View style={s.footer}>
 
-         <Button style={s.buttonNext}
-                onPress={()=>testingStore.testsList.length > 0 ? navigation.navigate('IndividualProgramm') : navigation.navigate('Main')}
+        <AnimatedGradientButton style={s.buttonNext}
+                disabled={authStore.isLoading}
+                onPress={()=>testingStore.testsList.length > 0 ?
+                  navigateAndReset(navigation, 'IndividualProgramm')
+                  :
+                  navigateAndReset(navigation, 'Main')}
                 >
-                <View style={s.buttonContent}>
-                    <View style={s.buttonContentRow}>
-                    <View style={[gs.flexRow, gs.alignCenter]}>
-                         <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Быть здоровым</IfgText>
+                <View style={gs.buttonContent}>
+                <View style={gs.buttonContentRow}>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Быть здоровым</IfgText>
+                        {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
                     </View>
-                        <ArrowRight />
-                    </View>
-
                     <View />
                 </View>
-
-            </Button>
-
+            </AnimatedGradientButton>
         </View>
 
         </ImageBackground>
@@ -112,7 +116,13 @@ const s = StyleSheet.create({
         zIndex: 9999,
         elevation: 100,
     },
-
+      buttonLogin: {
+        backgroundColor: colors.GREEN_COLOR,
+        borderRadius: 16,
+        paddingHorizontal: 24,
+        height: 78,
+        width: '86%',
+      },
     shadowGradient: {
         position: 'absolute',
         bottom: 0,
