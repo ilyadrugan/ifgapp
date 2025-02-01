@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -36,6 +36,7 @@ export const IndividualProgramm = observer(() => {
     const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
     const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const setCheckBoxesValues = () =>{
       const values = {
         'Питание': recommendationStore.recommendationList.Питание.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
@@ -44,6 +45,7 @@ export const IndividualProgramm = observer(() => {
         'Физическая активность': recommendationStore.recommendationList['Физическая активность'].map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
       };
       console.log('values', values);
+
       return values;
       // setCheckBoxes(values)
     };
@@ -60,8 +62,10 @@ export const IndividualProgramm = observer(() => {
     }, []);
 
     const getData = async () => {
-      testingStore.getAllMyTest();
-      recommendationStore.getPersonalRecommendations();
+      setIsLoading(true);
+
+      await testingStore.getAllMyTest();
+      await recommendationStore.getPersonalRecommendations();
       // recommendationStore.getPersonalRecommendations();
       if (!testingStore.myCurrentResultsTest || testingStore.myCurrentResultsTest.id === 0) {
         // console.log('testingStore.testsList', testingStore.testsList);
@@ -74,10 +78,14 @@ export const IndividualProgramm = observer(() => {
       if (articlesStore.articlesMainList.articles.length === 0) {
         articlesStore.loadMainArticles();
       }
+      setCheckBoxes(setCheckBoxesValues());
     };
 
 
-    const getRecomendations = async (testId: number) => await recommendationStore.getRecommendations(testId);
+    const getRecomendations = async (testId: number) => {
+      await recommendationStore.getRecommendations(testId);
+      setIsLoading(false);
+    };
 
     const onRecommendationCheck = async (link: string, category: string, index: number) =>{
       console.log('onRecommendationCheck', link, category);
@@ -176,8 +184,6 @@ export const IndividualProgramm = observer(() => {
          <View style={gs.mt24} />
          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваш персональный план</IfgText>
 
-
-
         <View style={gs.mt16} />
         {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
@@ -192,7 +198,7 @@ export const IndividualProgramm = observer(() => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {recommendationStore.recommendationList.Питание.map((item, index)=><View key={index.toString()} style={s.row}>
+          {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Питание.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
             <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Питание', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Питание'][index]}/>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
@@ -216,7 +222,7 @@ export const IndividualProgramm = observer(() => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {recommendationStore.recommendationList.Сон.map((item, index)=><View key={index.toString()} style={s.row}>
+          {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Сон.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
           <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Сон', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Сон'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
@@ -240,7 +246,7 @@ export const IndividualProgramm = observer(() => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {recommendationStore.recommendationList.Антистресс.map((item, index)=><View key={index.toString()} style={s.row}>
+          {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Антистресс.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
           <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Антистресс', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Антистресс'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
@@ -264,7 +270,7 @@ export const IndividualProgramm = observer(() => {
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold, {width: '50%'}]}>Активности</IfgText>
             <IfgText color={colors.BLACK_COLOR} style={[gs.fontCaption3, gs.bold]}>Цели</IfgText>
           </View>
-          {recommendationStore.recommendationList['Физическая активность'].map((item, index)=><View key={index.toString()} style={s.row}>
+          {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList['Физическая активность'].map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
           <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Физическая активность', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Физическая активность'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
