@@ -160,8 +160,8 @@ export const ArticleView = observer(({route}) => {
         <View style={gs.mt12} />
         </InView>
 
-        <View style={[gs.flexRow, { gap: 10, flexWrap: 'wrap'}]}>
-          <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+        <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
+          <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
           <View style={{ top: -1}}>
           <EyeViews/>
           </View>
@@ -169,10 +169,8 @@ export const ArticleView = observer(({route}) => {
           </Button>
 
           <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
-            <View >
-            <Star />
-            </View>
-            {articlesStore.isUserArticleLoading ? <View style={{width: 100}}><ActivityIndicator/></View> : <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>}
+          {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
+            <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
           </Button>
           <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
           style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
