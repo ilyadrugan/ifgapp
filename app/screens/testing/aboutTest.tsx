@@ -206,13 +206,13 @@ export const AboutTest = () => {
             <Carousel
                 data={carouselItems}
                 renderItem={({ item }) => <Card item={item} />}
-                sliderWidth={width - 32}
-                itemWidth={width - 32}
+                sliderWidth={width - 28}
+                itemWidth={width - 28}
                 loop={false}
                 // useScrollView={false}
-                autoplayDelay={0.2}
+                // autoplayDelay={0.2}
                 // autoplayInterval={0.5}
-                autoplay={true} // Зацикливание слайдера
+                autoplay={false} // Зацикливание слайдера
                 layout={'default'} // Расположение карточек
                 onSnapToItem={(index) => setActiveSlide(index) }
                 // enableMomentum={false}
@@ -237,18 +237,8 @@ export const AboutTest = () => {
     <AnimatedGradientButton style={s.buttonNext}
            onPress={()=>navigation.navigate('Testing')}
            >
-           <View style={{
-               flexDirection: 'row',
-               justifyContent: 'space-between',
-               alignItems: 'center',
-
-               }}>
-               <View style={{
-                   width:'100%',
-                   flexDirection: 'row',
-                   justifyContent: 'space-between',
-                   alignItems: 'center',
-               }}>
+           <View style={gs.buttonContent}>
+               <View style={gs.buttonContentRow}>
                 <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{'Пройти тестирование'}</IfgText>
                    <AnimatedArrow />
                </View>

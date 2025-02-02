@@ -6,8 +6,12 @@ import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
 import { IfgText } from '../../../../core/components/text/ifg-text';
 import gs from '../../../../core/styles/global';
 import Benefit from '../../../../../assets/icons/benefit.svg';
-import { AnimatedGradientButton } from '../../../../core/components/button/button';
+import { AnimatedGradientButton, Button } from '../../../../core/components/button/button';
 import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
+import { Controller } from 'react-hook-form';
+import { Input } from '../../../../core/components/input/input';
+import authStore from '../../../../../store/state/authStore/authStore';
+import Arrow from '../../../../../assets/icons/arrow-right.svg';
 
 export const SubscribeTariffs:
     FC<{
@@ -35,7 +39,7 @@ export const SubscribeTariffs:
       <View style={gs.mt16}/>
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>
-        {Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} ₽
+        {(tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}
         </IfgText>
         {tariffsStore.tariffs[activeDiscount].description && <View style={[s.discountPercentsBig, gs.ml24]}>
             <IfgText color={colors.BLACK_COLOR} style={gs.fontCaption}>
@@ -45,7 +49,7 @@ export const SubscribeTariffs:
       </View>
       <View style={gs.mt12}/>
       {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-                {tariffsStore.tariffs[activeDiscount].price} ₽
+                {Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽
             </IfgText>}
       <View style={gs.mt4}/>
       {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
@@ -82,6 +86,18 @@ export const SubscribeTariffs:
           </View>
         </View>
       </View>
+      {/* <Input
+                // fullWidth
+                //  value={value}
+                //  onChange={onChange}
+                placeholder="Промокод"
+                style={[gs.fontCaption, s.promocodeForm, {justifyContent: 'space-between', flexDirection: 'row', width: '100%'}]}
+            >
+              <Button style={{borderRadius: 12,width: 54, height: 54,right: 54 + 12, backgroundColor: colors.GREEN_COLOR, justifyContent:'center', alignItems: 'center'}}>
+              <Arrow />
+        </Button>
+
+      </Input> */}
       <View style={gs.mt16} />
       <AnimatedGradientButton style={s.buttonLogin}
                 onPress={onNext}
@@ -175,5 +191,11 @@ export const SubscribeTariffs:
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    promocodeForm: {
+              color: colors.BLACK_COLOR,
+              backgroundColor: colors.GREEN_LIGHT_LIGHT_GREEN,
+              borderColor: colors.GREEN_LIGHT_COLOR,
+              borderStyle: 'dashed',
     },
   });

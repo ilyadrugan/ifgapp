@@ -44,7 +44,7 @@ export const AnimatedHashtagContainer: FC<{
 export interface CardContainerProps extends ViewProps {
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  onPress?: () => void,
+  onPress?: () => void | null,
 }
 
 export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, ...props}) => {

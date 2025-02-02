@@ -66,12 +66,12 @@ export const SubscribeEmailConfirm:
             console.log('paymentCreate');
             // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
             // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
-            const price = tariffsStore.tariffChoosed.price_discount || tariffsStore.tariffChoosed.price;
+            const price = tariffsStore.tariffChoosed.price_discount ? Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1 : tariffsStore.tariffChoosed.price;
             YookassaModule.startTokenize('', 'Оплата подписки IFeelGood Pro', '', price,
                 async (result) => {
               console.log('Результат из нативного модуля:', result.paymentToken);
               if (result.paymentToken) {
-               await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: 10, token: result.paymentToken})
+               await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: price, token: result.paymentToken})
                 .then(async (res)=>{
                   console.log('payment-create data',res.data);
                   if (res.data.status === 'succeeded') {

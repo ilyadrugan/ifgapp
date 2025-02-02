@@ -4,6 +4,7 @@ export const formatPhoneNumberToPlain = (phoneNumber: string) => {
 
 export const formatPhoneNumberToPlus = (phoneNumber) => {
     // Преобразуем в строку и удаляем все лишние символы
+    if (!phoneNumber) {return '';}
     phoneNumber = phoneNumber.toString().replace(/\D/g, '');
 
     // Проверяем, начинается ли номер с "8"

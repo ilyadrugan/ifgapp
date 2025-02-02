@@ -39,10 +39,10 @@ export const Subscription: FC = observer(() =>{
     }, []);
 
     const onAddCard = async () => {
-      console.log('AddCard', formatPhoneNumberToPlus(userStore.userInfo?.phone));
+      console.log('AddCard');
       // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
       // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
-      const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone);
+      const phone_number = formatPhoneNumberToPlus(userStore.userInfo?.phone) || '';
       YookassaModule.startTokenize(phone_number, 'Добавление карты', '', 10,async (result) => {
         console.log('Результат из нативного модуля:', result.paymentToken);
 
@@ -126,9 +126,9 @@ export const Subscription: FC = observer(() =>{
             <View style={gs.mt6} />
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка IFeelGood Pro</IfgText>
 
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>{Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} ₽</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>{(tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}</IfgText>
             {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-                {tariffsStore.tariffs[activeDiscount].price}
+            {Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽
             </IfgText>}
             {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
             <View style={gs.mt12} />
@@ -195,7 +195,7 @@ export const Subscription: FC = observer(() =>{
                   </CardContainer>
           ) :
           <ShimmerPlaceholder style={[s.bankCardContainer, {width: '100%'}]} />}
-          <CardContainer  onPress={isLoading ? null : onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
+          <CardContainer onPress={isLoading ? null : onAddCard} style={[s.bankCardContainer,s.bankCardAddContainer]}>
           <View style={gs.mt4}>
               <View style={s.container}>
                 <View style={s.horizontal} />
