@@ -163,6 +163,7 @@ class AuthStore {
         const token = await AsyncStorage.getItem('fcm_token') || '';
         console.log('updateDeviceResultsTestApi',token);
         if (token) {await updateDeviceResultsTestApi(token);}
+        this.isLoading = false;
         this.access_token && callBack();
       }
       })

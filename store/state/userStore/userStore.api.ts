@@ -49,10 +49,13 @@ export const uploadProfileImage = async (imageUri: string) => {
       successToast('Фото загружено успешно');
       return result;
     } else {
+      // console.log('response err', await response.json());
       errorToast(`Ошибка загрузки: ${response.status}`);
       throw new Error(`Ошибка загрузки: ${response.status}`);
     }
   } catch (error) {
+    console.error('Ошибка отправки изображения:', error.response.data.errors);
+
     console.error('Ошибка отправки изображения:', error);
     throw error;
   }

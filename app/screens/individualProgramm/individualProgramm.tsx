@@ -31,6 +31,13 @@ import { StoreRecommendationModel } from '../../../store/state/recommendationSto
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 
+export type CheckBoxesTypes = {
+  'Питание': boolean[],
+  'Сон': boolean[],
+  'Антистресс': boolean[],
+  'Физическая активность': boolean[],
+}
+
 export const IndividualProgramm = observer(() => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
     const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
@@ -50,7 +57,11 @@ export const IndividualProgramm = observer(() => {
       // setCheckBoxes(values)
     };
     // const valuesChecks = setCheckBoxesValues();
-    const [checkBoxes, setCheckBoxes] = useState(setCheckBoxesValues());
+    const [checkBoxes, setCheckBoxes] = useState<CheckBoxesTypes>(
+      {'Питание': [],
+      'Сон': [],
+      'Антистресс': [],
+      'Физическая активность': []});
     // const { activiti_value_json } = route.params || undefined;
     // console.log('activiti_value_json', activiti_value_json);
     const onBack = () => {
@@ -73,12 +84,20 @@ export const IndividualProgramm = observer(() => {
 
         // console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
       }
-      getRecomendations(testingStore.myCurrentResultsTest.id);
+      await getRecomendations(testingStore.myCurrentResultsTest.id);
       if (recommendationStore.personalRecomendationList.length === 0) {recommendationStore.getPersonalRecommendations();}
       if (articlesStore.articlesMainList.articles.length === 0) {
         articlesStore.loadMainArticles();
       }
-      setCheckBoxes(setCheckBoxesValues());
+      setCheckBoxes(()=>{
+        const values = {
+          'Питание': recommendationStore.recommendationList.Питание.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+          'Сон': recommendationStore.recommendationList.Сон.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+          'Антистресс': recommendationStore.recommendationList.Антистресс.map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+          'Физическая активность': recommendationStore.recommendationList['Физическая активность'].map((item)=>recommendationStore.personalRecomendationList.some((rec)=>rec.link_text === item.activity.express[0].link_text)),
+        };
+        return values;
+      });
     };
 
 

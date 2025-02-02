@@ -79,7 +79,7 @@ export const Testing = observer(() => {
             }
             console.log('currentResultsTest',testingStore.currentResultsTest, {...currentAnswers, ...tmpObj});
             await testingStore.submitTest(testingStore.currentResultsTest)
-              .then(()=>navigation.navigate('ResultTest', {activiti_value_json: activitiValues}))
+              .then(()=>navigation.replace('ResultTest', {activiti_value_json: activitiValues}))
               .catch(()=>errorToast('Произошла ошибка отправки резульатов'));
             return;
         }
@@ -155,17 +155,8 @@ export const Testing = observer(() => {
     </CardContainer>))}
     <View style={gs.mt4} />
     <AnimatedGradientButton disabled={inTest && currentAnswer === -1  } style={s.buttonNext} onPress={inTest ? ()=> nextQuestion(currentAnswerScore) : ()=>{setPercentage(currentQuestion / testingStore.currentTest.questions.length * 100 + '%'); setInTest(true);}}>
-           <View style={{
-               flexDirection: 'row',
-               justifyContent: 'space-between',
-               alignItems: 'center',
-               }}>
-               <View style={{
-                   width:'100%',
-                   flexDirection: 'row',
-                   justifyContent: 'space-between',
-                   alignItems: 'center',
-               }}>
+           <View style={gs.buttonContent}>
+               <View style={gs.buttonContentRow}>
                 <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>{inTest ? 'Далее' : 'Пройти тестирование'}</IfgText>
                    <AnimatedArrow />
                </View>

@@ -66,6 +66,8 @@ export const Subscription: FC = observer(() =>{
                  .then((res)=>{
                   console.log(res);
 
+                }).catch(err=>{
+                  console.log(err);
                 });
                 }
               });
