@@ -46,6 +46,7 @@ export const uploadProfileImage = async (imageUri: string) => {
     if (response.ok) {
       const result = await response.json(); // Парсим ответ от сервера
       console.log('Фото загружено', result);
+      userStore.getProfile(true);
       successToast('Фото загружено успешно');
       return result;
     } else {

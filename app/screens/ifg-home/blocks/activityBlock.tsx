@@ -27,6 +27,7 @@ import { categoryColorsEng } from '../../../core/colors/categoryColors';
 import { RecommendationCategoryToRu } from '../../../core/utils/recommendationFormatter';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../../hooks/useDimensions';
+import { API_URL } from '../../../core/hosts';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -98,7 +99,7 @@ return <CardContainer >
   <View style={[gs.flexRow, gs.alignCenter]}>
       <View style={s.photo}>
         {userStore.userInfo?.profile_photo_url ?
-        <Image style={{width: '100%', height: '100%'}} source={{uri: userStore.userInfo?.profile_photo_url}}/>
+        <Image style={{width: '100%', height: '100%'}} source={{uri: `${!userStore.userInfo?.profile_photo_url.startsWith('https://') ? API_URL + '/storage/' : '' }${userStore.userInfo?.profile_photo_url}`}}/>
         :
         <ProfileHolder />}
 

@@ -29,8 +29,8 @@ class UserStore {
   clearChangeInputError = (field: string) => {
     this.userChangeInfoState[`${field}InputError`] =  '';
   };
-  getProfile = async () => {
-    this.isLoading = true;
+  getProfile = async (withNoUpdate = false) => {
+    this.isLoading = withNoUpdate ? false : true;
     await getProfileApi()
       .then((result)=>{
         if (result.data.profile) {
