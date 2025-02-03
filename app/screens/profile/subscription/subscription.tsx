@@ -134,7 +134,7 @@ export const Subscription: FC = observer(() =>{
             {Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽
             </IfgText>}
             {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
-            <View style={gs.mt12} />
+            {/* <View style={gs.mt12} />
             <Input
                 fullWidth
                 //  value={value}
@@ -146,9 +146,9 @@ export const Subscription: FC = observer(() =>{
               <Arrow />
               </Button>
 
-            </Input>
+            </Input> */}
           </CardContainer> : <ShimmerPlaceholder style={{borderRadius: 22}} height={333} width={ScreenWidth - 64}/>}
-
+          {/*
           <View style={[gs.mt8, gs.flexRow, gs.alignCenter, {gap: 18}]}>
             <Button style={{alignItems: 'center',backgroundColor: colors.GREEN_COLOR, borderRadius: 16, height: 60, flex: 1}} >
               <IfgText style={[gs.fontCaption, gs.medium]} color={colors.WHITE_COLOR}>Применить</IfgText>
@@ -156,7 +156,7 @@ export const Subscription: FC = observer(() =>{
             <Button outlined style={{alignItems: 'center',borderColor: colors.GREEN_LIGHT_COLOR, borderRadius: 16, borderWidth: 1, flex: 1, height: 60}}>
               <IfgText style={[gs.fontCaption, gs.medium]}>Отменить</IfgText>
             </Button>
-          </View>
+          </View> */}
 
           <View style={gs.mt4}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>

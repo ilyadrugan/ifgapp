@@ -24,15 +24,7 @@ class StoriesStore {
     //   this.errorMessage = '';
       await getStoriesApi()
         .then((result)=>{
-          // console.log('result.data', result.data['common stories']);
-          // this.storiesList = result.data['common stories'].map((story)=>{
-          //  const substory: SubStoryModel = {
-          //   title: story.title,
-          //   media: story.article.media[0],
-          //  };
-          //  story.subStories = [substory];
-          //  return story;
-          // });
+
           const categories:StoryMappedModel[] = result.data['common stories'].map((cat)=>{
             return {
               category_title: cat.category_title,
@@ -41,14 +33,12 @@ class StoriesStore {
               bgColor: cat.bgColor,
             };
           });
-          console.log('categories', categories);
           const uniqueArray = categories.filter((value, index) => {
             const _value = JSON.stringify(value);
             return index === categories.findIndex(obj => {
               return JSON.stringify(obj) === _value;
             });
           });
-          console.log('uniqueCategories', uniqueArray);
           this.storiesMappedList = uniqueArray.map((cat: StoryMappedModel)=>{
             const subStoriesArticles = result.data['common stories'].filter((item)=>item.category_id === cat.category_id);
             // console.log('subStoriesArticles', subStoriesArticles);
@@ -62,8 +52,7 @@ class StoriesStore {
               };
             })};
           });
-          console.log('this.storiesMappedList',this.storiesMappedList);
-          console.log('this.storiesMappedList substories',this.storiesMappedList.map((subst)=>subst.subStories.length));
+
           this.storiesList = {
             'Физическая активность': result.data['common stories'].filter((story)=> story.category_title === 'Физическая активность'),
             'Правильное питание': result.data['common stories'].filter((story)=> story.category_title === 'Правильное питание'),

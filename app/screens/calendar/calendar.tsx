@@ -133,11 +133,13 @@ export const CalendarScreen = observer(() =>{
                 />
                 <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
                 <View style={[gs.flexRow, gs.alignCenter]}>
-                  <Image
-                  resizeMode="cover"
-                  style={{width: 44, height: 44}}
-                  source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
-                  />
+                  <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 8, borderWidth: 1, borderColor: '#F4F4F4', width: 46, height: 46, overflow: 'hidden', alignItems: 'center', justifyContent: 'center'}}>
+                            <Image
+                            resizeMode="cover"
+                            style={{width: 42, height: 42, borderRadius: 8}}
+                            source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
+                            />
+                  </View>
                 {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
                 </View>
                 {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}

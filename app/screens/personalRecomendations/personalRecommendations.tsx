@@ -31,11 +31,14 @@ export const PersonalRecommendations = observer(() =>{
         />
         <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
         <View style={[gs.flexRow, gs.alignCenter]}>
+          <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 10, borderWidth: 1, borderColor: '#F4F4F4', width: 49, height: 49,alignItems: 'center', justifyContent: 'center'}}>
           <Image
           resizeMode="cover"
-          style={{width: 44, height: 44}}
+          style={{width: 44, height: 44, borderRadius: 6}}
           source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
           />
+          </View>
+
          {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
         </View>
         {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}

@@ -31,7 +31,6 @@ const { width, height } = Dimensions.get('window');
 export const StoryModal: FC<{stories: SubStoryModel[], isVisible: boolean, onClose: ()=>void }>
 = ({ stories, isVisible, onClose }) => {
     const navigation = useNavigation<any>();
-    console.log('stories',stories.length);
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
     const [progressAnims, setProgressAnims] = useState<Animated.Value[]>(stories.map(() => new Animated.Value(0)));
     const [paused, setPaused] = useState(false); // Состояние для приостановки анимации

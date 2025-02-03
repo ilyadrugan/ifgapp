@@ -92,7 +92,6 @@ export const IFGHome = observer(() => {
         </View>
     </CardContainer>;
     const StoryCard = (item: StoryMappedModel, index)=>{
-      console.log('item', item);
         return (storiesStore.storiesMappedList[index] && storiesStore.storiesMappedList[index].subStories.length > 0) &&
         <CardContainer onPress={() => {
             setCurrentStoryPressed(index);
@@ -179,7 +178,7 @@ return <>
         <View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
             <IfgText style={[gs.fontBodyMedium, gs.bold]}>Рекомендации</IfgText>
-            <Button style={s.buttonToCalendar} onPress={()=>console.log('buttonToCalendar')}>
+            <Button style={s.buttonToCalendar} onPress={()=>navigation.navigate('Календарь')}>
             <>
             <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>В календарь</IfgText>
 
@@ -202,11 +201,13 @@ return <>
           />
           <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
           <View style={[gs.flexRow, gs.alignCenter]}>
-            <Image
-            resizeMode="cover"
-            style={{width: 44, height: 44}}
-            source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
-            />
+          <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 10, borderWidth: 1, borderColor: '#F4F4F4', width: 49, height: 49,alignItems: 'center', justifyContent: 'center'}}>
+                    <Image
+                    resizeMode="cover"
+                    style={{width: 44, height: 44, borderRadius: 6}}
+                    source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
+                    />
+                    </View>
            {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
           </View>
           <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />

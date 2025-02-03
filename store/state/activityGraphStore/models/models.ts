@@ -1,3 +1,4 @@
+import { CupsType } from '../../../../app/screens/ifg-home/blocks/data/data-cups';
 
 export type DailyActivityModel = {
     date: string,
@@ -12,6 +13,12 @@ export type DailyActivityModel = {
     watter: number,
     isDrinkEight: boolean,
     score:{score: number}
+}
+
+export type CupsDataModel = {
+    data: CupsType[],
+    watter: number,
+    isDrinkEight: boolean,
 }
 
 export type DailyCaloriesModel = {
