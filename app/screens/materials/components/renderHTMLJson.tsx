@@ -28,7 +28,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
 
     switch (node.tag) {
         case 'p':
-          if (node.children[0].tag === 'img' || node.children[0].tag === 'iframe') {return renderNode(node.children[0], 0);}
+          if (node.children && (node.children[0].tag === 'img' || node.children[0].tag === 'iframe')) {return renderNode(node.children[0], 0);}
           return (
             <Text style={styles.paragraph}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
@@ -139,7 +139,20 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
               />
             </View>
           );
-
+        case 'figure':
+          console.log('figure', node);
+          return node.children.map((child, childIndex)=>renderNode(child, childIndex));
+            // const imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
+            // console.log('Image URI:', imageUri); // Отладка URI
+            // return (
+            //   <View style={{ width: '100%', height: 200 }}>
+            //     <Image
+            //       source={{ uri: imageUri }}
+            //       resizeMode="cover"
+            //       style={{ width: '100%', height: 200 }}
+            //     />
+            //   </View>
+            // );
         case 'iframe':
           const videoUrl = node.attributes?.src;
           if (videoUrl) {

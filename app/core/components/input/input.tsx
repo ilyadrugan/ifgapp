@@ -72,25 +72,31 @@ export const Input: FC<{
 export const TextInputWithIcon: FC<{
   onChange?: (text: string) => void,
   onFocus?: () => void,
+  onBlur?: () => void,
   style?: StyleProp<ViewStyle | TextStyle>,
   placeholder?: string,
   placeholderTextColor?: string,
+  value?: string,
 }> = (
   {
     onChange,
     onFocus,
+    onBlur,
     style,
     placeholder,
     placeholderTextColor,
+    value,
   }) => {
   return (
     <View style={[s.inputContainer, style]}>
       <TextInput
+        value={value}
         style={s.input2}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor || colors.PLACEHOLDER_COLOR}
         onFocus={onFocus}
         onChangeText={onChange}
+        onBlur={onBlur}
       />
       <View style={s.icon} >
         <Search />

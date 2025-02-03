@@ -45,6 +45,7 @@ class RecommendationStore {
           )
           .catch((err)=>{
             console.log('getPersonalRecommendations ERROR', err.message);
+            this.isLoading = false;
           })
           .finally(()=>{this.isLoading = false;});
       };
