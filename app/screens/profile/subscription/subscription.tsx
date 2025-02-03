@@ -53,9 +53,9 @@ export const Subscription: FC = observer(() =>{
             console.log('payment-create data',res.data);
             if (res.data.status === 'succeeded') {
               await HttpClient.get(`${API_URL}/api/lk/card-callback`)
-               .then((res)=>{
+               .then(async(res)=>{
                 console.log(res);
-
+                await paymentsStore.getPaymentCards();
               });
             }
             else if (res.data.confirmation.confirmation_url) {
@@ -63,8 +63,9 @@ export const Subscription: FC = observer(() =>{
                 console.log('res', result);
                 if (result.status === 'RESULT_OK') {
                  await HttpClient.get(`${API_URL}/api/lk/card-callback`)
-                 .then((res)=>{
+                 .then(async(res)=>{
                   console.log(res);
+                  await paymentsStore.getPaymentCards();
 
                 }).catch(err=>{
                   console.log(err);
@@ -75,13 +76,13 @@ export const Subscription: FC = observer(() =>{
 
 
           })
-          .catch(err=>console.log('payment-create error',err))
+          .catch(err=>console.log('payment-error',err))
           .finally(async()=>{
-
+            await paymentsStore.getPaymentCards();
             setIsLoading(false);
           });
         }
-       await paymentsStore.getPaymentCards();
+
       } );
 
       setIsLoading(false);

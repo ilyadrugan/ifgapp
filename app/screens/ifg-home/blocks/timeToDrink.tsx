@@ -53,8 +53,8 @@ export const TimeToDrinkBlock: FC<{isNew?: boolean, watterCount?: number}> = obs
 
     const addToDailyActivity = async (cups: CupsType[]) => {
         if (dailyActivityStore.dailyTodayActivityData.watter === 0) {
-            dailyActivityStore.addDailyActivity('food', dailyActivityStore.dailyTodayActivityData.food + 1);
-            ifgScoreStore.addScore(1);
+            await dailyActivityStore.addDailyActivity('food', dailyActivityStore.dailyTodayActivityData.food + 1);
+            await ifgScoreStore.addScore(1);
         }
        await dailyActivityStore.addDailyActivity('watter', cups.filter(cup=>cup.status === CupStatus.Filled).length);
     };

@@ -319,8 +319,8 @@ const DropdownBlock: FC<{
   const handleEndReached = useCallback(
     _debounce((text) => {
       getQuery(text);
-    }, 1000),
-    [articlesStore.articlesList.current_page, articlesStore.isLoading]
+    }, 500),
+    [articlesStore.articlesList.current_page, articlesStore.isLoading, activeTab]
   );
   return (
     <>

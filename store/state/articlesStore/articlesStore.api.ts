@@ -30,7 +30,10 @@ export const getUserArticlesApi = async () => {
     console.log(`${BASE_URL}/lk/articles`);
     return await HttpClient.get(`${BASE_URL}/lk/articles`);
 };
-
+export const getUserEventsApi = async () => {
+    console.log(`${BASE_URL}/materials/my-events`);
+    return await HttpClient.get(`${BASE_URL}/materials/my-events`);
+};
 export const changeLikeArticleApi = async (id: number, action: number) => {
     return await HttpClient.post(`${BASE_URL}/article/like?id=${id}&action=${action}`);
 };
@@ -39,4 +42,9 @@ export const changeLikeInterViewApi = async (id: number, action: number) => {
 };
 export const changeUserArticleApi = async (id: number) => {
     return await HttpClient.post(`${BASE_URL}/article/wishlist`, {id: id});
+};
+
+export const changeUserInterViewApi = async (id: number, del: boolean) => {
+    console.log(`${BASE_URL}/materials/${del ? 'delete-my-event' : 'add-favorite-event'}`, id);
+    return await HttpClient.post(`${BASE_URL}/materials/${del ? 'delete-my-event' : 'add-favorite-event'}`, {event_id: id});
 };

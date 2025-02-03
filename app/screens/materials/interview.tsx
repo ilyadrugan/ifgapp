@@ -31,13 +31,13 @@ export const InterviewView = observer(({route}) => {
       navigation.goBack();
     };
     const { interviewId } = route.params;
-    // const [isInFavoriet, setIsInFavoriet] = useState(false);
+    const [isInFavoriet, setIsInFavoriet] = useState(false);
     useEffect(() => {
       if (interviewId !== undefined) {
         loadInterviewById(interviewId);
         console.log(interviewId);
         console.log(stripHtmlTags(articlesStore.currentInterview.title).split('').length);
-        // setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));
+        setIsInFavoriet(articlesStore.interViewsUserList.some(event=>event.id === interviewId));
       }
     }, [interviewId]);
 
@@ -47,9 +47,10 @@ export const InterviewView = observer(({route}) => {
         await articlesStore.changeLikeInterView(articlesStore.currentInterview.id, action);
     };
 
-    // const addInFavorite = async () => await articlesStore.changeUserArticle(articleId).then(()=>
-    //   {console.log(articlesStore.articlesUserList.map((item)=>item.id));
-    //   setIsInFavoriet(articlesStore.articlesUserList.some(article=>article.id === articleId));});
+    const addInFavorite = async () => await articlesStore.changeUserInterView(interviewId, isInFavoriet)
+    .then(()=>{
+      setIsInFavoriet(articlesStore.interViewsUserList.some(event=>event.id === interviewId));
+    });
     const MaterialCard = ({title, media, subtitle, id}, index)=>
       <CardContainer onPress={()=>navigation.replace('ArticleView', {articleId: id})} key={index.toString() + 'key'} style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
@@ -128,20 +129,20 @@ export const InterviewView = observer(({route}) => {
 
         <View style={gs.mt12} />
 
-        <View style={[gs.flexRow, { gap: 10, flexWrap: 'wrap'}]}>
-          <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+        <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
+          <Button style={[gs.flexRow, gs.alignCenter,  {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
           <View style={{ top: -1}}>
           <EyeViews/>
           </View>
           <IfgText style={gs.fontCaption2}>{articlesStore.currentInterview.views}</IfgText>
           </Button>
 
-          {/* <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavoriet ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+          <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavoriet ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
           <View >
-          <Star />
+          {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
           </View>
           <IfgText style={gs.fontCaption2}>В {isInFavoriet ? 'избранном' : 'избранное'}</IfgText>
-          </Button> */}
+          </Button>
           <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
           style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
           <View >

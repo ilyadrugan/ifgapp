@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { ArticleHashTagModel, ArticleListModel, ArticleModel, ArticleQueryParamsModel, ArticleThemesModel, ArticleViewModel, InterViewsTypesModel, InterviewViewModel } from './models/models';
-import { changeLikeArticleApi, changeLikeInterViewApi, changeUserArticleApi, getArticleByIdApi, getArticlesByTagsApi, getInterviewByIdApi, getInterViewsByTagsApi, getMaterialFiltersApi, getMaterialHashtagsApi, getUserArticlesApi } from './articlesStore.api';
+import { ArticleHashTagModel, ArticleListModel, ArticleModel, ArticleQueryParamsModel, ArticleThemesModel, ArticleViewModel, InterViewModel, InterViewsTypesModel, InterviewViewModel } from './models/models';
+import { changeLikeArticleApi, changeLikeInterViewApi, changeUserArticleApi, changeUserInterViewApi, getArticleByIdApi, getArticlesByTagsApi, getInterviewByIdApi, getInterViewsByTagsApi, getMaterialFiltersApi, getMaterialHashtagsApi, getUserArticlesApi, getUserEventsApi } from './articlesStore.api';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 
 class ArticlesStore {
@@ -64,6 +64,7 @@ class ArticlesStore {
     media: [],
   };
   articlesUserList: ArticleModel[] = [];
+  interViewsUserList: InterviewViewModel[] = [];
   errorMessage: string = '';
   articleHashTagList: ArticleHashTagModel[] = [];
   articleThemesList: ArticleThemesModel[] = [];
@@ -173,32 +174,7 @@ class ArticlesStore {
     await getArticleByIdApi(id)
       .then((result)=>{
         // console.log('result.data.data',result.data.data);
-
         this.currentArticle = result.data.data;
-
-        // this.currentArticle = {
-        //   id: result.data.data.id,
-        //   title: result.data.data.title,
-        //   subtitle: result.data.data.subtitle,
-        //   datetime_publish: result.data.data.datetime_publish,
-        //   like: result.data.data.like,
-        //   unlike: result.data.data.unlike,
-        //   type: result.data.data.type,
-        //   media: result.data.data.media,
-        //   created_at: result.data.data.created_at,
-        //   views: result.data.data.views,
-        //   body: null,
-        //   body_json: null,
-        //   url: result.data.data.url,
-
-        // };
-        // console.log('this.currentArticle',this.currentArticle);
-        // console.log('result.data.data',result.data.data.body);
-        // if (result.data.data.body_json.length > 0) {
-        //   this.currentArticle.body_json = result.data.data.body_json[0].data;
-        //   console.log('result.data.data.body_json[0].data', result.data.data.body_json[0].data);
-        // }
-        // this.currentArticle.body = result.data.data.body;
       }
       )
       .catch((err)=>{
@@ -370,6 +346,32 @@ class ArticlesStore {
         this.isUserArticleLoading = false;
       });
   }
+  async getUserEvents() {
+    this.isUserArticleLoading = true;
+    this.errorMessage = '';
+    await getUserEventsApi()
+      .then((result)=>{
+        console.log('getUserEventsApi',result.data.data);
+        // const mappedEvents = result.data.data.map(item=>{
+        //   console.log('item.articles.id',item.articles.id);
+        //   return {...item.articles, id: item.articles.id} as ArticleModel;
+        // });
+        // console.log(mappedArticles);
+        this.interViewsUserList = result.data.data;
+        // console.log('result.data', result.articles.data[0]);
+        // console.log('result.data', result.articles.data[0].articles);
+        // this.articlesUserList = [result.articles.data[0].articles];
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
+
+      })
+      .finally(()=>{
+        this.isUserArticleLoading = false;
+      });
+  }
   async changeUserArticle(id: number) {
     this.isUserArticleLoading = true;
     this.errorMessage = '';
@@ -379,6 +381,25 @@ class ArticlesStore {
         // console.log(result);
         await this.getUserArticles().then(()=>
           successToast(`Материал ${result.data.set === 1 ? 'добавлен в избранное' : 'удалён из избранного'} `)
+        );
+      }
+      )
+      .catch((err)=>{
+        console.log('ERROR');
+        this.errorMessage = err.message;
+        errorToast(err.message);
+      })
+      .finally(()=>{this.isUserArticleLoading = false;});
+  }
+  async changeUserInterView(id: number, del: boolean) {
+    this.isUserArticleLoading = true;
+    this.errorMessage = '';
+    console.log(id);
+    await changeUserInterViewApi(id, del)
+      .then(async (result)=>{
+        // console.log(result);
+        await this.getUserEvents().then(()=>
+          successToast(`Событие ${!del ? 'добавлено в избранное' : 'удалено из избранного'} `)
         );
       }
       )

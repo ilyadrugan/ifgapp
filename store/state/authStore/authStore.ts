@@ -227,6 +227,7 @@ class AuthStore {
   async logout() {
     this.isAuthenticated = false;
     this.access_token = '';
+
     await deleteAuthTokenToStorage();
   }
 }

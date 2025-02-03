@@ -48,14 +48,13 @@ class DailyActivityStore {
       })
       .finally(()=>{this.isLoading = false;});
   };
-  getDailyTodayActivity = async (date_to) => {
+  getDailyTodayActivity = async (date_to?:string) => {
     this.dailyTodayActivityDataLoading = true;
   //   this.errorMessage = '';
-    await getDailyActivityApi(date_to)
+    await getDailyActivityApi(date_to || '')
       .then((result)=>{
         console.log('getDailyTodayActivity',result.data.data);
         this.dailyTodayActivityData = result.data.data;
-        console.log('getDailyTodayActivity dailyTodayActivityDataLoading',this.dailyTodayActivityDataLoading);
 
       }
       )

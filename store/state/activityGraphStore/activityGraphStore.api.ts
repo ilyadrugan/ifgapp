@@ -6,8 +6,9 @@ export const getPeriodActivityApi = async (date_from: string, date_to: string) =
     return await HttpClient.get(`${BASE_URL}/daily-activity/period?date_from=${date_from}&date_to=${date_to}`);
 };
 export const getDailyActivityApi = async (date_to?: string) => {
+
     console.log(`${BASE_URL}/daily-activity?date_to=${date_to}`);
-    return await HttpClient.get(`${BASE_URL}/daily-activity?date_to=${date_to}`);
+    return await HttpClient.get(`${BASE_URL}/daily-activity${date_to ? '?date_to=' + date_to : ''}`);
 };
 export const addDailyActivityApi = async (model: StoreDailyActivities) => {
     console.log('/daily-activity/store', model);

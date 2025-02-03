@@ -33,7 +33,10 @@ export const SubscribeEmailConfirm:
         }
         };
         useEffect(() => {
-            console.log(tariffsStore.tariffChoosed);
+            // console.log(userStore.userInfo);
+            if (!userStore.userInfo) {
+              userStore.getProfile();
+            }
             if (!isRunning) {return;}
             scrollToBottom();
             if (timeLeft === 0) {
@@ -77,8 +80,11 @@ export const SubscribeEmailConfirm:
                   if (res.data.status === 'succeeded') {
                     await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
                      .then((res)=>{
-                      console.log(res);
-
+                      console.log(res.data);
+                      navigation.replace('SuccessfulReg');
+                    })
+                    .catch((err)=>{
+                      console.log('payment-callback error',err);
                     });
                   }
                   else if (res.data.confirmation.confirmation_url) {
@@ -89,6 +95,9 @@ export const SubscribeEmailConfirm:
                        .then((res)=>{
                         console.log(res.data);
                         navigation.replace('SuccessfulReg');
+                      })
+                      .catch((err)=>{
+                        console.log('payment-callback error',err);
                       });
                       }
                     });

@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { ActivitiValueModel, MyCurrentResultsTestModel, MyTestModel, QuestionModel, ResultsTestModel, TestListModel, TestModel } from './models/models';
 import { getAllMyTestApi, getTestByIdApi, submitResultsTestApi } from './testingStore.api';
+import { errorToast } from '../../../app/core/components/toast/toast';
 
 class TestingStore {
   isLoading = false; // Состояние загрузки
@@ -66,7 +67,7 @@ class TestingStore {
       activiti_value_json: JSON.parse(test.activiti_value_json),
       completedHtmlOnConditionScore: test.completedHtmlOnConditionScore,
     };
-    console.log('this.myCurrentResultsTest', this.myCurrentResultsTest.maxValues);
+    // console.log('this.myCurrentResultsTest', this.myCurrentResultsTest.maxValues);
     }
     else {
       this.disableRecommendationCheck = false;
@@ -165,6 +166,8 @@ class TestingStore {
       .catch((err)=>{
         console.log('ERROR', err.message);
         this.errorMessage = err.message;
+        errorToast('Неизвестная ошибка');
+        this.isLoading = false;
 
       })
       .finally(()=>{this.isLoading = false;});

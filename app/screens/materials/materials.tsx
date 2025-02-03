@@ -67,7 +67,7 @@ export const MaterialsScreen = observer(() => {
     }, []);
 
     const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
-
+        
         return <CardContainer key={activeTab + index + activeTab} style={s.articleCard}>
             {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
 

@@ -90,8 +90,9 @@ export const TextInputWithIcon: FC<{
   return (
     <View style={[s.inputContainer, style]}>
       <TextInput
+
         value={value}
-        style={s.input2}
+        style={[s.input2, {color: colors.PLACEHOLDER_COLOR}]}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor || colors.PLACEHOLDER_COLOR}
         onFocus={onFocus}

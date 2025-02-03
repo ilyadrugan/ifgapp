@@ -89,7 +89,7 @@ export const IFGHome = observer(() => {
       articlesStore.clearCurrentArticle();
       presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-      await dailyActivityStore.getDailyTodayActivity(formatDate());
+      await dailyActivityStore.getDailyTodayActivity();
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
       recommendationStore.getPersonalRecommendations();
     };
@@ -118,13 +118,13 @@ export const IFGHome = observer(() => {
           storiesStore.storiesList[item].length > 0 && <CardContainer onPress={() => {
             setCurrentCaregoryStoryPressed(item);
             // setCurrentStoryPressed(index);
-            setModalVisible(true);}} style={[{width: 124, overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, backgroundColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).bgColor }, gs.mr12, index === 0 && gs.ml16]} >
+            setModalVisible(true);}} style={[{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, backgroundColor: hexToRgba(GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, 0.07) }, gs.mr12, index === 0 && gs.ml16]} >
             <View style={[gs.ml12, gs.mt12]}>
             <Eye />
             </View>
             <Image
            source={StoriesImages[item]}
-           style={{height: 80, width: 110, alignSelf: 'center'}}
+           style={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
             resizeMode="contain"
             />
             <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{item}</IfgText>

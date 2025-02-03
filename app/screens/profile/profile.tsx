@@ -53,11 +53,13 @@ export const ProfileScreen = observer(() => {
       await testingStore.getAllMyTest();
       await paymentsStore.getPaymentCards();
       await tariffsStore.getTariffs();
+      await articlesStore.getUserEvents();
       setRefreshing(false);
     };
 
     const animation = useRef(new Animated.Value(0)).current;
     const exit = async() => {
+      testingStore.clearTests();
       await authStore.logout().then(()=>{
         navigateAndReset(navigation, 'Login');
       });
@@ -169,7 +171,7 @@ return <>
         </CardContainer>
 
         <View style={gs.mt16} />
-        {/* {currentMenu === 0 && <MyEvents />} */}
+        {currentMenu === 0 && <MyEvents />}
         {currentMenu === 1 && <MyTests />}
         {currentMenu === 2 && <MyMaterials />}
         {currentMenu === 3 && <Settings onRefresh={onRefresh} />}
