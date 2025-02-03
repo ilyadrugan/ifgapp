@@ -110,5 +110,5 @@ export type ArticleQueryParamsModel = {
     tag?: string,
     page?: string,
     populate_tags?: string
-    // search?: string
+    search?: string
 }

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,8 @@ import articlesStore from '../../../../store/state/articlesStore/articlesStore';
 import { ArticleSortModel, ArticleThemeModel, ArticleThemesModel } from '../../../../store/state/articlesStore/models/models';
 import colors from '../../../core/colors/colors';
 import { observer } from 'mobx-react';
-
+import { TextInputWithIcon } from '../../../core/components/input/input';
+import _debounce from 'lodash/debounce';
 // Активируем LayoutAnimation для Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -34,6 +35,7 @@ const DropdownBlock: FC<{
   const [themeOpen, setThemeOpen] = useState(false);
   const [themeOptions, setThemeOptions] = useState<ArticleThemesModel[]>([ {title: 'Показать все'} as ArticleThemesModel,...themes]);
   const [sortOption, setSortOption] = useState<ArticleSortModel>();
+  const [searchOption, setSearchOption] = useState<string>('');
   const [themeOption, setThemeOption] = useState<ArticleThemesModel>();
   const [themeParentThemeOption, setParentThemeOption] = useState<ArticleThemesModel | null>();
   const [openParent, setOpenParent] = useState<number>(0);
@@ -108,6 +110,8 @@ const DropdownBlock: FC<{
     setSortOpen(false);
     setThemeOpen(false);
     setOpenParent(0);
+    console.log('articlesStore.articlesQueryParams', articlesStore.articlesQueryParams);
+    console.log('articlesStore.interViewsQueryParams', articlesStore.interViewsQueryParams);
     if (activeTab === 0) {
       if (articlesStore.articlesQueryParams.tag) {
         const parent = articlesStore.articleThemesList.find((filter)=> filter.children?.some((child)=>child.tag_id === Number(articlesStore.articlesQueryParams.tag)));
@@ -121,6 +125,7 @@ const DropdownBlock: FC<{
         setParentThemeOption(null);
         setThemeOption({tag_id: 0, title: 'Показать все'} as ArticleThemesModel);
       }
+      setSearchOption(articlesStore.articlesQueryParams.search || '');
       // setActiveHashTag(!articlesStore.articlesQueryParams.populate_tags ?
       //   0
       //   :
@@ -145,6 +150,8 @@ const DropdownBlock: FC<{
         setParentThemeOption(null);
         setThemeOption({tag_id: 0, title: 'Показать все'} as ArticleThemesModel);
       }
+      setSearchOption(articlesStore.interViewsQueryParams.search || '');
+
       const condition = !articlesStore.interViewsQueryParams['sort[date]'] && !articlesStore.interViewsQueryParams['sort[likes]'] && !articlesStore.interViewsQueryParams['sort[popular]'];
       setSortOption(condition ? sortOptions[0]
       :
@@ -154,10 +161,10 @@ const DropdownBlock: FC<{
 
   },[activeTab]);
 
-  const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number, parent?: ArticleThemesModel) => {
+  const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number | string , parent?: ArticleThemesModel) => {
     // if (activeTab === 0) {articlesStore.clearArticles();}
     // if (activeTab === 1) {articlesStore.clearInterViews('finished'); articlesStore.clearInterViews('actual');}
-    // console.log('getMaterialsBySortTheme',option, parent);
+    console.log('getMaterialsBySortTheme interViewsQueryParams', articlesStore.interViewsQueryParams);
 
 
     if (option.tag_id !== 1000 && (option.sort_value || sortOption.sort_value)) {
@@ -196,13 +203,22 @@ const DropdownBlock: FC<{
         articlesStore.setArticleQueryParam('populate_tags', `${option}`);
       }
       // const optionId = typeof option === 'number' ? option : activeHashTag;
-
+    }
+    console.log('searchOption', searchOption);
+    if (typeof option === 'string' && option.trim() !== '') {
+      if (activeTab === 0) {articlesStore.setArticleQueryParam('search', `${option.trim()}`);}
+      if (activeTab === 1) {articlesStore.setInterViewsQueryParam('search', `${option.trim()}`);}
+    }
+    else if (typeof option === 'string' && option.trim() === '') {
+      if (activeTab === 0) {articlesStore.removeArticleParam('search');}
+      if (activeTab === 1) {articlesStore.removeInterViewsParam('search');}
     }
     if (option.title === 'Показать все'){
+      setParentThemeOption(null);
       if (activeTab === 0) {articlesStore.removeArticleParam('tag');}
       if (activeTab === 1) {articlesStore.removeInterViewsParam('tag');}
     }
-    if (option.tag_id === 100) {
+    if (option.tag_id === 1000) {
       if (activeTab === 1) {
         articlesStore.removeInterViewsParam('sort[popular]');
         articlesStore.removeInterViewsParam('sort[likes]');
@@ -220,14 +236,15 @@ const DropdownBlock: FC<{
   // }, [themeOption, sortOption])
 
 
-  const getQuery = async (option: ArticleSortModel | ArticleThemesModel | number, parent?: ArticleThemesModel) => {
+  const getQuery = async (option: ArticleSortModel | ArticleThemesModel | number | string, parent?: ArticleThemesModel) => {
     // const sortQuery = getMaterialsBySort(option)
-
     getMaterialsBySortTheme(option, parent);
 
     // setCurrentQuery(finalQuery);
-    // console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
+    console.log('articlesQueryParams',articlesStore.getArticleQueryParamsString());
     // console.log('interviewsQueryParams',articlesStore.getInterViewsQueryParamsString());
+    console.log('Search query:', articlesStore.interViewsQueryParams);
+
     if (activeTab === 0) {
       await articlesStore.clearArticles();
       await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
@@ -266,7 +283,8 @@ const DropdownBlock: FC<{
       key={index.toString()}
       style={styles.option}>
       <IfgText onPress={() => {
-        if (option.tag_id === themeOption?.tag_id || option.tag_id === sortOption?.tag_id) {return;}
+        console.log('option', option);
+        if (option.tag_id === themeOption?.tag_id || option.title === sortOption?.tag_id) {return;}
         onSelect(option);
         switch (type){
           case 'sort':
@@ -292,13 +310,26 @@ const DropdownBlock: FC<{
       renderOptionTheme(child as ArticleThemeModel, option, index, (selectedOption) => setThemeOption(selectedOption)))}
     </>
   );};
-  const onHashTag = (populate_tag: number) => {
 
-    // setActiveHashTag(populate_tag === activeHashTag ? 0 : populate_tag);
-    // await articlesStore.clearArticles();
+  // Функция обработки ввода
+  const handleSearch = (text: string) => {
+    setSearchOption(text); // Обновляем состояние при каждом вводе
+    handleEndReached(text);
   };
+  const handleEndReached = useCallback(
+    _debounce((text) => {
+      getQuery(text);
+    }, 1000),
+    [articlesStore.articlesList.current_page, articlesStore.isLoading]
+  );
   return (
     <>
+       <TextInputWithIcon
+          value={searchOption}
+          onChange={handleSearch}
+          placeholderTextColor="rgba(55, 55, 55, 0.45)"
+          placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/>
+    <View style={gs.mt16} />
     <View style={[styles.container, themeOpen && {borderBottomLeftRadius: 0, borderBottomRightRadius: 0}]}>
       {/* Сортировка */}
       <View style={[styles.dropdownContainer, {borderBottomWidth: 1}]}>

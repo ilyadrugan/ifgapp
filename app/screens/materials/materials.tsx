@@ -150,10 +150,10 @@ return <>
                     <IfgText style={[gs.h2, gs.bold]} >{'Материалы'}</IfgText>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
-                <View style={gs.mt16} />
-                <TextInputWithIcon
+                {/* <View style={gs.mt16} /> */}
+                {/* <TextInputWithIcon
                 placeholderTextColor="rgba(55, 55, 55, 0.45)"
-                placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/>
+                placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/> */}
                 <View style={gs.mt16} />
             {(articlesStore.articleThemesList.length > 0) ?
                     <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} /> :
