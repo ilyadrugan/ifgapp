@@ -1,4 +1,5 @@
 export function hexToRgba(hex, alpha) {
+    if (!hex) {return '#000000';}
     let r = 0, g = 0, b = 0;
 
     // Если цвет в формате #RGB

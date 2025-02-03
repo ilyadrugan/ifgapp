@@ -9,6 +9,23 @@ export type StoryModel = {
     subStories: SubStoryModel[]
 }
 
+export type StoryMappedModel = {
+  category_id: number,
+  category_title: string,
+  category_cover?: string,
+  subStories: SubStoryModel[],
+  bgColor: string
+}
+
+export type SubStoryModel = {
+  duration: number;
+  title: string,
+  article: ArticleModel,
+  media: MediaModel,
+  subtitle: string,
+  cover?: string
+}
+
 export type StoriesListModel = {
   'Физическая активность': StoryModel[],
   'Правильное питание': StoryModel[],
@@ -16,10 +33,6 @@ export type StoriesListModel = {
   'Крепкий сон': StoryModel[],
 };
 
-export type SubStoryModel = {
-    title: string,
-    media: MediaModel,
-}
 
 
 export enum ActivitiesType {

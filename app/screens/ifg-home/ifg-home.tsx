@@ -32,7 +32,7 @@ import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import storiesStore from '../../../store/state/storiesStore/storiesStore';
 import { StoryModal } from '../../core/components/storyModal/storyModal';
-import { GetActivitiesTypeNumber, GetActivityBgColorName, StoryModel } from '../../../store/state/storiesStore/models/models';
+import { GetActivitiesTypeNumber, GetActivityBgColorName, StoryMappedModel, StoryModel } from '../../../store/state/storiesStore/models/models';
 import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import testingStore from '../../../store/state/testingStore/testingStore';
@@ -44,19 +44,10 @@ import { ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
 import Delete from '../../../assets/icons/delete.svg';
 
-
-
-const StoriesImages = {
-  'Физическая активность': require('../../../assets/backgrounds/storyActivity.png'),
-  'Правильное питание': require('../../../assets/backgrounds/storyPitanie.png'),
-  'Снижение стресса': require('../../../assets/backgrounds/storyPitanie.png'),
-  'Крепкий сон': require('../../../assets/backgrounds/storySleep.png'),
-};
-
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
     const [isModalVisible, setModalVisible] = useState(false);
-    const [currentStoryPressed, setCurrentStoryPressed] = useState(0);
+    const [currentStoryPressed, setCurrentStoryPressed] = useState(undefined);
     const [currentCaregoryStoryPressed, setCurrentCaregoryStoryPressed] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
@@ -64,21 +55,7 @@ export const IFGHome = observer(() => {
     useLayoutEffect(() => {
       getData();
     }, []);
-    // useLayoutEffect(() => {
-    //   userStore.getProfile();
 
-    //   testingStore.getAllMyTest();
-    //   if (storiesStore.storiesList['Физическая активность'].length === 0) {storiesStore.getStories();}
-    //   ifgScoreStore.getScoreToday();
-    //   if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
-    //   articlesStore.loadMainArticles();
-    //   articlesStore.clearCurrentArticle();
-    //   presentsStore.loadMorePresents();
-    //   // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-    //   dailyActivityStore.getDailyTodayActivity(new Date().toISOString().split('T')[0]);
-    //   dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
-    //   recommendationStore.getPersonalRecommendations();
-    // }, []);
     const getData = async () => {
       storiesStore.getStories();
       await testingStore.getAllMyTest();
@@ -114,23 +91,24 @@ export const IFGHome = observer(() => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
-    const StoryCard = (item: string, index)=>
-          storiesStore.storiesList[item].length > 0 && <CardContainer onPress={() => {
-            setCurrentCaregoryStoryPressed(item);
+    const StoryCard = (item: StoryMappedModel, index)=>{
+      console.log('item', item);
+        return (storiesStore.storiesMappedList[index] && storiesStore.storiesMappedList[index].subStories.length > 0) &&
+        <CardContainer onPress={() => {
+            setCurrentStoryPressed(index);
             // setCurrentStoryPressed(index);
-            setModalVisible(true);}} style={[{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, backgroundColor: hexToRgba(GetActivityBgColorName(GetActivitiesTypeNumber(item)).borderColor, 0.07) }, gs.mr12, index === 0 && gs.ml16]} >
+            setModalVisible(true);}} style={[{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: item.bgColor, backgroundColor: hexToRgba(item.bgColor, 0.07) }, gs.mr12, index === 0 && gs.ml16]} >
             <View style={[gs.ml12, gs.mt12]}>
             <Eye />
             </View>
             <Image
-           source={StoriesImages[item]}
+           source={{uri: 'https://abcd.100qrs.ru/storage/' + storiesStore.storiesMappedList[index].category_cover}}
            style={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
             resizeMode="contain"
             />
-            <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{item}</IfgText>
-            {/* </ImageBackground> */}
+            <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{storiesStore.storiesMappedList[index].category_title}</IfgText>
 
-      </CardContainer>;
+      </CardContainer>;};
     const StoryShimmerCard = (item, index) => <ShimmerPlaceholder
     style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
     />;
@@ -155,7 +133,7 @@ return <>
         :
         <FlatList
         keyExtractor={(_, index) => index.toString()}
-        data={Object.keys(storiesStore.storiesList)}
+        data={storiesStore.storiesMappedList}
         horizontal
         style={{marginHorizontal: -16}}
         contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
@@ -197,7 +175,6 @@ return <>
       <View style={gs.mt24} />
 
        <ActivityBlock />
-       {/* : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />} */}
 
         <View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
@@ -293,13 +270,14 @@ return <>
 
 
         <View style={{height: 70}}/>
-       {(currentCaregoryStoryPressed && storiesStore.storiesList[currentCaregoryStoryPressed].length > 0) && <StoryModal
-        stories={storiesStore.storiesList[currentCaregoryStoryPressed]}
-        category={currentCaregoryStoryPressed}
+       {(currentStoryPressed !== undefined && storiesStore.storiesMappedList.length > 0 && storiesStore.storiesMappedList[currentStoryPressed].subStories) ?
+       <StoryModal
+        stories={storiesStore.storiesMappedList[currentStoryPressed].subStories}
+        // category={currentStoryPressed}
         // currentStoryPressed={currentStoryPressed}
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
-      />}
+      /> : null}
       </ScrollView>
       {/*<ChatFooter />*/}
     </>;

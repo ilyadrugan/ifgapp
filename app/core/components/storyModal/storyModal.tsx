@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -11,8 +12,9 @@ import {
   PanResponder,
   StatusBar,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
-import { StoryModel } from '../../../../store/state/storiesStore/models/models';
+import { StoryModel, SubStoryModel } from '../../../../store/state/storiesStore/models/models';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import colors from '../../colors/colors';
 import Close from '../../../../assets/icons/close.svg';
@@ -26,34 +28,40 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
-export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean, onClose: ()=>void }>
-= ({ stories, category, isVisible, onClose }) => {
-        const navigation = useNavigation<any>();
-
+export const StoryModal: FC<{stories: SubStoryModel[], isVisible: boolean, onClose: ()=>void }>
+= ({ stories, isVisible, onClose }) => {
+    const navigation = useNavigation<any>();
+    console.log('stories',stories.length);
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
-    const progressAnims = useRef(
-      stories.map(() => new Animated.Value(0)) // Массив анимаций для прогресс-баров
-    ).current;
-    const duration = 5000;
+    const [progressAnims, setProgressAnims] = useState<Animated.Value[]>(stories.map(() => new Animated.Value(0)));
     const [paused, setPaused] = useState(false); // Состояние для приостановки анимации
     const [previousValue, setPreviousValue] = useState(0); // Значение прогресса на момент приостановки
     const [startTime, setStartTime] = useState(0); // Время начала анимации до приостановки
     const [pauseStartTime, setPauseStartTime] = useState(0); // Время начала паузы
     const insets = useSafeAreaInsets();
-    // useEffect(() => {
-    //   if (isVisible) {
-    //     setCurrentStoryIndex(currentStoryPressed); // Сброс текущей стори при открытии
-    //     startProgressAnimation(currentStoryPressed);
-    //   }
-    // }, [isVisible, currentStoryPressed]);
+
 
     useEffect(() => {
-      startProgressAnimation(currentStoryIndex);
-    }, [currentStoryIndex, isVisible]);
+      if (stories.length > 0) {
+        setCurrentStoryIndex(0);
+        setProgressAnims(stories.map(() => new Animated.Value(0)));
+      }
+    }, [stories]);
+
+    useEffect(() => {
+      if (progressAnims.length === stories.length) { // Убеждаемся, что массив полностью обновлен
+        startProgressAnimation(currentStoryIndex);
+      }
+    }, [progressAnims, currentStoryIndex, isVisible]);
+
 
     const startProgressAnimation = (storyIndex: number) => {
+      if (!progressAnims[storyIndex]) {
+        console.warn(`startProgressAnimation: progressAnims[${storyIndex}] is undefined`);
+        return;
+      }
       progressAnims[storyIndex].setValue(0); // Сброс анимации для текущей стори
-      const duration = stories[storyIndex].duration || 5000; // Длительность текущей стори
+      const duration = 5000; // Длительность текущей стори
       setStartTime(Date.now()); // Устанавливаем время начала анимации
       setPauseStartTime(0); // Сброс времени паузы
 
@@ -68,7 +76,6 @@ export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean
         }
       });
     };
-
     const handleNextStory = () => {
       if (currentStoryIndex < stories.length - 1) {
         setCurrentStoryIndex((prevIndex) => prevIndex + 1);
@@ -99,7 +106,7 @@ export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean
       if (paused) {
         const elapsedPauseTime = Date.now() - pauseStartTime; // Считаем время паузы
 
-        const duration = stories[currentStoryIndex].duration || 5000;
+        const duration = 5000;
         const elapsedTime = Date.now() - startTime; // Время, прошедшее с начала анимации
         const remainingDuration = duration - elapsedTime; // Оставшееся время анимации
         // Возобновляем анимацию с оставшегося прогресса
@@ -119,26 +126,6 @@ export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean
       }
     };
 
-    // const panResponder = PanResponder.create({
-    //   onStartShouldSetPanResponder: () => true,
-    //   onPanResponderRelease: (evt, gestureState) => {
-    //     if (gestureState.dx > 50) {
-    //       // Свайп вправо (предыдущая)
-    //       handlePreviousStory();
-    //     } else if (gestureState.dx < -50) {
-    //         handleNextStory();
-    //     }
-    //   },
-    // });
-    // const onSwipe = ({ nativeEvent }) => {
-    //     if (nativeEvent.translationX > 50) {
-    //       // Свайп вправо
-    //       handlePreviousStory();
-    //     } else if (nativeEvent.translationX < -50) {
-    //       // Свайп влево
-    //       handleNextStory();
-    //     }
-    //   };
   return (
     <Modal
       visible={isVisible}
@@ -150,21 +137,17 @@ export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean
 
         <PanGestureHandler >
       <View style={styles.modalContainer}  >
-        {/* <View style={{ transform: [{rotate: '180deg'}]}}> */}
         <LinearGradient
                 colors={['transparent', `rgba(0, 0, 0, ${0.55})` ]}
                 style={[styles.shadowGradient, {top: 0, transform: [{rotate: '180deg'}]} ]}
                 />
-        {/* </View> */}
 
-        {/* Кнопка закрытия */}
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
           <Close />
         </TouchableOpacity>
 
-        {/* Прогресс-бары */}
         <View style={styles.progressBarContainer}>
-          {stories.map((_, index) => (
+          {progressAnims.length > 0 ? stories.map((_, index) => (
             <View key={index} style={styles.progressBarWrapper}>
               {index < currentStoryIndex ? (
                 <View style={styles.progressBarCompleted} />
@@ -184,30 +167,28 @@ export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean
                 <View style={styles.progressBarInactive} />
               )}
             </View>
-          ))}
+          )) : <ActivityIndicator />}
         </View>
 
-        {/* Область отображения стори */}
         <TouchableOpacity
           style={styles.touchableArea}
         //   onPress={handleNextStory}
-          onPressIn={handlePauseProgressAnimation} // Приостанавливаем при нажатии
-          onPressOut={handleResumeProgressAnimation} // Возобновляем при отпускании
+          onPressIn={handlePauseProgressAnimation}
+          onPressOut={handleResumeProgressAnimation}
           activeOpacity={1}
         >
           <Image
-            source={{ uri: `https://abcd.100qrs.ru${stories[currentStoryIndex].cover}` }}
+            source={{ uri: `https://abcd.100qrs.ru${stories[currentStoryIndex]?.cover || ''}` }}
             style={styles.storyImage}
             resizeMode="cover"
           />
         <View>
-        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex].article.title}</IfgText>
-        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex].article.subtitle}</IfgText>
+        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex]?.title || ''}</IfgText>
+        <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex]?.subtitle || ''}</IfgText>
         </View>
 
         </TouchableOpacity>
 
-        {/* Левая область для перехода */}
         {currentStoryIndex > 0 && (
           <TouchableOpacity
             style={styles.leftTouchableArea}
@@ -215,7 +196,6 @@ export const StoryModal: FC<{stories: StoryModel[], category, isVisible: boolean
             activeOpacity={1}
           />
         )}
-        {/* Правая область для перехода */}
         {currentStoryIndex < stories.length && (
           <TouchableOpacity
             style={styles.rightTouchableArea}
