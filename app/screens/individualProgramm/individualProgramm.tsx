@@ -210,7 +210,7 @@ export const IndividualProgramm = observer(() => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>
               <Fish />
             </View>
-            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Питание} maxValue={testingStore.currentTest.maxValues.Питание} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Питание} maxValue={testingStore.currentTest.maxValues ? testingStore.currentTest.maxValues.Питание : 0} />
           </CardContainer>
           <RecommendHelper  bgColor="#DDFFE3"/>
           <View style={[gs.flexRow]}>
@@ -234,7 +234,7 @@ export const IndividualProgramm = observer(() => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Сон</IfgText>
               <Moon />
             </View>
-            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Сон} maxValue={testingStore.currentTest.maxValues.Сон} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Сон} maxValue={testingStore.currentTest.maxValues ? testingStore.currentTest.maxValues.Сон : 0} />
           </CardContainer>
           <RecommendHelper bgColor="#FFEDDD"/>
           <View style={[gs.flexRow]}>
@@ -258,7 +258,7 @@ export const IndividualProgramm = observer(() => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Антистресс</IfgText>
               <Antistress />
             </View>
-            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Антистресс} maxValue={testingStore.currentTest.maxValues.Антистресс} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json.Антистресс} maxValue={testingStore.currentTest.maxValues ? testingStore.currentTest.maxValues.Антистресс : 0} />
           </CardContainer>
           <RecommendHelper bgColor="#F2FFDD"/>
           <View style={[gs.flexRow]}>
@@ -282,7 +282,7 @@ export const IndividualProgramm = observer(() => {
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Физическая активность</IfgText>
               <PhysicalActivity />
             </View>
-            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json['Физическая активность']} maxValue={testingStore.currentTest.maxValues['Физическая активность']} />
+            <CircularProgress value={testingStore.myCurrentResultsTest.activiti_value_json['Физическая активность']} maxValue={testingStore.currentTest.maxValues ? testingStore.currentTest.maxValues['Физическая активность'] : 0} />
           </CardContainer>
           <RecommendHelper bgColor="#DDF6FF"/>
           <View style={[gs.flexRow]}>
