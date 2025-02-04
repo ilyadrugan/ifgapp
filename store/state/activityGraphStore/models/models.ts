@@ -15,12 +15,6 @@ export type DailyActivityModel = {
     score:{score: number}
 }
 
-export type CupsDataModel = {
-    data: CupsType[],
-    watter: number,
-    isDrinkEight: boolean,
-}
-
 export type DailyCaloriesModel = {
     calories: number,
     created_at: string,
