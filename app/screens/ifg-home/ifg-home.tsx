@@ -67,6 +67,9 @@ export const IFGHome = observer(() => {
       presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
       await dailyActivityStore.getDailyTodayActivity();
+      // if (dailyActivityStore.dailyTodayActivityData?.watter === undefined) {
+      //   await dailyActivityStore.addDailyActivity('watter', 0);
+      // }
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
       recommendationStore.getPersonalRecommendations();
     };
@@ -187,7 +190,7 @@ return <>
             </Button>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
-        {(!dailyActivityStore.dailyTodayActivityDataLoading && dailyActivityStore.dailyTodayActivityData?.watter !== undefined) ? <TimeToDrinkBlock isNew={true}/>
+        {(!dailyActivityStore.dailyTodayActivityDataLoading) ? <TimeToDrinkBlock isNew={true}/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={300} width={ScreenWidth - 32} />}
 
 

@@ -22,43 +22,44 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
     const [cupsData, setCupsData] = useState<CupsType[]>([0, 1, 2, 3, 4, 5, 6, 7].map((item) => ({
         id: item,
         status:
-            item < dailyTodayActivityData.watter
+            item < (dailyTodayActivityData?.watter )
                 ? CupStatus.Filled
-                : item === dailyTodayActivityData.watter
+                : item === (dailyTodayActivityData?.watter)
                 ? CupStatus.Plused
                 : CupStatus.Empty,
     })));
     const [isLoading, setIsLoading] = useState(false);
-    const [scoreGotted, setScoreGotted] = useState<boolean>(dailyTodayActivityData.isDrinkEight);
+    const [scoreGotted, setScoreGotted] = useState<boolean>(dailyTodayActivityData?.isDrinkEight || false);
 
     useFocusEffect(
       React.useCallback(() => {
+        console.log('useFocusEffect');
         if (isLoading) {return;}
-        setScoreGotted(dailyTodayActivityData.isDrinkEight);
+        setScoreGotted(dailyTodayActivityData?.isDrinkEight || false);
         setCupsData([0, 1, 2, 3, 4, 5, 6, 7].map((item) => ({
             id: item,
             status:
-                item < dailyTodayActivityData.watter
+                item < (dailyTodayActivityData?.watter)
                     ? CupStatus.Filled
-                    : item === dailyTodayActivityData.watter
+                    : item === (dailyTodayActivityData?.watter)
                     ? CupStatus.Plused
                     : CupStatus.Empty,
         })));
       }, [])
     );
     useEffect(() => {
-        console.log('dailyTodayActivityData.watter', dailyTodayActivityData.watter);
-        setScoreGotted(dailyTodayActivityData.isDrinkEight);
+        console.log('dailyTodayActivityData.watter', dailyTodayActivityData?.watter);
+        setScoreGotted(dailyTodayActivityData?.isDrinkEight);
         setCupsData([0, 1, 2, 3, 4, 5, 6, 7].map((item) => ({
             id: item,
             status:
-                item < dailyTodayActivityData.watter
+                item < dailyTodayActivityData?.watter
                     ? CupStatus.Filled
-                    : item === dailyTodayActivityData.watter
+                    : item === dailyTodayActivityData?.watter
                     ? CupStatus.Plused
                     : CupStatus.Empty,
         })));
-    }, [dailyTodayActivityData.watter, isLoading]);
+    }, [dailyTodayActivityData, isLoading]);
 
     // Обработчик нажатия на стакан
     const onCupTap = async (id: number, status: CupStatus) => {
@@ -95,10 +96,10 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
             <View style={[gs.flexRow, { justifyContent: 'space-between' }]}>
                 <View>
                     <IfgText style={[gs.fontCaption2, gs.bold]}>Сегодня</IfgText>
-                    <IfgText style={[gs.fontCaptionSmall, gs.mt4]}>{dailyTodayActivityData.watter} из 8</IfgText>
+                    <IfgText style={[gs.fontCaptionSmall, gs.mt4]}>{(dailyTodayActivityData?.watter || 0)} из 8</IfgText>
                 </View>
                 <IfgText style={[gs.fontCaption, gs.bold]}>
-                    {`${dailyTodayActivityData.watter * 0.25} л`.replace('.', ',')}
+                    {`${(dailyTodayActivityData?.watter || 0) * 0.25} л`.replace('.', ',')}
                 </IfgText>
             </View>
             {/* Кружки */}
@@ -123,7 +124,7 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
             {!scoreGotted && (
                 <ButtonNext
                     onPress={addScoreForWatter}
-                    disabled={dailyTodayActivityData.watter !== 8}
+                    disabled={dailyTodayActivityData?.watter !== 8}
                     title="Сделано"
                     oliveTitle="+ 3 балла"
                 />

@@ -61,6 +61,9 @@ class DailyActivityStore {
       .then((result)=>{
         console.log('getDailyTodayActivity',result.data.data);
         this.dailyTodayActivityData = result.data.data;
+        if (this.dailyTodayActivityData.watter === undefined) {
+          this.addWatter(0);
+        }
       }
       )
       .catch((err)=>{
