@@ -26,7 +26,9 @@ export type ArticleViewModel = {
 }
 
 export type BodyJsonType = {
-    data: string
+    data: string,
+    name: string,
+    type: string,
 }
 
 export type ArticleListModel = {

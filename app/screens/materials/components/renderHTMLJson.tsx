@@ -10,17 +10,18 @@ import { youtube_parser, YoutubeVideo } from '../../../core/components/youtubePl
 
 const width = Dimensions.get('screen').width;
 export const RenderHTMLContent = ({ content, fromBodyJson }) => {
-  console.log('content', content);
+  // console.log('content', content);
   let styleText: StyleProp<ViewStyle | TextStyle> = {};
   const renderNode = (node, index) => {
     if (node.text) {
         let style;
-        if (!fromBodyJson) {
-          style = styleText;
+        style = styleText;
           styleText = {} as StyleProp<ViewStyle | TextStyle>;
-        }
-        return fromBodyJson ? node.text :
-          <Text key={index} style={[styles.defaultText, style]}>
+        // if (!fromBodyJson) {
+        //   style = styleText;
+        //   styleText = {} as StyleProp<ViewStyle | TextStyle>;
+        // }
+        return <Text key={index} style={[styles.defaultText, style]}>
             {node.text}
           </Text>
         ;
@@ -34,9 +35,40 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );
-        case 'ul':
+          case 'table':
+            return (
+              <View style={styles.table} key={index}>
+                {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </View>
+            );
+
+          case 'tr':
+            return (
+              <View style={styles.tableRow} key={index}>
+                {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+              </View>
+            );
+
+          case 'th':
+            return (
+              <View style={[styles.tableCell, styles.tableHeader]} key={index}>
+                <Text style={styles.tableHeaderText}>
+                  {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+                </Text>
+              </View>
+            );
+
+          case 'td':
+            return (
+              <View style={styles.tableCell} key={index}>
+                <Text style={styles.tableCellText}>
+                  {node.children.map((child, childIndex) => renderNode(child, childIndex))}
+                </Text>
+              </View>
+            );
+            case 'ul':
           return (
-            <View style={styles.ul}>
+            <View style={styles.ul} key={index}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </View>
           );
@@ -52,9 +84,9 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
                 </View>
               );
         case 'li':
-          // console.log('li',node, node.isOrdered, node.index);
+          console.log('li',node, node.isOrdered, index);
           return (
-            <View style={styles.li} key={index}>
+            <View  style={styles.li} key={index}>
               {node.isOrdered ? (
                 <IfgText color={colors.GREEN_COLOR} style={[gs.h2Intro,{ marginTop: 0}]}>0{node.index} </IfgText>
               ) : <View style={styles.bullet}/>}
@@ -128,10 +160,16 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
               </Text>
           );
         case 'img':
-          const imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
+          let imageUri = '';
+          if (node.attributes?.src.startsWith('https:/')){
+            imageUri = node.attributes?.src;
+          }
+          else {
+            imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
+          }
           console.log('Image URI:', imageUri); // Отладка URI
           return (
-            <View style={{ width: '100%', height: 200 }}>
+            <View key={index} style={{ width: '100%', height: 200 }}>
               <Image
                 source={{ uri: imageUri }}
                 resizeMode="cover"
@@ -140,19 +178,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
             </View>
           );
         case 'figure':
-          console.log('figure', node);
           return node.children.map((child, childIndex)=>renderNode(child, childIndex));
-            // const imageUri = `https://ifeelgood.life/storage${node.attributes?.src.split('storage')[1]}`;
-            // console.log('Image URI:', imageUri); // Отладка URI
-            // return (
-            //   <View style={{ width: '100%', height: 200 }}>
-            //     <Image
-            //       source={{ uri: imageUri }}
-            //       resizeMode="cover"
-            //       style={{ width: '100%', height: 200 }}
-            //     />
-            //   </View>
-            // );
         case 'iframe':
           const videoUrl = node.attributes?.src;
           if (videoUrl) {
@@ -266,6 +292,35 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 200,
+  },
+  table: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginVertical: 10,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  tableHeader: {
+    backgroundColor: '#f4f4f4',
+  },
+  tableHeaderText: {
+    fontWeight: 'bold',
+    padding: 8,
+    textAlign: 'center',
+  },
+  tableCell: {
+    flex: 1,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tableCellText: {
+    textAlign: 'center',
   },
 });
 

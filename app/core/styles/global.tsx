@@ -159,6 +159,7 @@ const gs = StyleSheet.create({
   mt16: { marginTop: 16 },
   mt18: { marginTop: 18 },
   mt20: { marginTop: 20 },
+  mt22: { marginTop: 22 },
   mt24: { marginTop: 24 },
   mt32: { marginTop: 32 },
   mt36: { marginTop: 36 },

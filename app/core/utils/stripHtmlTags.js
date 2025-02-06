@@ -11,6 +11,21 @@ export function stripHtmlTags(htmlString) {
         ;
 }
 
+export function stripWebHtmlSheluha(htmlString) {
+  if (!htmlString) {return '';}
+  return htmlString
+      .replaceAll('&nbsp;', ' ')
+      .replaceAll('&mdash;', '—')
+      .replaceAll('&ndash;', '-')
+      .replaceAll(/\u00A0/g, ' ')
+      .replaceAll('&laquo;','«')
+      .replaceAll('&raquo;','»')
+      .replaceAll('&deg;', '°')
+      .replaceAll('&ordm;', 'º')
+      .replaceAll('\n', '')
+      ;
+}
+
 export  function parseHTMLToSequentialObjects(htmlString) {
     const result = [];
     const stack = []; // Для отслеживания вложенности
