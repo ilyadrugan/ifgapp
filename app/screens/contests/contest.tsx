@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, FlatList, ActivityIndicator } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { Button, ButtonTo } from '../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../../core/colors/colors';
@@ -16,6 +16,7 @@ import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import { PresentModel, WinnerModel } from '../../../store/state/presentsStore/models/models';
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import { observer } from 'mobx-react';
+import { RenderHTMLView } from '../materials/components/renderHtml';
 
 
 export const ContestView = observer(({route}) => {
@@ -77,14 +78,16 @@ export const ContestView = observer(({route}) => {
             />
         </ImageBackground>}
         <View style={gs.mt24} />
-        <CardContainer>
+        <CardContainer style={{gap:0}}>
             <IfgText style={[gs.fontCaption, gs.bold]}>Описание приза</IfgText>
-            <IfgTextWithLinks style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.subtitle)}</IfgTextWithLinks>
+            <RenderHTMLView br html={presentsStore.currentPresent.subtitle} />
+            {/* <IfgTextWithLinks style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.subtitle)}</IfgTextWithLinks> */}
         </CardContainer>
         <View style={gs.mt24} />
-        <CardContainer>
+        <CardContainer style={{gap:0}}>
             <IfgText style={[gs.fontCaption, gs.bold]}>Описание конкурса</IfgText>
-            <IfgTextWithLinks style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.desc)}</IfgTextWithLinks>
+            {/* <IfgTextWithLinks style={gs.fontCaption2}>{stripHtmlTags(presentsStore.currentPresent.desc)}</IfgTextWithLinks> */}
+            <RenderHTMLView br html={presentsStore.currentPresent.desc} />
         </CardContainer>
         <View style={gs.mt24}/>
         <FeedBack />

@@ -11,19 +11,22 @@ export function stripHtmlTags(htmlString) {
         ;
 }
 
-export function stripWebHtmlSheluha(htmlString) {
+export function stripWebHtmlSheluha(htmlString, withBr = false) {
   if (!htmlString) {return '';}
-  return htmlString
-      .replaceAll('&nbsp;', ' ')
-      .replaceAll('&mdash;', '—')
-      .replaceAll('&ndash;', '-')
-      .replaceAll(/\u00A0/g, ' ')
-      .replaceAll('&laquo;','«')
-      .replaceAll('&raquo;','»')
-      .replaceAll('&deg;', '°')
-      .replaceAll('&ordm;', 'º')
-      .replaceAll('\n', '')
-      ;
+  const result = htmlString
+    .replaceAll('&nbsp;', ' ')
+    .replaceAll('&mdash;', '—')
+    .replaceAll('&ndash;', '-')
+    .replaceAll(/\u00A0/g, ' ')
+    .replaceAll('&laquo;','«')
+    .replaceAll('&raquo;','»')
+    .replaceAll('&deg;', '°')
+    .replaceAll('&ordm;', 'º')
+    .replaceAll('\n', '');
+  if (withBr) {
+    return result.replaceAll('<br>', '\n');
+  }
+  return result;
 }
 
 export  function parseHTMLToSequentialObjects(htmlString) {
