@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, Linking } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -188,7 +188,7 @@ export const IndividualProgramm = observer(() => {
          >
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Начинайте сейчас!</IfgText>
             <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Если становится тяжело, смотрите видео и читайте статьи о том, как чувствовать себя лучше — это поможет вам не сдаться.</IfgText>
-            <Button onPress={()=>navigation.navigate('Main')} style={s.howItWorksButton}>
+            <Button onPress={()=>Linking.openURL('https://t.me/ifgbot_bot')} style={s.howItWorksButton}>
                 <>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>Начать заниматься</IfgText>
                     <ArrowRight />

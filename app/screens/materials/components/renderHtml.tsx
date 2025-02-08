@@ -8,6 +8,7 @@ import Accept from '../../../../assets/icons/accept-article.svg';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import { YoutubeVideo, youtube_parser } from '../../../core/components/youtubePlayer/youtubePlayer';
 import { useNavigation } from '@react-navigation/native';
+import RutubeView from '../../../core/components/rutubeView/rutubeVideo';
 
 const width = Dimensions.get('screen').width;
 
@@ -44,7 +45,13 @@ export const RenderHTMLView: FC<{html: string, br?: boolean}> = ({
         if (node.name === 'iframe') {
           const videoUrl = node.attribs?.src;
           if (videoUrl) {
-                  return <View><YoutubeVideo videoId={youtube_parser(videoUrl) || ''} /></View>;
+                  return <View>
+                    {videoUrl.includes('youtube') ?
+                      <YoutubeVideo videoId={youtube_parser(videoUrl) || ''} />
+                      :
+                      <RutubeView url={videoUrl}/>
+                    }
+                  </View>;
           }
         }
         if (node.name === 'blockquote'){

@@ -7,6 +7,7 @@ import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import { youtube_parser, YoutubeVideo } from '../../../core/components/youtubePlayer/youtubePlayer';
+import RutubeView from '../../../core/components/rutubeView/rutubeVideo';
 
 const width = Dimensions.get('screen').width;
 export const RenderHTMLContent = ({ content, fromBodyJson }) => {
@@ -183,7 +184,11 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
           const videoUrl = node.attributes?.src;
           if (videoUrl) {
             return <View  >
+          {videoUrl.includes('youtube') ?
             <YoutubeVideo videoId={youtube_parser(videoUrl) || ''} />
+            :
+            <RutubeView url={videoUrl}/>
+          }
             </View>;}
           break;
         default:

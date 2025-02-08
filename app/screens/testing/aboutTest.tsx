@@ -84,7 +84,8 @@ const carouselItems = [
   ];
 export const AboutTest = () => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
-    const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');    const navigation = useNavigation<any>();
+    const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');    
+    const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [activeSlide, setActiveSlide] = useState(0);
 

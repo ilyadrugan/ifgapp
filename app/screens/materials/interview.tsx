@@ -21,6 +21,7 @@ import RenderHTML from 'react-native-render-html';
 import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
 import { onShare } from '../../core/components/share/share';
 import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlayer/youtubePlayer';
+import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 
 const width = Dimensions.get('screen').width;
 
@@ -102,7 +103,12 @@ export const InterviewView = observer(({route}) => {
                  </View>
             )}
         </View>
-        <YoutubeVideo videoId={youtube_parser(articlesStore.currentInterview.video) || ''} />
+        {articlesStore.currentInterview.video.includes('youtube') ?
+         <YoutubeVideo videoId={youtube_parser(articlesStore.currentInterview.video) || ''} />
+        :
+        <RutubeView url={articlesStore.currentInterview.video}/>
+        }
+
         </CardContainer>
         <View style={gs.mt16} />
         <CardContainer style={[gs.flexRow, {justifyContent: 'space-between', borderRadius: 12}]}>
