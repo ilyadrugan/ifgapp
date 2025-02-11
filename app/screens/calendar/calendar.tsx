@@ -127,7 +127,7 @@ export const CalendarScreen = observer(() =>{
       return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
                 <ArticleHeader
                   // isNew
-                  time={'10:00'}
+                  // time={'10:00'}
                   hashTagColor={categoryColors[rec.category]}
                   hashTagText={'#' + rec.category}
                 />
@@ -182,7 +182,7 @@ export const CalendarScreen = observer(() =>{
             <View
             style={s.content}
             onLayout={(event) => onLayoutContent(0, event)}>
-               {dailyActivityStore.dailyTodayActivityData ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } isNew={true}/>
+               {dailyActivityStore.dailyTodayActivityData ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } />
             : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />}
             {recommendationStore.personalRecomendationList.filter((rec)=>(rec.category === 'Питание')).map((rec)=>
             renderRecommendation(rec))}

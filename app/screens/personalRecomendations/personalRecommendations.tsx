@@ -25,7 +25,7 @@ export const PersonalRecommendations = observer(() =>{
         return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
         <ArticleHeader
           // isNew
-          time={'10:00'}
+          // time={'10:00'}
           hashTagColor={categoryColors[rec.category]}
           hashTagText={'#' + rec.category}
         />

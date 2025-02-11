@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions, Platform, View, StyleSheet } from 'react-native';
 
 export const youtube_parser = (url: string) => {
     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -10,10 +10,20 @@ export const youtube_parser = (url: string) => {
 
 export const YoutubeVideo: FC<{ videoId: string }> = ({ videoId }) => {
   const windowWidth = Dimensions.get('window').width - 32;
-  return <YoutubePlayer
+  return <View style={styles.container}>
+    <YoutubePlayer
     webViewStyle={ Platform.OS === 'android' && { opacity:0.99 } }
-    height={(windowWidth / 16) * 9}
+    height={(Dimensions.get('window').width) / 19 * 9}
     // width={windowWidth}
     videoId={videoId}
-  />;
+  /></View>;
 };
+
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'relative',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+});

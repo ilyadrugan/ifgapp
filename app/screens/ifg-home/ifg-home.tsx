@@ -190,7 +190,7 @@ return <>
             </Button>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
-        {(!dailyActivityStore.dailyTodayActivityDataLoading) ? <TimeToDrinkBlock isNew={true}/>
+        {(!dailyActivityStore.dailyTodayActivityDataLoading) ? <TimeToDrinkBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={300} width={ScreenWidth - 32} />}
 
 
@@ -198,7 +198,7 @@ return <>
           return <CardContainer style={gs.mt16} key={index.toString()} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
           <ArticleHeader
             // isNew
-            time={'10:00'}
+            // time={'10:00'}
             hashTagColor={categoryColors[rec.category]}
             hashTagText={'#' + rec.category}
           />

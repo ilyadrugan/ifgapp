@@ -19,8 +19,12 @@ const RutubeView: React.FC<RutubeViewProps> = ({ url, title, width = '100%', hei
   const [loading, setLoading] = useState(false);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const isPrivateVideo = url.includes('private/');
+  const isEmbed = url.includes('embed/');
 
   const getEmbedUrl = (rutubeUrl: string): string => {
+    if (isEmbed) {
+      return rutubeUrl;
+    }
     if (isPrivateVideo) {
       const splited = rutubeUrl.split('private/');
       const videoId = splited[1].split('/')[0];
@@ -62,7 +66,7 @@ const RutubeView: React.FC<RutubeViewProps> = ({ url, title, width = '100%', hei
 
   return (
     <View style={[styles.container, { width, height }]}>
-      {!isPlaying ? (
+      {(!isPlaying && thumbnailUrl) ? (
         <TouchableOpacity style={styles.thumbnailContainer} onPress={handlePress} activeOpacity={0.7}>
           {thumbnailUrl ? (
             typeof thumbnailUrl === 'number' ? (

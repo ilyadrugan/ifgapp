@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { Image, Platform, TouchableWithoutFeedback, Keyboard, View, ActivityIndicator, ScrollView, StyleSheet, FlatList, Dimensions, ImageBackground } from 'react-native';
+import { Image, Platform, TouchableWithoutFeedback, Keyboard, View, ActivityIndicator, ScrollView, StyleSheet, FlatList, Dimensions, ImageBackground, Linking } from 'react-native';
 import { WinnerModel } from '../../../store/state/presentsStore/models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import colors from '../../core/colors/colors';
@@ -87,7 +87,7 @@ export const InterviewView = observer(({route}) => {
                 <View style={{width: '55%'}}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>{stripHtmlTags(articlesStore.currentInterview.thumb_title)}</IfgText>
                 <IfgText  color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>{stripHtmlTags(articlesStore.currentInterview.title)}</IfgText>
-                <ButtonTo style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Участвовать" whiteIcon/>
+                <ButtonTo onPress={()=>Linking.openURL(articlesStore.currentInterview.video)} style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Участвовать" whiteIcon/>
                 </View>
                 <Image resizeMode="contain" style={{width: '56%', height: '130%', bottom: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? -16 : 8, right: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? 48 : 32  }}
                 source={{uri: `https://ifeelgood.life${articlesStore.currentInterview.media[0].full_path[0]}`}}/>
