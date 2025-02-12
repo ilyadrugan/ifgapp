@@ -69,7 +69,7 @@ export const Registration = observer(() => {
     };
     useEffect(() => {
         onTabClick(2);
-        scrollToBottom();
+        // scrollToBottom();
     }, []);
 
     const maskDateChange = (text) => {
@@ -200,8 +200,7 @@ export const Registration = observer(() => {
         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
             Зарегистрируйтесь, чтобы сохранить результаты тестирования и начать следовать рекомендациям!
         </IfgText>
-        <View style={gs.mt32}/>
-        <Tabs activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
+
         <View style={gs.mt32}/>
        {(activeTab === 1 || activeTab === 0) &&
        <View style={s.formCard}>
@@ -400,6 +399,10 @@ export const Registration = observer(() => {
        <View style={[s.formCard, {backgroundColor: colors.WHITE_DIRTY_COLOR}]}>
             <SubscribeReg />
         </View>}
+        <View style={gs.mt32}/>
+        <Tabs activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
+
+        <View style={{height: 60}} />
         </ImageBackground>
 
         </ScrollView>
@@ -426,7 +429,7 @@ const s = StyleSheet.create({
         paddingVertical:20,
         paddingHorizontal: 18,
         gap: 18,
-        marginBottom: 56,
+        // marginBottom: 56,
       },
       buttonLogin: {
         backgroundColor: colors.GREEN_COLOR,
