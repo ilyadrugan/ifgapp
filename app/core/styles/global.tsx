@@ -185,6 +185,7 @@ const gs = StyleSheet.create({
 
   mb4: { marginBottom: 4 },
   mb8: { marginBottom: 8 },
+  mb6: { marginBottom: 6 },
   mb12: { marginBottom: 12 },
   mb16: { marginBottom: 16 },
   mb24: { marginBottom: 24 },

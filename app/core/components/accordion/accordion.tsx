@@ -16,27 +16,31 @@ interface AccordionItem {
 
 export const Accordion: FC<AccordionProps> = ({ items }) => {
 
-  const [opened, setOpened] = useState<Set<AccordionItem>>(new Set());
+  // const [opened, setOpened] = useState<Set<AccordionItem>>(new Set());
 
-  function open(item: AccordionItem) {
-    setOpened(new Set(opened.add(item)));
-  }
+  // function open(item: AccordionItem) {
+  //   setOpened(new Set(opened.add(item)));
+  // }
 
-  function close(item: AccordionItem) {
-    opened.delete(item);
-    setOpened(new Set(opened));
-  }
+  // function close(item: AccordionItem) {
+  //   opened.delete(item);
+  //   setOpened(new Set(opened));
+  // }
+
+  // function toggle(item: AccordionItem) {
+  //   opened.has(item) ? close(item) : open(item);
+  // }
+  const [openedItem, setOpenedItem] = useState<AccordionItem | null>(null);
 
   function toggle(item: AccordionItem) {
-    opened.has(item) ? close(item) : open(item);
+    setOpenedItem(openedItem === item ? null : item);
   }
-
   return (<>
     <View>
       {items.map((x, index) =>
         <TouchableWithoutFeedback key={index.toString()} onPress={() => toggle(x)}>
           <View>
-            <Item item={x} isOpened={opened.has(x)}/>
+            <Item item={x} isOpened={openedItem === x} index={index}/>
           </View>
         </TouchableWithoutFeedback>
       )}
@@ -46,59 +50,58 @@ export const Accordion: FC<AccordionProps> = ({ items }) => {
 
 const Item: FC<{
   item: AccordionItem,
-  isOpened: boolean
+  isOpened: boolean,
+  index: number,
 }> = ({
   item,
   isOpened,
+  index,
 }) => {
+  // const animatedHeight = useRef(new Animated.Value(0)).current;
+  // const contentRef = useRef<View>(null);
+  // const [contentHeight, setContentHeight] = useState(0);
+  // const [isMeasured, setIsMeasured] = useState(false);
 
-  const progress = useRef(new Animated.Value(0)).current;
+  // useEffect(() => {
+  //   if (isOpened && !isMeasured) {
+  //     setTimeout(() => {
+  //       contentRef.current?.measure((_, __, ___, height) => {
+  //         setContentHeight(height);
+  //         setIsMeasured(true);
+  //       });
+  //     }, 0);
+  //   }
+  // }, [isOpened]);
 
-  useEffect(() => {
-    isOpened
-      ? Animated.timing(progress, {
-        duration: 200,
-        toValue: 1,
-        useNativeDriver: true,
-      }).start()
-      : Animated.timing(progress, {
-        duration: 200,
-        toValue: 0,
-        useNativeDriver: true,
-      }).start();
-  }, [isOpened]);
-
-  const interpolatedRotation = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '45deg'],
-  });
+  // useEffect(() => {
+  //   Animated.timing(animatedHeight, {
+  //     toValue: isOpened ? contentHeight : 0,
+  //     duration: 300,
+  //     useNativeDriver: false,
+  //   }).start();
+  // }, [contentHeight, isOpened]);
 
   return (
-    <View style={s.container}>
+    <View style={[s.container, {paddingTop: index === 0 ? 0 : 12}]}>
       <View style={s.header}>
         <View style={{ flexShrink: 1 }}>
           <IfgText style={[gs.fontCaption, gs.bold]}>{item.question}</IfgText>
         </View>
-        {/* <Animated.View style={[gs.ml16, s.button, isOpened ? s.buttonSuccess : s.buttonAdditional, {
-          transform: [{
-            rotate: interpolatedRotation,
-          }],
-        }]}> */}
+
             <View style={s.toggleButton}>
               <IfgText color={colors.GREEN_COLOR} style={[gs.fontBody1, {top:2}]}>{isOpened ? '−' : '+'}</IfgText>
             </View>
-          {/* </Animated.View> */}
       </View>
-      {isOpened &&
-        <Animated.View style={[s.text]}>
-          {typeof (item.answer) === 'string' ?
-          <IfgText style={gs.fontCaption2}>
-          {item.answer}
-          </IfgText> :
-          item.answer
-          }
-        </Animated.View>
-      }
+      {isOpened && <View style={[s.answerContainer]}>
+        <View style={s.hiddenAnswer}>
+          {typeof item.answer === 'string' ? (
+            <IfgText style={gs.fontCaption2}>{item.answer}</IfgText>
+          ) : (
+            item.answer
+          )}
+        </View>
+      </View>}
+
     </View>
   );
 };
@@ -106,8 +109,7 @@ const Item: FC<{
 
 const s = StyleSheet.create({
   container: {
-    paddingTop: 24,
-    paddingBottom: 24,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     marginTop: -1,
     borderColor: '#B4B4B4',
@@ -125,17 +127,12 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonSuccess: {
-    backgroundColor: colors.GREEN_COLOR,
-    borderColor: colors.GREEN_COLOR,
-  },
-  buttonAdditional: {
-    backgroundColor: 'white',
-    borderColor: colors.PLACEHOLDER_COLOR,
-    borderWidth: 1,
-  },
-  text: {
+  answerContainer: {
+    overflow: 'hidden',
     marginTop: 12,
+  },
+  hiddenAnswer: {
+    opacity: 1,
   },
   toggleButton: {
               width: 36,
