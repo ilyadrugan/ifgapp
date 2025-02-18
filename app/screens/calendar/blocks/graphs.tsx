@@ -14,7 +14,7 @@ import { useFocusEffect } from '@react-navigation/native';
 const tabss: TabInterface[] = [
     {
         id: 0,
-        name: 'Неделю',
+        name: 'Неделя',
     },
     {
         id: 1,
