@@ -12,6 +12,7 @@ import ArrowRightGray from '../../../../assets/icons/arrow-right-gray.svg';
 import Plus from '../../../../assets/icons/plus.svg';
 import Question from '../../../../assets/icons/question.svg';
 import Open from '../../../../assets/icons/open-up.svg';
+import GoalSettings from '../../../../assets/icons/goalSettings.svg';
 import Separator from '../../../../assets/icons/separator.svg';
 import { Button } from '../../../core/components/button/button';
 import { useNavigation } from '@react-navigation/native';
@@ -107,11 +108,17 @@ return <CardContainer >
       <TouchableOpacity onPress={selectImage} style={s.pin}>
           <Plus />
         </TouchableOpacity>
-      <View style={[gs.ml12]}>
+      <View style={[gs.ml12, {flexDirection: 'column'}]}>
 
-      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}</IfgText>
+      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + ' ' + userStore.userInfo?.last_name}</IfgText>
       :
       <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.email}</IfgText>}
+      <TouchableWithoutFeedback onPress={()=>navigation.navigate('GoalSettings')} >
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 2}}>
+        <IfgText color="#747474" >Настроить цели</IfgText>
+        <GoalSettings />
+        </View>
+      </TouchableWithoutFeedback>
       </View>
   </View>
   <Button style={s.buttonBack} onPress={()=> navigation.navigate('Профиль')}>

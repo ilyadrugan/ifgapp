@@ -16,6 +16,7 @@ import { InterviewView } from './materials/interview';
 import { Coverage } from './coverage/coverage';
 import { PersonalRecommendations } from './personalRecomendations/personalRecommendations';
 import { SubscribeEmailConfirm } from './registration/components/subscribeReg/subscribeEmailConfirm';
+import { GoalSettings } from './goalSettings/goalSettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -96,6 +97,11 @@ export const MainNavigation: FC = () => {
       <Stack.Screen
       name="PersonalRecommendations"
       component={PersonalRecommendations}
+      options={{ headerShown: false }}
+      />
+      <Stack.Screen
+      name="GoalSettings"
+      component={GoalSettings}
       options={{ headerShown: false }}
       />
 
