@@ -20,6 +20,9 @@ import { RenderHTMLView } from '../materials/components/renderHtml';
 import userStore from '../../../store/state/userStore/userStore';
 import { Input } from '../../core/components/input/input';
 import Slider from '@react-native-community/slider';
+import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
+import { formatNumber } from '../../core/utils/formatNumber';
+import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 const { width } = Dimensions.get('window');
 interface SliderInputProps {
     title: string;
@@ -27,28 +30,35 @@ interface SliderInputProps {
     max: number;
     step?: number;
     unit?: string;
-    initialValue?: number;
+    initialValue: number;
   }
 
-export const GoalSettings = observer(() => {
+export const GoalSettings = () => {
     const navigation = useNavigation<any>();
     const onBack = () => {
       navigation.goBack();
     };
     useEffect(() => {
+      console.log('dailyActivityStore.dailyActivitySettingsToSend', dailyActivityStore.dailyActivitySettingsToSend);
     }, []);
-
+    const onSave = async () => {
+      console.log('dailyActivityStore.dailyActivitySettingsToSend', dailyActivityStore.dailyActivitySettingsToSend);
+      await dailyActivityStore.setDailyActivitySettings(dailyActivityStore.dailyActivitySettingsToSend);
+    };
+    // eslint-disable-next-line react/no-unstable-nested-components
     const SliderInput:FC<SliderInputProps> = ({
         title,
         min,
         max,
         step = 1,
         unit = '',
-        initialValue = min * 2,
+        initialValue,
       }) => {
+        console.log('initialValue');
         const [value, setValue] = useState(`${(initialValue).toString()} ${unit}`);
 
-        const handleSliderChange = (val: number) => {
+        const handleSliderChange = async (val: number) => {
+          setChoosedValue(Math.round(val));
           setValue(`${Math.round(val).toString()} ${unit}`);
         };
 
@@ -56,9 +66,11 @@ export const GoalSettings = observer(() => {
           const num = parseInt(text, 10);
           if (!isNaN(num) && num >= min && num <= max) {
             setValue(num.toString());
+            setChoosedValue(num);
           }
           else {
             setValue(text);
+
           }
         };
 
@@ -66,15 +78,34 @@ export const GoalSettings = observer(() => {
             const num = parseInt(value.split(' ')[0], 10);
             if (num <= min || isNaN(num)) {
                 setValue(`${min.toString()} ${unit}`);
+                setChoosedValue(min);
               }
             else if (num >= max) {
                 setValue(`${max.toString()} ${unit}`);
+                setChoosedValue(max);
             }
             else {
                 setValue(`${num.toString()} ${unit}`);
+                setChoosedValue(num);
             }
-        };
 
+        };
+        const setChoosedValue = (num: number) => {
+          switch (unit) {
+            case 'баллов':
+              dailyActivityStore.setDailyActivitySettingsForSend('ifg_scores', num);
+              break;
+            case 'ккал':
+              dailyActivityStore.setDailyActivitySettingsForSend('calories', num);
+              break;
+            case 'шагов':
+              dailyActivityStore.setDailyActivitySettingsForSend('steps', num);
+              break;
+            case 'пролетов':
+              dailyActivityStore.setDailyActivitySettingsForSend('floor_spans', num);
+              break;
+          }
+        };
         return (
           <>
             <IfgText style={[gs.h3, gs.bold]}>{title}</IfgText>
@@ -99,11 +130,25 @@ export const GoalSettings = observer(() => {
 
             />
             <View style={s.labels}>
-              <IfgText style={gs.fontCaptionSmall}>{min}</IfgText>
-              <IfgText style={gs.fontCaptionSmall}>{max}</IfgText>
+              <IfgText style={gs.fontCaptionSmall}>{formatNumber(min)}</IfgText>
+              <IfgText style={gs.fontCaptionSmall}>{formatNumber(max)}</IfgText>
             </View>
           </>
         );
+      };
+      const ArticleCard:FC<{item?: ArticleModel}> = ({item}) => {
+
+        return <CardContainer style={s.articleCard}>
+            <Image resizeMode="cover" source={{uri: 'https://ifeelgood.life/storage/library/xFTU0dBDEOmqVPvD0.48Мб/webp/thumb.webp'}}
+
+            style={{ width: '40%', height: '100%' }}
+            />
+            <View style={{paddingRight: 15,paddingVertical: 12, flexDirection: 'column'}}>
+            <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold, {maxWidth: '75%'}]}>{'Правильно ставьте цели для новых привычек'}</IfgText>
+            <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8, {maxWidth: '65%'}]}>{'Пошаговое руководство от эксперта'}</IfgText>
+            <View style={gs.mt12}><ButtonTo onPress={()=>navigation.navigate('ArticleView', {articleId: 27})} style={{width: 114, height: 26}} title="Подробнее" /></View>
+            </View>
+        </CardContainer>;
       };
     return <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -122,18 +167,19 @@ export const GoalSettings = observer(() => {
 
         <View style={gs.mt16} />
         <CardContainer >
-            <SliderInput title="Цель ifg-баллов" min={30} max={100} unit="баллов" />
-            <SliderInput title="Шаги" min={1000} max={30000} unit="шагов" step={500} />
-            <SliderInput title="Калории" min={100} max={3000} unit="ккал" step={50} />
-            <SliderInput title="Пролёты" min={1} max={50} unit="пролетов" />
-            <Button fullWidth style={{justifyContent: 'center', alignItems: 'center', borderRadius: 16, height: 60, backgroundColor: colors.GREEN_COLOR}}>
-                <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>Сохранить</IfgText>
+            <SliderInput title="Цель ifg-баллов" min={30} max={100} unit="баллов" initialValue={dailyActivityStore.dailyActivitySettings.ifg_scores} />
+            <SliderInput title="Шаги" min={1000} max={30000} unit="шагов" step={500} initialValue={dailyActivityStore.dailyActivitySettings.steps} />
+            <SliderInput title="Калории" min={100} max={3000} unit="ккал" step={50} initialValue={dailyActivityStore.dailyActivitySettings.calories} />
+            <SliderInput title="Пролёты" min={1} max={50} unit="пролетов" initialValue={dailyActivityStore.dailyActivitySettings.floor_spans} />
+            <Button disabled={dailyActivityStore.isLoading} onPress={onSave} fullWidth style={{justifyContent: 'center', alignItems: 'center', borderRadius: 16, height: 60, backgroundColor: colors.GREEN_COLOR}}>
+                {dailyActivityStore.isLoading ? <ActivityIndicator /> : <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>Сохранить</IfgText>}
             </Button>
         </CardContainer>
+      <ArticleCard />
       <View style={{height: 100}} />
     </ScrollView>
     </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>;});
+    </KeyboardAvoidingView>;};
 
 const s = StyleSheet.create({
     container: {
@@ -185,4 +231,15 @@ const s = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
       },
+      articleCard:{
+        marginTop: 16,
+        overflow: 'hidden',
+        gap: 18,
+        padding: 0,
+        borderRadius: 16,
+        borderWidth: 1,
+        borderTopWidth: 0,
+        borderColor: '#E7E7E7',
+        flexDirection: 'row',
+    },
 });

@@ -9,17 +9,17 @@ import userStore from '../../../../store/state/userStore/userStore';
 import { getHealthData } from '../../../hooks/getHealthData';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { useHealthData } from '../../../hooks/useHealthData';
-import { DailyActivityModel } from '../../../../store/state/activityGraphStore/models/models';
+import { DailyActivityModel, DailyActivitySettingsModel } from '../../../../store/state/activityGraphStore/models/models';
 import colors from '../../colors/colors';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { observer } from 'mobx-react';
 
-export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boolean}>  = observer(({dailyActivities, today}) => {
+export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boolean, dailySettings?: DailyActivitySettingsModel}>  = observer(({dailyActivities, today, dailySettings}) => {
     const [dailyValues, setDailyValues] = useState(dailyActivities);
     //new Date('2024-12-12T00:00:00')
     const {healthData} = useHealthData();
     useEffect(() => {
-        // console.log('dailyActivities', dailyActivities);
+        console.log('dailyActivityStore.dailyActivitySettings', dailySettings);
         setDailyValues(dailyActivities);
         // console.log('healthData', healthData);
     }, [dailyActivities]);
@@ -35,13 +35,13 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boole
             color={ActivityStats[name].color}/>
         )} */}
         <ColumnarProgressBar
-            height={(today ? healthData.steps : dailyValues?.steps ||  0) / 10000 * 100}
+            height={(today ? healthData.steps : dailyValues?.steps ||  0) / (dailySettings?.steps || 10000) * 100}
             color={colors.GREEN_COLOR}/>
         <ColumnarProgressBar
-            height={(today ? healthData.caloriesBurned : dailyValues?.calories || 0) / 1500 * 100}
+            height={(today ? healthData.caloriesBurned : dailyValues?.calories || 0) / (dailySettings?.calories || 1500) * 100}
             color={colors.OLIVE_COLOR}/>
          <ColumnarProgressBar
-            height={(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0) / 10000 * 100}
+            height={(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0) / (dailySettings?.floor_spans || 50) * 100}
             color={colors.ORANGE_COLOR}/>
         </View>
         <View style={[gs.flexRow]}>

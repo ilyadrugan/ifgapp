@@ -67,6 +67,7 @@ export const IFGHome = observer(() => {
       presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
       await dailyActivityStore.getDailyTodayActivity();
+      await dailyActivityStore.getDailyActivitySettings();
       // if (dailyActivityStore.dailyTodayActivityData?.watter === undefined) {
       //   await dailyActivityStore.addDailyActivity('watter', 0);
       // }

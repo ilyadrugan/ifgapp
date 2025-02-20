@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
-import { addDailyActivityApi, getDailyActivityApi, getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi } from './activityGraphStore.api';
-import { DailyActivityModel, DailyCommonModel, StoreDailyActivities } from './models/models';
+import { addDailyActivityApi, getDailyActivityApi, getDailyActivitySettingsApi, getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi, setDailyActivitySettingsApi } from './activityGraphStore.api';
+import { DailyActivityModel, DailyActivitySettingsModel, DailyCommonModel, StoreDailyActivities } from './models/models';
+import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 
 class DailyActivityStore {
   isLoading = false; // Состояние загрузки
@@ -13,11 +14,24 @@ class DailyActivityStore {
   dailyTodayActivityDataLoading = false;
   isGraphLoading = false; // Состояние загрузки
   dailyTodayActivityAddLoading = false;
-
+  dailyActivitySettings: DailyActivitySettingsModel = {
+    steps: 10000,
+    calories: 1500,
+    floor_spans: 50,
+    ifg_scores: 100,
+  };
+  dailyActivitySettingsToSend: DailyActivitySettingsModel = {
+    steps: 10000,
+    calories: 1500,
+    floor_spans: 50,
+    ifg_scores: 100,
+  };
   constructor() {
     makeAutoObservable(this);
 }
-
+  setDailyActivitySettingsForSend = (field: string, val: number) => {
+    this.dailyActivitySettingsToSend[field] = val;
+  };
   getPeriodActivity = async (date_from, date_to) => {
     this.isLoading = true;
   //   this.errorMessage = '';
@@ -154,6 +168,39 @@ class DailyActivityStore {
           .catch((err)=>{
             console.log('ERROR', err.message);
 
+          });
+          // .finally(()=>{this.isLoading = false;});
+      };
+      getDailyActivitySettings = async () => {
+        // this.isLoading = true;
+      //   this.errorMessage = '';
+        console.log('getDailyActivitySettings');
+        await getDailyActivitySettingsApi()
+          .then((result)=>{
+            console.log('getDailyActivitySettings result',result.data);
+            this.dailyActivitySettings = result.data;
+          }
+          )
+          .catch((err)=>{
+            console.log('ERROR', err.message);
+
+          });
+          // .finally(()=>{this.isLoading = false;});
+      };
+      setDailyActivitySettings = async (model: DailyActivitySettingsModel) => {
+        // this.isLoading = true;
+      //   this.errorMessage = '';
+        console.log('setDailyActivitySettings');
+        await setDailyActivitySettingsApi(model)
+          .then((result)=>{
+            console.log('setDailyActivitySettings result',result.data);
+            this.dailyActivitySettings = result.data;
+            successToast('Цели успешно изменены!');
+          }
+          )
+          .catch((err)=>{
+            console.log('setDailyActivitySettings ERROR', err.message);
+            errorToast('Неизвестная ошибка');
           });
           // .finally(()=>{this.isLoading = false;});
       };

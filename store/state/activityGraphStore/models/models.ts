@@ -54,3 +54,10 @@ export type StoreDailyActivities = {
     isDrinkEight?: boolean
 }
 
+export type DailyActivitySettingsModel = {
+    steps: number,
+    calories: number,
+    floor_spans: number,
+    ifg_scores: number,
+}
+
