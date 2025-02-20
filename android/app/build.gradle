@@ -134,3 +134,8 @@ dependencies {
         implementation jscFlavor
     }
 }
+configurations {
+    all {
+        exclude group: 'androidx.work', module: 'work-runtime-ktx'
+    }
+}

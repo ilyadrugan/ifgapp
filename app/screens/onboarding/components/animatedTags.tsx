@@ -106,7 +106,7 @@ export const AnimatedTags = () => {
                 inputRange: [0, 1],
                 outputRange: [ `${hashtag.startAngle}deg`, `${hashtag.angle}deg`], // Углы в градусах как строки
               });
-            return <AnimatedHashtagContainer style={[s.hashtagContainer, hashtag.style,
+            return <AnimatedHashtagContainer key={index.toString()} style={[s.hashtagContainer, hashtag.style,
             {transform: [
                 { translateX: index === 0 ? -50 : 0 }, // Смещаем центр вращения влево
                 { rotate },          // Применяем поворот

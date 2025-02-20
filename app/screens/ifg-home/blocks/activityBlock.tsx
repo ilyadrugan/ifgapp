@@ -110,7 +110,7 @@ return <CardContainer >
         </TouchableOpacity>
       <View style={[gs.ml12, {flexDirection: 'column'}]}>
 
-      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.name + ' ' + userStore.userInfo?.last_name}</IfgText>
+      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <IfgText style={[gs.fontCaption,gs.bold, ]}>{userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}</IfgText>
       :
       <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.email}</IfgText>}
       <TouchableWithoutFeedback onPress={()=>navigation.navigate('GoalSettings')} >

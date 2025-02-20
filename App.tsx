@@ -16,7 +16,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { requestNotificationPermission } from './app/core/firebase/firebase';
 import 'react-native-gesture-handler';
 LogBox.ignoreLogs(['Require cycle:']);
-requestNotificationPermission();
+// requestNotificationPermission();
 
 const App = () => {
   // AsyncStorage.clear();
