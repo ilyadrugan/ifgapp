@@ -224,7 +224,7 @@ const s = StyleSheet.create({
         paddingLeft: 16,
       },
       slider: {
-        width: width - 36,
+        width: Platform.OS==='ios'?'100%':width - 36,
         alignSelf: 'center',
       },
       labels: {

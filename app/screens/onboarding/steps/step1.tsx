@@ -1,4 +1,4 @@
-import { Dimensions, Image, ImageBackground, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, Platform, StyleSheet, View } from 'react-native';
 import { FC } from 'react';
 import React from 'react';
 import { Carousel } from 'react-native-snap-carousel';
@@ -20,21 +20,23 @@ export const Step1:FC = () => {
             },
           ];
     return <>
-      <View style={[s.scrollContainer,{ zIndex: 99, elevation: 10}]}>
+      <View style={[s.scrollContainer,{ zIndex: 99, elevation: 10,}]}>
 
         {/* <Image
             resizeMode="contain"
             style={{ width: '90%', top: -200}}
             source={require('../../../../assets/ifeelgood.png')}/> */}
            {/* <View> */}
-           <AnimatedTags />
-            {/* </View> */}
+           <View style={{marginTop: Platform.OS ==='ios'?32:0, width: width, padding:0}}>
+            <AnimatedTags />
+            </View>
            <View style={{marginLeft: width * 0.1,top: 72, alignItems: 'flex-start', width: '100%'}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.medium, {fontSize: 110, lineHeight: 110}]}>i feel</IfgText>
             </View>
            <View style={{marginRight: width * 0.1, alignItems: 'flex-end', width: '100%', marginTop: 26}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.medium, {fontSize: 110, lineHeight: 110}]}>good</IfgText>
            </View>
+           {/* </View> */}
         <ImageBackground
             resizeMode="contain"
             style={s.phoneContainer}

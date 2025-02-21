@@ -41,7 +41,7 @@ export const AnimatedTags = () => {
         {
             name: '#мотивация',
             style: {
-                top: 210, left: width * 0.05 , width: 110 , transform: [{ rotate: '-50deg' }],
+                top: 210, left: width * 0.05 , width: 120 , transform: [{ rotate: '-50deg' }],
             },
             bgColor: '#FDCD00',
             startAngle: -50,
