@@ -6,10 +6,10 @@ import gs from '../../styles/global';
 import { IfgText } from '../text/ifg-text';
 
 
-export const IFGScoreLine: FC<{score: number, title: string}> = ({score, title}) => <>
+export const IFGScoreLine: FC<{score: number, title: string, maximum: number}> = ({score, title, maximum}) => <>
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
         <IfgText style={[gs.fontCaption2, gs.bold]}>{title}</IfgText>
         <IfgText color={colors.GREEN_COLOR} style={[gs.fontCaption, gs.bold]}>{score}</IfgText>
         </View>
-        <ProgressBar color={colors.GREEN_LIGHT_COLOR} width={score / 180 * 100} unfilledColor="#EDEDED" />
+        <ProgressBar color={colors.GREEN_LIGHT_COLOR} width={score / maximum * 100} unfilledColor="#EDEDED" />
     </>;

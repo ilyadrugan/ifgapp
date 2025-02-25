@@ -110,12 +110,13 @@ export const GoalSettings = () => {
           <>
             <IfgText style={[gs.h3, gs.bold]}>{title}</IfgText>
             <TextInput
-              style={[s.input, gs.fontCaption2]}
+              style={[s.input, gs.fontCaption2, {color: colors.PLACEHOLDER_COLOR}]}
               keyboardType="numeric"
               value={value}
               onChangeText={handleInputChange}
               onBlur={onBlur}
               onFocus={()=>setValue(value.split(' ')[0])}
+
             />
             <Slider
               style={s.slider}
@@ -224,7 +225,7 @@ const s = StyleSheet.create({
         paddingLeft: 16,
       },
       slider: {
-        width: Platform.OS==='ios'?'100%':width - 36,
+        width: Platform.OS === 'ios' ? '100%' : width - 36,
         alignSelf: 'center',
       },
       labels: {

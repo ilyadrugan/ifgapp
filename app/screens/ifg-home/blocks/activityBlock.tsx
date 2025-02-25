@@ -166,7 +166,7 @@ return <CardContainer >
   </Animated.View>
 
   </CardContainer>
-  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} />
+  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores}/>
   <IFGActivity today dailySettings={dailyActivityStore.dailyActivitySettings}/>
   </>
   :
