@@ -10,7 +10,9 @@ export type RecommendationsModel = {
 export type RecommendationActivivtyModel = {
   activity: {
     name: string,
-    express: ActivivtyExpressModel[]
+    express: ActivivtyExpressModel[],
+    time_push: string,
+    description_push: string,
   }
 }
 
@@ -20,7 +22,10 @@ export type PersonalRecommendationModel = {
   user_recomendation_id: number,
   status: string,
   category: string,
-  article: ArticleViewModel
+  article: ArticleViewModel,
+  title: string,
+  description: string,
+  publish_time: string
 }
 
 export type ActivivtyExpressModel = {
@@ -34,6 +39,9 @@ export type ActivivtyExpressModel = {
 export type StoreRecommendationModel = {
   link_text: string,
   category: string,
+  title: string,
+  description: string,
+  publish_time: string
 }
 
 export enum ActivitiesType {

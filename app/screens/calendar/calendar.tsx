@@ -127,11 +127,11 @@ export const CalendarScreen = observer(() =>{
       return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
                 <ArticleHeader
                   // isNew
-                  // time={'10:00'}
+                  time={rec.publish_time}
                   hashTagColor={categoryColors[rec.category]}
                   hashTagText={'#' + rec.category}
                 />
-                <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
+                <IfgText style={[gs.fontCaption, gs.bold]}>{rec.title}</IfgText>
                 <View style={[gs.flexRow, gs.alignCenter]}>
                   <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 8, borderWidth: 1, borderColor: '#F4F4F4', width: 46, height: 46, overflow: 'hidden', alignItems: 'center', justifyContent: 'center'}}>
                             <Image
@@ -140,9 +140,9 @@ export const CalendarScreen = observer(() =>{
                             source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
                             />
                   </View>
-                {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
+                {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
                 </View>
-                {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}
+                {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Сделано" oliveTitle="+ 1 балл" />}
             </CardContainer>;
     };
     return <>

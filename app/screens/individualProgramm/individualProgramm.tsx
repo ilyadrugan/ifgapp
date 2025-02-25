@@ -79,8 +79,8 @@ export const IndividualProgramm = observer(() => {
       await recommendationStore.getPersonalRecommendations();
       // recommendationStore.getPersonalRecommendations();
       if (!testingStore.myCurrentResultsTest || testingStore.myCurrentResultsTest.id === 0) {
-        // console.log('testingStore.testsList', testingStore.testsList);
-        testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
+        console.log('myCurrentResultsTest is null');
+        await testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
 
         // console.log('testingStore.myCurrentResultsTest', testingStore.myCurrentResultsTest);
       }
@@ -106,7 +106,7 @@ export const IndividualProgramm = observer(() => {
       setIsLoading(false);
     };
 
-    const onRecommendationCheck = async (link: string, category: string, index: number) =>{
+    const onRecommendationCheck = async (link: string, category: string, index: number, activityname: string, desc: string, time: string) =>{
       console.log('onRecommendationCheck', link, category);
       // const values = checkBoxes;
       if (!checkBoxes[category][index]) {
@@ -115,6 +115,9 @@ export const IndividualProgramm = observer(() => {
         const model: StoreRecommendationModel = {
           link_text: link,
           category: category,
+          title: activityname,
+          description: desc || 'Описание',
+          publish_time: time || '',
         };
         recommendationStore.storeRecommendation(model);
       }
@@ -219,7 +222,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Питание.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-            <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Питание', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Питание'][index]}/>
+            <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Питание', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Питание'][index]}/>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -243,7 +246,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Сон.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Сон', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Сон'][index]}/>
+          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Сон', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Сон'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -267,7 +270,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Антистресс.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Антистресс', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Антистресс'][index]}/>
+          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Антистресс', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Антистресс'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
@@ -291,7 +294,7 @@ export const IndividualProgramm = observer(() => {
           </View>
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList['Физическая активность'].map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Физическая активность', index)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Физическая активность'][index]}/>
+          <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Физическая активность', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Физическая активность'][index]}/>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>

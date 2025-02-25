@@ -21,29 +21,26 @@ export const PersonalRecommendations = observer(() =>{
         navigation.goBack();
     };
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-        console.log('rec', rec.article.id);
-        return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
-        <ArticleHeader
-          // isNew
-          // time={'10:00'}
-          hashTagColor={categoryColors[rec.category]}
-          hashTagText={'#' + rec.category}
-        />
-        <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
-        <View style={[gs.flexRow, gs.alignCenter]}>
-          <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 10, borderWidth: 1, borderColor: '#F4F4F4', width: 49, height: 49,alignItems: 'center', justifyContent: 'center'}}>
-          <Image
-          resizeMode="cover"
-          style={{width: 44, height: 44, borderRadius: 6}}
-          source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
-          />
-          </View>
-
-         {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
-        </View>
-        {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />}
-
-      </CardContainer>;
+      return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
+                <ArticleHeader
+                  // isNew
+                  time={rec.publish_time}
+                  hashTagColor={categoryColors[rec.category]}
+                  hashTagText={'#' + rec.category}
+                />
+                <IfgText style={[gs.fontCaption, gs.bold]}>{rec.title}</IfgText>
+                <View style={[gs.flexRow, gs.alignCenter]}>
+                  <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 8, borderWidth: 1, borderColor: '#F4F4F4', width: 46, height: 46, overflow: 'hidden', alignItems: 'center', justifyContent: 'center'}}>
+                            <Image
+                            resizeMode="cover"
+                            style={{width: 42, height: 42, borderRadius: 8}}
+                            source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
+                            />
+                  </View>
+                {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
+                </View>
+                {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Сделано" oliveTitle="+ 1 балл" />}
+            </CardContainer>;
     };
 
     return  <FlatList

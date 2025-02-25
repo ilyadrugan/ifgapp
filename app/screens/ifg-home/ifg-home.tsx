@@ -43,6 +43,8 @@ import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
 import Delete from '../../../assets/icons/delete.svg';
+import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
+import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -61,7 +63,10 @@ export const IFGHome = observer(() => {
       await testingStore.getAllMyTest();
       await userStore.getProfile();
       ifgScoreStore.getScoreToday();
-      if (testingStore.testsList.length > 0) {recommendationStore.getRecommendations(testingStore.testsList[0].id);}
+      if (testingStore.testsList.length > 0) {
+        testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
+        recommendationStore.getRecommendations(testingStore.testsList[0].id);
+      }
       articlesStore.loadMainArticles();
       articlesStore.clearCurrentArticle();
       presentsStore.loadMorePresents();
@@ -115,6 +120,18 @@ export const IFGHome = observer(() => {
     const StoryShimmerCard = (item, index) => <ShimmerPlaceholder
     style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
     />;
+
+    const onCompleted =  async (rec: PersonalRecommendationModel) => {
+      await ifgScoreStore.addScore(1);
+      if (rec) {
+       // console.log('personalRecommendation.id',personalRecommendation.id);
+       await recommendationStore.completeRecommendation(`${rec.id}`);
+       const categoryEng = RecommendationCategoryToEng(rec.category);
+       // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+       dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+       await recommendationStore.getPersonalRecommendations();
+     }
+     };
 return <>
 
       <ScrollView style={s.container}
@@ -199,11 +216,11 @@ return <>
           return <CardContainer style={gs.mt16} key={index.toString()} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
           <ArticleHeader
             // isNew
-            // time={'10:00'}
+            time={rec.publish_time}
             hashTagColor={categoryColors[rec.category]}
             hashTagText={'#' + rec.category}
           />
-          <IfgText style={[gs.fontCaption, gs.bold]}>{rec.article.title}</IfgText>
+          <IfgText style={[gs.fontCaption, gs.bold]}>{rec.title}</IfgText>
           <View style={[gs.flexRow, gs.alignCenter]}>
           <View style={{backgroundColor: colors.WHITE_COLOR,borderRadius: 10, borderWidth: 1, borderColor: '#F4F4F4', width: 49, height: 49,alignItems: 'center', justifyContent: 'center'}}>
                     <Image
@@ -212,9 +229,9 @@ return <>
                     source={{uri: `https://ifeelgood.life${rec.article.media[0].full_path[2]}`}}
                     />
                     </View>
-           {rec.article.subtitle && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.article.subtitle}</IfgText>}
+           {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
           </View>
-          <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Читать статью" oliveTitle="+ 1 балл" />
+          <ButtonNext onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />
 
         </CardContainer>;
         })}
