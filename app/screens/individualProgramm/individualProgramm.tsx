@@ -30,6 +30,7 @@ import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import { StoreRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
+import { TimeZone } from '../../hooks/useTimezone';
 
 export type CheckBoxesTypes = {
   'Питание': boolean[],
@@ -118,6 +119,7 @@ export const IndividualProgramm = observer(() => {
           title: activityname,
           description: desc || 'Описание',
           publish_time: time || '',
+          timezone: TimeZone
         };
         recommendationStore.storeRecommendation(model);
       }

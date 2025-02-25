@@ -41,7 +41,8 @@ export type StoreRecommendationModel = {
   category: string,
   title: string,
   description: string,
-  publish_time: string
+  publish_time: string,
+  timezone: string
 }
 
 export enum ActivitiesType {

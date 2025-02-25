@@ -128,9 +128,10 @@ export const IFGHome = observer(() => {
        await recommendationStore.completeRecommendation(`${rec.id}`);
        const categoryEng = RecommendationCategoryToEng(rec.category);
        // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
-       dailyActivityStore.addDailyActivity(categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+       const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
+       dailyActivityStore.addDailyActivity(categoryEng, newValue);
        await recommendationStore.getPersonalRecommendations();
-     }
+      }
      };
 return <>
 
@@ -213,7 +214,9 @@ return <>
 
 
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.status === 'pending').slice(0,3).map((rec, index)=>{
-          return <CardContainer style={gs.mt16} key={index.toString()} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
+          return <CardContainer style={gs.mt16} key={index.toString()} 
+          // onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} 
+          >
           <ArticleHeader
             // isNew
             time={rec.publish_time}

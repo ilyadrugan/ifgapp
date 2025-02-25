@@ -28,6 +28,8 @@ import { ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
 import { Easing } from 'react-native-reanimated';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
+import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
 
 export const CalendarScreen = observer(() =>{
     const dropdowns = [
@@ -123,8 +125,22 @@ export const CalendarScreen = observer(() =>{
       );
     }
     };
+    const onCompleted =  async (rec: PersonalRecommendationModel) => {
+      await ifgScoreStore.addScore(1);
+      if (rec) {
+       // console.log('personalRecommendation.id',personalRecommendation.id);
+       await recommendationStore.completeRecommendation(`${rec.id}`);
+       const categoryEng = RecommendationCategoryToEng(rec.category);
+       // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
+       const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
+       dailyActivityStore.addDailyActivity(categoryEng, newValue);
+       await recommendationStore.getPersonalRecommendations();
+      }
+     };
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-      return <CardContainer style={gs.mt16} onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} >
+      return <CardContainer style={gs.mt16} 
+      // onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})}
+       >
                 <ArticleHeader
                   // isNew
                   time={rec.publish_time}
@@ -142,7 +158,8 @@ export const CalendarScreen = observer(() =>{
                   </View>
                 {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
                 </View>
-                {rec.status === 'pending' && <ButtonNext onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} title="Сделано" oliveTitle="+ 1 балл" />}
+                {rec.status === 'pending' && 
+                <ButtonNext onPress={()=>onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
             </CardContainer>;
     };
     return <>
