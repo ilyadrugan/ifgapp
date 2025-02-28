@@ -170,6 +170,16 @@ export const IndividualProgramm = observer(() => {
     </CardContainer>
     </>;
     };
+    const getArticleId = (html: string) =>{
+      const htmlSplitted = html.split(`/articles`)
+      if (htmlSplitted.length>1) {
+        return htmlSplitted[1].split('"')[0]
+      }
+      return ''
+    }
+  const goToArticle = (id) =>{
+    navigation.navigate('ArticleView', {id: Number(id)})
+  }
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -228,7 +238,7 @@ export const IndividualProgramm = observer(() => {
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -252,7 +262,7 @@ export const IndividualProgramm = observer(() => {
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -276,7 +286,7 @@ export const IndividualProgramm = observer(() => {
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -300,7 +310,7 @@ export const IndividualProgramm = observer(() => {
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
