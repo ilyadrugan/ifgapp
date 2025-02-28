@@ -133,6 +133,15 @@ export const IFGHome = observer(() => {
        await recommendationStore.getPersonalRecommendations();
       }
      };
+     const checkTests = () =>{
+      if (testingStore.testsList.length === 0) {
+        return true;
+      }
+      if (testingStore.testsList.length === 1 && testingStore.testList[0].survey_id === 9) {
+        return true;
+      }
+      return false;
+     };
 return <>
 
       <ScrollView style={s.container}
@@ -164,7 +173,7 @@ return <>
 
       <View style={gs.mt24} />
      {testingStore.isLoading ? <ShimmerPlaceholder style={[{height: 200, width: '100%',  borderRadius: 16 }]}/> :
-     !testingStore.testsList.some(test=>test.survey_id === 9) && !closeEndSetting ?
+     checkTests() && !closeEndSetting ?
       <CardContainer style={{borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
         <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
         <View style={[s.circle]}>
@@ -214,8 +223,8 @@ return <>
 
 
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.status === 'pending').slice(0,3).map((rec, index)=>{
-          return <CardContainer style={gs.mt16} key={index.toString()} 
-          // onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} 
+          return <CardContainer style={gs.mt16} key={index.toString()}
+          // onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})}
           >
           <ArticleHeader
             // isNew
