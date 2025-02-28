@@ -119,7 +119,7 @@ export const IndividualProgramm = observer(() => {
           title: activityname,
           description: desc || 'Описание',
           publish_time: time || '',
-          timezone: TimeZone
+          timezone: TimeZone,
         };
         recommendationStore.storeRecommendation(model);
       }
@@ -171,15 +171,18 @@ export const IndividualProgramm = observer(() => {
     </>;
     };
     const getArticleId = (html: string) =>{
-      const htmlSplitted = html.split(`/articles`)
-      if (htmlSplitted.length>1) {
-        return htmlSplitted[1].split('"')[0]
+      console.log(html);
+      const htmlSplitted = html.split('/articles/');
+      console.log(htmlSplitted[1].split('"')[0]);
+      if (htmlSplitted.length > 1) {
+        return htmlSplitted[1].split('"')[0];
       }
-      return ''
-    }
+      return '';
+    };
   const goToArticle = (id) =>{
-    navigation.navigate('ArticleView', {id: Number(id)})
-  }
+    console.log('id', id);
+    navigation.navigate('ArticleView', {articleId: Number(id)});
+  };
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
@@ -238,7 +241,7 @@ export const IndividualProgramm = observer(() => {
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].link_text))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -262,7 +265,7 @@ export const IndividualProgramm = observer(() => {
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -286,7 +289,7 @@ export const IndividualProgramm = observer(() => {
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -310,7 +313,7 @@ export const IndividualProgramm = observer(() => {
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
