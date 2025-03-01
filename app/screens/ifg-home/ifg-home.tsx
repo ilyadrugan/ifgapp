@@ -137,7 +137,7 @@ export const IFGHome = observer(() => {
       if (testingStore.testsList.length === 0) {
         return true;
       }
-      if (testingStore.testsList.length === 1 && testingStore.testList[0].survey_id === 9) {
+      if (testingStore.testsList.length === 1 && testingStore.testsList[0].survey_id === 9) {
         return true;
       }
       return false;
@@ -173,7 +173,7 @@ return <>
 
       <View style={gs.mt24} />
      {testingStore.isLoading ? <ShimmerPlaceholder style={[{height: 200, width: '100%',  borderRadius: 16 }]}/> :
-     checkTests() && !closeEndSetting ?
+     (checkTests() && !closeEndSetting) ?
       <CardContainer style={{borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
         <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
         <View style={[s.circle]}>

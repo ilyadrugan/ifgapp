@@ -74,7 +74,7 @@ const faqData = [
   {
     id: 7,
     question: 'Где взять заявление об отказе от договора страхования АльфаСтрахование-Жизнь?',
-    answer: <IfgText style={[gs.fontCaption2]}>Для расторжения ДоЗаявление на возврат страховки, а также инструкции по возврату Вы можете получить на <IfgText onPress={()=>Linking.openURL('https://aslife.ru/10291/')} color={colors.GREEN_COLOR} style={[gs.underline,{lineHeight: 18}]}>сайте страховой компании</IfgText> или обратившись по номеру <IfgText onPress={()=>Linking.openURL('tel:88007003320')} color={colors.GREEN_COLOR} style={[gs.underline, gs.bold,{lineHeight: 18}]}>8-800-700-33-20</IfgText>.</IfgText>,
+    answer: <IfgText style={[gs.fontCaption2]}>Заявление на возврат страховки, а также инструкции по возврату Вы можете получить на <IfgText onPress={()=>Linking.openURL('https://aslife.ru/10291/')} color={colors.GREEN_COLOR} style={[gs.underline,{lineHeight: 18}]}>сайте страховой компании</IfgText> или обратившись по номеру <IfgText onPress={()=>Linking.openURL('tel:88007003320')} color={colors.GREEN_COLOR} style={[gs.underline, gs.bold,{lineHeight: 18}]}>8-800-700-33-20</IfgText>.</IfgText>,
   },
   {
     id: 8,
@@ -84,7 +84,7 @@ const faqData = [
   {
     id: 9,
     question: 'Какие есть исключения в договоре страхования?',
-    answer: <IfgText style={[gs.fontCaption2]}>Напишите нам на <IfgText onPress={()=>Linking.openURL('mailto:strahvopros@ifeelgood.life')} color={colors.GREEN_COLOR} style={[gs.underline,{lineHeight: 18}]}>strahvopros@ifeelgood.life</IfgText> или позвоните: <IfgText onPress={()=>Linking.openURL('tel:88007003320')} color={colors.GREEN_COLOR} style={[gs.underline, gs.bold,{lineHeight: 18}]}>8-800-700-33-20</IfgText>.</IfgText>,
+    answer: <IfgText style={[gs.fontCaption2]}>Полный набор исключений указан в Разделе II "Что не застраховано?" Ключевого информационного документа вашего страхового полиса. Если вы остались вопросы, связанные с интерпретаций условий, напишите нам на <IfgText onPress={()=>Linking.openURL('mailto:strahvopros@ifeelgood.life')} color={colors.GREEN_COLOR} style={[gs.underline,{lineHeight: 18}]}>strahvopros@ifeelgood.life</IfgText> или позвоните: <IfgText onPress={()=>Linking.openURL('tel:88007003320')} color={colors.GREEN_COLOR} style={[gs.underline, gs.bold,{lineHeight: 18}]}>8-800-700-33-20</IfgText>.</IfgText>,
   },
   {
     id: 10,
@@ -113,7 +113,7 @@ const faqData = [
   },
   {
     id: 15,
-    question: 'Какие есть исключения в договоре страхования?',
+    question: 'Через какое время после оформления полиса я могу сдать анализы?',
     answer: <IfgText style={[gs.fontCaption2]}>После оформления обычно необходимо подождать несколько дней, чтобы информация о вашем договоре появилась в наших системах. После этого вы регистрируете <IfgText onPress={()=>Linking.openURL('https://dms.aslife.ru/#lk')} color={colors.GREEN_COLOR} style={[gs.underline,{lineHeight: 18}]}>личный кабинет</IfgText>, получаете онлайн консультацию врача, далее получаете направление на анализы!</IfgText>,
   },
 
@@ -186,7 +186,7 @@ const accidentSteps = [
     index: 1,
     number: '02',
     title: 'Соберите и отправьте документы',
-    text: 'Пакет документов по страховому случаю отправьте в ООО "АльфаСтрахование-Жизнь" по адресу: г. Москва, ул. Шаболовка, д. 31, стр. Б',
+    text: 'Пакет документов по страховому случаю отправьте в ООО "АльфаСтрахование-Жизнь" по адресу: 115280, г. Москва, вн.тер. г. муниципальный округ Даниловский, пр-кт. Лихачёва, д. 15, помещ. 2/10',
 },
 {
     index: 2,
@@ -673,7 +673,7 @@ export const Coverage = observer(() => {
             <IfgText style={[gs.fontCaption, gs.bold]}>
             Илья Ильф и Евгений Петров
             </IfgText>
-            <Image style={{width: '100%', height: 280, bottom: -16, marginTop: -16}} source={require('../../../assets/backgrounds/coverageMan.png')}/>
+            {/* <Image style={{width: '100%', height: 280, bottom: -16, marginTop: -16}} source={require('../../../assets/backgrounds/coverageMan.png')}/> */}
         </CardContainer>
         <View style={gs.mt24} />
 
