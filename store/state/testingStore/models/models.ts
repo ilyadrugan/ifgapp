@@ -40,6 +40,7 @@ export type ResultsTestModel = {
     answers_json: string,
     completedHtmlOnConditionScore: HtmlOnConditionScore[],
     startHtml: string,
+    timezone: string,
     // activiti_value: string
 }
 export type MyCurrentResultsTestModel = {

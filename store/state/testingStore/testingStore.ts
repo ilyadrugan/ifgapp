@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { ActivitiValueModel, MyCurrentResultsTestModel, MyTestModel, QuestionModel, ResultsTestModel, TestListModel, TestModel } from './models/models';
 import { getAllMyTestApi, getTestByIdApi, submitResultsTestApi } from './testingStore.api';
 import { errorToast } from '../../../app/core/components/toast/toast';
+import { TimeZone } from '../../../app/hooks/useTimezone';
 
 class TestingStore {
   isLoading = false; // Состояние загрузки
@@ -118,6 +119,7 @@ class TestingStore {
       answers_json: answers,
       completedHtmlOnConditionScore: this.currentTest.completedHtmlOnConditionScore,
       startHtml: this.currentTest.startHtml,
+      timezone: TimeZone,
     };
     if (device_id) {this.currentResultsTest = {...this.currentResultsTest, device_id: device_id};}
     if (user_id) {this.currentResultsTest = {...this.currentResultsTest, user_id: user_id};}

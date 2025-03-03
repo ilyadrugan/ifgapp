@@ -32,7 +32,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
         case 'p':
           if (node.children && (node.children[0].tag === 'img' || node.children[0].tag === 'iframe')) {return renderNode(node.children[0], 0);}
           return (
-            <Text style={styles.paragraph}>
+            <Text key={index} style={styles.paragraph}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );
@@ -87,7 +87,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
         case 'li':
           console.log('li',node, node.isOrdered, index);
           return (
-            <View  style={styles.li} key={index}>
+            <View style={styles.li} key={index}>
               {node.isOrdered ? (
                 <IfgText color={colors.GREEN_COLOR} style={[gs.h2Intro,{ marginTop: 0}]}>0{node.index} </IfgText>
               ) : <View style={styles.bullet}/>}
@@ -98,15 +98,15 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
           );
         case 'h1':
           return (
-            <Text style={styles.h1}>
+            <Text key={index} style={styles.h1}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );
         case 'h2':
           return (
-            <Text style={styles.h2}>
+            <Text key={index} style={styles.h2}>
               {node.children.map((child, childIndex) =>
-                              <View style={[gs.flexRow, gs.alignCenter]}>
+                              <View key={childIndex} style={[gs.flexRow, gs.alignCenter]}>
             <View style={gs.mr12}>
             <Accept />
           </View>
@@ -119,7 +119,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
           );
         case 'blockquote':
           return (
-            <View style={styles.blockquote}>
+            <View key={index} style={styles.blockquote}>
               <Text style={styles.blockquoteText}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
@@ -127,13 +127,13 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
           );
         case 'div':
           return (
-            <View style={styles.div}>
+            <View key={index} style={styles.div}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </View>
           );
         case 'span':
           return (
-            <Text style={styles.span}>
+            <Text key={index} style={styles.span}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );
@@ -141,6 +141,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
           styleText = [styleText, styles.link];
           return (
             <Text
+              key={index}
               style={styles.link}
               onPress={() => Linking.openURL(node.attributes?.href)}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
@@ -149,14 +150,14 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
         case 'strong':
           styleText = [styleText, gs.bold];
           return (
-            <Text style={styles.strong}>
+            <Text key={index} style={styles.strong}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );
         case 'em':
           styleText = [styleText, gs.italic];
           return (
-            <Text style={styles.em}>
+            <Text key={index} style={styles.em}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );
@@ -183,7 +184,7 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
         case 'iframe':
           const videoUrl = node.attributes?.src;
           if (videoUrl) {
-            return <View  >
+            return <View key={index} >
           {videoUrl.includes('youtube') ?
             <YoutubeVideo videoId={youtube_parser(videoUrl) || ''} />
             :

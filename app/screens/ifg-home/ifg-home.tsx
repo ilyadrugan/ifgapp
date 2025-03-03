@@ -134,10 +134,11 @@ export const IFGHome = observer(() => {
       }
      };
      const checkTests = () =>{
+      console.log('checkTests', testingStore.testsList[0].survey_id);
       if (testingStore.testsList.length === 0) {
         return true;
       }
-      if (testingStore.testsList.length === 1 && testingStore.testsList[0].survey_id === 9) {
+      if (testingStore.testsList.length === 1 && testingStore.testsList[0].survey_id === 11) {
         return true;
       }
       return false;
