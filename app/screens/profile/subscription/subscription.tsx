@@ -160,7 +160,7 @@ export const Subscription: FC = observer(() =>{
 
           <View style={gs.mt4}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>
-            <IfgText onPress={changeFavoriteCard} color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline, {padding:12, margin: -12}]}>{changeFavCard ? 'Отменить' : 'Изменить метод оплаты'}</IfgText>
+            <IfgText disabled={paymentsStore.cards.length<2} onPress={changeFavoriteCard} color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline, {padding:12, margin: -12}]}>{changeFavCard ? 'Отменить' : 'Изменить метод оплаты'}</IfgText>
           </View>
           {!paymentsStore.isLoading ?  paymentsStore.cards.map((card:CardModel)=>
                     <CardContainer style={s.bankCardContainer}>

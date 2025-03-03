@@ -10,10 +10,11 @@ export const IfgText: FC<{
   numberOfLines?: number,
   wrap?: boolean,
   onPress?: ((event: GestureResponderEvent) => void) | undefined;
-}> = ({ children, style, color, numberOfLines, wrap, onPress }) => {
+  disabled?: boolean,
+}> = ({ children, style, color, numberOfLines, wrap, onPress,disabled }) => {
 
   return (<>
-    <Text numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.PLACEHOLDER_COLOR }]}>{children}</Text>
+    <Text disabled={disabled} numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.PLACEHOLDER_COLOR }]}>{children}</Text>
   </>);
 };
 
