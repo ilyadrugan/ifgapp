@@ -14,7 +14,7 @@ export const getAllMyTestApi = async (query?: string) => {
     return await HttpClient.get(`${BASE_URL}/lk/surveys?${query || ''}`);
 };
 
-export const updateDeviceResultsTestApi = async (device_id: string) => {
-    return await HttpClientWithoutHeaders.post(`${BASE_URL}/surveys/update-device`, {device_id: device_id});
+export const updateDeviceResultsTestApi = async (device_id: string, timezone: string) => {
+    return await HttpClientWithoutHeaders.post(`${BASE_URL}/surveys/update-device`, {device_id: device_id, timezone: timezone});
 };
 

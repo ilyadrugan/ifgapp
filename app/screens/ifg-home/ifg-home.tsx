@@ -134,7 +134,6 @@ export const IFGHome = observer(() => {
       }
      };
      const checkTests = () =>{
-      console.log('checkTests', testingStore.testsList[0].survey_id);
       if (testingStore.testsList.length === 0) {
         return true;
       }

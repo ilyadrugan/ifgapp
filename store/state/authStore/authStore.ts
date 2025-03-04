@@ -9,6 +9,7 @@ import { updateFirebaseMessagingToken } from '../../../app/core/firebase/firebas
 import { errorToast } from '../../../app/core/components/toast/toast';
 import { updateDeviceResultsTestApi } from '../testingStore/testingStore.api';
 import { stripHtmlTags } from '../../../app/core/utils/stripHtmlTags';
+import { TimeZone } from '../../../app/hooks/useTimezone';
 
 class AuthStore {
   isAuthenticated = false; // Авторизован ли пользователь
@@ -161,8 +162,21 @@ class AuthStore {
         this.setToken(result.data.token);
         userStore.setUser(result.data.data.user);
         const token = await AsyncStorage.getItem('fcm_token') || '';
-        console.log('updateDeviceResultsTestApi',token);
-        if (token) {await updateDeviceResultsTestApi(token);}
+        console.log('updatedResultsTest',token, TimeZone);
+        if (token) {
+          console.log(token, TimeZone);
+          await updateDeviceResultsTestApi(token, TimeZone)
+          .then(res=>console.log('updatedResultsTestApi'))
+          .catch(err=>{
+            console.log('updateDeviceResultsTestApi ERROR',err.message);
+          });
+        }
+        await updateFirebaseMessagingToken()
+          .then(res=> console.log(res.data))
+          .catch((err)=>{
+            console.log('updateFirebaseMessagingToken Error',err.message);
+            errorToast(err.message);
+          });
         this.isLoading = false;
         this.access_token && callBack();
       }
@@ -180,6 +194,10 @@ class AuthStore {
         else if (err.response.data.errors.num_doc){
           this.errorMessage = err.response.data.errors.num_doc[0].replaceAll('<br>', '\n');
           errorToast(this.errorMessage, '', 8000);
+        }
+        else if (err.response.data.errors.email){
+          this.errorMessage = err.response.data.errors.email;
+          errorToast(this.errorMessage);
         }
         else {
           this.errorMessage = 'Неизвестная ошибка';

@@ -238,10 +238,10 @@ export const IndividualProgramm = observer(() => {
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Питание.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
             <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Питание', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Питание'][index]}/>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
+            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].link_text))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].link_text))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -262,10 +262,10 @@ export const IndividualProgramm = observer(() => {
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Сон.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
           <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Сон', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Сон'][index]}/>
-          <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
+          <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].link_text))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -286,10 +286,10 @@ export const IndividualProgramm = observer(() => {
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList.Антистресс.map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
           <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Антистресс', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Антистресс'][index]}/>
-          <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
+          <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].link_text))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
@@ -310,10 +310,10 @@ export const IndividualProgramm = observer(() => {
           {isLoading ? <ActivityIndicator /> : recommendationStore.recommendationList['Физическая активность'].map((item, index)=><View key={index.toString()} style={s.row}>
           <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
           <CheckBox disabled={testingStore.disableRecommendationCheck} onPress={()=>onRecommendationCheck(item.activity.express[0].link_text, 'Физическая активность', index, item.activity.name, item.activity.description_push, item.activity.time_push)} checked={testingStore.disableRecommendationCheck ? false : checkBoxes['Физическая активность'][index]}/>
-          <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
+          <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].link_text))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.bold, gs.ml8, {maxWidth: '80%'}]}>{item.activity.name}</IfgText>
           </View>
           <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-            <IfgText onPress={()=>goToArticle(getArticleId(item.activity.express[0].html))} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.underline]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall]}>{stripHtmlTags(item.activity.express[0].html)}</IfgText>
           </View>
           </View>)}
         </CardContainer>
