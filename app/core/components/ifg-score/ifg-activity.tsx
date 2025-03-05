@@ -20,9 +20,10 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boole
     const {healthData} = useHealthData();
     useEffect(() => {
         console.log('dailyActivityStore.dailyActivitySettings', dailySettings);
+        console.log('dailyActivityStore.dailyActivities', dailyActivities);
         setDailyValues(dailyActivities);
         // console.log('healthData', healthData);
-    }, [dailyActivities]);
+    }, [dailyActivities, dailySettings]);
 
     return <>
     <IfgText style={[gs.fontCaption2, gs.bold]}>Активность</IfgText>

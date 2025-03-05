@@ -42,19 +42,24 @@ export const Graphs = observer(() =>{
     const [activeSwitch, setSwitch] = useState(0);
     const [graphData, setGraphData] = useState<GraphDataType[]>([]);
     useEffect(() => {
-        dailyActivityStore.getIfgScoreActivity('week').then(()=>convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities));
-        dailyActivityStore.getGraphCaloriesActivity('week');
-        dailyActivityStore.getGraphStepsActivity('week');
+        dailyActivityStore.getIfgScoreActivity('month').then(()=>{
+            if (activeTab === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities.slice(-7));}
+            else {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
+        });
+        dailyActivityStore.getGraphCaloriesActivity('month');
+        dailyActivityStore.getGraphStepsActivity('month');
     }, []);
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         console.log('Graphs', activeTab);
-    //         dailyActivityStore.getIfgScoreActivity(activeTab === 0 ? 'week' : 'month').then(()=>convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities));
-    //         dailyActivityStore.getGraphCaloriesActivity(activeTab === 0 ? 'week' : 'month');
-    //         dailyActivityStore.getGraphStepsActivity(activeTab === 0 ? 'week' : 'month');
-    //       return () => console.log('Ушли с Graphs'); // Опционально: Cleanup при уходе со страницы
-    //     }, [])
-    //   );
+    useFocusEffect(
+        React.useCallback(() => {
+            dailyActivityStore.getIfgScoreActivity('month').then(()=>{
+                if (activeTab === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities.slice(-7));}
+                else {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
+            });
+            dailyActivityStore.getGraphCaloriesActivity('month');
+            dailyActivityStore.getGraphStepsActivity('month');
+          return () => console.log('Ушли с Graphs'); // Опционально: Cleanup при уходе со страницы
+        }, [])
+      );
     const convertToGraphDataType = (graphsData: DailyCommonModel[]) => {
         // console.log('convertToGraphDataType', graphsData);
         setGraphData(graphsData.map((el)=>{
@@ -68,26 +73,21 @@ export const Graphs = observer(() =>{
 
     const onSwitch = (id: number) => {
         if (id !== activeSwitch){
-            if (id === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
-            if (id === 1) {convertToGraphDataType(dailyActivityStore.graphStepsActivities);}
-            if (id === 2) {convertToGraphDataType(dailyActivityStore.graphCaloriesActivities);}
+            if (id === 0) {convertToGraphDataType(activeTab === 0 ? dailyActivityStore.graphIfgScoreActivities.slice(-7) : dailyActivityStore.graphIfgScoreActivities);}
+            if (id === 1) {convertToGraphDataType(activeTab === 0 ? dailyActivityStore.graphStepsActivities.slice(-7) : dailyActivityStore.graphStepsActivities);}
+            if (id === 2) {convertToGraphDataType(activeTab === 0 ? dailyActivityStore.graphCaloriesActivities.slice(-7) : dailyActivityStore.graphCaloriesActivities);}
             setSwitch(id);
         }
     };
+
     const onTabClick = async (id: number) => {
-        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphIfgScoreActivities)
-        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphStepsActivities)
-        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphCaloriesActivities)
+        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphIfgScoreActivities);
+        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphStepsActivities);
+        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphCaloriesActivities);
         if (id !== activeTab){
-            await dailyActivityStore.getIfgScoreActivity(id === 0 ? 'week' : 'month').then(()=>{
-                if (activeSwitch === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
-            });
-            await dailyActivityStore.getGraphCaloriesActivity(id === 0 ? 'week' : 'month').then(()=>{
-                if (activeSwitch === 1) {convertToGraphDataType(dailyActivityStore.graphStepsActivities);}
-            });
-            await dailyActivityStore.getGraphStepsActivity(id === 0 ? 'week' : 'month').then(()=>{
-                if (activeSwitch === 2) {convertToGraphDataType(dailyActivityStore.graphCaloriesActivities);}
-            });
+            if (activeSwitch === 0) {convertToGraphDataType(id === 0 ? dailyActivityStore.graphIfgScoreActivities.slice(-7) : dailyActivityStore.graphIfgScoreActivities);}
+            if (activeSwitch === 1) {convertToGraphDataType(id === 0 ? dailyActivityStore.graphStepsActivities.slice(-7) : dailyActivityStore.graphStepsActivities);}
+            if (activeSwitch === 2) {convertToGraphDataType(id === 0 ? dailyActivityStore.graphCaloriesActivities.slice(-7) : dailyActivityStore.graphCaloriesActivities);}
             setActiveTab(id);
         }
     };

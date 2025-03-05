@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Animated } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Animated, RefreshControl } from 'react-native';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
 import { Graphs } from './blocks/graphs';
@@ -38,6 +38,7 @@ export const CalendarScreen = observer(() =>{
     'Сон',
     'Антистресс',
     ];
+    const [refreshing, setRefreshing] = useState(false);
     const [expandedIndexes, setExpandedIndexes] = useState(
         dropdowns.map(() => true) // Изначально все списки раскрыты
       );
@@ -59,7 +60,7 @@ export const CalendarScreen = observer(() =>{
             animationValues[index].setValue(height); // Устанавливаем начальную высоту
           }
         });
-      }, [contentHeights]);
+      }, [contentHeights, refreshing]);
       const onLayoutContent = (index: number, event: any) => {
         const height = event.nativeEvent.layout.height;
         setContentHeights((prev) => {
@@ -73,13 +74,18 @@ export const CalendarScreen = observer(() =>{
 
     // }, []);
 
-    useFocusEffect(
-      React.useCallback(() => {
-        recommendationStore.getPersonalRecommendations();
-        dailyActivityStore.getDailyTodayActivity(formatDate());
-        return () => console.log('Ушли со страницы'); // Опционально: Cleanup при уходе со страницы
-      }, []));
-
+    // useFocusEffect(
+    //   React.useCallback(() => {
+    //     recommendationStore.getPersonalRecommendations();
+    //     // dailyActivityStore.getDailyTodayActivity(formatDate());
+    //     return () => console.log('Ушли со страницы'); // Опционально: Cleanup при уходе со страницы
+    //   }, []));
+      const onRefresh = async () => {
+        setRefreshing((prev)=>!prev);
+        await recommendationStore.getPersonalRecommendations();
+        // await dailyActivityStore.getDailyTodayActivity(formatDate());
+        setRefreshing((prev)=>!prev);
+      };
     const toggleDropdown = (index: number) => {
         const isExpanded = expandedIndexes[index];
 
@@ -138,11 +144,11 @@ export const CalendarScreen = observer(() =>{
       }
      };
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-      return <CardContainer style={gs.mt16} 
+      return <CardContainer style={gs.mt16}
       onPress={()=>{
-        recommendationStore.readRecommendation(rec.id)
-        navigation.navigate('ArticleView', {articleId: rec.article.id})}} 
-      
+        recommendationStore.readRecommendation(rec.id);
+        navigation.navigate('ArticleView', {articleId: rec.article.id});}}
+
       >
       <ArticleHeader
         // isCicleBadge={!rec.is_viewed}
@@ -162,12 +168,14 @@ export const CalendarScreen = observer(() =>{
                   </View>
                 {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
                 </View>
-                {rec.status === 'pending' && 
+                {rec.status === 'pending' &&
                 <ButtonNext onPress={()=>onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
             </CardContainer>;
     };
     return <>
-    <ScrollView style={s.container}>
+    <ScrollView style={s.container}
+    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]} >{'Календарь'}</IfgText>
         <View style={gs.mt16} />

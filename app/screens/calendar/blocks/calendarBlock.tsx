@@ -18,23 +18,31 @@ import { formatDate } from '../../../core/utils/formatDateTime';
 const width = Dimensions.get('screen').width;
 
 export const CalendarBlock: FC = observer(() =>{
-    useFocusEffect(
-        React.useCallback(() => {
-            console.log('CalendarBlock');
-            recommendationStore.getPersonalRecommendations();
-            dailyActivityStore.getDailyTodayActivity(formatDate());
-          return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
-        }, [])
-      );
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         console.log('CalendarBlock');
+    //         recommendationStore.getPersonalRecommendations();
+    //         dailyActivityStore.getDailyTodayActivity(formatDate());
+    //       return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
+    //     }, [])
+    //   );
       useEffect(()=>{
-        dailyActivityStore.getDailyActivity(formatDate());
-      },[])
+        getDailyActivities();
+      },[]);
+      const getDailyActivities = async()=> {
+        if (!dailyActivityStore.dailyActivityData)
+          {await dailyActivityStore.getDailyActivity(formatDate());}
+        console.log('dailyActivityStore.dailyActivityData', dailyActivityStore.dailyActivityData);
+
+      };
     return <CardContainer>
         <CustomCalendar />
-        {dailyActivityStore.dailyActivityData ? <>
-        <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores}/>
-         <IFGActivity today={formatDate()===dailyActivityStore.dailyActivityData.date} dailyActivities={dailyActivityStore.dailyActivityData}/>
+        {(dailyActivityStore.isLoading || !dailyActivityStore.dailyActivityData) ? <>
+          <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />
          </> :
-         <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />}
+         <>
+         <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores}/>
+         <IFGActivity today={formatDate() === dailyActivityStore.dailyActivityData.date} dailyActivities={dailyActivityStore.dailyActivityData}/></>
+}
     </CardContainer>;
 });

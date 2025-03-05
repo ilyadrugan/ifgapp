@@ -47,7 +47,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
 
   const convertGraphData = () => {
     return graphData.map((el, index)=>{
-      return {x: monthly ? new Date(el.created_at).getDate().toString()+'.'+new Date(el.created_at).getMonth().toString() : new Date(el.created_at).getDate().toString(), y: el.value};
+      return {x: monthly ? new Date(el.created_at).getDate().toString() + '.' + new Date(el.created_at).getMonth().toString() : new Date(el.created_at).getDate().toString(), y: el.value};
     });
   };
 
@@ -67,7 +67,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
     return number; // Если число меньше 0, просто возвращаем его
   };
   useEffect(() => {
-    console.log('graphdata', graphData, 'monthly', monthly)
+    console.log('graphdata', graphData, 'monthly', monthly);
     setSelectedPoint(null);
     setRendered(false);
     if (graphData.length === 0) {return;}
@@ -85,14 +85,14 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
         y: convertedData[convertedDataLen - 1].y,
     };
     setSelectedPoint(todayDot);
-    console.log('todayDot', todayDot)
+    console.log('todayDot', todayDot);
     // setMaxValue(findMaxValue(convertedData));
     setData(convertedData);
     console.log();
   }, [graphData, monthly]);
 
   return (
-    ((data.length>0 && (data.length === 7 && !monthly) || (data.length > 0 && monthly) && !dailyActivityStore.isGraphLoading)) ? <View
+    ((data.length > 0 && (data.length === 7 && !monthly) || (data.length > 0 && monthly) && !dailyActivityStore.isGraphLoading)) ? <View
     // onLayout={() => {
     //   setRendered(true);
     //   console.log('График завершил рендеринг!');
@@ -157,9 +157,9 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
           }}
         />
 
-    {(selectedPoint && selectedPoint?._y>0) && <VictoryScatter
+    {(selectedPoint) && <VictoryScatter
         data={[selectedPoint]} // Показывать только выбранную точку
-        size={8}
+        size={10}
 
         style={{
           data: {
@@ -172,8 +172,8 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
         }}
         dataComponent={<CustomDoubleCircle />}
         labels={({ datum }) => {
-          console.log('datum', datum)
-          return `${selectedPoint? selectedPoint._y:''}`
+          return `${datum.y}`;
+          // return `${selectedPoint ? selectedPoint._y : ''}`;
         }}
         labelComponent={
           <VictoryTooltip
@@ -186,7 +186,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
             flyoutWidth={29}
             dx={-10}
             // dx={(datum, index) => (index>14 ? -10 : 10)}
-            active={(selectedPoint._y>0)}
+            active
             orientation={'left'}
             style={{ fill: '#ffffff', fontSize: 14, fontFamily: 'tilda-sans_medium' }}
             pointerLength={3}
@@ -197,7 +197,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
       {/* Событие клика для выбора точки */}
       <VictoryScatter
         data={data}
-        size={10}
+        size={20}
         style={{
           data: {
             fill: 'transparent',
