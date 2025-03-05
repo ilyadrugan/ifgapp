@@ -38,10 +38,13 @@ export const PersonalRecommendations = observer(() =>{
      };
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
       return <CardContainer style={gs.mt16} 
-      // onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})} 
+      onPress={()=>{
+        recommendationStore.readRecommendation(rec.id)
+        navigation.navigate('ArticleView', {articleId: rec.article.id})}} 
       >
                 <ArticleHeader
-                  // isNew
+                  // isCicleBadge={!rec.is_viewed}
+                  isNew={!rec.is_viewed}
                   time={rec.publish_time}
                   hashTagColor={categoryColors[rec.category]}
                   hashTagText={'#' + rec.category}

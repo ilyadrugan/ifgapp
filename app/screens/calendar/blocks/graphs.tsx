@@ -74,16 +74,18 @@ export const Graphs = observer(() =>{
             setSwitch(id);
         }
     };
-    const onTabClick = (id: number) => {
-
+    const onTabClick = async (id: number) => {
+        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphIfgScoreActivities)
+        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphStepsActivities)
+        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphCaloriesActivities)
         if (id !== activeTab){
-            dailyActivityStore.getIfgScoreActivity(id === 0 ? 'week' : 'month').then(()=>{
+            await dailyActivityStore.getIfgScoreActivity(id === 0 ? 'week' : 'month').then(()=>{
                 if (activeSwitch === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
             });
-            dailyActivityStore.getGraphCaloriesActivity(id === 0 ? 'week' : 'month').then(()=>{
+            await dailyActivityStore.getGraphCaloriesActivity(id === 0 ? 'week' : 'month').then(()=>{
                 if (activeSwitch === 1) {convertToGraphDataType(dailyActivityStore.graphStepsActivities);}
             });
-            dailyActivityStore.getGraphStepsActivity(id === 0 ? 'week' : 'month').then(()=>{
+            await dailyActivityStore.getGraphStepsActivity(id === 0 ? 'week' : 'month').then(()=>{
                 if (activeSwitch === 2) {convertToGraphDataType(dailyActivityStore.graphCaloriesActivities);}
             });
             setActiveTab(id);

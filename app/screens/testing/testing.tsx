@@ -71,10 +71,10 @@ export const Testing = observer(() => {
         setActivitiValues(copyActivitiValues);
         setTotalScore(totalScore + Number(score));
         if (currentQuestion === testingStore.currentTest.questions.length){
-            if (userStore.userInfo?.id) {testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), userStore.userInfo?.id);}
+            if (userStore.userInfo?.id) {testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), testingStore.currentTest.questions, userStore.userInfo?.id);}
             else  {
               const fcm_token = await messaging().getToken();
-              testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), undefined, fcm_token);
+              testingStore.setScoreToResult(totalScore, activitiValues, JSON.stringify({...currentAnswers, ...tmpObj}), testingStore.currentTest.questions, undefined, fcm_token);
               saveScoreResultsInAsyncStorage(fcm_token);
             }
             console.log('currentResultsTest',testingStore.currentResultsTest, {...currentAnswers, ...tmpObj});

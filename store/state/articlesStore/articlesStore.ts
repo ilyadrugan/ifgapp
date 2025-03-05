@@ -167,7 +167,17 @@ class ArticlesStore {
       media: [],
     };
   }
-
+  readArticle(id: number) {
+    const articleIndex = this.articlesList.articles.findIndex((item)=>item.id ===id)
+    if (articleIndex) {
+      this.articlesList.articles = this.articlesList.articles.map((article, index)=>{
+        if (index === articleIndex) {
+          return {...article, is_viewed: true}
+        }
+        return article
+      })
+    }
+  }
   async getArticleById(id: number) {
     this.isLoading = true;
     this.errorMessage = '';

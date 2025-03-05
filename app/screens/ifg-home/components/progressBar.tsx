@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 export const ProgressBar:FC<{
     width: number,
     color: string,
-    unfilledColor?: string
+    unfilledColor?: string,
   }> = ({width, color, unfilledColor}) =>
     <View style={[s.progressBarContainer, unfilledColor && {backgroundColor: unfilledColor}]}>
                   <View

@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { ActivitiValueModel, MyCurrentResultsTestModel, MyTestModel, QuestionModel, ResultsTestModel, TestListModel, TestModel } from './models/models';
+import { ActivitiValueModel, HtmlOnConditionScore, MyCurrentResultsTestModel, MyTestModel, QuestionModel, ResultsTestModel, TestListModel, TestModel } from './models/models';
 import { getAllMyTestApi, getTestByIdApi, submitResultsTestApi } from './testingStore.api';
 import { errorToast } from '../../../app/core/components/toast/toast';
 import { TimeZone } from '../../../app/hooks/useTimezone';
@@ -27,6 +27,13 @@ class TestingStore {
       'Физическая активность': 0,
     },
     completedHtmlOnConditionScore: [],
+    maxValues: {
+      'Сон': 0,
+      'Антистресс': 0,
+      'Питание': 0,
+      'Физическая активность': 0,
+    },
+    balanceLvl: ''
   };
   errorMessage: string = '';
   disableRecommendationCheck: boolean = true;
@@ -52,7 +59,10 @@ class TestingStore {
       return Math.max(...item.choices.map((choice)=>Number(choice.score))) + summ;
     }, 0);
   }
-
+  createBalanceLvl(summScore: number, completedHtmlScore: HtmlOnConditionScore[]) {
+        const HtmlScore = completedHtmlScore.filter((score)=>summScore >= Number(score.score_on) && summScore <= Number(score.score_to));
+        return HtmlScore.length>0 ? HtmlScore[0].title : ''
+    };
   setMyCurrentResultsTest(testId: number) {
     console.log('setMyCurrentResultsTest', testId);
     this.disableRecommendationCheck = true;
@@ -60,6 +70,7 @@ class TestingStore {
       if (index === 0 && test.id === testId) {this.disableRecommendationCheck = false;}
       return (test.id === testId);});
     if (test) {
+      
       this.getTestById(test.survey_id);
       this.myCurrentResultsTest = {
       id: test?.id,
@@ -67,6 +78,13 @@ class TestingStore {
       total_score: test.total_score,
       activiti_value_json: JSON.parse(test.activiti_value_json),
       completedHtmlOnConditionScore: test.completedHtmlOnConditionScore,
+      maxValues: {
+        Сон: this.countMaxValuesInTestByGroup('Сон', test.questions),
+        Питание: this.countMaxValuesInTestByGroup('Питание', test.questions),
+        Антистресс: this.countMaxValuesInTestByGroup('Антистресс', test.questions),
+        'Физическая активность': this.countMaxValuesInTestByGroup('Физическая активность', test.questions),
+      },
+      balanceLvl: this.createBalanceLvl(test.total_score, test.completedHtmlOnConditionScore)
     };
     // console.log('this.myCurrentResultsTest', this.myCurrentResultsTest.maxValues);
     }
@@ -83,6 +101,14 @@ class TestingStore {
           'Физическая активность': JSON.parse(this.currentResultsTest.activiti_value_json).fizact,
         },
         completedHtmlOnConditionScore: this.currentResultsTest.completedHtmlOnConditionScore,
+        maxValues: {
+          Сон: this.countMaxValuesInTestByGroup('Сон', this.currentResultsTest.questions),
+          Питание: this.countMaxValuesInTestByGroup('Питание', this.currentResultsTest.questions),
+          Антистресс: this.countMaxValuesInTestByGroup('Антистресс', this.currentResultsTest.questions),
+          'Физическая активность': this.countMaxValuesInTestByGroup('Физическая активность', this.currentResultsTest.questions),
+        },
+        balanceLvl: this.createBalanceLvl(this.currentResultsTest.total_score, this.currentResultsTest.completedHtmlOnConditionScore)
+
     };
   }
   }
@@ -98,6 +124,13 @@ class TestingStore {
         'Физическая активность': 0,
       },
       completedHtmlOnConditionScore: [],
+      maxValues: {
+        'Сон': 0,
+        'Антистресс': 0,
+        'Питание': 0,
+        'Физическая активность': 0,
+      },
+      balanceLvl: ''
     };
   }
   clearTests() {
@@ -110,7 +143,7 @@ class TestingStore {
     };
     // this.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
   }
-  setScoreToResult(total_score: number, activitiValues: ActivitiValueModel, answers: string, user_id?: number | undefined, device_id?: string | undefined) {
+  setScoreToResult(total_score: number, activitiValues: ActivitiValueModel, answers: string, questions: QuestionModel[], user_id?: number | undefined, device_id?: string | undefined) {
     this.currentResultsTest = {
       id: 0,
       survey_id: this.currentTest.id,
@@ -120,6 +153,7 @@ class TestingStore {
       completedHtmlOnConditionScore: this.currentTest.completedHtmlOnConditionScore,
       startHtml: this.currentTest.startHtml,
       timezone: TimeZone,
+      questions: questions
     };
     if (device_id) {this.currentResultsTest = {...this.currentResultsTest, device_id: device_id};}
     if (user_id) {this.currentResultsTest = {...this.currentResultsTest, user_id: user_id};}
@@ -162,7 +196,6 @@ class TestingStore {
             'Физическая активность': this.countMaxValuesInTestByGroup('Физическая активность', questions),
           },
         };
-        console.log('this.currentTest',this.currentTest.maxValues);
       }
       )
       .catch((err)=>{

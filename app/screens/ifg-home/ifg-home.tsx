@@ -224,10 +224,14 @@ return <>
 
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.status === 'pending').slice(0,3).map((rec, index)=>{
           return <CardContainer style={gs.mt16} key={index.toString()}
-          // onPress={()=>navigation.navigate('ArticleView', {articleId: rec.article.id})}
+          onPress={()=>{
+            recommendationStore.readRecommendation(rec.id)
+            navigation.navigate('ArticleView', {articleId: rec.article.id})}} 
+          
           >
           <ArticleHeader
-            // isNew
+            // isCicleBadge={!rec.is_viewed}
+            isNew={!rec.is_viewed}
             time={rec.publish_time}
             hashTagColor={categoryColors[rec.category]}
             hashTagText={'#' + rec.category}

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 import { completeRecommendationApi, deleteRecommendationApi, getPersonalRecommendationsApi, getRecommendationsApi, storeRecommendationApi } from './recommendationStore.api';
 import { PersonalRecommendationModel, RecommendationsModel, StoreRecommendationModel } from './models/models';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 class RecommendationStore {
@@ -17,6 +18,28 @@ class RecommendationStore {
   personalRecomendationList: PersonalRecommendationModel[] = [];
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
+  }
+
+  async readRecommendation(id: number) {
+    console.log('readRecommendation', id)
+    const recIndex = this.personalRecomendationList.findIndex((item)=>item.id ===id)
+    if (recIndex) {
+      console.log('readRecommendation recIndex', recIndex)
+      this.personalRecomendationList = this.personalRecomendationList.map((rec, index)=>{
+        if (index === recIndex) {
+          return {...rec, is_viewed: true}
+        }
+        return rec
+      })
+    }
+    const recs = await AsyncStorage.getItem('read_recs')
+    if (recs) {
+      await AsyncStorage.setItem('read_recs',JSON.stringify([...JSON.parse(recs), id]))
+    }
+    else {
+      await AsyncStorage.setItem('read_recs',JSON.stringify([id]))
+    }
+    
   }
 
   getRecommendations = async (resultTestId: number) => {
@@ -38,8 +61,15 @@ class RecommendationStore {
       console.log('getPersonalRecommendations');
         this.isLoading = true;
         await getPersonalRecommendationsApi()
-          .then((result)=>{
-            this.personalRecomendationList = result.data;
+          .then(async (result)=>{
+            const recs = await AsyncStorage.getItem('read_recs') || JSON.stringify([])
+            if (!recs) {
+              await AsyncStorage.setItem('read_recs', JSON.stringify(recs))
+            }
+            console.log('recsss',recs)
+            this.personalRecomendationList = result.data.map((rec)=>{
+              return {...rec, is_viewed: JSON.parse(recs).includes(rec.id)}
+            });
             // console.log('this.personalReacomendationList', this.personalRecomendationList);
           }
           )

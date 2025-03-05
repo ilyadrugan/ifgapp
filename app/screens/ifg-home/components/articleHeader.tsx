@@ -26,12 +26,12 @@ export const ArticleHeader:FC<{
                         </IfgText>
 
                 </View>}
-                <View style={{marginLeft: 10}} />
-                {isCicleBadge && <View style={s.circle} />}
+                {/* <View style={{marginLeft: 10}} /> */}
                 {isNew &&
-                <View style={s.new}>
+                <View style={[s.new, gs.ml8]}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontTiny} >NEW</IfgText>
                 </View>}
+                {isCicleBadge && <View style={[s.circle, time && gs.ml8]} />}
             </View>
             {hashTagText && <HashtagContainer bgcolor={hashTagColor} >
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption3, gs.light, {lineHeight: 14}]}>{hashTagText}</IfgText>

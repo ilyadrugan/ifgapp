@@ -39,7 +39,7 @@ const CustomDoubleCircle = ({ x, y }) => {
     );
   };
 const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observer(({monthly, graphData}) => {
-  const [selectedPoint, setSelectedPoint] = useState<DotType | null>();
+  const [selectedPoint, setSelectedPoint] = useState<DotType | null>(null);
   const [data, setData] = useState<DotDataType[]>([]);
   const [maxValue, setMaxValue] = useState<number>(0);
   const [isGraphLoading, setIsGraphLoading] = useState(false);
@@ -47,7 +47,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
 
   const convertGraphData = () => {
     return graphData.map((el, index)=>{
-      return {x: monthly ? new Date(el.created_at).getDate().toString() : new Date(el.created_at).getDate().toString(), y: el.value};
+      return {x: monthly ? new Date(el.created_at).getDate().toString()+'.'+new Date(el.created_at).getMonth().toString() : new Date(el.created_at).getDate().toString(), y: el.value};
     });
   };
 
@@ -67,10 +67,11 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
     return number; // Если число меньше 0, просто возвращаем его
   };
   useEffect(() => {
-    // setIsGraphLoading(true);
+    console.log('graphdata', graphData, 'monthly', monthly)
+    setSelectedPoint(null);
     setRendered(false);
     if (graphData.length === 0) {return;}
-    setSelectedPoint(null);
+    // setSelectedPoint(null);
 
     const  convertedData = convertGraphData();
     const convertedDataLen = convertedData.length;
@@ -84,37 +85,14 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
         y: convertedData[convertedDataLen - 1].y,
     };
     setSelectedPoint(todayDot);
+    console.log('todayDot', todayDot)
     // setMaxValue(findMaxValue(convertedData));
     setData(convertedData);
     console.log();
-    // setIsGraphLoading(false);
   }, [graphData, monthly]);
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     console.log('useFocusEffect, victoryGraph');
-  //     setRendered(false);
-  //     if (graphData.length === 0) {return;}
-  //     setSelectedPoint(null);
 
-  //     const  convertedData = convertGraphData();
-  //     const convertedDataLen = convertedData.length;
-
-  //     const today = new Date().getDay();
-  //     const todayDot: DotType = {
-  //         _x: convertedData.length,
-  //         _y: convertedData[convertedDataLen - 1].y,
-  //         x:  convertedData[convertedDataLen - 1].x,
-  //         xName: convertedData[convertedDataLen - 1].x,
-  //         y: convertedData[convertedDataLen - 1].y,
-  //     };
-  //     setSelectedPoint(todayDot);
-  //     // setMaxValue(findMaxValue(convertedData));
-  //     setData(convertedData);
-  //     return () => console.log('Ушли с графика'); // Опционально: Cleanup при уходе со страницы
-  //   }, [monthly, graphData])
-  // );
   return (
-    (((data.length === 7 && !monthly) || (data.length > 0 && monthly)  && !dailyActivityStore.isGraphLoading)) ? <View
+    ((data.length>0 && (data.length === 7 && !monthly) || (data.length > 0 && monthly) && !dailyActivityStore.isGraphLoading)) ? <View
     // onLayout={() => {
     //   setRendered(true);
     //   console.log('График завершил рендеринг!');
@@ -135,7 +113,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
         {/* Ось X */}
         <VictoryAxis
         tickFormat={(t, index) => {
-          return monthly ? (((index + 1) % 3) === 0 ? t : '') : dataWeekNames[Math.abs(new Date().getDay() - 6 + index)];}} // Показать каждую пятую метку
+          return monthly ? (((index + 1) % 3) === 0 ? t.split('.')[0] : '') : dataWeekNames[Math.abs(new Date().getDay() - 6 + index)];}} // Показать каждую пятую метку
           style={{
             axis: { stroke: 'transparent' },
             tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'tilda-sans_medium' },
@@ -179,7 +157,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
           }}
         />
 
-    {selectedPoint && <VictoryScatter
+    {(selectedPoint && selectedPoint?._y>0) && <VictoryScatter
         data={[selectedPoint]} // Показывать только выбранную точку
         size={8}
 
@@ -193,7 +171,10 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
           },
         }}
         dataComponent={<CustomDoubleCircle />}
-        labels={({ datum }) => `${datum.y}`}
+        labels={({ datum }) => {
+          console.log('datum', datum)
+          return `${selectedPoint? selectedPoint._y:''}`
+        }}
         labelComponent={
           <VictoryTooltip
             flyoutStyle={{
@@ -204,7 +185,8 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
             flyoutHeight={24}
             flyoutWidth={29}
             dx={-10}
-            active
+            // dx={(datum, index) => (index>14 ? -10 : 10)}
+            active={(selectedPoint._y>0)}
             orientation={'left'}
             style={{ fill: '#ffffff', fontSize: 14, fontFamily: 'tilda-sans_medium' }}
             pointerLength={3}

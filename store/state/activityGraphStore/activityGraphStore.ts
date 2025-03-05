@@ -49,7 +49,7 @@ class DailyActivityStore {
 
   getDailyActivity = async (date_to) => {
     this.isLoading = true;
-  //   this.errorMessage = '';
+    console.log('getDailyActivity date_to',date_to);
     await getDailyActivityApi(date_to)
       .then((result)=>{
         console.log('getDailyActivityApi',result.data.data);
@@ -69,6 +69,8 @@ class DailyActivityStore {
   };
 
   getDailyTodayActivity = async (date_to?:string) => {
+    console.log('getDailyTodayActivity date_to',date_to);
+
     this.dailyTodayActivityDataLoading = true;
   //   this.errorMessage = '';
     await getDailyActivityApi(date_to || '')
@@ -178,7 +180,7 @@ class DailyActivityStore {
         await getDailyActivitySettingsApi()
           .then((result)=>{
             console.log('getDailyActivitySettings result',result.data);
-            this.dailyActivitySettings = result.data;
+            this.dailyActivitySettings = result.data.settings;
           }
           )
           .catch((err)=>{

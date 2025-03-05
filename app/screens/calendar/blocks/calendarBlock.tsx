@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
@@ -26,13 +26,15 @@ export const CalendarBlock: FC = observer(() =>{
           return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
         }, [])
       );
+      useEffect(()=>{
+        dailyActivityStore.getDailyActivity(formatDate());
+      },[])
     return <CardContainer>
         <CustomCalendar />
-        {!dailyActivityStore.isLoading ? <>
+        {dailyActivityStore.dailyActivityData ? <>
         <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores}/>
-         <IFGActivity today={false} dailyActivities={dailyActivityStore.dailyActivityData}/>
+         <IFGActivity today={formatDate()===dailyActivityStore.dailyActivityData.date} dailyActivities={dailyActivityStore.dailyActivityData}/>
          </> :
          <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />}
     </CardContainer>;
 });
-

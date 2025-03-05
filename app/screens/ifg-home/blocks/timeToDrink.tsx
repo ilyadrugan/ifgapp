@@ -87,7 +87,7 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
     };
     return (
         <CardContainer style={gs.mt16}>
-            <ArticleHeader isCicleBadge={isNew && !scoreGotted} hashTagColor={colors.GREEN_COLOR} hashTagText="#Питание"
+            <ArticleHeader isCicleBadge={dailyTodayActivityData?.watter===0} hashTagColor={colors.GREEN_COLOR} hashTagText="#Питание"
             // time="10:00"
              />
             <IfgText style={[gs.fontCaption, gs.bold]}>Пришло время освежиться</IfgText>

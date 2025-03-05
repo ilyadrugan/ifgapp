@@ -25,7 +25,8 @@ export type PersonalRecommendationModel = {
   article: ArticleViewModel,
   title: string,
   description: string,
-  publish_time: string
+  publish_time: string, 
+  is_viewed: boolean,
 }
 
 export type ActivivtyExpressModel = {

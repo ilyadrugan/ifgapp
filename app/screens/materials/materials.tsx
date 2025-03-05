@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableOpacity, RefreshControl, ActivityIndicator, ImageBackground } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { TabInterface, TabsMaterials } from './components/tabs';
@@ -69,15 +69,31 @@ export const MaterialsScreen = observer(() => {
     const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
 
         return <CardContainer key={activeTab + index + activeTab} style={s.articleCard}>
-            {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+            
 
-            style={{ width: '40%', height: '100%' }}
-            /> : <View />}
+            {item.media.length > 0 ? <Image resizeMode='cover' source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+
+            style={{ width: '40%'}}
+            >
+            
+            </Image> : <View />}
+            {(!item.is_viewed) && 
+            <View style={{width: 26, height: 16, alignItems:'center', justifyContent: 'center', borderBottomLeftRadius: 6, borderTopLeftRadius: 6, backgroundColor:'#FA5D5D', position: 'absolute', top: 14, left: 0.4*(ScreenWidth-32)-26.5 }}>
+                <IfgText color={colors.WHITE_COLOR} style={gs.fontTiny}>NEW</IfgText>
+            </View>}
             <View style={{paddingRight: 15,paddingVertical: 12, flexDirection: 'column'}}>
             <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold, {maxWidth: '75%'}]}>{item.title}</IfgText>
             <IfgText numberOfLines={3} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaptionSmall, gs.mt8, {maxWidth: '65%'}]}>{item.subtitle}</IfgText>
-            <View style={gs.mt12}><ButtonTo onPress={()=>navigation.navigate('ArticleView', {articleId: item.id})} style={{width: 114, height: 26}} title="Подробнее" /></View>
+                <View style={[gs.mt12]}>
+                <ButtonTo onPress={()=>{
+                    articlesStore.readArticle(item.id)
+                    navigation.navigate('ArticleView', {articleId: item.id})
+                    }} style={{width: 114, height: 26}} title="Подробнее" />
+                
+                </View>
             </View>
+            {(!item.is_viewed) && <View style={{width: 6, height: 6, borderRadius: 6, backgroundColor:'#FA5D5D', position: 'absolute', right: 16, bottom: 18 }}/>}
+
         </CardContainer>;
       };
     const renderInterviewItem:FC<{item: InterViewModel, index:number}> = ({item, index}) => {

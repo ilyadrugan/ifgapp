@@ -41,15 +41,16 @@ export type ResultsTestModel = {
     completedHtmlOnConditionScore: HtmlOnConditionScore[],
     startHtml: string,
     timezone: string,
-    // activiti_value: string
+    questions: QuestionModel[],
 }
 export type MyCurrentResultsTestModel = {
     id: number,
     survey_id: number,
     total_score: number,
     activiti_value_json: ActivitiValueViewModel,
-    // activiti_value: string
+    maxValues: ActivitiValueViewModel,
     completedHtmlOnConditionScore: HtmlOnConditionScore[],
+    balanceLvl: string
 }
 export type ActivitiValueModel = {
         'fizact': number,
@@ -73,6 +74,8 @@ export type MyTestModel = {
     activiti_value_json: string,
     created_at: string,
     completedHtmlOnConditionScore: HtmlOnConditionScore[],
+    questions: QuestionModel[],
+    maxValues: ActivitiValueViewModel,
 }
 
 export type TestListModel = {

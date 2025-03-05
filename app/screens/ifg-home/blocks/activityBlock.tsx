@@ -24,11 +24,13 @@ import { useImageUploader } from '../../../core/components/imagePicker/imagePick
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { DailyActivityModel } from '../../../../store/state/activityGraphStore/models/models';
-import { categoryColorsEng } from '../../../core/colors/categoryColors';
+import { categoryColors, categoryColorsEng } from '../../../core/colors/categoryColors';
 import { RecommendationCategoryToRu } from '../../../core/utils/recommendationFormatter';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../../hooks/useDimensions';
 import { API_URL } from '../../../core/hosts';
+import testingStore from '../../../../store/state/testingStore/testingStore';
+import { clearObserving } from 'mobx/dist/internal';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -92,6 +94,7 @@ export const ActivityBlock = observer(() => {
 
     useEffect(() => {
       console.log('dailyActivitySettings', dailyActivityStore.dailyActivitySettings);
+      console.log('lastTest', testingStore.myCurrentResultsTest)
     }, []);
 
 return <CardContainer >
@@ -133,7 +136,7 @@ return <CardContainer >
   </> :
   <ShimmerPlaceholder style={{borderRadius: 8}} height={40} width={ScreenWidth - 64} />
 }
-{!dailyActivityStore.dailyTodayActivityDataLoading ? <>
+{!testingStore.isLoading ? <>
 <CardContainer style={{backgroundColor: '#EFFCF4', borderRadius: 16, gap: 0}}>
   <View style={[gs.flexRow, {justifyContent: 'space-between'}]} >
       <View style={[gs.flexRow, gs.alignCenter]}>
@@ -144,7 +147,7 @@ return <CardContainer >
       </View>
       <TouchableOpacity activeOpacity={1}  onPress={toggleExpand} style={[gs.flexRow, gs.alignCenter]}>
         <IfgText style={[gs.fontCaption2, gs.bold, gs.mr6]}>
-          {userStore.userInfo?.ifg_level}
+          {testingStore.myCurrentResultsTest.balanceLvl}
         </IfgText>
         <TouchableOpacity disabled style={{ transform: [{ scaleY: scaleY }] }}>
           <Open />
@@ -156,12 +159,12 @@ return <CardContainer >
 
   {expanded && <>
   <View style={gs.mt12}/>
-  {['food', 'stress', 'sleep', 'phisical_activity'].map((name, index)=>
+  {['Питание', 'Антистресс', 'Сон', 'Физическая активность'].map((name, index)=>
   <View key={index.toString()} style={[gs.alignCenter, gs.flexRow]}>
     <IfgText color={'#747474'} style={[gs.fontCaptionSmallMedium, gs.regular, {width: 80}]}>
-      {RecommendationCategoryToRu(name)}
+      {name !== 'Физическая активность' ? name : 'Активность'}
     </IfgText>
-    <ProgressBar width={dailyActivityStore.dailyTodayActivityData[name] || 0} color={categoryColorsEng[name]}/>
+    <ProgressBar width={testingStore.myCurrentResultsTest.activiti_value_json[name]/testingStore.myCurrentResultsTest.maxValues[name]*100 || 0} color={categoryColors[name]}/>
   </View>)}</>}
   </Animated.View>
 
