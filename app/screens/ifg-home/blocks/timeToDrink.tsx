@@ -15,9 +15,10 @@ import { observer, useStaticRendering } from 'mobx-react';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 import { useFocusEffect } from '@react-navigation/native';
+import { formatDate } from '../../../core/utils/formatDateTime';
 
 const width = Dimensions.get('screen').width;
-export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) => {
+export const TimeToDrinkBlock: FC<{ isNew?: boolean, fromCalendar?: boolean }> = observer(({ isNew, fromCalendar }) => {
     const { dailyTodayActivityData, addDailyActivity, addWatter } = dailyActivityStore;
     const [cupsData, setCupsData] = useState<CupsType[]>([0, 1, 2, 3, 4, 5, 6, 7].map((item) => ({
         id: item,
@@ -30,10 +31,12 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
     })));
     const [isLoading, setIsLoading] = useState(false);
     const [scoreGotted, setScoreGotted] = useState<boolean>(dailyTodayActivityData?.isDrinkEight || false);
+    // const [isLoadingButton, setIsLoadingButton] = useState(false);
 
     useFocusEffect(
       React.useCallback(() => {
         console.log('useFocusEffect');
+        // dailyActivityStore.getDailyTodayActivity(formatDate());
         if (isLoading) {return;}
         setScoreGotted(dailyTodayActivityData?.isDrinkEight || false);
         setCupsData([0, 1, 2, 3, 4, 5, 6, 7].map((item) => ({
@@ -76,14 +79,19 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
             await dailyActivityStore.addDailyActivity('food', dailyTodayActivityData.food + 1);
             await ifgScoreStore.addScore(1);
         }
-       await dailyActivityStore.addDailyActivity('watter', watter);
+        if (fromCalendar) {
+            dailyActivityStore.needResfrehWatterChange(true)
+        }
+        await dailyActivityStore.addDailyActivity('watter', watter);
     };
-    const addScoreForWatter = () => {
+    const addScoreForWatter = async () => {
+        // setIsLoadingButton(true)
         setScoreGotted((prev)=>!prev);
         dailyActivityStore.addDailyActivity('watter', cupsData.filter(cup=>cup.status === CupStatus.Filled).length);
         dailyActivityStore.addDailyActivity('food', dailyTodayActivityData.food + 2);
         dailyActivityStore.addDailyActivity('isDrinkEight', true);
         ifgScoreStore.addScore(2);
+        // setIsLoadingButton(false)
     };
     return (
         <CardContainer style={gs.mt16}>
@@ -126,9 +134,10 @@ export const TimeToDrinkBlock: FC<{ isNew?: boolean }> = observer(({ isNew }) =>
             {!scoreGotted && (
                 <ButtonNext
                     onPress={addScoreForWatter}
-                    disabled={dailyTodayActivityData?.watter !== 8}
+                    disabled={dailyTodayActivityData?.watter !== 8 || dailyActivityStore.dailyTodayActivityAddLoading}
                     title="Сделано"
                     oliveTitle="+ 3 балла"
+                    // isLoading={isLoadingButton}
                 />
             )}
         </CardContainer>

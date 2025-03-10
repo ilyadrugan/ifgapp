@@ -26,6 +26,8 @@ class DailyActivityStore {
     floor_spans: 50,
     ifg_scores: 100,
   };
+  needRefreshWatter = false;
+
   constructor() {
     makeAutoObservable(this);
 }
@@ -67,6 +69,10 @@ class DailyActivityStore {
     this.dailyTodayActivityData = { ...this.dailyTodayActivityData, watter: watter };
     console.log('this.dailyTodayActivityData', this.dailyTodayActivityData);
   };
+
+  needResfrehWatterChange = (val: boolean) => {
+    this.needRefreshWatter = val
+  }
 
   getDailyTodayActivity = async (date_to?:string) => {
     console.log('getDailyTodayActivity date_to',date_to);
@@ -155,8 +161,8 @@ class DailyActivityStore {
           .catch((err)=>{
             console.log('ERROR', err.message);
 
-          });
-          // .finally(()=>{this.dailyTodayActivityAddLoading = false;});
+          })
+          .finally(()=>{this.dailyTodayActivityAddLoading = false;});
       };
       addDailyActivityArray = async (model: StoreDailyActivities) => {
         // this.isLoading = true;

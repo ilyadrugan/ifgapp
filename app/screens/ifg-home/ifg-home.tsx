@@ -3,7 +3,7 @@
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl} from 'react-native';
 import React, { FC, useEffect, useLayoutEffect, useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
@@ -57,7 +57,14 @@ export const IFGHome = observer(() => {
     useLayoutEffect(() => {
       getData();
     }, []);
-
+    useFocusEffect(
+      React.useCallback(() => {
+        if (dailyActivityStore.needRefreshWatter) {
+          dailyActivityStore.getDailyTodayActivity(formatDate());
+          dailyActivityStore.needResfrehWatterChange(false)
+        }
+      }, [])
+    );
     const getData = async () => {
       storiesStore.getStories();
       await testingStore.getAllMyTest();
@@ -219,7 +226,7 @@ return <>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
         {(!dailyActivityStore.dailyTodayActivityDataLoading) ? <TimeToDrinkBlock/>
-        : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={300} width={ScreenWidth - 32} />}
+        : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 
 
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.status === 'pending').slice(0,3).map((rec, index)=>{

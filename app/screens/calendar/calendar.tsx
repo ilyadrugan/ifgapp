@@ -83,7 +83,7 @@ export const CalendarScreen = observer(() =>{
       const onRefresh = async () => {
         setRefreshing((prev)=>!prev);
         await recommendationStore.getPersonalRecommendations();
-        // await dailyActivityStore.getDailyTodayActivity(formatDate());
+        await dailyActivityStore.getDailyTodayActivity(formatDate());
         setRefreshing((prev)=>!prev);
       };
     const toggleDropdown = (index: number) => {
@@ -211,7 +211,7 @@ export const CalendarScreen = observer(() =>{
             <View
             style={s.content}
             onLayout={(event) => onLayoutContent(0, event)}>
-               {dailyActivityStore.dailyTodayActivityData ? <TimeToDrinkBlock watterCount={dailyActivityStore.dailyTodayActivityData?.watter } />
+               {(!dailyActivityStore.dailyTodayActivityDataLoading) ? <TimeToDrinkBlock fromCalendar watterCount={dailyActivityStore.dailyTodayActivityData?.watter } />
             : <ShimmerPlaceholder style={{borderRadius: 22}} height={300} width={ScreenWidth - 32} />}
             {recommendationStore.personalRecomendationList.filter((rec)=>(rec.category === 'Питание')).map((rec)=>
             renderRecommendation(rec))}
