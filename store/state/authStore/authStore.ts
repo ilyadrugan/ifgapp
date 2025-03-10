@@ -189,6 +189,8 @@ class AuthStore {
           console.log('Validation errors:', err.response.data.errors); // Детали ошибок
 
           this.errorMessage = err.response.data.errors.promocode[0];
+          // this.errorMessage = 'Промокод не найден';
+
           errorToast(this.errorMessage);
         }
         else if (err.response.data.errors.num_doc){
