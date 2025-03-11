@@ -8,6 +8,7 @@ export type UserInfo = {
     birthday: string;
     ifg_level: string;
     city: string;
+    unseenArticles: boolean;
 }
 
 export type UserChangeInfoModel = {

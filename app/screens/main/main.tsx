@@ -20,6 +20,7 @@ import { MaterialsScreen } from '../materials/materials';
 import { observer } from 'mobx-react';
 import { ContestsScreen } from '../contests/contests';
 import { CalendarScreen } from '../calendar/calendar';
+import userStore from '../../../store/state/userStore/userStore';
 
 const Tab = createBottomTabNavigator();
 
@@ -68,9 +69,32 @@ export const Main: FC = observer(() => {
       <Tab.Screen name="Профиль" component={ProfileScreen} />
       <Tab.Screen name="Календарь" component={CalendarScreen} />
       <Tab.Screen name="Дом" component={IFGHome}  />
-      <Tab.Screen name="Материалы" component={MaterialsScreen} />
+      <Tab.Screen name="Материалы" component={MaterialsScreen}
+      options={{
+        tabBarIcon: ({ color, size, focused }) => (
+          <View>
+            { focused ? <MaterialsActive /> : <Materials />}
+            {userStore.userInfo?.unseenArticles && <View
+              style={s.badge}
+            />}
+          </View>
+        ),
+      }}/>
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
     </Tab.Navigator>
     </View>
   );
 });
+
+const s = StyleSheet.create({
+    badge:{
+      position: 'absolute',
+      top: -2,
+      right: -4,
+      width: 8,
+      height: 8,
+      backgroundColor: 'red',
+      borderRadius: 4,
+      },
+  });
+
