@@ -93,7 +93,7 @@ const s = StyleSheet.create({
       right: -4,
       width: 8,
       height: 8,
-      backgroundColor: 'red',
+      backgroundColor: '#FA5D5D',
       borderRadius: 4,
       },
   });
