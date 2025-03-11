@@ -89,8 +89,8 @@ export const Main: FC = observer(() => {
 const s = StyleSheet.create({
     badge:{
       position: 'absolute',
-      top: -2,
-      right: -4,
+      top: 0,
+      right: -6,
       width: 8,
       height: 8,
       backgroundColor: '#FA5D5D',
