@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { addDailyActivityApi, getDailyActivityApi, getDailyActivitySettingsApi, getGraphCaloriesActivityApi, getGraphStepsActivityApi, getIfgScoreActivityApi, getPeriodActivityApi, setDailyActivitySettingsApi } from './activityGraphStore.api';
 import { DailyActivityModel, DailyActivitySettingsModel, DailyCommonModel, StoreDailyActivities } from './models/models';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
+import watterStore from '../watterStore/watterStore';
 
 class DailyActivityStore {
   isLoading = false; // Состояние загрузки
@@ -26,7 +27,6 @@ class DailyActivityStore {
     floor_spans: 50,
     ifg_scores: 100,
   };
-  needRefreshWatter = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -70,10 +70,6 @@ class DailyActivityStore {
     console.log('this.dailyTodayActivityData', this.dailyTodayActivityData);
   };
 
-  needResfrehWatterChange = (val: boolean) => {
-    this.needRefreshWatter = val
-  }
-
   getDailyTodayActivity = async (date_to?:string) => {
     console.log('getDailyTodayActivity date_to',date_to);
 
@@ -86,6 +82,9 @@ class DailyActivityStore {
         if (this.dailyTodayActivityData.watter === undefined) {
           this.addWatter(0);
         }
+        watterStore.isDrinkEight = this.dailyTodayActivityData.isDrinkEight;
+        watterStore.watterCount = this.dailyTodayActivityData.watter;
+        watterStore.updateCups(this.dailyTodayActivityData.watter);
       }
       )
       .catch((err)=>{

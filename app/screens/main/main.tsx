@@ -71,7 +71,7 @@ export const Main: FC = observer(() => {
       <Tab.Screen name="Дом" component={IFGHome}  />
       <Tab.Screen name="Материалы" component={MaterialsScreen}
       options={{
-        tabBarIcon: ({ color, size, focused }) => (
+        tabBarIcon: ({ focused }) => (
           <View>
             { focused ? <MaterialsActive /> : <Materials />}
             {userStore.userInfo?.unseenArticles && <View

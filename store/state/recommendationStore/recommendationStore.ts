@@ -21,25 +21,25 @@ class RecommendationStore {
   }
 
   async readRecommendation(id: number) {
-    console.log('readRecommendation', id)
-    const recIndex = this.personalRecomendationList.findIndex((item)=>item.id ===id)
+    console.log('readRecommendation', id);
+    const recIndex = this.personalRecomendationList.findIndex((item)=>item.id === id);
     if (recIndex) {
-      console.log('readRecommendation recIndex', recIndex)
+      console.log('readRecommendation recIndex', recIndex);
       this.personalRecomendationList = this.personalRecomendationList.map((rec, index)=>{
         if (index === recIndex) {
-          return {...rec, is_viewed: true}
+          return {...rec, is_viewed: true};
         }
-        return rec
-      })
+        return rec;
+      });
     }
-    const recs = await AsyncStorage.getItem('read_recs')
+    const recs = await AsyncStorage.getItem('read_recs');
     if (recs) {
-      await AsyncStorage.setItem('read_recs',JSON.stringify([...JSON.parse(recs), id]))
+      await AsyncStorage.setItem('read_recs',JSON.stringify([...JSON.parse(recs), id]));
     }
     else {
-      await AsyncStorage.setItem('read_recs',JSON.stringify([id]))
+      await AsyncStorage.setItem('read_recs',JSON.stringify([id]));
     }
-    
+
   }
 
   getRecommendations = async (resultTestId: number) => {
@@ -47,9 +47,7 @@ class RecommendationStore {
       this.isLoading = true;
       await getRecommendationsApi(resultTestId)
         .then((result)=>{
-          console.log('recommendationList',result.data);
           this.recommendationList = result.data;
-          // console.log('this.recommendationList', this.recommendationList);
         }
         )
         .catch((err)=>{
@@ -62,13 +60,13 @@ class RecommendationStore {
         this.isLoading = true;
         await getPersonalRecommendationsApi()
           .then(async (result)=>{
-            const recs = await AsyncStorage.getItem('read_recs') || JSON.stringify([])
+            const recs = await AsyncStorage.getItem('read_recs') || JSON.stringify([]);
             if (!recs) {
-              await AsyncStorage.setItem('read_recs', JSON.stringify(recs))
+              await AsyncStorage.setItem('read_recs', JSON.stringify(recs));
             }
-            console.log('recsss',recs)
+            console.log('recsss',recs);
             this.personalRecomendationList = result.data.map((rec)=>{
-              return {...rec, is_viewed: JSON.parse(recs).includes(rec.id)}
+              return {...rec, is_viewed: JSON.parse(recs).includes(rec.id)};
             });
             // console.log('this.personalReacomendationList', this.personalRecomendationList);
           }

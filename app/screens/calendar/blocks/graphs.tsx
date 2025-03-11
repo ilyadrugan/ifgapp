@@ -38,6 +38,8 @@ const switchs = [
 
 
 export const Graphs = observer(() =>{
+    console.log('🔄 Рендер Graphs');
+
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [graphData, setGraphData] = useState<GraphDataType[]>([]);

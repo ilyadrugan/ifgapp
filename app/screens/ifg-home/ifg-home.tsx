@@ -3,7 +3,7 @@
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl} from 'react-native';
 import React, { FC, useEffect, useLayoutEffect, useState } from 'react';
 
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
@@ -16,23 +16,17 @@ import Eye from '../../../assets/icons/eye.svg';
 import { Button, ButtonNext, ButtonTo } from '../../core/components/button/button';
 import { ActivityBlock } from './blocks/activityBlock';
 import { RecommendationBlock } from './blocks/recommendationBlock';
-import { TimeToDrinkBlock } from './blocks/timeToDrink';
 import { ArticleHeader } from './components/articleHeader';
 import {ShadowGradient} from '../../core/components/gradient/shadow-gradient';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatFooter } from './blocks/chat-footer';
 import { observer } from 'mobx-react';
-import { dataContests } from '../contests/contests';
-import { ContestType } from '../contests/models/models';
-import { Stories } from './data/data';
 import { hexToRgba } from '../../core/utils/hexToRGBA';
 import userStore from '../../../store/state/userStore/userStore';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
-import { ArticleModel } from '../../../store/state/articlesStore/models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import storiesStore from '../../../store/state/storiesStore/storiesStore';
 import { StoryModal } from '../../core/components/storyModal/storyModal';
-import { GetActivitiesTypeNumber, GetActivityBgColorName, StoryMappedModel, StoryModel } from '../../../store/state/storiesStore/models/models';
+import { StoryMappedModel } from '../../../store/state/storiesStore/models/models';
 import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import testingStore from '../../../store/state/testingStore/testingStore';
@@ -45,9 +39,12 @@ import { formatDate } from '../../core/utils/formatDateTime';
 import Delete from '../../../assets/icons/delete.svg';
 import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
 import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
+import { TimeToDrinkNewBlock } from './blocks/timeToDrinkNew';
+import watterStore from '../../../store/state/watterStore/watterStore';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
+    const isFocused = useIsFocused();
     const [isModalVisible, setModalVisible] = useState(false);
     const [currentStoryPressed, setCurrentStoryPressed] = useState(undefined);
     const [currentCaregoryStoryPressed, setCurrentCaregoryStoryPressed] = useState('');
@@ -57,14 +54,7 @@ export const IFGHome = observer(() => {
     useLayoutEffect(() => {
       getData();
     }, []);
-    useFocusEffect(
-      React.useCallback(() => {
-        if (dailyActivityStore.needRefreshWatter) {
-          dailyActivityStore.getDailyTodayActivity(formatDate());
-          dailyActivityStore.needResfrehWatterChange(false)
-        }
-      }, [])
-    );
+
     const getData = async () => {
       storiesStore.getStories();
       await testingStore.getAllMyTest();
@@ -94,8 +84,8 @@ export const IFGHome = observer(() => {
     };
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
-      <CardContainer onPress={async()=>{
-        await articlesStore.clearCurrentArticle();
+      <CardContainer onPress={()=>{
+        articlesStore.clearCurrentArticle();
         navigation.navigate('ArticleView', {articleId: id});}}  style={[{width: 200, height: 256, padding:0 , overflow: 'hidden', borderWidth: 1, borderColor: '#E7E7E7'  }, gs.mr12, index === 0 && gs.ml16]} >
                 {media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${media[0].full_path[0]}`}}
                 style={{ height: 114, width: '100%' }}
@@ -225,16 +215,16 @@ return <>
             </Button>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
-        {(!dailyActivityStore.dailyTodayActivityDataLoading) ? <TimeToDrinkBlock/>
+        {(isFocused && watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 
 
         {recommendationStore.personalRecomendationList.filter((rec)=>rec.status === 'pending').slice(0,3).map((rec, index)=>{
           return <CardContainer style={gs.mt16} key={index.toString()}
           onPress={()=>{
-            recommendationStore.readRecommendation(rec.id)
-            navigation.navigate('ArticleView', {articleId: rec.article.id})}} 
-          
+            recommendationStore.readRecommendation(rec.id);
+            navigation.navigate('ArticleView', {articleId: rec.article.id});}}
+
           >
           <ArticleHeader
             // isCicleBadge={!rec.is_viewed}

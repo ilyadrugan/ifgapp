@@ -59,17 +59,17 @@ export function useHealthData(date?: Date) {
     const setDataToDailyActivities = (model: StoreDailyActivities) => {
       dailyActivityStore.addDailyActivityArray(model);
     };
-    useEffect(()=>{
-      if (isRequesting) {return;}
-      if (Platform.OS === 'ios') {
-        requestHealthKitAuthorizationIOS();
-        fetchHealthDataIOS();
-      }
-      if (Platform.OS === 'android') {
-        setIsRequesting(true);
-        requestHealthData();
-      }
-    },[]);
+    // useEffect(()=>{
+    //   if (isRequesting) {return;}
+    //   if (Platform.OS === 'ios') {
+    //     requestHealthKitAuthorizationIOS();
+    //     fetchHealthDataIOS();
+    //   }
+    //   if (Platform.OS === 'android') {
+    //     setIsRequesting(true);
+    //     requestHealthData();
+    //   }
+    // },[]);
 
     // useFocusEffect(
     //   React.useCallback(() => {
