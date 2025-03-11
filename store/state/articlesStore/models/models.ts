@@ -7,6 +7,7 @@ export type ArticleModel = {
     id: number,
     status: boolean,
     is_viewed: boolean,
+    is_new: boolean,
     media: MediaModel[]
 }
 
