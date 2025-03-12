@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Linking, LogBox, StatusBar } from 'react-native';
 import { Toast } from './app/core/components/toast/toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-// import { FirebaseComponent } from './app/core/components/firebase-component/firebase-component';
+import { FirebaseComponent } from './app/core/components/firebase-component/firebase-component';
 import { NavigationContainer } from '@react-navigation/native';
 import { requestNotificationPermission } from './app/core/firebase/firebase';
 import 'react-native-gesture-handler';
@@ -42,7 +42,7 @@ const App = () => {
     <StatusBar hidden={true} />
     <NavigationContainer>
        <SafeAreaProvider>
-          {/* <FirebaseComponent/> */}
+          <FirebaseComponent/>
           <MainNavigation/>
           <Toast/>
       </SafeAreaProvider>

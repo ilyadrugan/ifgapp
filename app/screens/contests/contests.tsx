@@ -40,6 +40,7 @@ export const ContestsScreen = observer(() => {
         </View>}
     </CardContainer>;
     const onRefresh = async () => {
+        if (refreshing) {return;}
         setRefreshing(true);
         presentsStore.clearPresents();
         await onLoadMore();

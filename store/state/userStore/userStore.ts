@@ -40,7 +40,7 @@ class UserStore {
       .catch((err)=>{
         console.log('ERROR', err);
         // this.errorMessage = err.message;
-        errorToast('Произошла ошибка');
+        // errorToast('Произошла ошибка');
       }).finally(()=>this.isLoading = false);
 
     };
@@ -59,7 +59,7 @@ class UserStore {
         console.log('ERROR', err);
         // this.errorMessage = err.message;
         this.isLoading = false;
-        errorToast('Произошла ошибка');
+        // errorToast('Произошла ошибка');
       });
   };
 }

@@ -33,7 +33,7 @@ class TestingStore {
       'Питание': 0,
       'Физическая активность': 0,
     },
-    balanceLvl: ''
+    balanceLvl: '',
   };
   errorMessage: string = '';
   disableRecommendationCheck: boolean = true;
@@ -61,8 +61,8 @@ class TestingStore {
   }
   createBalanceLvl(summScore: number, completedHtmlScore: HtmlOnConditionScore[]) {
         const HtmlScore = completedHtmlScore.filter((score)=>summScore >= Number(score.score_on) && summScore <= Number(score.score_to));
-        return HtmlScore.length>0 ? HtmlScore[0].title : ''
-    };
+        return HtmlScore.length > 0 ? HtmlScore[0].title : '';
+    }
   setMyCurrentResultsTest(testId: number) {
     console.log('setMyCurrentResultsTest', testId);
     this.disableRecommendationCheck = true;
@@ -70,7 +70,7 @@ class TestingStore {
       if (index === 0 && test.id === testId) {this.disableRecommendationCheck = false;}
       return (test.id === testId);});
     if (test) {
-      
+
       this.getTestById(test.survey_id);
       this.myCurrentResultsTest = {
       id: test?.id,
@@ -84,7 +84,7 @@ class TestingStore {
         Антистресс: this.countMaxValuesInTestByGroup('Антистресс', test.questions),
         'Физическая активность': this.countMaxValuesInTestByGroup('Физическая активность', test.questions),
       },
-      balanceLvl: this.createBalanceLvl(test.total_score, test.completedHtmlOnConditionScore)
+      balanceLvl: this.createBalanceLvl(test.total_score, test.completedHtmlOnConditionScore),
     };
     // console.log('this.myCurrentResultsTest', this.myCurrentResultsTest.maxValues);
     }
@@ -107,7 +107,7 @@ class TestingStore {
           Антистресс: this.countMaxValuesInTestByGroup('Антистресс', this.currentResultsTest.questions),
           'Физическая активность': this.countMaxValuesInTestByGroup('Физическая активность', this.currentResultsTest.questions),
         },
-        balanceLvl: this.createBalanceLvl(this.currentResultsTest.total_score, this.currentResultsTest.completedHtmlOnConditionScore)
+        balanceLvl: this.createBalanceLvl(this.currentResultsTest.total_score, this.currentResultsTest.completedHtmlOnConditionScore),
 
     };
   }
@@ -130,7 +130,7 @@ class TestingStore {
         'Питание': 0,
         'Физическая активность': 0,
       },
-      balanceLvl: ''
+      balanceLvl: '',
     };
   }
   clearTests() {
@@ -153,7 +153,7 @@ class TestingStore {
       completedHtmlOnConditionScore: this.currentTest.completedHtmlOnConditionScore,
       startHtml: this.currentTest.startHtml,
       timezone: TimeZone,
-      questions: questions
+      questions: questions,
     };
     if (device_id) {this.currentResultsTest = {...this.currentResultsTest, device_id: device_id};}
     if (user_id) {this.currentResultsTest = {...this.currentResultsTest, user_id: user_id};}
@@ -201,7 +201,7 @@ class TestingStore {
       .catch((err)=>{
         console.log('ERROR', err.message);
         this.errorMessage = err.message;
-        errorToast('Неизвестная ошибка');
+        // errorToast('Неизвестная ошибка');
         this.isLoading = false;
 
       })

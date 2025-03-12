@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding } from './onboarding/onboarding';
 import { Login } from './login/login';
@@ -21,6 +21,7 @@ import { GoalSettings } from './goalSettings/goalSettings';
 const Stack = createNativeStackNavigator();
 
 export const MainNavigation: FC = () => {
+
   return (<>
 
     <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>

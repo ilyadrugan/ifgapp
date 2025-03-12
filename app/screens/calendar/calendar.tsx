@@ -43,6 +43,7 @@ export const CalendarScreen = () =>{
     const navigation = useNavigation<any>();
 
       const onRefresh = async () => {
+        if (refreshing) {return;}
         setRefreshing((prev)=>!prev);
         // await recommendationStore.getPersonalRecommendations();
         console.log('refresh', choosedDate);

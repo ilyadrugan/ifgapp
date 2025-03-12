@@ -1,6 +1,6 @@
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Profile from '../../../assets/icons/tabs/profile.svg';
 import Calendar from '../../../assets/icons/tabs/calendar.svg';
@@ -21,16 +21,16 @@ import { observer } from 'mobx-react';
 import { ContestsScreen } from '../contests/contests';
 import { CalendarScreen } from '../calendar/calendar';
 import userStore from '../../../store/state/userStore/userStore';
+import authStore from '../../../store/state/authStore/authStore';
 
 const Tab = createBottomTabNavigator();
 
 export const Main: FC = observer(() => {
   const insets = useSafeAreaInsets();
-
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
 
-  return (
+  return userStore.userInfo !== null ? (
     <View style={{ height: deviceHeight}}>
       <Tab.Navigator initialRouteName="Дом"
         // headerShown={false}
@@ -43,8 +43,8 @@ export const Main: FC = observer(() => {
               return focused ? <CalendarActive /> : <Calendar />;
             case 'Дом':
               return focused ? <HomeActive /> : <Home />;
-            case 'Материалы':
-              return focused ? <MaterialsActive /> : <Materials />;
+            // case 'Материалы':
+            //   return focused ? <MaterialsActive /> : <Materials />;
             case 'Конкурсы':
               return focused ? <ContestsActive /> : <Contests />;
           }
@@ -83,7 +83,7 @@ export const Main: FC = observer(() => {
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
     </Tab.Navigator>
     </View>
-  );
+  ) : null;
 });
 
 const s = StyleSheet.create({

@@ -38,12 +38,11 @@ class AuthStore {
    };
   checkAuthUser = async () => {
     const token = await getAuthTokenFromStorage();
-
     if (token) {
       this.setToken(token);
       console.log('TOKEN', token);
       this.isAuthenticated = true;
-      userStore.getProfile();
+      await userStore.getProfile();
       console.log('getProfile');
     }
   };

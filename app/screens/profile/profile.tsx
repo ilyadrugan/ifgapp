@@ -47,6 +47,7 @@ export const ProfileScreen = observer(() => {
     const [refreshing, setRefreshing] = React.useState(false);
     const {selectImage} = useImageUploader();
     const onRefresh = async () => {
+      if (refreshing) {return;}
       setRefreshing(true);
       await userStore.getProfile();
       await articlesStore.getUserArticles();

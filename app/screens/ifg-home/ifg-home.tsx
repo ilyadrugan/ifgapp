@@ -44,11 +44,11 @@ import watterStore from '../../../store/state/watterStore/watterStore';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
-    const isFocused = useIsFocused();
     const [isModalVisible, setModalVisible] = useState(false);
     const [currentStoryPressed, setCurrentStoryPressed] = useState(undefined);
     const [currentCaregoryStoryPressed, setCurrentCaregoryStoryPressed] = useState('');
     const [refreshing, setRefreshing] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
 
     useLayoutEffect(() => {
@@ -56,17 +56,18 @@ export const IFGHome = observer(() => {
     }, []);
 
     const getData = async () => {
-      storiesStore.getStories();
+      setIsLoading((prev)=>!prev);
+      await storiesStore.getStories();
       await testingStore.getAllMyTest();
       await userStore.getProfile();
-      ifgScoreStore.getScoreToday();
+      await ifgScoreStore.getScoreToday();
       if (testingStore.testsList.length > 0) {
         testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
-        recommendationStore.getRecommendations(testingStore.testsList[0].id);
+        await recommendationStore.getRecommendations(testingStore.testsList[0].id);
       }
-      articlesStore.loadMainArticles();
+      await articlesStore.loadMainArticles();
       articlesStore.clearCurrentArticle();
-      presentsStore.loadMorePresents();
+      await presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
       await dailyActivityStore.getDailyTodayActivity();
       await dailyActivityStore.getDailyActivitySettings();
@@ -74,10 +75,12 @@ export const IFGHome = observer(() => {
       //   await dailyActivityStore.addDailyActivity('watter', 0);
       // }
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
-      recommendationStore.getPersonalRecommendations();
+      await recommendationStore.getPersonalRecommendations();
+      setIsLoading((prev)=>!prev);
     };
 
     const onRefresh = async () => {
+      if (refreshing) {return;}
       setRefreshing((prev)=>!prev);
       await getData();
       setRefreshing((prev)=>!prev);
@@ -169,7 +172,7 @@ return <>
       />}
 
       <View style={gs.mt24} />
-     {testingStore.isLoading ? <ShimmerPlaceholder style={[{height: 200, width: '100%',  borderRadius: 16 }]}/> :
+     {isLoading ? <ShimmerPlaceholder style={[{height: 219, width: '100%',  borderRadius: 16 }]}/> :
      (checkTests() && !closeEndSetting) ?
       <CardContainer style={{borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
         <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
@@ -215,7 +218,7 @@ return <>
             </Button>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
-        {(isFocused && watterStore.cupsData) ? <TimeToDrinkNewBlock/>
+        {(watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 
 
