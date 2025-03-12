@@ -36,15 +36,18 @@ import { RecommendationBlock } from '../ifg-home/blocks/recommendationBlock';
 import { RecommendationsBlock } from './blocks/recommendationsBlock';
 
 export const CalendarScreen = () =>{
-  console.log('🔄 Рендер CalendarScreen');
+  // console.log('🔄 Рендер CalendarScreen');
     const [refreshing, setRefreshing] = useState(false);
+    const [choosedDate, setChoosedDate] = useState(formatDate());
 
     const navigation = useNavigation<any>();
 
       const onRefresh = async () => {
         setRefreshing((prev)=>!prev);
-        await recommendationStore.getPersonalRecommendations();
-        await dailyActivityStore.getDailyTodayActivity(formatDate());
+        // await recommendationStore.getPersonalRecommendations();
+        console.log('refresh', choosedDate);
+        await dailyActivityStore.getDailyTodayActivity(choosedDate);
+        await dailyActivityStore.getDailyActivity(choosedDate);
         setRefreshing((prev)=>!prev);
       };
 
@@ -59,16 +62,18 @@ export const CalendarScreen = () =>{
               <TimeToDrinkNewBlock />
             : <ShimmerPlaceholder style={{borderRadius: 22}} height={450} width={ScreenWidth - 32} />} */}
         <View style={gs.mt16} />
-        <Graphs />
+        <Graphs refresh={refreshing}/>
         <View style={gs.mt24} />
         <IfgText style={[gs.fontBodyMedium, gs.bold]}>План по дням</IfgText>
         <View style={gs.mt12} />
         <IfgText style={[gs.fontCaptionSmall]}>Предстоящие и прошедшие рекомендации</IfgText>
         <View style={gs.mt16} />
-        <CalendarBlock/>
-        <View style={gs.mt24} />
-
-        <RecommendationsBlock />
+        <CalendarBlock setChoosedDate={setChoosedDate} refresh={refreshing}/>
+        {(watterStore.cupsData) ?
+              <TimeToDrinkNewBlock />
+            : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
+                <View style={gs.mt24} />
+                <RecommendationsBlock />
 
         <View style={{height: 200}} />
     </ScrollView>

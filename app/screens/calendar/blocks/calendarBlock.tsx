@@ -17,9 +17,9 @@ import recommendationStore from '../../../../store/state/recommendationStore/rec
 import { formatDate } from '../../../core/utils/formatDateTime';
 const width = Dimensions.get('screen').width;
 
-export const CalendarBlock: FC = observer(() =>{
-  console.log('🔄 Рендер CalendarBlock');
-  useFocusEffect(
+export const CalendarBlock: FC<{setChoosedDate: ()=>void, refresh: boolean}> = observer(({setChoosedDate, refresh}) =>{
+  // console.log('🔄 Рендер CalendarBlock');
+      useFocusEffect(
         React.useCallback(() => {
             console.log('CalendarBlock');
             recommendationStore.getPersonalRecommendations();
@@ -29,7 +29,7 @@ export const CalendarBlock: FC = observer(() =>{
       );
       useEffect(()=>{
         getDailyActivities();
-      },[]);
+      },[refresh]);
       const getDailyActivities = async()=> {
         if (!dailyActivityStore.dailyActivityData)
           {await dailyActivityStore.getDailyActivity(formatDate());}
@@ -37,7 +37,7 @@ export const CalendarBlock: FC = observer(() =>{
 
       };
     return <CardContainer>
-        <CustomCalendar />
+        <CustomCalendar setChoosedDate={setChoosedDate} />
         {(dailyActivityStore.isLoading || !dailyActivityStore.dailyActivityData) ? <>
           <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />
          </> :

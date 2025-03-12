@@ -37,8 +37,8 @@ const switchs = [
 ];
 
 
-export const Graphs = observer(() =>{
-    console.log('🔄 Рендер Graphs');
+export const Graphs = observer(({refresh}) =>{
+    // console.log('🔄 Рендер Graphs');
 
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
@@ -50,7 +50,7 @@ export const Graphs = observer(() =>{
         });
         dailyActivityStore.getGraphCaloriesActivity('month');
         dailyActivityStore.getGraphStepsActivity('month');
-    }, []);
+    }, [refresh]);
     useFocusEffect(
         React.useCallback(() => {
             dailyActivityStore.getIfgScoreActivity('month').then(()=>{

@@ -31,7 +31,7 @@ const months = [
   'Декабрь',
 ];
 
-const CustomCalendar = observer(() => {
+const CustomCalendar: FC<{setChoosedDate: ()=>void}> = observer(({setChoosedDate}) => {
   const [currentDate, setCurrentDate] = useState(new Date()); // Текущая дата
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // Выбранная дата
   const [calendarMode, setCalendarMode] = useState<'month' | 'week'>('month');
@@ -111,6 +111,7 @@ const CustomCalendar = observer(() => {
   const handleDayPress = async (date: Date) => {
     // console.log();
     setSelectedDate(date);
+    setChoosedDate(formatDate(date));
     // console.log('date date',date.toLocaleDateString());
     await dailyActivityStore.getDailyActivity(formatDate(date));
   };

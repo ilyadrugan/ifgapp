@@ -33,7 +33,7 @@ import { Image } from 'react-native';
 export const RecommendationsBlock: FC = observer(() =>{
     const isFocused = useIsFocused();
     const navigation = useNavigation<any>();
-    console.log('🔄 Рендер RecommendationsBlock');
+    // console.log('🔄 Рендер RecommendationsBlock');
   const dropdowns = [
     'Физическая активность',
     'Питание',
@@ -182,9 +182,9 @@ const renderRecommendation = (rec:PersonalRecommendationModel) => {
             <View
             style={s.content}
             onLayout={(event) => onLayoutContent(0, event)}>
-               {(isFocused && watterStore.cupsData) ?
+               {/* {(isFocused && watterStore.cupsData) ?
               <TimeToDrinkNewBlock />
-            : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
+            : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />} */}
             {recommendationStore.personalRecomendationList.filter((rec)=>(rec.category === 'Питание')).map((rec)=>
             renderRecommendation(rec))}
             </View>

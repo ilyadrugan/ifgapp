@@ -18,7 +18,7 @@ import watterStore from '../../../../store/state/watterStore/watterStore';
 const width = Dimensions.get('screen').width;
 
 export const TimeToDrinkNewBlock: FC<{ isNew?: boolean, fromCalendar?: boolean }> = observer(({ isNew, fromCalendar }) => {
-    console.log('🔄 Рендер TimeToDrinkNewBlock', watterStore.cupsData);
+    // console.log('🔄 Рендер TimeToDrinkNewBlock', watterStore.cupsData);
     // const [scoreGotted, setScoreGotted] = useState<boolean>(watterStore.isDrinkEight);
 
     return (
