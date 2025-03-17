@@ -418,7 +418,6 @@ const s = StyleSheet.create({
         minHeight: height,
         flexDirection:'column',
         alignItems: 'center',
-
       },
       formCard: {
         borderRadius: 22,

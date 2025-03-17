@@ -22,6 +22,9 @@ import messaging from '@react-native-firebase/messaging';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import authStore from '../../../store/state/authStore/authStore';
+import { ScreenHeight } from '../../hooks/useDimensions';
+import { Platform } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 
 export const Testing = observer(() => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
@@ -106,7 +109,16 @@ export const Testing = observer(() => {
     }
     , []);
     return (
-    <ScrollView style={s.container}>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1 }} 
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+      <View style={s.container}>
         <View style={gs.mt16} />
         <Button style={s.buttonBack} onPress={onBack}>
             <>
@@ -164,7 +176,7 @@ export const Testing = observer(() => {
                <View />
            </View>
     </AnimatedGradientButton>
-    <View style={gs.mt24} />
+    <View style={gs.mt16} />
     {showEmail && <CardContainer style={s.emailBlock}>
         <View style={[gs.flexRow, gs.alignCenter]}>
             <Email />
@@ -178,18 +190,19 @@ export const Testing = observer(() => {
     </CardContainer>}
 
         </> }
+        <View style={{height:80}}/>
+        </View>
     </ScrollView>
+    </KeyboardAvoidingView>
     );
   });
 
 const s = StyleSheet.create({
     container: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        backgroundColor: colors.BACKGROUND_COLOR,
-        paddingHorizontal: 16,
-
+      flex: 1,
+      width: '100%',
+      minHeight: ScreenHeight,
+      paddingHorizontal: 16
       },
       cardGradientContainer:{
         flex: 1,
