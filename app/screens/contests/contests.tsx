@@ -67,7 +67,7 @@ export const ContestsScreen = observer(() => {
                 <View style={{width: '60%'}}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Призы и подарки</IfgText>
                 <IfgText  color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>В каждом интервью с экспертами разыгрываются призы! Будьте активными, выполняйте задания от экспертов и получайте призы!</IfgText>
-                <ButtonTo style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Смотреть" whiteIcon/>
+                <ButtonTo onPress={()=>navigation.navigate('Материалы', {toInterViews: true})} style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Смотреть" whiteIcon/>
                 </View>
                 <Image resizeMode="contain" style={{width: '55%', height: '130%', marginLeft: -16, marginTop: -12}} source={require('../../../assets/backgrounds/manWithGift.png')}/>
             </ImageBackground>

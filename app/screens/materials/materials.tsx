@@ -30,11 +30,12 @@ const tabss: TabInterface[] = [
     },
 ];
 
-export const MaterialsScreen = observer(() => {
+export const MaterialsScreen = observer(({route}) => {
     const navigation = useNavigation<any>();
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
+    
     const onSwitch = async (id: number) => {
         if (id === 1) {
             // await articlesStore.clearInterViews('actual');
@@ -53,6 +54,11 @@ export const MaterialsScreen = observer(() => {
     };
 
     useEffect(() => {
+        if (route.params){
+            if (route.params.toInterViews) {
+                setActiveTab(1)
+            }
+        }
         articlesStore.getMaterialFilters().then((res)=>{
             // console.log('res', res);
           });
@@ -64,7 +70,7 @@ export const MaterialsScreen = observer(() => {
         //     console.log(res);
         // });
         console.log(`getQueryParamsString ${articlesStore.articlesQueryParams}`);
-    }, []);
+    }, [route]);
 
     const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
 
