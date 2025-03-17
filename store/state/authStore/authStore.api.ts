@@ -17,3 +17,8 @@ export const deleteProfile = async () => {
     console.log(Config,`${BASE_URL}/auth/delete`);
     return await HttpClient.post(`${BASE_URL}/auth/delete`);
 };
+
+export const forgotPasswordApi = async (email: string) => {
+    console.log(Config,`${BASE_URL}/auth/forgotpassword`);
+    return await HttpClient.post(`${BASE_URL}/auth/forgotpassword`, {email: email});
+};

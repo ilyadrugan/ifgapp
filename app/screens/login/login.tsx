@@ -6,7 +6,7 @@ import { Input } from '../../core/components/input/input';
 import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import authStore from '../../../store/state/authStore/authStore';
 import { LoginByUserPasswordModel } from '../../../store/state/authStore/models/models';
@@ -21,7 +21,7 @@ export const Login = observer(() => {
       authStore.clearMessageError();
       navigation.replace('Registration');
     };
-
+    const [forgotPassword, setForgotPassword] = useState(false);
     const {
         control,
         handleSubmit,
@@ -42,10 +42,16 @@ export const Login = observer(() => {
       );
       const onSubmit = handleSubmit(async (data) => {
         console.log(data);
+        
         if (!data.email) {authStore.fillEmailError('Заполните поле');}
         else if (!isValidEmail(data.email)){
           authStore.fillEmailError('Некорректный Email');
-      }
+        }
+        if (forgotPassword) {
+          if (!isValidEmail(data.email)) return
+          await authStore.forgotPassword(data.email)
+          return
+        }
         if (!data.password) {authStore.fillPasswordError('Заполните поле');}
         if (isValidEmail(data.email) && data.email && data.password) {authStore.login(data, ()=>navigation.replace('Main'));}
       });
@@ -68,11 +74,16 @@ export const Login = observer(() => {
         source={require('../../../assets/backgrounds/imageShort.png')}
         style={[s.container]}  >
         <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
-              Начните прямо сейчас
+             {forgotPassword?'Восстановить пароль':'Начните прямо сейчас'} 
         </IfgText>
+        {forgotPassword?
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 31, maxWidth: 322}]}>
+       После заполнения формы мы отправим специальную ссылку на указанный электронный адрес, перейдя по которой вы сможете задать новый пароль
+        </IfgText>
+        :
         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 32, maxWidth: 322}]}>
             Еще не зарегистрированы? Перейдите на <IfgText color={colors.WHITE_COLOR} onPress={toRegistraition} style={[gs.semiBold, gs.underline]}>страницу регистрации</IfgText> для доступа в личный кабинет платформы
-        </IfgText>
+        </IfgText>}
         <View style={gs.mt32}/>
         <View style={s.formCard}>
         <Controller control={control} name={'email'}
@@ -81,14 +92,16 @@ export const Login = observer(() => {
                 onFocus={authStore.clearEmailError}
                 fullWidth
                 value={value}
-                onChange={onChange}
+                onChange={(event)=>{
+                  authStore.clearEmailError();
+                  onChange(event)}}
                 placeholder="Электронная почта"
                 keyboardType="email-address"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={authStore.loginByUserPassword.loginInputError}
             />
         )}/>
-        <Controller control={control} name={'password'}
+        {!forgotPassword && <Controller control={control} name={'password'}
             render={({ field: { onChange, onBlur, value } }) => (
             <Input
                 onFocus={authStore.clearPasswordError}
@@ -100,7 +113,7 @@ export const Login = observer(() => {
                 secureTextEntry={true}
                 error={authStore.loginByUserPassword.passwordInputError}
             />
-            )}/>
+            )}/>}
           {/* {authStore.errorMessage && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
           {authStore.errorMessage || 'Что-то пошло не так'}</IfgText>} */}
             <AnimatedGradientButton style={s.buttonLogin}
@@ -109,7 +122,7 @@ export const Login = observer(() => {
                 >
                 <View style={gs.buttonContent}>
                 <View style={gs.buttonContentRow}>
-                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Войти</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{forgotPassword?'Отправить':'Войти'}</IfgText>
                         {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
                     </View>
                     <View />
@@ -126,10 +139,15 @@ export const Login = observer(() => {
                         <IfgText style={[gs.fontBody1, { fontSize: 21, textAlign: 'center'}]}>Войти с Apple</IfgText>
                     </View>
             </Button> */}
+            {forgotPassword?
+            <View style={{flexDirection:'row', justifyContent: 'center'}}>
+                <IfgText onPress={()=>setForgotPassword((prev)=>!prev)} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Войти в личный кабинет</IfgText>
+            </View>
+            :
             <View style={{flexDirection:'row', justifyContent: 'center', gap: 16}}>
                 <IfgText onPress={toRegistraition} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Регистрация</IfgText>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Забыли пароль?</IfgText>
-            </View>
+                <IfgText onPress={()=>setForgotPassword((prev)=>!prev)} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Забыли пароль?</IfgText>
+            </View>}
         </View>
     </ImageBackground>
     </TouchableWithoutFeedback>

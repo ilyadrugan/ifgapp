@@ -1,12 +1,12 @@
 import { makeAutoObservable } from 'mobx';
-import { deleteProfile, login, registration } from './authStore.api';
+import { deleteProfile, forgotPasswordApi, login, registration } from './authStore.api';
 import userStore from '../userStore/userStore';
 import { deleteAuthTokenToStorage, getAuthTokenFromStorage, saveAuthTokenToStorage } from '../../../app/core/utils/bearer-token';
 import { UserInfo } from '../userStore/models/models';
 import { LoginByUserPasswordModel, LoginByUserPasswordState, RegisterFormModel, RegisterFormState } from './models/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateFirebaseMessagingToken } from '../../../app/core/firebase/firebase';
-import { errorToast } from '../../../app/core/components/toast/toast';
+import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 import { updateDeviceResultsTestApi } from '../testingStore/testingStore.api';
 import { stripHtmlTags } from '../../../app/core/utils/stripHtmlTags';
 import { TimeZone } from '../../../app/hooks/useTimezone';
@@ -226,6 +226,23 @@ class AuthStore {
         console.log('ERROR');
         this.errorMessage = err.message;
 
+      });
+      // .finally(()=>{this.isLoading = false;});
+      this.isLoading = false;
+  }
+  async forgotPassword(email: string) {
+    this.isLoading = true;
+    await forgotPasswordApi(email)
+      .then((result)=>{
+        console.log(result.data);
+        if (result.data) {
+          successToast('Вам отправлено на почту письмо!')
+        }
+      })
+      .catch((err)=>{
+        console.log('ERROR forgotpassword');
+        this.errorMessage = err.message;
+        // errorToast(this.errorMessage)
       });
       // .finally(()=>{this.isLoading = false;});
       this.isLoading = false;
