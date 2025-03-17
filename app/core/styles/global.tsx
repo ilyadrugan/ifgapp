@@ -152,6 +152,7 @@ const gs = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
 
+  mt2: { marginTop: 2 },
   mt4: { marginTop: 4 },
   mt8: { marginTop: 8 },
   mt6: { marginTop: 6 },

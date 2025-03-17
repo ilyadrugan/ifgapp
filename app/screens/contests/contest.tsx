@@ -112,8 +112,8 @@ export const ContestView = observer(({route}) => {
                     />
                 <Button onPress={()=>navigation.replace('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
                   <>
-                  <IfgText style={gs.fontBody2}>{item.deleted_at ? 'Как получить приз' : 'К результатам'}</IfgText>
-                  <View style={{marginTop:2}}>
+                  <IfgText style={gs.fontBody2}>{!item.deleted_at ? 'Как получить приз' : 'К результатам'}</IfgText>
+                  <View style={gs.mt2}>
                     <ArrowRightBlack width={12} />
                   </View>
                   </>

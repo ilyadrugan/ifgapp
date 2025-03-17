@@ -179,7 +179,7 @@ export const StoryModal: FC<{stories: SubStoryModel[], isVisible: boolean, onClo
           <Image
             source={{ uri: `https://abcd.100qrs.ru${stories[currentStoryIndex]?.cover || ''}` }}
             style={styles.storyImage}
-            resizeMode="cover"
+            // resizeMode="cover"
           />
         <View>
         <IfgText style={[gs.fontBodyMedium, gs.bold, gs.ml32, {marginTop: 16}]}>{stories[currentStoryIndex]?.title || ''}</IfgText>
@@ -291,9 +291,10 @@ const styles = StyleSheet.create({
     //   zIndex: 99,
     },
     storyImage: {
-      marginTop: height * 0.2,
+      // marginTop: height * 0.2,
       width: '100%',
-      height: 200,
+      height: '100%',
+      // height: 200,
     },
 
     leftTouchableArea: {
