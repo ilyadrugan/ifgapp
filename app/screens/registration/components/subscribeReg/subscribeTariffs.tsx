@@ -35,7 +35,7 @@ export const SubscribeTariffs:
       </TouchableOpacity>
       </View>
       <View style={gs.mt16}/>
-      <IfgText color={colors.SECONDARY_COLOR} style={gs.h2}>Подписка IFeelGood Pro</IfgText>
+      <IfgText color={colors.SECONDARY_COLOR} style={gs.h2}>Подписка ifeelgood Pro</IfgText>
       <View style={gs.mt16}/>
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>

@@ -98,7 +98,7 @@ export const Subscription: FC = observer(() =>{
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Подписка действует до 24 мая</IfgText>
 
           <CardContainer style={s.subsriptionCard}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка IFeelGood Pro</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка ifeelgood Pro</IfgText>
             <View style={gs.mt6} />
             <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>499 ₽</IfgText>
             <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>Спишется 24 мая</IfgText>
@@ -127,7 +127,7 @@ export const Subscription: FC = observer(() =>{
           </TouchableOpacity>
           </View>
             <View style={gs.mt6} />
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка IFeelGood Pro</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка ifeelgood Pro</IfgText>
 
             <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>{(tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}</IfgText>
             {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
