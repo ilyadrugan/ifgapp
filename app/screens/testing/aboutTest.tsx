@@ -25,22 +25,22 @@ const dataSteps = [
     {
         index: 0,
         title: 'Тестирование',
-        text: 'Мы разработали тестирование, которое поможет определить, какие аспекты вашего здоровья требуют внимания. Самое главное на данном этапе — честно отвечать на все вопросы.',
+        text: <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>Мы разработали <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>тестирование, которое поможет определить, какие аспекты вашего здоровья требуют внимания.</IfgText> Самое главное на данном этапе — честно отвечать на все вопросы.</IfgText>,
     },
     {
         index: 1,
         title: 'Определение уровня',
-        text: 'После прохождения теста вы получаете ifg-баллы. Количество баллов помогает сформировать индивидуальный ifg-план.',
+        text: <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>После прохождения теста вы получаете ifg-баллы. <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Количество баллов помогает сформировать индивидуальный ifg-план.</IfgText></IfgText>,
     },
     {
         index: 2,
         title: 'Следуйте рекомендациям',
-        text: 'Мы разработали тестирование, которое поможет определить, какие аспекты вашего здоровья требуют внимания. Самое главное на данном этапе — честно отвечать на все вопросы.',
+        text: <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}>Следуйте советам ifg-плана и фиксируйте свои достижения! <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Ваша задача — выполнять рекомендации по всем направлениям не менее месяца.</IfgText> Это поможет сформировать полезные привычки.</IfgText>,
     },
     {
         index: 3,
         title: 'Повторное тестирование',
-        text: 'После прохождения теста вы получаете ifg-баллы. Количество баллов помогает сформировать индивидуальный ifg-план.',
+        text: <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2]}><IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Пройдите повторное тестирование,</IfgText> чтобы понять, готовы ли вы перейти на следующий уровень изменений или стоит продолжить заниматься на текущем.</IfgText>,
     },
 ];
 
@@ -182,7 +182,7 @@ export const AboutTest = () => {
               {dataSteps.map(({title, text, index})=>
               <CardContainer key={index.toString()} style={[{width: 250 }, gs.mr24]} >
                 <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold ]}>{title}</IfgText>
-                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption  ]}>{text}</IfgText>
+                {text}
             </CardContainer>)}
         </View>
     </ScrollView>
