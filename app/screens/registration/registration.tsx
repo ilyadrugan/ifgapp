@@ -209,7 +209,7 @@ export const Registration = observer(() => {
                  render={({ field: { onChange, onBlur, value } }) => (
                 <Input
                 fullWidth
-                keyboardType="numeric"
+                // keyboardType="numeric"
                 value={value}
                 onChange={onChange}
                 placeholder="Номер договора"
