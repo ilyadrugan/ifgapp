@@ -23,8 +23,6 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import authStore from '../../../store/state/authStore/authStore';
 import { ScreenHeight } from '../../hooks/useDimensions';
-import { Platform } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native';
 
 export const Testing = observer(() => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
@@ -109,16 +107,12 @@ export const Testing = observer(() => {
     }
     , []);
     return (
-      <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
+
       <ScrollView 
         contentContainerStyle={{ flexGrow: 1 }} 
-        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        style={s.container}
       >
-      <View style={s.container}>
         <View style={gs.mt16} />
         <Button style={s.buttonBack} onPress={onBack}>
             <>
@@ -191,9 +185,7 @@ export const Testing = observer(() => {
 
         </> }
         <View style={{height:80}}/>
-        </View>
     </ScrollView>
-    </KeyboardAvoidingView>
     );
   });
 
