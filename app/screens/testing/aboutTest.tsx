@@ -84,7 +84,7 @@ const carouselItems = [
   ];
 export const AboutTest = () => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
-    const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');    
+    // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');    
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [activeSlide, setActiveSlide] = useState(0);
@@ -145,8 +145,7 @@ export const AboutTest = () => {
          <View style={gs.mt16} />
          <RutubeView
               url={url}
-
-              thumbnailUrl={thumbnail1}
+              // thumbnailUrl={thumbnail1}
               title="О платформе ifeelgood"
             />
     <View style={gs.mt16} />
@@ -209,11 +208,11 @@ export const AboutTest = () => {
                 renderItem={({ item }) => <Card item={item} />}
                 sliderWidth={width - 28}
                 itemWidth={width - 28}
-                loop={false}
+                // loop={true}
                 // useScrollView={false}
-                // autoplayDelay={0.2}
+                // autoplayDelay={1}
                 // autoplayInterval={0.5}
-                autoplay={false} // Зацикливание слайдера
+                autoplay={true} // Зацикливание слайдера
                 layout={'default'} // Расположение карточек
                 onSnapToItem={(index) => setActiveSlide(index) }
                 // enableMomentum={false}

@@ -6,6 +6,7 @@ import { errorToast, successToast } from '../../../app/core/components/toast/toa
 class ArticlesStore {
   isLoading = false; // Состояние загрузки
   isUserArticleLoading = false;
+  isUserLikeArticleLoading = false;
   articlesMainList: ArticleListModel = {
     current_page: 1,
     articles: [],
@@ -421,7 +422,8 @@ class ArticlesStore {
       .finally(()=>{this.isUserArticleLoading = false;});
   }
   async changeLikeUserArticle(id: number, action: number) {
-    this.isUserArticleLoading = true;
+    if (this.isUserLikeArticleLoading) return
+    this.isUserLikeArticleLoading = true;
     this.errorMessage = '';
     await changeLikeArticleApi(id, action)
       .then(async (result)=>{
@@ -434,7 +436,7 @@ class ArticlesStore {
         this.errorMessage = err.message;
         errorToast(err.message);
       })
-      .finally(()=>{this.isUserArticleLoading = false;});
+      .finally(()=>{this.isUserLikeArticleLoading = false;});
   }
   async changeLikeInterView(id: number, action: number) {
     this.isUserArticleLoading = true;

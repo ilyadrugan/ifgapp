@@ -35,6 +35,7 @@ export const getUserEventsApi = async () => {
     return await HttpClient.get(`${BASE_URL}/materials/my-events`);
 };
 export const changeLikeArticleApi = async (id: number, action: number) => {
+    console.log(`${BASE_URL}/article/like?id=${id}&action=${action}`)
     return await HttpClient.post(`${BASE_URL}/article/like?id=${id}&action=${action}`);
 };
 export const changeLikeInterViewApi = async (id: number, action: number) => {
