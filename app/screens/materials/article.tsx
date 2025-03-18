@@ -46,7 +46,7 @@ export const ArticleView = observer(({route}) => {
     const [personalRecommendation, setPersonalRecommendation] = useState<PersonalRecommendationModel>();
     useEffect(() => {
       // console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-
+      console.log('WIDTH', width);
      if (articleId !== undefined) {
         loadArticleById(articleId).then(()=>
         setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
@@ -180,17 +180,28 @@ export const ArticleView = observer(({route}) => {
         </InView>
 
         <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
+          {width < 385 ? <View style={[gs.flexRow, {gap: 8}]}>
+            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <View style={{ top: -1}}>
+            <EyeViews/>
+            </View>
+            <IfgText style={gs.fontCaption2}>{articlesStore.currentArticle.views}</IfgText>
+            </Button>
+            <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
+              <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
+            </Button>
+          </View> : <>
           <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
-          <View style={{ top: -1}}>
-          <EyeViews/>
-          </View>
-          <IfgText style={gs.fontCaption2}>{articlesStore.currentArticle.views}</IfgText>
-          </Button>
-
-          <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
-          {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
-            <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
-          </Button>
+            <View style={{ top: -1}}>
+            <EyeViews/>
+            </View>
+            <IfgText style={gs.fontCaption2}>{articlesStore.currentArticle.views}</IfgText>
+            </Button>
+            <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
+              <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
+            </Button></>}
           <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
           style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
           <View >
