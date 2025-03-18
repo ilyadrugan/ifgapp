@@ -9,6 +9,7 @@ export type UserInfo = {
     ifg_level: string;
     city: string;
     unseenArticles: boolean;
+    roles: string[]
 }
 
 export type UserChangeInfoModel = {

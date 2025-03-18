@@ -36,6 +36,9 @@ class UserStore {
         if (result.data.profile) {
           this.userInfo = result.data.profile;
         }
+        if (result.data.roles && this.userInfo) {
+          this.userInfo.roles = result.data.roles;
+        }
       })
       .catch((err)=>{
         console.log('ERROR', err);

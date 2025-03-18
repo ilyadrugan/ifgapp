@@ -43,7 +43,7 @@ if (Platform.OS === 'android') {
 export const ProfileScreen = observer(() => {
     const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
-    const [currentMenu, setCurrentMenu] = useState(4);
+    const [currentMenu, setCurrentMenu] = useState(!userStore.userInfo?.roles.includes('user_pay')?3:4);
     const [refreshing, setRefreshing] = React.useState(false);
     const {selectImage} = useImageUploader();
     const onRefresh = async () => {
@@ -82,7 +82,7 @@ export const ProfileScreen = observer(() => {
           useNativeDriver: false,
         }),
         Animated.timing(height, {
-          toValue: 64 * 6,
+          toValue: 64 * (!userStore.userInfo?.roles.includes('user_pay')? 5: 6),
           duration: 300,
           easing: Easing.ease,
           useNativeDriver: false,
@@ -157,16 +157,16 @@ return <>
 
           {expanded &&
           <><View style={gs.mt12} />
-            {menuOptions.map((option)=>
-
-              <Button key={option.id.toString()} onPress={()=>chooseMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
+            {menuOptions.map((option)=>{
+              if (!userStore.userInfo?.roles.includes('user_pay') && option.id === 4) return
+             return <Button key={option.id.toString()} onPress={()=>chooseMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
               <View style={[gs.flexRow, gs.alignCenter]}>
                 <View style={s.iconButtonContainer}>
                 {currentMenu === option.id ? option.iconActive : option.icon}
                 </View>
                 <IfgText color={currentMenu === option.id ? colors.WHITE_COLOR : colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.regular, gs.ml16]}>{option.name}</IfgText>
               </View>
-            </Button>)}
+            </Button>})}
             </>}
           </Animated.View>
         </CardContainer>
