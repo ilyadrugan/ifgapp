@@ -136,7 +136,7 @@ export const InterviewView = observer(({route}) => {
         <View style={gs.mt12} />
 
         <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
-          <Button style={[gs.flexRow, gs.alignCenter,  {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+        {width < 385 ? <View style={[gs.flexRow, {gap: 8}]}> <Button style={[gs.flexRow, gs.alignCenter,  {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
           <View style={{ top: -1}}>
           <EyeViews/>
           </View>
@@ -148,7 +148,9 @@ export const InterviewView = observer(({route}) => {
           {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
           </View>
           <IfgText style={gs.fontCaption2}>В {isInFavoriet ? 'избранном' : 'избранное'}</IfgText>
-          </Button>
+          </Button></View>
+          :
+          <>
           <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
           style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
           <View >
@@ -156,6 +158,8 @@ export const InterviewView = observer(({route}) => {
           </View>
           <IfgText style={gs.fontCaption2}>Поделиться</IfgText>
           </Button>
+          </>
+        }
         </View>
         <View style={gs.mt24} />
         <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>
