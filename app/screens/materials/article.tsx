@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState, useRef } from 'react';
-import { Image, View, ActivityIndicator, Text, StyleSheet, FlatList, Dimensions, ScrollView, Linking, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { Image, View, ActivityIndicator, Text, StyleSheet, FlatList, Dimensions, ScrollView, Linking, StyleProp, TextStyle, ViewStyle, RefreshControl } from 'react-native';
 import colors from '../../core/colors/colors';
 import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -43,10 +43,10 @@ export const ArticleView = observer(({route}) => {
     const { articleId } = route.params;
     const [isInFavorite, setIsInFavorite] = useState(false);
     const [isReaded, setIsReaded] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
     const [personalRecommendation, setPersonalRecommendation] = useState<PersonalRecommendationModel>();
     useEffect(() => {
       // console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-      console.log('WIDTH', width);
      if (articleId !== undefined) {
         loadArticleById(articleId).then(()=>
         setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
@@ -62,6 +62,22 @@ export const ArticleView = observer(({route}) => {
         }
       }
     }, [articleId]);
+    const onRefresh = async () => {
+      setRefreshing((prev)=>!prev);
+      loadArticleById(articleId).then(()=>
+        setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
+        // console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
+        const persRec = recommendationStore.personalRecomendationList.find((rec)=> rec.article.id === articleId);
+        console.log('persRec', persRec);
+        if (persRec) {
+          setPersonalRecommendation(persRec);
+          setIsReaded(persRec.status === 'completed');
+        }
+        else {
+          setIsReaded(true);
+        }
+      setRefreshing((prev)=>!prev);
+    };
     const clearCurrentArticle = async () => await articlesStore.clearCurrentArticle();
     const loadArticleById = async (id) => await articlesStore.getArticleById(id);
 
@@ -108,6 +124,7 @@ export const ArticleView = observer(({route}) => {
 
       {articlesStore.currentArticle.id !== 0 && <IOScrollView
       style={s.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={gs.mt48} />
         <IfgText style={[gs.h2, gs.bold]}>{articlesStore.currentArticle?.title}</IfgText>
