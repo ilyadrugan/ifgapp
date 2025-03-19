@@ -232,17 +232,21 @@ class AuthStore {
   }
   async forgotPassword(email: string) {
     this.isLoading = true;
-    await forgotPasswordApi(email)
+    const model = {
+      email: email,
+    };
+    await forgotPasswordApi(model)
       .then((result)=>{
-        console.log(result.data);
-        if (result.data) {
-          successToast('Вам отправлено на почту письмо!')
+        console.log('result.status', result.status);
+        if (result.status === 200) {
+          successToast('Вам отправлено на почту письмо!');
         }
       })
       .catch((err)=>{
-        console.log('ERROR forgotpassword');
+        console.log('ERROR forgotpassword', err);
         this.errorMessage = err.message;
         // errorToast(this.errorMessage)
+        errorToast('Такой email не зарегистрирован');
       });
       // .finally(()=>{this.isLoading = false;});
       this.isLoading = false;

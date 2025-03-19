@@ -1,7 +1,7 @@
-import HttpClient from '../../../app/core/http-client/http-client';
+import HttpClient, { HttpClientWithoutHeaders } from '../../../app/core/http-client/http-client';
 import Config from 'react-native-config';
 import { API_URL, BASE_URL } from '../../../app/core/hosts';
-import { LoginByUserPasswordModel, RegisterFormModel } from './models/models';
+import { ForgotPasswordModel, LoginByUserPasswordModel, RegisterFormModel } from './models/models';
 
 export const login = async (model: LoginByUserPasswordModel) => {
     console.log(Config,`${BASE_URL}/auth/login`);
@@ -18,7 +18,7 @@ export const deleteProfile = async () => {
     return await HttpClient.post(`${BASE_URL}/auth/delete`);
 };
 
-export const forgotPasswordApi = async (email: string) => {
-    console.log(Config,`${BASE_URL}/auth/forgotpassword`);
-    return await HttpClient.post(`${BASE_URL}/auth/forgotpassword`, {email: email});
+export const forgotPasswordApi = async (model: ForgotPasswordModel) => {
+    // console.log(model,`${BASE_URL}/auth/forgotpassword`);
+    return await HttpClientWithoutHeaders.post(`${BASE_URL}/auth/forgotpassword`, model);
 };

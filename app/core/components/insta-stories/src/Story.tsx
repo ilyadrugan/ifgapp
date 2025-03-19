@@ -136,6 +136,7 @@ export const Story = ({
           storyImageStyle={storyImageStyle}
           storyAvatarImageStyle={storyAvatarImageStyle}
           storyContainerStyle={storyContainerStyle}
+          bgColor={x.bgColor}
         />
       );
     });

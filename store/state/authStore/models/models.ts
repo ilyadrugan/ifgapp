@@ -54,3 +54,7 @@ export interface RegisterFormStateErrors {
     password_confirmation: string,
     message: string;
 }
+
+export interface ForgotPasswordModel {
+    email: string
+}
