@@ -41,13 +41,8 @@ import { RecommendationCategoryToEng } from '../../core/utils/recommendationForm
 import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 import { TimeToDrinkNewBlock } from './blocks/timeToDrinkNew';
 import watterStore from '../../../store/state/watterStore/watterStore';
-import {
-  type MultiStoryRef,
-  Indicator,
-  MultiStory,
-  TransitionMode,
-} from 'react-native-custome-story-component';
-import InstaStory from 'react-native-insta-story';
+import InstaStory from '../../core/components/insta-stories/insta-stories';
+
 const stories = [
   {
     id: 1, //unique id (required)
@@ -63,14 +58,6 @@ const stories = [
         storyId: 1,
         isSeen: false,
       },
-      {
-        id: 1,
-        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        type: 'video',
-        duration: 15,
-        storyId: 1,
-        isSeen: false,
-      },
     ],
   },
 ];
@@ -78,42 +65,47 @@ const data = [
   {
     user_id: 1,
     user_image:
-      'https://pbs.twimg.com/profile_images/1222140802475773952/61OmyINj.jpg',
-    user_name: 'Ahmet Çağlar Durmuş',
+      '01JK5PA1QAASSX69QWBSHHCZKG.png',
+    user_name: 'Хочу высыпаться',
+    bgColor: '#5C9DC2',
     stories: [
       {
         story_id: 1,
         story_image:
-          'https://image.freepik.com/free-vector/universe-mobile-wallpaper-with-planets_79603-600.jpg',
+          '/storage/01JK5PMY95ZXQ3K44X12AZWSXG.jpg',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 1 swiped'),
-      },
-      {
-        story_id: 2,
-        story_image:
-          'https://image.freepik.com/free-vector/mobile-wallpaper-with-fluid-shapes_79603-601.jpg',
+        article: {
+          id: 151,
+        },
       },
     ],
   },
   {
     user_id: 2,
-    user_image:
-      'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
-    user_name: 'Test User',
+    user_image: '01JK5PB2XMWEP8NCW865D92APD.png',
+    user_name: 'Хочу правильно питаться',
+    bgColor: '#835CC2',
     stories: [
       {
         story_id: 1,
         story_image:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjORKvjcbMRGYPR3QIs3MofoWkD4wHzRd_eg&usqp=CAU',
+          '/storage/01JK5PRXX4PPCGJXPPWJTRFHPS.jpg',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 1 swiped'),
+        article: {
+          id: 133,
+        },
       },
       {
         story_id: 2,
         story_image:
-          'https://ir.ozone.ru/s3/multimedia-d/6292464769.jpg',
+          '/storage/01JNZHHBKJW1BCDV3C89RRYSVT.jpg',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 2 swiped'),
+        article: {
+          id: 40,
+        },
       },
     ],
   },
@@ -127,10 +119,7 @@ export const IFGHome = observer(() => {
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
-    const multiStoryRef = useRef<MultiStoryRef>(null);
-    const [userStories, setUserStories] = useState(
-      JSON.parse(JSON.stringify(stories))
-    );
+
     useLayoutEffect(() => {
       getData();
     }, []);
@@ -180,23 +169,23 @@ export const IFGHome = observer(() => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
-    const StoryCard = (item: StoryMappedModel, index)=>{
-        return (storiesStore.storiesMappedList[index] && storiesStore.storiesMappedList[index].subStories.length > 0) &&
-        <CardContainer onPress={() => {
-            setCurrentStoryPressed(index);
-            // setCurrentStoryPressed(index);
-            setModalVisible(true);}} style={[{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: item.bgColor, backgroundColor: hexToRgba(item.bgColor, 0.07) }, gs.mr12, index === 0 && gs.ml16]} >
-            <View style={[gs.ml12, gs.mt12]}>
-            <Eye />
-            </View>
-            <Image
-           source={{uri: 'https://abcd.100qrs.ru/storage/' + storiesStore.storiesMappedList[index].category_cover}}
-           style={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
-            resizeMode="contain"
-            />
-            <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{storiesStore.storiesMappedList[index].category_title}</IfgText>
+    // const StoryCard = (item: StoryMappedModel, index)=>{
+    //     return (storiesStore.storiesMappedList[index] && storiesStore.storiesMappedList[index].subStories.length > 0) &&
+    //     <CardContainer onPress={() => {
+    //         setCurrentStoryPressed(index);
+    //         // setCurrentStoryPressed(index);
+    //         setModalVisible(true);}} style={[{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: item.bgColor, backgroundColor: hexToRgba(item.bgColor, 0.07) }, gs.mr12, index === 0 && gs.ml16]} >
+    //         <View style={[gs.ml12, gs.mt12]}>
+    //         <Eye />
+    //         </View>
+    //         <Image
+    //        source={{uri: 'https://abcd.100qrs.ru/storage/' + storiesStore.storiesMappedList[index].category_cover}}
+    //        style={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
+    //         resizeMode="contain"
+    //         />
+    //         <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{storiesStore.storiesMappedList[index].category_title}</IfgText>
 
-      </CardContainer>;};
+    //   </CardContainer>;};
     const StoryShimmerCard = (item, index) => <ShimmerPlaceholder
     style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
     />;
@@ -222,17 +211,7 @@ export const IFGHome = observer(() => {
       }
       return false;
      };
-     const onStoryClose = (viewedStories?: Array<boolean[]>) => {
-      if (viewedStories == null || viewedStories == undefined) {return;}
-      const stories = [...userStories];
-      userStories.map((_: any, index: number) => {
-        userStories[index].stories.map((_: any, subIndex: number) => {
-          stories[index].stories[subIndex].isSeen =
-            viewedStories[index][subIndex];
-        });
-      });
-      setUserStories([...stories]);
-    };
+
 return <>
 
       <ScrollView style={s.container}
@@ -262,15 +241,12 @@ return <>
       //   renderItem={({item, index})=>StoryCard(item, index)}
       // />
       <InstaStory
-        data={data}
-        duration={10}
+        data={storiesStore.storiesMappedList}
+        duration={6}
         // showAvatarText={false}
         renderTextComponent={()=>null}
-        avatarWrapperStyle={{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1,
-          // borderColor: item.bgColor,
-          // backgroundColor: hexToRgba(item.bgColor, 0.07)
-        }}
-        avatarImageStyle={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
+        avatarWrapperStyle={{width: 124, justifyContent: 'space-between', alignItems: 'flex-start', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1}}
+        avatarImageStyle={{width: 100, height: 100, alignSelf: 'center', marginTop: 20}}
         // avatarTextStyle={{}}
       />
       }
@@ -412,14 +388,14 @@ return <>
 
 
         <View style={{height: 70}}/>
-       {(currentStoryPressed !== undefined && storiesStore.storiesMappedList.length > 0 && storiesStore.storiesMappedList[currentStoryPressed].subStories) ?
+       {/* {(currentStoryPressed !== undefined && storiesStore.storiesMappedList.length > 0 && storiesStore.storiesMappedList[currentStoryPressed].subStories) ?
        <StoryModal
         stories={storiesStore.storiesMappedList[currentStoryPressed].subStories}
         // category={currentStoryPressed}
         // currentStoryPressed={currentStoryPressed}
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
-      /> : null}
+      /> : null} */}
       </ScrollView>
       {/*<ChatFooter />*/}
     </>;
