@@ -75,7 +75,7 @@ const StoryCircleListItem = ({
             {
               height: avatarSize,
               width: avatarSize,
-              borderRadius: 100,
+              // borderRadius: 100,
             },
             avatarImageStyle,
           ]}
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderColor: 'red',
-    borderRadius: 100,
+    // borderRadius: 100,
     height: 64,
     width: 64,
   },

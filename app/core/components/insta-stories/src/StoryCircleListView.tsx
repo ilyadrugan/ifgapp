@@ -50,7 +50,8 @@ const StoryCircleListView = ({
 
 const styles = StyleSheet.create({
   paddingLeft: {
-    paddingLeft: 12,
+    paddingLeft: 16,
+    marginHorizontal: -16,
   },
   footer: {
     flex: 1,

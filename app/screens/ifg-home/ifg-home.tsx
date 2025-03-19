@@ -43,74 +43,6 @@ import { TimeToDrinkNewBlock } from './blocks/timeToDrinkNew';
 import watterStore from '../../../store/state/watterStore/watterStore';
 import InstaStory from '../../core/components/insta-stories/insta-stories';
 
-const stories = [
-  {
-    id: 1, //unique id (required)
-    username: 'Alan', //user name on header
-    title: 'Albums', //title below username
-    profile: 'https://sosugary.com/wp-content/uploads/2022/01/TheWeeknd_001.jpg', //user profile picture
-    stories: [
-      {
-        id: 0, //unique id (required)
-        url: 'https://i1.sndcdn.com/artworks-IrhmhgPltsdrwMu8-thZohQ-t500x500.jpg', // story url
-        type: 'image', //image or video type of story
-        duration: 5, //default duration
-        storyId: 1,
-        isSeen: false,
-      },
-    ],
-  },
-];
-const data = [
-  {
-    user_id: 1,
-    user_image:
-      '01JK5PA1QAASSX69QWBSHHCZKG.png',
-    user_name: 'Хочу высыпаться',
-    bgColor: '#5C9DC2',
-    stories: [
-      {
-        story_id: 1,
-        story_image:
-          '/storage/01JK5PMY95ZXQ3K44X12AZWSXG.jpg',
-        swipeText: 'Custom swipe text for this story',
-        onPress: () => console.log('story 1 swiped'),
-        article: {
-          id: 151,
-        },
-      },
-    ],
-  },
-  {
-    user_id: 2,
-    user_image: '01JK5PB2XMWEP8NCW865D92APD.png',
-    user_name: 'Хочу правильно питаться',
-    bgColor: '#835CC2',
-    stories: [
-      {
-        story_id: 1,
-        story_image:
-          '/storage/01JK5PRXX4PPCGJXPPWJTRFHPS.jpg',
-        swipeText: 'Custom swipe text for this story',
-        onPress: () => console.log('story 1 swiped'),
-        article: {
-          id: 133,
-        },
-      },
-      {
-        story_id: 2,
-        story_image:
-          '/storage/01JNZHHBKJW1BCDV3C89RRYSVT.jpg',
-        swipeText: 'Custom swipe text for this story',
-        onPress: () => console.log('story 2 swiped'),
-        article: {
-          id: 40,
-        },
-      },
-    ],
-  },
-];
-
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
     const [isModalVisible, setModalVisible] = useState(false);
@@ -231,15 +163,6 @@ return <>
         renderItem={({item, index})=>StoryShimmerCard(item, index)}
       />
         :
-      //   <FlatList
-      //   keyExtractor={(_, index) => index.toString()}
-      //   data={storiesStore.storiesMappedList}
-      //   horizontal
-      //   style={{marginHorizontal: -16}}
-      //   contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
-      //   showsHorizontalScrollIndicator={false}
-      //   renderItem={({item, index})=>StoryCard(item, index)}
-      // />
       <InstaStory
         data={storiesStore.storiesMappedList}
         duration={6}
