@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Linking, NativeModules, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -21,6 +21,10 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
 import { observer } from 'mobx-react';
 import { isValidPhoneNumber } from '../../core/utils/isValidPhoneNumber';
+import tariffsStore from '../../../store/state/tariffsStore/tariffsStore';
+import HttpClient from '../../core/http-client/http-client';
+
+
 const height = Dimensions.get('screen').height;
 const tabss: TabInterface[] = [
     {
@@ -185,6 +189,7 @@ export const Registration = observer(() => {
             }
         }
       });
+      
       return (  <>
      <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

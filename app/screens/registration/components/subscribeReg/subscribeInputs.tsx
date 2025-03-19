@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
-import React, { FC, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { View, TouchableOpacity, StyleSheet, ActivityIndicator, NativeModules } from 'react-native';
 import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
 import colors from '../../../../core/colors/colors';
 import { IfgText } from '../../../../core/components/text/ifg-text';
@@ -13,12 +13,17 @@ import { isValidEmail } from '../../../../core/utils/isValidEmail';
 import { useNavigation } from '@react-navigation/native';
 import { AnimatedGradientButton } from '../../../../core/components/button/button';
 import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
+import HttpClient from '../../../../core/http-client/http-client';
+import { API_URL } from '../../../../core/hosts';
+
+const { YookassaModule } = NativeModules;
 
 export const SubscribeInputs:
     FC<{
         onNext: ()=> void,
         tarrif_id: number
     }> = observer(({onNext, tarrif_id}) => {
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation<any>();
 
     const {
@@ -30,7 +35,57 @@ export const SubscribeInputs:
     useEffect(() => {
         control._reset();
     }, [control]);
+    const paymentCreate = async () => {
+        console.log('paymentCreate');
+        // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
+        // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
+        const price = tariffsStore.tariffChoosed.price_discount ? Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1 : tariffsStore.tariffChoosed.price;
+        YookassaModule.startTokenize('', 'Оплата подписки IFeelGood Pro', '', price,
+            async (result) => {
+          console.log('Результат из нативного модуля:', result.paymentToken);
+          if (result.paymentToken) {
+           await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: price, token: result.paymentToken})
+            .then(async (res)=>{
+              console.log('payment-create data',res.data);
+              if (res.data.status === 'succeeded') {
+                await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
+                 .then((res)=>{
+                  console.log(res.data);
+                  navigation.navigate('SubscribeEmailConfirm');
+                })
+                .catch((err)=>{
+                  console.log('payment-callback error',err);
+                });
+              }
+              else if (res.data.confirmation.confirmation_url) {
+                YookassaModule.start3DSecure(res.data.confirmation.confirmation_url, async (result) => {
+                  console.log('res', result);
+                  if (result.status === 'RESULT_OK') {
+                   await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
+                   .then((res)=>{
+                    console.log(res.data);
+                    navigation.navigate('SubscribeEmailConfirm');
+                  })
+                  .catch((err)=>{
+                    console.log('payment-callback error',err);
+                  });
+                  }
+                });
+              }
 
+
+            })
+            .catch(err=>console.log('payment-create error',err))
+            .finally(async()=>{
+                setIsLoading(false);
+            });
+          }
+          setIsLoading(false);
+
+        } );
+
+        // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
+      };
     const onSubmit = handleSubmit(async (data) => {
             console.log(data);
             authStore.clearAllRegisterByPromocodeInputError();
@@ -54,7 +109,7 @@ export const SubscribeInputs:
                 console.log(model);
                 tariffsStore.setChoosedTariff(tariffsStore.tariffs.find((tariff)=> tariff.id === tarrif_id));
                 // navigation.navigate('SubscribeEmailConfirm');
-                await authStore.register(model, ()=>navigation.navigate('SubscribeEmailConfirm'));
+                await authStore.register(model, paymentCreate);
             }
 
 
@@ -106,14 +161,14 @@ export const SubscribeInputs:
                 />
             {/* <View style={gs.mt16} /> */}
             <AnimatedGradientButton
-                disabled={authStore.isLoading}
+                disabled={authStore.isLoading || isLoading}
                 style={s.buttonLogin}
                 onPress={onSubmit}
                 >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
-                    {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
+                    {(authStore.isLoading || isLoading) ? <ActivityIndicator /> : <AnimatedArrow />}
 
                     </View>
                     <View />

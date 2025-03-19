@@ -63,7 +63,7 @@ export const SubscribeEmailConfirm:
             console.log('Проверить');
             setIsLoading(true);
             successToast('Ваш профиль активирован!');
-            setTimeout(()=>paymentCreate(), 1000);
+            setTimeout(()=>navigation.replace('SuccessfulReg'), 1000);
         };
         const paymentCreate = async () => {
             console.log('paymentCreate');
