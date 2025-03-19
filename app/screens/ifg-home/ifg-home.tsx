@@ -1,7 +1,7 @@
 
 
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl} from 'react-native';
-import React, { FC, useEffect, useLayoutEffect, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -41,6 +41,83 @@ import { RecommendationCategoryToEng } from '../../core/utils/recommendationForm
 import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 import { TimeToDrinkNewBlock } from './blocks/timeToDrinkNew';
 import watterStore from '../../../store/state/watterStore/watterStore';
+import {
+  type MultiStoryRef,
+  Indicator,
+  MultiStory,
+  TransitionMode,
+} from 'react-native-custome-story-component';
+import InstaStory from 'react-native-insta-story';
+const stories = [
+  {
+    id: 1, //unique id (required)
+    username: 'Alan', //user name on header
+    title: 'Albums', //title below username
+    profile: 'https://sosugary.com/wp-content/uploads/2022/01/TheWeeknd_001.jpg', //user profile picture
+    stories: [
+      {
+        id: 0, //unique id (required)
+        url: 'https://i1.sndcdn.com/artworks-IrhmhgPltsdrwMu8-thZohQ-t500x500.jpg', // story url
+        type: 'image', //image or video type of story
+        duration: 5, //default duration
+        storyId: 1,
+        isSeen: false,
+      },
+      {
+        id: 1,
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        type: 'video',
+        duration: 15,
+        storyId: 1,
+        isSeen: false,
+      },
+    ],
+  },
+];
+const data = [
+  {
+    user_id: 1,
+    user_image:
+      'https://pbs.twimg.com/profile_images/1222140802475773952/61OmyINj.jpg',
+    user_name: 'Ahmet Çağlar Durmuş',
+    stories: [
+      {
+        story_id: 1,
+        story_image:
+          'https://image.freepik.com/free-vector/universe-mobile-wallpaper-with-planets_79603-600.jpg',
+        swipeText: 'Custom swipe text for this story',
+        onPress: () => console.log('story 1 swiped'),
+      },
+      {
+        story_id: 2,
+        story_image:
+          'https://image.freepik.com/free-vector/mobile-wallpaper-with-fluid-shapes_79603-601.jpg',
+      },
+    ],
+  },
+  {
+    user_id: 2,
+    user_image:
+      'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
+    user_name: 'Test User',
+    stories: [
+      {
+        story_id: 1,
+        story_image:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjORKvjcbMRGYPR3QIs3MofoWkD4wHzRd_eg&usqp=CAU',
+        swipeText: 'Custom swipe text for this story',
+        onPress: () => console.log('story 1 swiped'),
+      },
+      {
+        story_id: 2,
+        story_image:
+          'https://ir.ozone.ru/s3/multimedia-d/6292464769.jpg',
+        swipeText: 'Custom swipe text for this story',
+        onPress: () => console.log('story 2 swiped'),
+      },
+    ],
+  },
+];
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -50,7 +127,10 @@ export const IFGHome = observer(() => {
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
-
+    const multiStoryRef = useRef<MultiStoryRef>(null);
+    const [userStories, setUserStories] = useState(
+      JSON.parse(JSON.stringify(stories))
+    );
     useLayoutEffect(() => {
       getData();
     }, []);
@@ -142,6 +222,17 @@ export const IFGHome = observer(() => {
       }
       return false;
      };
+     const onStoryClose = (viewedStories?: Array<boolean[]>) => {
+      if (viewedStories == null || viewedStories == undefined) {return;}
+      const stories = [...userStories];
+      userStories.map((_: any, index: number) => {
+        userStories[index].stories.map((_: any, subIndex: number) => {
+          stories[index].stories[subIndex].isSeen =
+            viewedStories[index][subIndex];
+        });
+      });
+      setUserStories([...stories]);
+    };
 return <>
 
       <ScrollView style={s.container}
@@ -161,15 +252,28 @@ return <>
         renderItem={({item, index})=>StoryShimmerCard(item, index)}
       />
         :
-        <FlatList
-        keyExtractor={(_, index) => index.toString()}
-        data={storiesStore.storiesMappedList}
-        horizontal
-        style={{marginHorizontal: -16}}
-        contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({item, index})=>StoryCard(item, index)}
-      />}
+      //   <FlatList
+      //   keyExtractor={(_, index) => index.toString()}
+      //   data={storiesStore.storiesMappedList}
+      //   horizontal
+      //   style={{marginHorizontal: -16}}
+      //   contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
+      //   showsHorizontalScrollIndicator={false}
+      //   renderItem={({item, index})=>StoryCard(item, index)}
+      // />
+      <InstaStory
+        data={data}
+        duration={10}
+        // showAvatarText={false}
+        renderTextComponent={()=>null}
+        avatarWrapperStyle={{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1,
+          // borderColor: item.bgColor,
+          // backgroundColor: hexToRgba(item.bgColor, 0.07)
+        }}
+        avatarImageStyle={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
+        // avatarTextStyle={{}}
+      />
+      }
 
       <View style={gs.mt24} />
      {isLoading ? <ShimmerPlaceholder style={[{height: 219, width: '100%',  borderRadius: 16 }]}/> :
