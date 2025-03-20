@@ -177,16 +177,23 @@ export const ArticleView = observer(({route}) => {
 
         <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
           <Button disabled={articlesStore.isUserArticleLoading} onPress={()=>likeArticle(1)} style={[gs.flexRow, gs.alignCenter, {justifyContent: 'flex-start', borderRadius: 12, backgroundColor: colors.WHITE_DIRTY_COLOR, width: (width - 32) * 0.48, height: 46}]} >
-          <View style={{marginLeft: 16, top: -1}}>
+          {articlesStore.isUserLikeArticleLoading ?
+          <View style={gs.ml16}>
+            <ActivityIndicator/>
+          </View> : <View style={{marginLeft: 16, top: -1}}>
           <Like />
-          </View>
+          </View>}
           <IfgText style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.like} нравится</IfgText>
           </Button>
 
           <Button disabled={articlesStore.isUserArticleLoading} onPress={()=>likeArticle(0)} style={[gs.flexRow, gs.alignCenter, {justifyContent: 'flex-start',borderRadius: 12, backgroundColor: '#FFF3F8', width: (width - 32) * 0.48, height: 46}]} >
-          <View style={{marginLeft: 16, top: 1, transform: [{ scaleY: -1 }]}}>
-          <Like />
+          {articlesStore.isUserDislikeArticleLoading ?
+          <View style={gs.ml16}>
+            <ActivityIndicator/>
           </View>
+          : <View style={{marginLeft: 16, top: 1, transform: [{ scaleY: -1 }]}}>
+          <Like />
+          </View>}
           <IfgText style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.unlike} не нравится</IfgText>
           </Button>
         </View>

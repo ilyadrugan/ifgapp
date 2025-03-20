@@ -7,6 +7,7 @@ class ArticlesStore {
   isLoading = false; // Состояние загрузки
   isUserArticleLoading = false;
   isUserLikeArticleLoading = false;
+  isUserDislikeArticleLoading = false;
   articlesMainList: ArticleListModel = {
     current_page: 1,
     articles: [],
@@ -169,14 +170,14 @@ class ArticlesStore {
     };
   }
   readArticle(id: number) {
-    const articleIndex = this.articlesList.articles.findIndex((item)=>item.id ===id)
+    const articleIndex = this.articlesList.articles.findIndex((item)=>item.id === id);
     if (articleIndex) {
       this.articlesList.articles = this.articlesList.articles.map((article, index)=>{
         if (index === articleIndex) {
-          return {...article, is_viewed: true}
+          return {...article, is_viewed: true};
         }
-        return article
-      })
+        return article;
+      });
     }
   }
   async getArticleById(id: number) {
@@ -422,8 +423,13 @@ class ArticlesStore {
       .finally(()=>{this.isUserArticleLoading = false;});
   }
   async changeLikeUserArticle(id: number, action: number) {
-    if (this.isUserLikeArticleLoading) return
-    this.isUserLikeArticleLoading = true;
+    if (this.isUserLikeArticleLoading || this.isUserDislikeArticleLoading) {return;}
+    if (action === 1) {
+      this.isUserLikeArticleLoading = true;
+    }
+    else {
+      this.isUserDislikeArticleLoading = true;
+    }
     this.errorMessage = '';
     await changeLikeArticleApi(id, action)
       .then(async (result)=>{
@@ -436,10 +442,16 @@ class ArticlesStore {
         this.errorMessage = err.message;
         errorToast(err.message);
       })
-      .finally(()=>{this.isUserLikeArticleLoading = false;});
+      .finally(()=>{this.isUserLikeArticleLoading = false; this.isUserDislikeArticleLoading = false;});
   }
   async changeLikeInterView(id: number, action: number) {
-    this.isUserArticleLoading = true;
+    if (this.isUserLikeArticleLoading || this.isUserDislikeArticleLoading) {return;}
+    if (action === 1) {
+      this.isUserLikeArticleLoading = true;
+    }
+    else {
+      this.isUserDislikeArticleLoading = true;
+    }
     this.errorMessage = '';
     await changeLikeInterViewApi(id, action)
       .then(async (result)=>{
@@ -452,7 +464,7 @@ class ArticlesStore {
         this.errorMessage = err.message;
         errorToast(err.message);
       })
-      .finally(()=>{this.isUserArticleLoading = false;});
+      .finally(()=>{this.isUserLikeArticleLoading = false; this.isUserDislikeArticleLoading = false;});
   }
 }
 
