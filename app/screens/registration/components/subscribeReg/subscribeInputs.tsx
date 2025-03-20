@@ -15,6 +15,7 @@ import { AnimatedGradientButton } from '../../../../core/components/button/butto
 import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
 import HttpClient from '../../../../core/http-client/http-client';
 import { API_URL } from '../../../../core/hosts';
+import couponStore from '../../../../../store/state/couponStore/couponStore';
 
 const { YookassaModule } = NativeModules;
 
@@ -39,8 +40,15 @@ export const SubscribeInputs:
         console.log('paymentCreate');
         // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
         // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
-        const price = tariffsStore.tariffChoosed.price_discount ? Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1 : tariffsStore.tariffChoosed.price;
-        YookassaModule.startTokenize('', 'Оплата подписки IFeelGood Pro', '', price,
+        const yearPrice = tariffsStore.tariffChoosed.price_discount ?
+        couponStore.couponData[tarrif_id - 1] !== null ?
+        (Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1 - tariffsStore.tariffChoosed.price + couponStore.couponData[tarrif_id - 1].discounted_price)
+        :
+        Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1
+        : 0;
+        const monthPrice = couponStore.couponData[tarrif_id - 1] !== null ? couponStore.couponData[tarrif_id - 1]?.discounted_price : tariffsStore.tariffChoosed.price;
+        const price = tariffsStore.tariffChoosed.period === 'year' ? yearPrice : monthPrice;
+        YookassaModule.startTokenize('', 'Оплата подписки ifeelgood Pro', '', price,
             async (result) => {
           console.log('Результат из нативного модуля:', result.paymentToken);
           if (result.paymentToken) {
@@ -107,7 +115,8 @@ export const SubscribeInputs:
                     tariff_id: tarrif_id,
                 };
                 console.log(model);
-                tariffsStore.setChoosedTariff(tariffsStore.tariffs.find((tariff)=> tariff.id === tarrif_id));
+                const tarrif = tariffsStore.tariffs.find((tariff)=> tariff.id === tarrif_id);
+                tariffsStore.setChoosedTariff(tarrif);
                 // navigation.navigate('SubscribeEmailConfirm');
                 await authStore.register(model, paymentCreate);
             }

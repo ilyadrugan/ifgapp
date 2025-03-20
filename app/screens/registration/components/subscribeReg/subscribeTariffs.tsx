@@ -8,10 +8,11 @@ import gs from '../../../../core/styles/global';
 import Benefit from '../../../../../assets/icons/benefit.svg';
 import { AnimatedGradientButton, Button } from '../../../../core/components/button/button';
 import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../../../../core/components/input/input';
 import authStore from '../../../../../store/state/authStore/authStore';
 import Arrow from '../../../../../assets/icons/arrow-right.svg';
+import couponStore from '../../../../../store/state/couponStore/couponStore';
 
 export const SubscribeTariffs:
     FC<{
@@ -19,6 +20,21 @@ export const SubscribeTariffs:
         onChangeDiscount: (id:number)=> void,
         onNext: ()=> void,
     }> = observer(({activeDiscount, onChangeDiscount, onNext}) => {
+      const {
+              control,
+              handleSubmit,
+              setValue,
+              formState: { errors },
+            } = useForm<{coupon: string}>();
+     const onSubmitCoupon = handleSubmit(async (data) => {
+      console.log(data.coupon, activeDiscount + 1);
+      if (data.coupon){
+        await couponStore.checkCoupon({
+          code: data.coupon.trim(),
+          tariff_id: activeDiscount + 1,
+        });
+      }
+      });
     return tariffsStore.tariffs.length > 0 && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChangeDiscount(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
           <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
@@ -39,7 +55,12 @@ export const SubscribeTariffs:
       <View style={gs.mt16}/>
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>
-        {(tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}
+        {couponStore.couponData[activeDiscount] !== null ?
+        (tariffsStore.tariffs[activeDiscount].period === 'year') ?
+        Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 - (tariffsStore.tariffs[activeDiscount].price - couponStore.couponData[activeDiscount].discounted_price)
+        :
+        couponStore.couponData[activeDiscount].discounted_price
+        : (tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}
         </IfgText>
         {tariffsStore.tariffs[activeDiscount].description && <View style={[s.discountPercentsBig, gs.ml24]}>
             <IfgText color={colors.BLACK_COLOR} style={gs.fontCaption}>
@@ -48,9 +69,15 @@ export const SubscribeTariffs:
         </View>}
       </View>
       <View style={gs.mt12}/>
-      {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
+      {couponStore.couponData[activeDiscount] !== null ?
+      <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
+      {tariffsStore.tariffs[activeDiscount].period === 'year' ?
+      `${Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽` :
+      `${tariffsStore.tariffs[activeDiscount].price} ₽`}
+      </IfgText>
+      : tariffsStore.tariffs[activeDiscount].price_discount ? <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
                 {Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽
-            </IfgText>}
+            </IfgText> : null}
       <View style={gs.mt4}/>
       {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
       <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
@@ -86,18 +113,39 @@ export const SubscribeTariffs:
           </View>
         </View>
       </View>
+      <View>
+
+      <View style={gs.mt16} />
+      <Controller control={control} name={'coupon'}
+                 render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                fullWidth
+                value={value}
+                onChange={onChange}
+                placeholder="Промокод"
+                // keyboardType="email-address"
+                style={[gs.fontCaption, s.promocodeForm, {justifyContent: 'space-between', flexDirection: 'row'}]}
+                // error={authStore.registerByPromocode.emailInputError }
+                // onFocus={()=>authStore.clearRegisterByPromocodeInputError('email')}
+              >
+                <Button onPress={onSubmitCoupon} style={{borderRadius: 12, position: 'absolute', right: 12, width: 54, height: 54, backgroundColor: colors.GREEN_COLOR, justifyContent:'center', alignItems: 'center'}}>
+                <Arrow />
+                </Button>
+              </Input>
+               )} />
       {/* <Input
                 // fullWidth
                 //  value={value}
                 //  onChange={onChange}
-                placeholder="Промокод"
-                style={[gs.fontCaption, s.promocodeForm, {justifyContent: 'space-between', flexDirection: 'row', width: '100%'}]}
+                placeholder="Купон"
+                style={[gs.fontCaption, s.promocodeForm, {justifyContent: 'space-between', flexDirection: 'row'}]}
             >
               <Button style={{borderRadius: 12,width: 54, height: 54,right: 54 + 12, backgroundColor: colors.GREEN_COLOR, justifyContent:'center', alignItems: 'center'}}>
               <Arrow />
         </Button>
 
       </Input> */}
+      </View>
       <View style={gs.mt16} />
       <AnimatedGradientButton style={s.buttonLogin}
                 onPress={onNext}
@@ -194,8 +242,9 @@ export const SubscribeTariffs:
     },
     promocodeForm: {
               color: colors.BLACK_COLOR,
-              backgroundColor: colors.GREEN_LIGHT_LIGHT_GREEN,
+              backgroundColor: 'transparent',
               borderColor: colors.GREEN_LIGHT_COLOR,
               borderStyle: 'dashed',
+              paddingRight: 70,
     },
   });
