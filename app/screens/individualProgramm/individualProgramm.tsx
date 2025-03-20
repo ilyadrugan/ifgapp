@@ -41,7 +41,7 @@ export type CheckBoxesTypes = {
 
 export const IndividualProgramm = observer(() => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
-    const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
+    // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
     const [activityValue, setActivityValue] = useState<ActivitiValueModel>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -214,7 +214,7 @@ export const IndividualProgramm = observer(() => {
             </Button>
             <RutubeView
               url={url}
-              thumbnailUrl={thumbnail1}
+              // thumbnailUrl={thumbnail1}
               title="О платформе ifeelgood"
             />
          </ImageBackground>
