@@ -27,33 +27,33 @@ export const AnimatedGradientButton:FC<{
     outlined,
     isLoading,
   }) => {
-    const colorAnimation = useRef(new Animated.Value(0)).current;
+    // const colorAnimation = useRef(new Animated.Value(0)).current;
 
-    useEffect(() => {
-      // Бесконечная анимация переливания цвета
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(colorAnimation, {
-            toValue: 1, // Переход ко второму цвету
-            duration: 1000, // Длительность переливания (в миллисекундах)
-            useNativeDriver: false, // Для анимации цвета false
-          }),
-          Animated.delay(500),
-          Animated.timing(colorAnimation, {
-            toValue: 0, // Возврат к первому цвету
-            duration: 1000,
-            useNativeDriver: false,
-          }),
-          Animated.delay(500),
-        ])
-      ).start();
-    }, []);
+    // useEffect(() => {
+    //   // Бесконечная анимация переливания цвета
+    //   Animated.loop(
+    //     Animated.sequence([
+    //       Animated.timing(colorAnimation, {
+    //         toValue: 1, // Переход ко второму цвету
+    //         duration: 1000, // Длительность переливания (в миллисекундах)
+    //         useNativeDriver: false, // Для анимации цвета false
+    //       }),
+    //       Animated.delay(500),
+    //       Animated.timing(colorAnimation, {
+    //         toValue: 0, // Возврат к первому цвету
+    //         duration: 1000,
+    //         useNativeDriver: false,
+    //       }),
+    //       Animated.delay(500),
+    //     ])
+    //   ).start();
+    // }, []);
 
     // Интерполяция для перехода между двумя цветами
-    const backgroundColor = colorAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['#54B676', 'rgb(80,232,132)'], // Начальный и конечный цвета
-    });
+    // const backgroundColor = colorAnimation.interpolate({
+    //   inputRange: [0, 1],
+    //   outputRange: ['#54B676', 'rgb(80,232,132)'], // Начальный и конечный цвета
+    // });
   return (
     <TouchableOpacity
     disabled={disabled}
@@ -64,7 +64,7 @@ export const AnimatedGradientButton:FC<{
       style,
       fullWidth && s.fullWidth,
       outlined && s.outline,
-      {backgroundColor: backgroundColor},
+      // {backgroundColor: backgroundColor},
     ]}
    >
 
