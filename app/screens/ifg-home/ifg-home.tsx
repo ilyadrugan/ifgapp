@@ -150,19 +150,20 @@ return <>
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
-        <View style={gs.mt16} />
+        
 
         {storiesStore.isLoading ?
         <FlatList
         keyExtractor={(_, index) => index.toString()}
         data={[0,1,2]}
         horizontal
-        style={{marginHorizontal: -16}}
+        style={{marginHorizontal: -16, marginTop: 16}}
         contentContainerStyle={{flexGrow: 1, flexDirection: 'row'}}
         showsHorizontalScrollIndicator={false}
         renderItem={({item, index})=>StoryShimmerCard(item, index)}
       />
-        :
+        :<>
+        <View style={gs.mt16} />
       <InstaStory
         data={storiesStore.storiesMappedList}
         duration={6}
@@ -172,6 +173,7 @@ return <>
         avatarImageStyle={{width: 100, height: 100, alignSelf: 'center', marginTop: 20}}
         // avatarTextStyle={{}}
       />
+       </>
       }
 
       <View style={gs.mt24} />
