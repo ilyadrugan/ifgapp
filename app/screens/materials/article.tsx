@@ -31,8 +31,8 @@ import HTMLView from 'react-native-htmlview';
 import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlayer/youtubePlayer';
 import Accept from '../../../assets/icons/accept-article.svg';
 import { RenderHTMLView } from './components/renderHtml';
+import { ScreenWidth } from '../../hooks/useDimensions';
 
-const width = Dimensions.get('screen').width;
 
 export const ArticleView = observer(({route}) => {
     const navigation = useNavigation<any>();
@@ -41,6 +41,7 @@ export const ArticleView = observer(({route}) => {
       navigation.goBack();
     };
     const { articleId } = route.params;
+    const [widthElements, setWidthElements] = useState(0);
     const [isInFavorite, setIsInFavorite] = useState(false);
     const [isReaded, setIsReaded] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
@@ -116,6 +117,13 @@ export const ArticleView = observer(({route}) => {
      setIsReaded(true);
     };
 
+    const handleLayout = (event, name: string) => {
+      const { width, height } = event.nativeEvent.layout;
+      console.log(name,'Width :', width);
+      console.log('screenWidth', ScreenWidth);
+      console.log('WidthElements', widthElements + width);
+      setWidthElements((prev)=>prev + width);
+    };
 
     return <>
     {articlesStore.isLoading && <View style={{justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -134,7 +142,7 @@ export const ArticleView = observer(({route}) => {
                 source={{uri: `https://ifeelgood.life${articlesStore.currentArticle.media[0].full_path[0]}`}}
         />
 
-        <View style={gs.mt16} />
+        {/* <View style={gs.mt16} />
         {(articlesStore.currentArticle.body !== null && articlesStore.currentArticle.body?.length > 20) &&
         <CardContainer style={{gap:0}}>
 
@@ -148,21 +156,20 @@ export const ArticleView = observer(({route}) => {
             </CardContainer>;
           }
           return <></>;
-        })}
+        })} */}
 
 
         <View style={gs.mt24} />
-        <View style={[gs.flexRow, {gap: 12,width: '100%', justifyContent: 'space-between'} ]}>
-        <View style={{flex: 1}}>
-        <CardContainer style={[gs.flexRow, {justifyContent: 'space-between', borderRadius: 12}]}>
-          <IfgText style={gs.fontCaption}>Опубликовано:</IfgText>
+        <View style={[gs.flexRow, {gap: 12,width: '100%', justifyContent: 'space-between', alignItems: 'center'} ]}>
+        <View style={gs.flex1}>
+       <CardContainer style={[gs.flexRow, {justifyContent: 'space-between', borderRadius: 12, flexWrap: 'wrap'}]}>
+          <IfgText style={[gs.fontCaption]}>Опубликовано:</IfgText>
           <IfgText style={[gs.fontCaption, gs.bold]}>{formatDateWithParamsMoment(articlesStore.currentArticle.datetime_publish, '+03:00', 'D.MM.YYYY')}</IfgText>
         </CardContainer>
         </View>
 
-
           {articlesStore.currentArticle.type !== 'none' && <CardContainer style={{
-            aspectRatio: 1, borderRadius: 16, alignItems: 'center', justifyContent: 'center',
+             width: 52, maxHeight: 52,borderRadius: 16, alignItems: 'center', justifyContent: 'center',
             backgroundColor: articlesStore.currentArticle.type === 'verified_science' ? colors.PINK_COLOR :
             articlesStore.currentArticle.type === 'verified_researcher' ? '#FFAE21' : '#54B676'}} >
               <View style={{position: 'absolute',alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', width: 32, height: 32, borderRadius: 16}}>
@@ -175,8 +182,9 @@ export const ArticleView = observer(({route}) => {
         </View>
         <View style={gs.mt12} />
 
-        <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
-          <Button disabled={articlesStore.isUserArticleLoading} onPress={()=>likeArticle(1)} style={[gs.flexRow, gs.alignCenter, {justifyContent: 'flex-start', borderRadius: 12, backgroundColor: colors.WHITE_DIRTY_COLOR, width: (width - 32) * 0.48, height: 46}]} >
+        <View style={[gs.flexRow, {justifyContent: 'space-between', width: '100%'}]}>
+          <View style={{flex: 0.49}}>
+          <Button disabled={articlesStore.isUserArticleLoading} onPress={()=>likeArticle(1)} style={[gs.flexRow, gs.alignCenter, {justifyContent: 'flex-start', borderRadius: 12, backgroundColor: colors.WHITE_DIRTY_COLOR, height: 46 }]} >
           {articlesStore.isUserLikeArticleLoading ?
           <View style={gs.ml16}>
             <ActivityIndicator/>
@@ -185,8 +193,8 @@ export const ArticleView = observer(({route}) => {
           </View>}
           <IfgText style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.like} нравится</IfgText>
           </Button>
-
-          <Button disabled={articlesStore.isUserArticleLoading} onPress={()=>likeArticle(0)} style={[gs.flexRow, gs.alignCenter, {justifyContent: 'flex-start',borderRadius: 12, backgroundColor: '#FFF3F8', width: (width - 32) * 0.48, height: 46}]} >
+          </View>
+          <Button disabled={articlesStore.isUserArticleLoading} onPress={()=>likeArticle(0)} style={[gs.flexRow, gs.alignCenter, {flex: 0.49,justifyContent: 'flex-start',borderRadius: 12, backgroundColor: '#FFF3F8', height: 46 }]} >
           {articlesStore.isUserDislikeArticleLoading ?
           <View style={gs.ml16}>
             <ActivityIndicator/>
@@ -194,7 +202,7 @@ export const ArticleView = observer(({route}) => {
           : <View style={{marginLeft: 16, top: 1, transform: [{ scaleY: -1 }]}}>
           <Like />
           </View>}
-          <IfgText style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.unlike} не нравится</IfgText>
+          <IfgText numberOfLines={1} style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.unlike} не нравится</IfgText>
           </Button>
         </View>
         <InView onChange={(inView: boolean) => {
@@ -204,35 +212,41 @@ export const ArticleView = observer(({route}) => {
         </InView>
 
         <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
-          {width < 385 ? <View style={[gs.flexRow, {gap: 8}]}>
+          {(widthElements > ScreenWidth - 44) ? <View style={[gs.flexRow, {gap: 8}]}>
             <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             <View style={{ top: -1}}>
             <EyeViews/>
             </View>
             <IfgText style={gs.fontCaption2}>{articlesStore.currentArticle.views}</IfgText>
             </Button>
-            <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, { maxHeight: 46, width: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7'   }]} >
             {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
-              <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
+              {/* <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText> */}
             </Button>
           </View> : <>
-          <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+          <View onLayout={(event)=>handleLayout(event, 'eye')}>
+            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             <View style={{ top: -1}}>
             <EyeViews/>
             </View>
             <IfgText style={gs.fontCaption2}>{articlesStore.currentArticle.views}</IfgText>
             </Button>
+          </View>
+          <View onLayout={(event)=>handleLayout(event, 'favorite')}>
             <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavorite ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
-              <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
-            </Button></>}
-          <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
-          style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
-          <View >
-          <Share />
+            <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText>
+            </Button>
+          </View></>}
+          <View onLayout={(event)=>handleLayout(event, 'share')}>
+            <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
+            style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
+            <View >
+            <Share />
+            </View>
+            <IfgText style={gs.fontCaption2}>Поделиться</IfgText>
+            </Button>
           </View>
-          <IfgText style={gs.fontCaption2}>Поделиться</IfgText>
-          </Button>
         </View>
         <View style={gs.mt24} />
         <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>
@@ -322,7 +336,7 @@ const customStyles = StyleSheet.create( {
         marginVertical: 12,
       },
       tableContainer: {
-        width: width - 64,
+        width: ScreenWidth - 64,
         // overflow: 'scroll', // Добавлено для совместимости
         // flexDirection: 'column',
       },
@@ -335,7 +349,7 @@ const customStyles = StyleSheet.create( {
       },
       tr: {
         flexDirection: 'row',
-        width: width - 64,
+        width: ScreenWidth - 64,
       },
       th: {
         fontWeight: 'bold',
