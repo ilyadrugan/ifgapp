@@ -4,6 +4,7 @@ export type UserInfo = {
     phone: string;
     last_name: string;
     email: string;
+    email_verified_at: string | null;
     profile_photo_url: string;
     birthday: string;
     ifg_level: string;

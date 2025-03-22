@@ -9,7 +9,7 @@ import { CardContainer } from '../../../../core/components/card/cardContainer';
 import { AnimatedGradientButton } from '../../../../core/components/button/button';
 import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArrow';
 import userStore from '../../../../../store/state/userStore/userStore';
-import { successToast } from '../../../../core/components/toast/toast';
+import { errorToast, successToast } from '../../../../core/components/toast/toast';
 import { API_URL } from '../../../../core/hosts';
 import HttpClient from '../../../../core/http-client/http-client';
 import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
@@ -59,11 +59,22 @@ export const SubscribeEmailConfirm:
             console.log('sendAgain');
             restartTimer();
         };
-        const onCheckConfirm = () => {
+        const onCheckConfirm = async () => {
             console.log('Проверить');
             setIsLoading(true);
             successToast('Ваш профиль активирован!');
             setTimeout(()=>navigation.replace('SuccessfulReg'), 1000);
+            setIsLoading(false);
+            // await userStore.getProfile().then(
+            //   (res)=>{
+            //     if (userStore.userInfo?.email_verified_at) {
+            //       successToast('Ваш профиль активирован!');
+            //       setTimeout(()=>navigation.replace('SuccessfulReg'), 1000);
+            //     }
+            //     errorToast('Ваш профиль не активирован');
+            //     setIsLoading(false);
+            //   }
+            // );
         };
         const paymentCreate = async () => {
             console.log('paymentCreate');

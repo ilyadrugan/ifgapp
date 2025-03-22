@@ -7,7 +7,7 @@ const stores = {
   authStore,
   userStore,
   testingStore,
-  tariffsStore
+  tariffsStore,
 };
 
 export default stores;

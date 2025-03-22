@@ -94,46 +94,61 @@ export const ActivityBlock = observer(() => {
 
     useEffect(() => {
       console.log('dailyActivitySettings', dailyActivityStore.dailyActivitySettings);
-      console.log('lastTest', testingStore.myCurrentResultsTest)
+      console.log('lastTest', testingStore.myCurrentResultsTest);
     }, []);
 
 return <CardContainer >
-{!userStore.isLoading ? <>
-<View style={[gs.flexRow, gs.alignCenter, {justifyContent: 'space-between'}]}>
-  <View style={[gs.flexRow, gs.alignCenter]}>
-      <View style={s.photo}>
-        {userStore.userInfo?.profile_photo_url ?
-        <Image style={{width: '100%', height: '100%'}} source={{uri: `${!userStore.userInfo?.profile_photo_url.startsWith('https://') ? API_URL + '/storage/' : '' }${userStore.userInfo?.profile_photo_url}`}}/>
-        :
-        <ProfileHolder />}
-
-      </View>
-      <TouchableOpacity onPress={selectImage} style={s.pin}>
-          <Plus />
-        </TouchableOpacity>
-      <View style={[gs.ml12, {flexDirection: 'column'}]}>
-
-      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? <IfgText style={[gs.fontCaption,gs.bold ]}>{userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}</IfgText>
-      :
-      <IfgText style={[gs.fontCaption,gs.bold]}>{userStore.userInfo?.email}</IfgText>}
-      <TouchableWithoutFeedback onPress={()=>navigation.navigate('GoalSettings')} >
-        <View style={{flexDirection: 'row', alignItems: 'center', gap: 2}}>
-        <IfgText color="#747474" >Настроить цели</IfgText>
-        <GoalSettings />
+{!userStore.isLoading ?
+  <View style={[gs.flexRow, gs.alignCenter, { justifyContent: 'space-between', width: '100%', flexWrap: 'nowrap' }]}>
+  {/* Левая часть с фото и текстом */}
+  <View style={[gs.flexRow, gs.alignCenter, { flexShrink: 1 }]}>
+    <View style={s.photo}>
+      {userStore.userInfo?.profile_photo_url ? (
+        <Image
+          style={{ width: '100%', height: '100%' }}
+          source={{
+            uri: `${!userStore.userInfo?.profile_photo_url.startsWith('https://') ? API_URL + '/storage/' : ''}${userStore.userInfo?.profile_photo_url}`,
+          }}
+        />
+      ) : (
+        <ProfileHolder />
+      )}
+    </View>
+    <TouchableOpacity onPress={selectImage} style={s.pin}>
+      <Plus />
+    </TouchableOpacity>
+    <View style={[gs.ml12, { flexDirection: 'column', flexShrink: 1, maxWidth: 245 }]}>
+      {(userStore.userInfo?.name || userStore.userInfo?.last_name) ? (
+        <IfgText style={[gs.fontCaption, gs.bold]}>
+          {userStore.userInfo?.name + '\n' + userStore.userInfo?.last_name}
+        </IfgText>
+      ) : (
+        <IfgText  style={[gs.fontCaption, gs.bold]}>
+          {userStore.userInfo?.email}
+        </IfgText>
+      )}
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('GoalSettings')}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+          <IfgText color="#747474">Настроить цели</IfgText>
+          <GoalSettings />
         </View>
       </TouchableWithoutFeedback>
-      </View>
+    </View>
   </View>
-  <Button style={s.buttonBack} onPress={()=> navigation.navigate('Профиль')}>
+
+  {/* Кнопка "В профиль" */}
+  <View style={{ flexShrink: 1 }}>
+  <Button style={s.buttonBack} onPress={() => navigation.navigate('Профиль')}>
     <>
       <IfgText color={colors.GRAY_COLOR3} style={[gs.fontBody2]}>В профиль</IfgText>
-      <View style={{marginTop: 2}}>
-        <ArrowRightGray  />
+      <View style={{ marginTop: 2 }}>
+        <ArrowRightGray />
       </View>
-      </>
+    </>
   </Button>
-  </View>
-  </> :
+</View>
+</View>
+  :
   <ShimmerPlaceholder style={{borderRadius: 8}} height={40} width={ScreenWidth - 64} />
 }
 {!testingStore.isLoading ? <>
@@ -164,7 +179,7 @@ return <CardContainer >
     <IfgText color={'#747474'} style={[gs.fontCaptionSmallMedium, gs.regular, {width: 80}]}>
       {name !== 'Физическая активность' ? name : 'Активность'}
     </IfgText>
-    <ProgressBar width={testingStore.myCurrentResultsTest.activiti_value_json[name]/testingStore.myCurrentResultsTest.maxValues[name]*100 || 0} color={categoryColors[name]}/>
+    <ProgressBar width={testingStore.myCurrentResultsTest.activiti_value_json[name] / testingStore.myCurrentResultsTest.maxValues[name] * 100 || 0} color={categoryColors[name]}/>
   </View>)}</>}
   </Animated.View>
 

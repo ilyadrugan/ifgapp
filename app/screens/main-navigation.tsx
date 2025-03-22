@@ -18,6 +18,7 @@ import { PersonalRecommendations } from './personalRecomendations/personalRecomm
 import { SubscribeEmailConfirm } from './registration/components/subscribeReg/subscribeEmailConfirm';
 import { GoalSettings } from './goalSettings/goalSettings';
 import { observer } from 'mobx-react';
+import userStore from '../../store/state/userStore/userStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,11 @@ export const MainNavigation = observer(() => {
 
   return (<>
 
-    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' : authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
+    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' :
+      authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
+    {/* userStore.userInfo?.email_verified_at ? 'Main'
+      : 'SubscribeEmailConfirm' */}
+
       <Stack.Screen
         name="OnBoarding"
         component={Onboarding}

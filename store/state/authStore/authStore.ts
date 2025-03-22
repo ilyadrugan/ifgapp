@@ -42,8 +42,8 @@ class AuthStore {
       this.setToken(token);
       console.log('TOKEN', token);
       this.isAuthenticated = true;
-      await userStore.getProfile();
       console.log('getProfile');
+      await userStore.getProfile();
     }
   };
 
@@ -181,6 +181,14 @@ class AuthStore {
       }
       })
       .catch((err)=>{
+        console.log('registration ERROR',err.response.data.user);
+        if (err.response.data.order) {
+          callBack();
+        }
+        else if (err.response.data.user.id) {
+          errorToast('Такой email уже занят');
+        }
+
         console.log('registration ERROR',err.response.data.errors);
         if (err.response.data.errors.promocode) {
           console.log('Full error response:', err.response.data); // Полный JSON ошибки

@@ -52,11 +52,12 @@ export const IFGHome = observer(() => {
     const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
       getData();
     }, []);
 
     const getData = async () => {
+      console.log('GET DATA');
       setIsLoading((prev)=>!prev);
       await storiesStore.getStories();
       await testingStore.getAllMyTest();
@@ -150,7 +151,7 @@ return <>
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
-        
+
 
         {storiesStore.isLoading ?
         <FlatList
@@ -162,7 +163,7 @@ return <>
         showsHorizontalScrollIndicator={false}
         renderItem={({item, index})=>StoryShimmerCard(item, index)}
       />
-        :<>
+        : <>
         <View style={gs.mt16} />
       <InstaStory
         data={storiesStore.storiesMappedList}
@@ -405,7 +406,7 @@ const s = StyleSheet.create({
       borderRadius: 8,
       paddingHorizontal: 12,
       // paddingVertical: 8,
-      height: 30,
+      minHeight: 30,
       },
     cardGradientContainer:{
         flex: 1,
