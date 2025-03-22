@@ -31,6 +31,7 @@ import { StoreRecommendationModel } from '../../../store/state/recommendationSto
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 import { TimeZone } from '../../hooks/useTimezone';
+import { ScreenWidth } from '../../hooks/useDimensions';
 
 export type CheckBoxesTypes = {
   'Питание': boolean[],
@@ -162,7 +163,7 @@ export const IndividualProgramm = observer(() => {
       <CardContainer style={{borderRadius: 16,paddingVertical: 8, backgroundColor: bgColor, justifyContent: 'space-between', flexDirection: 'row', alignItems:'center'}}>
       <View style={[gs.flexRow, gs.alignCenter, gs.flex1]}>
         <CheckConst />
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.ml8, {paddingRight: 12}]}>Выберите, какие рекомендации вы хотите получать в течение дня</IfgText>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, gs.ml8, {paddingRight: ScreenWidth < 370 ? 16 : 12}]}>Выберите, какие рекомендации вы хотите получать в течение дня</IfgText>
       </View>
        <TouchableOpacity onPress={()=>setIsShow(prev=>!prev)} style={[s.circle]}>
            <Delete />

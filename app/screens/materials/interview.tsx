@@ -22,6 +22,7 @@ import { formatDateWithParamsMoment } from '../../core/utils/formatDateTime';
 import { onShare } from '../../core/components/share/share';
 import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlayer/youtubePlayer';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
+import { ScreenWidth } from '../../hooks/useDimensions';
 
 const width = Dimensions.get('screen').width;
 
@@ -33,6 +34,7 @@ export const InterviewView = observer(({route}) => {
     };
     const { interviewId } = route.params;
     const [isInFavoriet, setIsInFavoriet] = useState(false);
+    const [widthElements, setWidthElements] = useState(0);
     useEffect(() => {
       if (interviewId !== undefined) {
         loadInterviewById(interviewId);
@@ -64,6 +66,10 @@ export const InterviewView = observer(({route}) => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
+    const handleLayout = (event) => {
+          const { width, height } = event.nativeEvent.layout;
+          setWidthElements((prev)=>prev + width);
+    };
     return <>
     {articlesStore.isLoading && <View style={{justifyContent: 'center', alignItems: 'center', height: '100%' }}>
       <ActivityIndicator size={'large'} animating/>
@@ -143,30 +149,41 @@ export const InterviewView = observer(({route}) => {
         <View style={gs.mt12} />
 
         <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
-        {width < 385 ? <View style={[gs.flexRow, {gap: 8}]}> <Button style={[gs.flexRow, gs.alignCenter,  {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
-          <View style={{ top: -1}}>
-          <EyeViews/>
+          {(widthElements > ScreenWidth - 44) ? <View style={[gs.flexRow, {gap: 8}]}>
+            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <View style={{ top: -1}}>
+            <EyeViews/>
+            </View>
+            <IfgText style={gs.fontCaption2}>{articlesStore.currentInterview.views}</IfgText>
+            </Button>
+            <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, { maxHeight: 46, width: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavoriet ? colors.GREEN_COLOR : '#E7E7E7'   }]} >
+            {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
+              {/* <IfgText style={gs.fontCaption2}>В {isInFavorite ? 'избранном' : 'избранное'}</IfgText> */}
+            </Button>
+          </View> : <>
+          <View onLayout={(event)=>handleLayout(event)}>
+            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <View style={{ top: -1}}>
+            <EyeViews/>
+            </View>
+            <IfgText style={gs.fontCaption2}>{articlesStore.currentInterview.views}</IfgText>
+            </Button>
           </View>
-          <IfgText style={gs.fontCaption2}>{articlesStore.currentInterview.views}</IfgText>
-          </Button>
-
-          <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavoriet ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
-          <View >
-          {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
+          <View onLayout={(event)=>handleLayout(event)}>
+            <Button disabled={articlesStore.isUserArticleLoading}  onPress={addInFavorite} style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: isInFavoriet ? colors.GREEN_COLOR : '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            {articlesStore.isUserArticleLoading ? <ActivityIndicator/> : <Star />}
+            <IfgText style={gs.fontCaption2}>В {isInFavoriet ? 'избранном' : 'избранное'}</IfgText>
+            </Button>
+          </View></>}
+          <View onLayout={(event)=>handleLayout(event)}>
+            <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
+            style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
+            <View >
+            <Share />
+            </View>
+            <IfgText style={gs.fontCaption2}>Поделиться</IfgText>
+            </Button>
           </View>
-          <IfgText style={gs.fontCaption2}>В {isInFavoriet ? 'избранном' : 'избранное'}</IfgText>
-          </Button></View>
-          :
-          <>
-          <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
-          style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
-          <View >
-          <Share />
-          </View>
-          <IfgText style={gs.fontCaption2}>Поделиться</IfgText>
-          </Button>
-          </>
-        }
         </View>
         <View style={gs.mt24} />
         <View style={[gs.flexRow,gs.alignCenter, {justifyContent: 'space-between'}]}>

@@ -21,6 +21,7 @@ import testingStore from '../../../store/state/testingStore/testingStore';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RenderHTMLContent from '../../screens/materials/components/renderHTMLJson';
+import { ScreenWidth } from '../../hooks/useDimensions';
 
 export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
@@ -49,7 +50,7 @@ export const ResultTest = ({route}) => {
       };
 
     useEffect(()=>{
-      console.log('authStore', authStore.access_token);
+      console.log('authStore', ScreenWidth);
       if (testId) {
        testingStore.setMyCurrentResultsTest(testId);
         const summ = testingStore.myCurrentResultsTest.total_score;
@@ -178,6 +179,7 @@ const s = StyleSheet.create({
         borderColor: colors.GREEN_COLOR,
         borderWidth: 16,
         backgroundColor: '#ffffff',
+        paddingHorizontal: ScreenWidth <= 370 ? 6 : 16,
       },
       cardGradientContainer:{
         flex: 1,

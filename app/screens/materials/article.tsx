@@ -119,9 +119,6 @@ export const ArticleView = observer(({route}) => {
 
     const handleLayout = (event, name: string) => {
       const { width, height } = event.nativeEvent.layout;
-      console.log(name,'Width :', width);
-      console.log('screenWidth', ScreenWidth);
-      console.log('WidthElements', widthElements + width);
       setWidthElements((prev)=>prev + width);
     };
 
