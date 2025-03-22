@@ -142,7 +142,7 @@ export const ArticleView = observer(({route}) => {
                 source={{uri: `https://ifeelgood.life${articlesStore.currentArticle.media[0].full_path[0]}`}}
         />
 
-        {/* <View style={gs.mt16} />
+        <View style={gs.mt16} />
         {(articlesStore.currentArticle.body !== null && articlesStore.currentArticle.body?.length > 20) &&
         <CardContainer style={{gap:0}}>
 
@@ -156,7 +156,7 @@ export const ArticleView = observer(({route}) => {
             </CardContainer>;
           }
           return <></>;
-        })} */}
+        })}
 
 
         <View style={gs.mt24} />
