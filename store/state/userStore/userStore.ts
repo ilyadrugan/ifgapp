@@ -42,6 +42,11 @@ class UserStore {
       })
       .catch((err)=>{
         console.log('ERROR', err);
+        console.log(err.status);
+        if (authStore.access_token && err.status === 401) {
+          authStore.logout();
+          errorToast('Ошибка авторизации');
+        }
         // this.errorMessage = err.message;
         // errorToast('Произошла ошибка');
       }).finally(()=>this.isLoading = false);

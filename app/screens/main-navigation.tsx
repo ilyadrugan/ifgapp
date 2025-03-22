@@ -17,10 +17,11 @@ import { Coverage } from './coverage/coverage';
 import { PersonalRecommendations } from './personalRecomendations/personalRecommendations';
 import { SubscribeEmailConfirm } from './registration/components/subscribeReg/subscribeEmailConfirm';
 import { GoalSettings } from './goalSettings/goalSettings';
+import { observer } from 'mobx-react';
 
 const Stack = createNativeStackNavigator();
 
-export const MainNavigation: FC = () => {
+export const MainNavigation = observer(() => {
 
   return (<>
 
@@ -108,4 +109,4 @@ export const MainNavigation: FC = () => {
 
   </Stack.Navigator>
   </>);
-};
+});
