@@ -152,7 +152,7 @@ return <CardContainer >
   <ShimmerPlaceholder style={{borderRadius: 8}} height={40} width={ScreenWidth - 64} />
 }
 {!testingStore.isLoading ? <>
-<CardContainer style={{backgroundColor: '#EFFCF4', borderRadius: 16, gap: 0}}>
+<CardContainer style={{backgroundColor: '#EFFCF4', borderRadius: 16, gap: 0, padding: ScreenWidth > 370 ? 16 : 12}}>
   <View style={[gs.flexRow, {justifyContent: 'space-between'}]} >
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.mr4]}>

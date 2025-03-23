@@ -189,7 +189,7 @@ return <>
                 <View style={{width: '54%'}}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.bold]}>Завершите настройку приложения</IfgText>
                 <IfgText  color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>Пройдите полную версию IFG-тестирования для получения более точных рекомендаций</IfgText>
-                <ButtonTo onPress={()=>navigation.navigate('Testing')} style={[s.buttonTo, gs.mt16, {borderColor: colors.WHITE_COLOR}]} textStyle={[gs.fontCaption3, gs.medium]} textColor={colors.WHITE_COLOR} title="Пройти тестирование" whiteIcon/>
+                <ButtonTo onPress={()=>navigation.navigate('Testing')} style={[s.buttonTo, gs.mt16, {borderColor: colors.WHITE_COLOR}]} textStyle={[gs.fontCaption3, gs.medium]} textColor={colors.WHITE_COLOR} title={ScreenWidth > 370 ? 'Пройти тестирование' : 'К тестированию' }whiteIcon/>
                 </View>
                 <Image resizeMode="contain" style={{height: 160, width: 132, position: 'absolute', bottom: 0, right: 16}} source={require('../../../assets/backgrounds/phone0.4.png')}/>
       </CardContainer>
