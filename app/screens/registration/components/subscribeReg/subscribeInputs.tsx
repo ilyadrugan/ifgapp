@@ -59,7 +59,7 @@ export const SubscribeInputs:
                 await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
                  .then((res)=>{
                   console.log(res.data);
-                  navigation.navigate('SubscribeEmailConfirm');
+                  navigation.navigate('SuccessfulReg');
                 })
                 .catch((err)=>{
                   console.log('payment-callback error',err);
@@ -72,7 +72,7 @@ export const SubscribeInputs:
                    await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
                    .then((res)=>{
                     console.log(res.data);
-                    navigation.navigate('SubscribeEmailConfirm');
+                    navigation.navigate('SuccessfulReg');
                   })
                   .catch((err)=>{
                     console.log('payment-callback error',err);
