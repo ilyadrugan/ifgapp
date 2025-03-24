@@ -59,20 +59,20 @@ export const IFGHome = observer(() => {
     const getData = async () => {
       console.log('GET DATA');
       setIsLoading((prev)=>!prev);
-      await storiesStore.getStories();
-      await testingStore.getAllMyTest();
-      await userStore.getProfile();
-      await ifgScoreStore.getScoreToday();
+      storiesStore.getStories();
+      testingStore.getAllMyTest();
+      userStore.getProfile();
+      ifgScoreStore.getScoreToday();
       if (testingStore.testsList.length > 0) {
         testingStore.setMyCurrentResultsTest(testingStore.testsList[0].id);
         await recommendationStore.getRecommendations(testingStore.testsList[0].id);
       }
-      await articlesStore.loadMainArticles();
+      articlesStore.loadMainArticles();
       articlesStore.clearCurrentArticle();
-      await presentsStore.loadMorePresents();
+      presentsStore.loadMorePresents();
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
-      await dailyActivityStore.getDailyTodayActivity();
-      await dailyActivityStore.getDailyActivitySettings();
+      dailyActivityStore.getDailyTodayActivity();
+      dailyActivityStore.getDailyActivitySettings();
       // if (dailyActivityStore.dailyTodayActivityData?.watter === undefined) {
       //   await dailyActivityStore.addDailyActivity('watter', 0);
       // }
