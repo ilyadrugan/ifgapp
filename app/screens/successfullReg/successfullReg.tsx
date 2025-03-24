@@ -162,8 +162,8 @@ const s = StyleSheet.create({
         marginBottom: 1,
         position: 'absolute',
         bottom: 55 + 79,
-        zIndex: 9,
-        elevation: 1,
+        // zIndex: 9,
+        // elevation: 1,
       },
       dottedLine: {
         position: 'absolute',
@@ -188,8 +188,8 @@ const s = StyleSheet.create({
         alignSelf: 'center',
       },
       imageContainerStyle: {
-        zIndex: 9,
-        elevation: 1,
+        // zIndex: 9,
+        // elevation: 1,
         position: 'absolute',
         bottom: 40,
       },
