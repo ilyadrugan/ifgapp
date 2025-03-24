@@ -21,7 +21,7 @@ export const VideoPlayer: FC<{
     const [isPlaying, setIsPlaying] = useState(false);
 
     var thumbnailsImages = {
-      thumbnail1: img1,
+      // thumbnail1: img1,
       coverage1: img2,
       coverage2: img3,
   };

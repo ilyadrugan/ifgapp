@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import AnimatedArrow from '../../../core/components/animatedArrow/animatedArrow';
 import { isValidEmail } from '../../../core/utils/isValidEmail';
 import { isValidPhoneNumber } from '../../../core/utils/isValidPhoneNumber';
+import DeviceInfo, { getApplicationName, getBuildNumber, getVersion } from 'react-native-device-info';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState(userStore.userInfo?.phone || '');
@@ -228,7 +229,9 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             </Button>
           </View>
     </CardContainer>}
-
+    <View style={[gs.mt16, gs.alignCenter]}>
+        <IfgText style={gs.fontCaption2}>{getApplicationName()} ver. {getVersion()}.{getBuildNumber()}</IfgText>
+    </View>
     </>;
 });
 
