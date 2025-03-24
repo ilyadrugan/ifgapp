@@ -1,19 +1,18 @@
 
 import { StyleSheet, View, Image } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FC}  from 'react';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
+import { ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
 
 export const Step4:FC = () => {
 
-
-
     return <>
     <View style={[s.container,{ zIndex: 99, elevation: 10}]}>
-    <View>
-      <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', top: 44}]}>
+    <View style={{alignItems: 'center'}}>
+      <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', top: 44, paddingHorizontal: 16}]}>
               Начните прямо сейчас
       </IfgText>
       <View style={s.bubble}>
@@ -23,7 +22,7 @@ export const Step4:FC = () => {
     </View>
       <Image
           resizeMode="contain"
-          style={{ width: '100%', bottom: 100}}
+          style={{ width: '100%',top: ScreenHeight < 850 ? 0 : '15%',  position: 'absolute', alignSelf: 'center'}}
           source={require('../../../../assets/backgrounds/girl.png')}/>
     </View>
     </>;
@@ -36,7 +35,7 @@ const s = StyleSheet.create({
       alignItems: 'center',
     },
     bubble:{
-      maxWidth: '80%',
+      maxWidth: '85%',
       padding: 15,
       backgroundColor: 'rgba(255, 255, 255, 0.12)',
       alignItems: 'center',
@@ -46,7 +45,7 @@ const s = StyleSheet.create({
     tail: {
       position: 'absolute',
       bottom: 0,
-      left: 26,
+      left: ScreenWidth * 0.15,
       width: 0,
       height: 0,
       borderRightWidth: 25,
