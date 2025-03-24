@@ -189,7 +189,7 @@ export const Registration = observer(() => {
             }
         }
       });
-      
+
       return (  <>
      <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -337,9 +337,9 @@ export const Registration = observer(() => {
                 />
             }
             <View style={s.acceptContainer}>
-                <View style={s.acceptsBlock}>
+                <View style={[s.acceptsBlock]}>
                     <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
-                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2, {maxWidth: '85%'}]}>
                     Согласие на обработку <IfgText onPress={()=> Linking.openURL('https://ifeelgood.life/policy')} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
                     </IfgText>
                 </View>
@@ -350,7 +350,7 @@ export const Registration = observer(() => {
             <View style={s.acceptContainer}>
                 <View style={s.acceptsBlock}>
                     <CheckBox  onPress={()=>onChecked('info')} checked={infoChecked}/>
-                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2, {maxWidth: '85%'}]}>
                     Согласен на информационную рассылку
                     </IfgText>
                 </View>
