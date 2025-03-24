@@ -230,7 +230,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
           </View>
     </CardContainer>}
     <View style={[gs.mt16, gs.alignCenter]}>
-        <IfgText style={gs.fontCaption2}>{getApplicationName()} ver. {getVersion()}.{getBuildNumber()}</IfgText>
+        <IfgText style={gs.fontCaption2}>ver. {getVersion()}</IfgText>
     </View>
     </>;
 });
