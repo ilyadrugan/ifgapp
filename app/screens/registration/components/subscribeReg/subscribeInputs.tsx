@@ -59,6 +59,7 @@ export const SubscribeInputs:
                 await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
                  .then((res)=>{
                   console.log(res.data);
+                  setIsLoading(false);
                   navigation.navigate('SuccessfulReg');
                 })
                 .catch((err)=>{
@@ -72,6 +73,7 @@ export const SubscribeInputs:
                    await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
                    .then((res)=>{
                     console.log(res.data);
+                    setIsLoading(false);
                     navigation.navigate('SuccessfulReg');
                   })
                   .catch((err)=>{
@@ -84,8 +86,7 @@ export const SubscribeInputs:
 
             })
             .catch(err=>console.log('payment-create error',err))
-            .finally(async()=>{
-                setIsLoading(false);
+            .finally(()=>{
             });
           }
           setIsLoading(false);
@@ -96,6 +97,7 @@ export const SubscribeInputs:
       };
     const onSubmit = handleSubmit(async (data) => {
             console.log(data);
+            setIsLoading(true);
             authStore.clearAllRegisterByPromocodeInputError();
             if (!data.email) {authStore.fillRegisterByPromocodeInputError('email','Заполните поле');}
             else if (!isValidEmail(data.email)){

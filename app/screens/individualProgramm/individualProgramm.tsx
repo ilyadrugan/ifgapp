@@ -40,7 +40,7 @@ export type CheckBoxesTypes = {
   'Физическая активность': boolean[],
 }
 
-export const IndividualProgramm = observer(() => {
+export const IndividualProgramm = observer(({route}) => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
     // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
@@ -187,12 +187,12 @@ export const IndividualProgramm = observer(() => {
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
-        <Button style={s.buttonBack} onPress={onBack}>
+        {!route.params.withNoBack && <Button style={s.buttonBack} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
                 </>
-        </Button>
+        </Button>}
         <View style={gs.mt16} />
 
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]}>

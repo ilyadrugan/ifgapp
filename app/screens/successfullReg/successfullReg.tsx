@@ -12,8 +12,9 @@ import authStore from '../../../store/state/authStore/authStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { CommonActions } from '@react-navigation/native';
 import { navigateAndReset } from '../../core/utils/navigateAndReset';
+import { observer } from 'mobx-react';
 
-export const SuccessfulReg = () => {
+export const SuccessfulReg = observer(() => {
   const navigation = useNavigation<any>();
   const abilities = [
         {
@@ -79,9 +80,9 @@ export const SuccessfulReg = () => {
         <View style={s.footer}>
 
         <AnimatedGradientButton style={s.buttonNext}
-                disabled={authStore.isLoading}
+                disabled={testingStore.isLoading}
                 onPress={()=>testingStore.testsList.length > 0 ?
-                  navigateAndReset(navigation, 'IndividualProgramm')
+                  navigateAndReset(navigation, 'IndividualProgramm', {withNoBack: true})
                   :
                   navigateAndReset(navigation, 'Main')}
                 >
@@ -99,7 +100,7 @@ export const SuccessfulReg = () => {
 
     </>
     );
-  };
+  });
 const s = StyleSheet.create({
     container: {
         flex: 1,
