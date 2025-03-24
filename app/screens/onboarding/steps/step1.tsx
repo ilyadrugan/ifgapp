@@ -6,6 +6,7 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import colors from '../../../core/colors/colors';
 import gs from '../../../core/styles/global';
 import { AnimatedTags } from '../components/animatedTags';
+import { ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
 
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
@@ -20,14 +21,14 @@ export const Step1:FC = () => {
             },
           ];
     return <>
-      <View style={[s.scrollContainer,{ zIndex: 99, elevation: 10,}]}>
+      <View style={[s.scrollContainer,{ zIndex: 99, elevation: 10}]}>
 
         {/* <Image
             resizeMode="contain"
             style={{ width: '90%', top: -200}}
             source={require('../../../../assets/ifeelgood.png')}/> */}
            {/* <View> */}
-           <View style={{marginTop: Platform.OS ==='ios'?32:0, width: width, padding:0}}>
+           <View style={{marginTop: Platform.OS === 'ios' ? 32 : 0, width: width, padding:0}}>
             <AnimatedTags />
             </View>
            <View style={{marginLeft: width * 0.1,top: 72, alignItems: 'flex-start', width: '100%'}}>
@@ -42,18 +43,18 @@ export const Step1:FC = () => {
             style={s.phoneContainer}
             source={require('../../../../assets/backgrounds/onboarding/emptyPhone.png')}>
                         <Carousel
-                        containerCustomStyle={{bottom: 124}}
+                        containerCustomStyle={{bottom: '5%'}}
                         // contentContainerCustomStyle={{}}
                         data={carouselItems}
                         renderItem={({ item, index }) =>{
                             return <Image
                             resizeMode="contain"
                             source={item.img}
-                            style={{width: 250,  marginLeft: index === 0 ? 8 : 0, marginRight: index === 1 ? 8 : 0}}
+                            style={{width: '100%',  marginLeft: 0, marginRight: index === 1 ? 8 : 0}}
                         />;}
                     }
-                        sliderWidth={250}
-                        itemWidth={250}
+                        sliderWidth={ScreenWidth * 0.6}
+                        itemWidth={ScreenWidth * 0.6}
                         scrollEnabled={false} // Отключение скроллинга
                         // useScrollView={true}
                         // autoplayDelay={0.2}
@@ -78,14 +79,16 @@ const s = StyleSheet.create({
         // marginVertical: 120,
       },
       phoneContainer:{
-        flex: 1,
-        padding: 16,
-        flexDirection: 'row',
-        gap: 10,
-        overflow: 'hidden',
-        borderRadius: 22,
-        width: 290,
-        bottom: -200,
+        // flex: 1,
+        // padding: 16,
+        // flexDirection: 'row',
+        // gap: 10,
+        // overflow: 'hidden',
+        // borderRadius: 22,
+        width: ScreenWidth * 0.7,
+        // bottom: -200,
         alignItems: 'center',
+        position: 'absolute',
+        bottom: -250,
       },
   });
