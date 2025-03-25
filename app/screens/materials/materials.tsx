@@ -35,7 +35,7 @@ export const MaterialsScreen = observer(({route}) => {
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
-    
+
     const onSwitch = async (id: number) => {
         if (id === 1) {
             // await articlesStore.clearInterViews('actual');
@@ -56,7 +56,7 @@ export const MaterialsScreen = observer(({route}) => {
     useEffect(() => {
         if (route.params){
             if (route.params.toInterViews) {
-                setActiveTab(1)
+                setActiveTab(1);
             }
         }
         articlesStore.getMaterialFilters().then((res)=>{
@@ -74,11 +74,13 @@ export const MaterialsScreen = observer(({route}) => {
 
     const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
 
-        return <CardContainer key={activeTab + index + activeTab} style={s.articleCard}>
-
-
+        return <CardContainer
+                onPress={()=>{
+                articlesStore.readArticle(item.id);
+                navigation.navigate('ArticleView', {articleId: item.id});
+                }}
+                key={activeTab + index + activeTab} style={s.articleCard}>
             {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
-
             style={{ width: '40%'}}
              /> : <View />}
             {(item.is_new) &&
@@ -92,7 +94,8 @@ export const MaterialsScreen = observer(({route}) => {
                 <ButtonTo onPress={()=>{
                     articlesStore.readArticle(item.id);
                     navigation.navigate('ArticleView', {articleId: item.id});
-                    }} style={{width: 114, height: 26}} title="Подробнее" />
+                    }}
+                    style={{width: 114, height: 26}} title="Подробнее" />
 
                 </View>
             </View>
@@ -101,7 +104,7 @@ export const MaterialsScreen = observer(({route}) => {
         </CardContainer>;
       };
     const renderInterviewItem:FC<{item: InterViewModel, index:number}> = ({item, index}) => {
-        return <CardContainer key={activeTab + index + activeTab} style={s.interviewCard}>
+        return <CardContainer onPress={()=>navigation.navigate('InterviewView', {interviewId: item.id})} key={activeTab + index + activeTab} style={s.interviewCard}>
                 <>
             {(index % 2 === 0 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '40%', height: '100%' }}
