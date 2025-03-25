@@ -16,6 +16,7 @@ import couponStore from '../../../../../store/state/couponStore/couponStore';
 import { TariffModel } from '../../../../../store/state/tariffsStore/models/models';
 import { CouponViewModel } from '../../../../../store/state/couponStore/models/models';
 import { getPercent, getPrice, getPeriod } from '../../../../core/utils/tariffUtils';
+import { useNavigation } from '@react-navigation/native';
 
 export const SubscribeTariffs:
     FC<{
@@ -24,7 +25,7 @@ export const SubscribeTariffs:
         onNext: ()=> void,
     }> = observer(({activeDiscount, onChangeDiscount, onNext}) => {
 
-
+      const navigation = useNavigation<any>();
       const [currentCoupon, setCurrentCoupon] = useState<CouponViewModel | null>(null);
 
       const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +51,10 @@ export const SubscribeTariffs:
       }
       setIsLoading(false);
       });
-
+      const toLogin = () => {
+        authStore.clearMessageError();
+        navigation.replace('Login');
+    };
     return tariffsStore.tariffs.length > 0 && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChangeDiscount(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
           <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
@@ -175,7 +179,14 @@ export const SubscribeTariffs:
                     <View />
                 </View>
 
-      </AnimatedGradientButton></>;
+      </AnimatedGradientButton>
+      <View style={[gs.alignCenter, gs.mt12,{paddingHorizontal: 10}]}>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.fontCaption2}>Уже зарегистрированы?</IfgText>
+                <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, {textAlign: 'center'}]}>
+                Перейдите на <IfgText onPress={toLogin} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>страницу входа</IfgText> в личный кабинет
+                </IfgText>
+      </View>
+      </>;
 });
 
 
