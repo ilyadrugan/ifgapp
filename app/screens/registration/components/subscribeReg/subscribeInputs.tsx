@@ -37,6 +37,7 @@ export const SubscribeInputs:
         control._reset();
     }, [control]);
     const paymentCreate = async () => {
+        setIsLoading(true);
         console.log('paymentCreate');
         // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
         // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
@@ -97,7 +98,6 @@ export const SubscribeInputs:
       };
     const onSubmit = handleSubmit(async (data) => {
             console.log(data);
-            setIsLoading(true);
             authStore.clearAllRegisterByPromocodeInputError();
             if (!data.email) {authStore.fillRegisterByPromocodeInputError('email','Заполните поле');}
             else if (!isValidEmail(data.email)){

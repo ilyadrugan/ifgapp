@@ -32,7 +32,7 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 import { TimeZone } from '../../hooks/useTimezone';
 import { ScreenWidth } from '../../hooks/useDimensions';
-
+import { RouteProp } from '@react-navigation/native';
 export type CheckBoxesTypes = {
   'Питание': boolean[],
   'Сон': boolean[],
@@ -187,7 +187,7 @@ export const IndividualProgramm = observer(({route}) => {
     return (<>
     <ScrollView style={s.container}>
         <View style={gs.mt16} />
-        {!route.params.withNoBack && <Button style={s.buttonBack} onPress={onBack}>
+        {!route.params && <Button style={s.buttonBack} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

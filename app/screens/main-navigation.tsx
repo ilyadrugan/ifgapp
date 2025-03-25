@@ -20,7 +20,26 @@ import { GoalSettings } from './goalSettings/goalSettings';
 import { observer } from 'mobx-react';
 import userStore from '../../store/state/userStore/userStore';
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  OnBoarding: undefined;
+  Main: undefined;
+  Login: undefined;
+  SubscribeEmailConfirm: undefined;
+  Registration: undefined;
+  AboutTest: undefined;
+  Testing: undefined;
+  ResultTest: undefined;
+  IndividualProgramm: {withNoback: boolean };
+  ContestView: undefined;
+  SuccessfulReg: undefined;
+  ArticleView: undefined;
+  InterviewView: undefined;
+  Coverage: undefined;
+  PersonalRecommendations: undefined;
+  GoalSettings: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const MainNavigation = observer(() => {
 
