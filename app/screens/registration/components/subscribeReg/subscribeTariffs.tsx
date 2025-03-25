@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import colors from '../../../../core/colors/colors';
 import { observer } from 'mobx-react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
 import { IfgText } from '../../../../core/components/text/ifg-text';
 import gs from '../../../../core/styles/global';
@@ -20,6 +20,7 @@ export const SubscribeTariffs:
         onChangeDiscount: (id:number)=> void,
         onNext: ()=> void,
     }> = observer(({activeDiscount, onChangeDiscount, onNext}) => {
+      const [isLoading, setIsLoading] = useState(false);
       const {
               control,
               handleSubmit,
@@ -27,6 +28,7 @@ export const SubscribeTariffs:
               formState: { errors },
             } = useForm<{coupon: string}>();
      const onSubmitCoupon = handleSubmit(async (data) => {
+      setIsLoading(true);
       console.log(data.coupon, activeDiscount + 1);
       if (data.coupon){
         await couponStore.checkCoupon({
@@ -34,6 +36,7 @@ export const SubscribeTariffs:
           tariff_id: activeDiscount + 1,
         });
       }
+      setIsLoading(false);
       });
     return tariffsStore.tariffs.length > 0 && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChangeDiscount(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
@@ -128,8 +131,8 @@ export const SubscribeTariffs:
                 // error={authStore.registerByPromocode.emailInputError }
                 // onFocus={()=>authStore.clearRegisterByPromocodeInputError('email')}
               >
-                <Button onPress={onSubmitCoupon} style={{borderRadius: 12, position: 'absolute', right: 12, width: 54, height: 54, backgroundColor: colors.GREEN_COLOR, justifyContent:'center', alignItems: 'center'}}>
-                <Arrow />
+                <Button disabled={isLoading} onPress={onSubmitCoupon} style={{borderRadius: 12, position: 'absolute', right: 12, width: 54, height: 54, backgroundColor: colors.GREEN_COLOR, justifyContent:'center', alignItems: 'center'}}>
+                {isLoading ? <ActivityIndicator /> : <Arrow />}
                 </Button>
               </Input>
                )} />

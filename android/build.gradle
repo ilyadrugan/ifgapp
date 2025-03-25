@@ -7,7 +7,7 @@ buildscript {
         ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.22"
         versionCode = 1
-        versionName = "1.0.1"
+        versionName = "1.0.2"
         // build_gradle_version = '8.7'
         // kotlin_version = '1.9.23'
         // dokka_version = '0.9.17'
