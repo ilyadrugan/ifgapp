@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useState } from 'react';
 import colors from '../../../../core/colors/colors';
 import { observer } from 'mobx-react';
 import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
@@ -13,6 +13,9 @@ import { Input } from '../../../../core/components/input/input';
 import authStore from '../../../../../store/state/authStore/authStore';
 import Arrow from '../../../../../assets/icons/arrow-right.svg';
 import couponStore from '../../../../../store/state/couponStore/couponStore';
+import { TariffModel } from '../../../../../store/state/tariffsStore/models/models';
+import { CouponViewModel } from '../../../../../store/state/couponStore/models/models';
+import { getPercent, getPrice, getPeriod } from '../../../../core/utils/tariffUtils';
 
 export const SubscribeTariffs:
     FC<{
@@ -20,6 +23,10 @@ export const SubscribeTariffs:
         onChangeDiscount: (id:number)=> void,
         onNext: ()=> void,
     }> = observer(({activeDiscount, onChangeDiscount, onNext}) => {
+
+
+      const [currentCoupon, setCurrentCoupon] = useState<CouponViewModel | null>(null);
+
       const [isLoading, setIsLoading] = useState(false);
       const {
               control,
@@ -27,29 +34,35 @@ export const SubscribeTariffs:
               setValue,
               formState: { errors },
             } = useForm<{coupon: string}>();
+      useEffect(() => {
+        const couponActivated = tariffsStore.tariffs.find((tariff)=> tariff.coupon);
+        if (couponActivated){
+          setCurrentCoupon(couponActivated.coupon);
+          onChangeDiscount(couponActivated?.id - 1);
+        }
+      }, []);
      const onSubmitCoupon = handleSubmit(async (data) => {
       setIsLoading(true);
-      console.log(data.coupon, activeDiscount + 1);
+      console.log(data.coupon);
       if (data.coupon){
-        await couponStore.checkCoupon({
-          code: data.coupon.trim(),
-          tariff_id: activeDiscount + 1,
-        });
+
+        await couponStore.checkCoupon(data.coupon.trim(), onChangeDiscount);
       }
       setIsLoading(false);
       });
+
     return tariffsStore.tariffs.length > 0 && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChangeDiscount(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
           <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
           <View style={s.discountPercents}>
-            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%</IfgText>
+            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{getPercent(tariffsStore.tariffs[0])}%</IfgText>
           </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={()=>onChangeDiscount(1)} style={[s.dicountValue, activeDiscount === 1 && s.discountValueActive]} >
           <IfgText color={activeDiscount === 1 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[1].title}</IfgText>
           {tariffsStore.tariffs[1].price_discount &&
               <View style={s.discountPercents}>
-                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{(tariffsStore.tariffs[1].price - tariffsStore.tariffs[1].price_discount) / tariffsStore.tariffs[1].price * 100 }%</IfgText>
+                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{getPercent(tariffsStore.tariffs[1])}%</IfgText>
               </View>}
       </TouchableOpacity>
       </View>
@@ -58,29 +71,29 @@ export const SubscribeTariffs:
       <View style={gs.mt16}/>
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>
-        {couponStore.couponData[activeDiscount] !== null ?
-        (tariffsStore.tariffs[activeDiscount].period === 'year') ?
-        Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 - (tariffsStore.tariffs[activeDiscount].price - couponStore.couponData[activeDiscount].discounted_price)
-        :
-        couponStore.couponData[activeDiscount].discounted_price
-        : (tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}
+        {getPrice(tariffsStore.tariffs[activeDiscount])} {`₽/${getPeriod(tariffsStore.tariffs[activeDiscount].period)}`}
         </IfgText>
-        {tariffsStore.tariffs[activeDiscount].description && <View style={[s.discountPercentsBig, gs.ml24]}>
-            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaption}>
-            -{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%
-            </IfgText>
-        </View>}
       </View>
       <View style={gs.mt12}/>
-      {couponStore.couponData[activeDiscount] !== null ?
-      <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-      {tariffsStore.tariffs[activeDiscount].period === 'year' ?
-      `${Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽` :
-      `${tariffsStore.tariffs[activeDiscount].price} ₽`}
+      {tariffsStore.tariffs[activeDiscount].price_discount &&
+      <View style={[gs.flexRow, gs.alignCenter]}>
+        <View style={[s.discountPercentsBig, gs.mr12, gs.mb4]}>
+            <IfgText color={colors.BLACK_COLOR} style={gs.fontCaption}>
+            -{getPercent(tariffsStore.tariffs[activeDiscount])}%
+            </IfgText>
+        </View>
+        <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
+                {getPrice(tariffsStore.tariffs[activeDiscount], 1)} ₽
+        </IfgText>
+      </View>}
+      {tariffsStore.tariffs[activeDiscount].coupon ?  <>
+      <IfgText color={'#919191'} style={[gs.fontCaptionMedium, gs.light, gs.mt8]}>
+        Применен купон {tariffsStore.tariffs[activeDiscount].coupon.code}
       </IfgText>
-      : tariffsStore.tariffs[activeDiscount].price_discount ? <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-                {Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽
-            </IfgText> : null}
+      <IfgText color={'#919191'} style={[gs.fontCaptionMedium, gs.light, gs.mt4]}>
+        {tariffsStore.tariffs[activeDiscount].coupon.description}
+      </IfgText>
+      </> : null}
       <View style={gs.mt4}/>
       {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
       <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
@@ -126,6 +139,7 @@ export const SubscribeTariffs:
                 value={value}
                 onChange={onChange}
                 placeholder="Промокод"
+                defaultValue={currentCoupon?.code || ''}
                 // keyboardType="email-address"
                 style={[gs.fontCaption, s.promocodeForm, {justifyContent: 'space-between', flexDirection: 'row'}]}
                 // error={authStore.registerByPromocode.emailInputError }

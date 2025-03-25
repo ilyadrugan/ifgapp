@@ -16,6 +16,10 @@ import AnimatedArrow from '../../../../core/components/animatedArrow/animatedArr
 import HttpClient from '../../../../core/http-client/http-client';
 import { API_URL } from '../../../../core/hosts';
 import couponStore from '../../../../../store/state/couponStore/couponStore';
+import { getPrice } from '../../../../core/utils/tariffUtils';
+import CookieManager from '@react-native-cookies/cookies';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const { YookassaModule } = NativeModules;
 
@@ -41,29 +45,31 @@ export const SubscribeInputs:
         console.log('paymentCreate');
         // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
         // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
-        const yearPrice = tariffsStore.tariffChoosed.price_discount ?
-        couponStore.couponData[tarrif_id - 1] !== null ?
-        (Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1 - tariffsStore.tariffChoosed.price + couponStore.couponData[tarrif_id - 1].discounted_price)
-        :
-        Math.round(Math.floor(tariffsStore.tariffChoosed.price_discount) * 12 / 100) * 100 - 1
-        : 0;
-        const monthPrice = couponStore.couponData[tarrif_id - 1] !== null ? couponStore.couponData[tarrif_id - 1]?.discounted_price : tariffsStore.tariffChoosed.price;
-        const price = tariffsStore.tariffChoosed.period === 'year' ? yearPrice : monthPrice;
+        const cookies = await CookieManager.removeSessionCookies();
+        const price = getPrice(tariffsStore.tariffChoosed);
         YookassaModule.startTokenize('', 'Оплата подписки ifeelgood Pro', '', price,
             async (result) => {
-          console.log('Результат из нативного модуля:', result.paymentToken);
-          if (result.paymentToken) {
-           await HttpClient.post(`${API_URL}/api/lk/payment-create`, {price: price, token: result.paymentToken})
+              const options = {headers: {
+                'Authorization': `Bearer ${authStore.access_token}`,
+              },
+              withCredentials: false};
+            console.log('Результат из нативного модуля:', result.paymentToken);
+            if (result.paymentToken) {
+            axios.post(`${API_URL}/api/lk/payment-create`,
+              {price: price, token: result.paymentToken},
+               options
+            )
             .then(async (res)=>{
               console.log('payment-create data',res.data);
               if (res.data.status === 'succeeded') {
-                await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
+                await axios.get(`${API_URL}/api/lk/payment-callback`, options)
                  .then((res)=>{
                   console.log(res.data);
-                  setIsLoading(false);
                   navigation.navigate('SuccessfulReg');
+                  setIsLoading(false);
                 })
                 .catch((err)=>{
+                  setIsLoading(false);
                   console.log('payment-callback error',err);
                 });
               }
@@ -71,13 +77,14 @@ export const SubscribeInputs:
                 YookassaModule.start3DSecure(res.data.confirmation.confirmation_url, async (result) => {
                   console.log('res', result);
                   if (result.status === 'RESULT_OK') {
-                   await HttpClient.get(`${API_URL}/api/lk/payment-callback`)
+                   await axios.get(`${API_URL}/api/lk/payment-callback`, options)
                    .then((res)=>{
                     console.log(res.data);
-                    setIsLoading(false);
                     navigation.navigate('SuccessfulReg');
+                    setIsLoading(false);
                   })
                   .catch((err)=>{
+                    setIsLoading(false);
                     console.log('payment-callback error',err);
                   });
                   }
@@ -86,14 +93,15 @@ export const SubscribeInputs:
 
 
             })
-            .catch(err=>console.log('payment-create error',err))
-            .finally(()=>{
+            .catch(error => {
+              setIsLoading(false);
+              console.log('payment-callback error',error);
             });
+
           }
-          setIsLoading(false);
 
         } );
-
+        // setIsLoading(false);
         // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
       };
     const onSubmit = handleSubmit(async (data) => {

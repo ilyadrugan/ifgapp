@@ -9,6 +9,19 @@ import {
   getVersion,
 } from 'react-native-device-info';
 import authStore from '../../../store/state/authStore/authStore';
+import { PROD_URL } from '../hosts';
+import CookieManager, { Cookies } from '@react-native-cookies/cookies';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const setCookies = async (code: string) => {
+  await CookieManager.set(PROD_URL, {
+    name: 'coupon',
+    value: code,
+    path: '/',
+    secure: true, // true для HTTPS
+    httpOnly: false, // Попробуй отключить, если сервер блокирует
+  });
+};
 const HttpClient = axios.create({
   headers: {
     'Content-type': 'application/json',
@@ -18,7 +31,7 @@ const HttpClient = axios.create({
     'Device-ID': getDeviceId(),
     'Authorization': `Bearer ${authStore.access_token}`,
   },
-  withCredentials: true,
+  withCredentials: false,
   xsrfHeaderName: 'X-CSRF-TOKEN',
   xsrfCookieName: 'csrf_access_token',
 });
@@ -28,11 +41,25 @@ getDeviceName().then(x => {
 });
 
 export const HttpClientWithoutHeaders = axios.create({
+  // headers: {
+  //   'Content-type': 'application/json',
+  //   'Cache-control': 'no-cache',
+  // },
+  withCredentials: true,
+  // xsrfHeaderName: 'X-CSRF-TOKEN',
+  // xsrfCookieName: 'csrf_access_token',
+});
+
+export const HttpClientWithCookie = (cookieString: string) => {
+  return axios.create({
+  headers: {
+    'Content-type': 'application/json',
+    'Cookie': cookieString,
+  },
   withCredentials: true,
   xsrfHeaderName: 'X-CSRF-TOKEN',
   xsrfCookieName: 'csrf_access_token',
-});
-
+});};
 
 const addClientRequestInterceptors = (httpClient: AxiosInstance) => {
   httpClient.interceptors.request.use(

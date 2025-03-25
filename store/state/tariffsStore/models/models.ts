@@ -1,3 +1,4 @@
+import { CouponViewModel } from '../../couponStore/models/models';
 
 export type TariffModel = {
     id: number,
@@ -6,4 +7,5 @@ export type TariffModel = {
     price: number,
     price_discount: number | null,
     period: string,
+    coupon: CouponViewModel | null
 };

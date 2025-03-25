@@ -1,22 +1,31 @@
 import { successToast, errorToast } from '../../../app/core/components/toast/toast';
+import tariffsStore from '../tariffsStore/tariffsStore';
 import { checkCouponApi } from './couponStore.api';
-import { CouponModel, CouponViewModel } from './models/models';
+import { CouponResponseModel } from './models/models';
 
 class CouponStore {
   isLoading = false; // Состояние загрузки
-  couponData: CouponViewModel[] | null[] = [null, null];
-  async checkCoupon(model: CouponModel) {
+  couponData: CouponResponseModel;
+  async checkCoupon(code: string, onChangeActiveTarriff: (id: number)=>void) {
     this.isLoading = true;
-    await checkCouponApi(model)
-      .then((result)=>{
-        this.couponData = [null, null];
-        console.log('result.data', result.data);
-        this.couponData[model.tariff_id - 1] = result.data;
-        successToast('Купон активирован!');
+    await checkCouponApi(code)
+      .then(async (result)=>{
+        console.log('checkCouponApi result.data', result.data);
+        if (result.data.error) {
+          errorToast(result.data.error);
+          return;
+        }
+        else {
+          await tariffsStore.getTariffs(code);
+          this.couponData = result.data;
+          console.log('this.couponData', this.couponData.tariff);
+          onChangeActiveTarriff(result.data.tariff.id - 1);
+          successToast('Купон активирован!');
+        }
       })
       .catch((err)=>{
         // this.couponData = [null, null];
-        console.log('ERROR forgotpassword', err.data);
+        console.log('ERROR checkCouponApi', err);
         errorToast('Купон не найден или не активен');
       });
       // .finally(()=>{this.isLoading = false;});

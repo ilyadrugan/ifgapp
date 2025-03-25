@@ -20,6 +20,7 @@ import userStore from '../../../../store/state/userStore/userStore';
 import { formatPhoneNumberToPlus } from '../../../core/utils/phoneFormatter';
 import { API_URL, BASE_URL } from '../../../core/hosts';
 import HttpClient from '../../../core/http-client/http-client';
+import { getPercent, getPeriod, getPrice } from '../../../core/utils/tariffUtils';
 
 const { YookassaModule } = NativeModules;
 
@@ -115,23 +116,25 @@ export const Subscription: FC = observer(() =>{
               <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
               {tariffsStore.tariffs[0].price_discount &&
               <View style={s.discountPercents}>
-                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{ Math.round((tariffsStore.tariffs[0].price - tariffsStore.tariffs[0].price_discount) / tariffsStore.tariffs[0].price * 100)}%</IfgText>
+                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{getPercent(tariffsStore.tariffs[0])}%</IfgText>
               </View>}
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>onChange(1)} style={[s.dicountValue, activeDiscount === 1 && s.discountValueActive, gs.flex1]} >
               <IfgText color={activeDiscount === 1 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[1].title}</IfgText>
               {tariffsStore.tariffs[1].price_discount &&
               <View style={s.discountPercents}>
-                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{(tariffsStore.tariffs[1].price - tariffsStore.tariffs[1].price_discount) / tariffsStore.tariffs[1].price * 100 }%</IfgText>
+                <IfgText color={colors.BLACK_COLOR} style={gs.fontCaptionSmall}>-{getPercent(tariffsStore.tariffs[0])}%</IfgText>
               </View>}
           </TouchableOpacity>
           </View>
             <View style={gs.mt6} />
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка ifeelgood Pro</IfgText>
 
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>{(tariffsStore.tariffs[activeDiscount].period === 'year') ? Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) * 12 / 100) * 100 - 1 : Math.floor(tariffsStore.tariffs[activeDiscount].price_discount) || tariffsStore.tariffs[activeDiscount].price} {`₽${tariffsStore.tariffs[activeDiscount].period === 'year' ? '/год' : '/мес.'}`}</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>
+            {getPrice(tariffsStore.tariffs[activeDiscount])} {`₽/${getPeriod(tariffsStore.tariffs[activeDiscount].period)}`}
+            </IfgText>
             {tariffsStore.tariffs[activeDiscount].price_discount && <IfgText color={colors.GRAY_COLOR2} style={[gs.fontLight, gs.lineThrough]}>
-            {Math.round(Math.floor(tariffsStore.tariffs[activeDiscount].price) * 12 / 100) * 100 - 1} ₽
+            {getPrice(tariffsStore.tariffs[activeDiscount], 1)} ₽
             </IfgText>}
             {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
             {/* <View style={gs.mt12} />
@@ -160,7 +163,7 @@ export const Subscription: FC = observer(() =>{
 
           <View style={gs.mt4}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Способы оплаты</IfgText>
-            <IfgText disabled={paymentsStore.cards.length<2} onPress={changeFavoriteCard} color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline, {padding:12, margin: -12}]}>{changeFavCard ? 'Отменить' : 'Изменить метод оплаты'}</IfgText>
+            <IfgText disabled={paymentsStore.cards.length < 2} onPress={changeFavoriteCard} color={colors.GREEN_LIGHT_COLOR} style={[gs.fontCaption3, gs.medium, gs.underline, {padding:12, margin: -12}]}>{changeFavCard ? 'Отменить' : 'Изменить метод оплаты'}</IfgText>
           </View>
           {!paymentsStore.isLoading ?  paymentsStore.cards.map((card:CardModel)=>
                     <CardContainer style={s.bankCardContainer}>
