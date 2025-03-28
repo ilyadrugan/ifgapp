@@ -30,7 +30,7 @@ export const Main: FC = observer(() => {
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
 
-  return userStore.userInfo !== null ? (
+  return  (
     <View style={{ height: deviceHeight}}>
       <Tab.Navigator initialRouteName="Дом"
         // headerShown={false}
@@ -68,8 +68,8 @@ export const Main: FC = observer(() => {
     >
       <Tab.Screen name="Профиль" component={ProfileScreen} />
       <Tab.Screen name="Календарь" component={CalendarScreen} />
-      <Tab.Screen name="Дом" component={IFGHome}  />
-      <Tab.Screen name="Материалы" component={MaterialsScreen}
+     <Tab.Screen name="Дом" component={IFGHome}  />
+     {userStore.userInfo !== null ?<Tab.Screen name="Материалы" component={MaterialsScreen}
       options={{
         tabBarIcon: ({ focused }) => (
           <View>
@@ -79,11 +79,11 @@ export const Main: FC = observer(() => {
             />}
           </View>
         ),
-      }}/>
+      }}/>: null}
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
     </Tab.Navigator>
     </View>
-  ) : null;
+  );
 });
 
 const s = StyleSheet.create({
