@@ -320,7 +320,7 @@ export const StoryListItem = ({
           </TouchableWithoutFeedback>
         </View>
       </View>
-      {(content[current].withButton!==0) && <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: height*0.12}}>
+      {content[current].buttonContent && <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: height*0.12}}>
             <ButtonNext onPress={()=>{
               console.log(content[current].buttonContent?.buttonUrl)
                if (content[current].buttonContent?.is_article && content[current].article) navigation.navigate('ArticleView', {articleId: content[current].article.id});
