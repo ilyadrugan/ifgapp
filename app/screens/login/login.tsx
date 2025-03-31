@@ -123,7 +123,7 @@ export const Login = observer(() => {
                 <View style={gs.buttonContent}>
                 <View style={gs.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{forgotPassword?'Отправить':'Войти'}</IfgText>
-                        {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
+                        {authStore.isLoading ? <ActivityIndicator color={colors.WHITE_COLOR}/> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>

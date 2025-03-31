@@ -20,6 +20,7 @@ import { getPrice } from '../../../../core/utils/tariffUtils';
 import CookieManager from '@react-native-cookies/cookies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { ScreenHeight } from '../../../../hooks/useDimensions';
 
 const { YookassaModule } = NativeModules;
 
@@ -66,7 +67,7 @@ export const SubscribeInputs:
                  .then((res)=>{
                   console.log(res.data);
                   navigation.navigate('SuccessfulReg');
-                  setIsLoading(false);
+                  // setIsLoading(false);
                 })
                 .catch((err)=>{
                   setIsLoading(false);
@@ -99,7 +100,9 @@ export const SubscribeInputs:
             });
 
           }
-
+          else {
+            setIsLoading(false);
+          }
         } );
         // setIsLoading(false);
         // await paymentsStore.addPaymentCard().then(()=>setOpenYokassa(prev=>!prev));
@@ -187,7 +190,7 @@ export const SubscribeInputs:
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
-                    {(authStore.isLoading || isLoading) ? <ActivityIndicator /> : <AnimatedArrow />}
+                    {(authStore.isLoading || isLoading) ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
 
                     </View>
                     <View />

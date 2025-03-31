@@ -375,7 +375,7 @@ export const Registration = observer(() => {
                         alignItems: 'center',
                     }}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Зарегистрироваться</IfgText>
-                    {authStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
+                    {authStore.isLoading ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
 
                     </View>
                     <View />

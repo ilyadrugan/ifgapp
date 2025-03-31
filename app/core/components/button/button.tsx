@@ -127,7 +127,7 @@ export const ButtonNext:FC<{
                          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium, textStyle && textStyle]}>{title}</IfgText>
                          {oliveTitle && <IfgText color={colors.OLIVE_COLOR} style={[gs.fontCaptionSmallMedium, gs.ml12, {lineHeight: 16} ]}>{oliveTitle}</IfgText>}
                     </View>
-                    {isLoading ? <ActivityIndicator/> :
+                    {isLoading ? <ActivityIndicator color={colors.WHITE_COLOR}/> :
                       animated ? <AnimatedArrow/> : <ArrowRight />}
                     </View>
 

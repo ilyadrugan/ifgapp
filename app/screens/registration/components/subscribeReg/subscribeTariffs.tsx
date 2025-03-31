@@ -150,7 +150,7 @@ export const SubscribeTariffs:
                 // onFocus={()=>authStore.clearRegisterByPromocodeInputError('email')}
               >
                 <Button disabled={isLoading} onPress={onSubmitCoupon} style={{borderRadius: 12, position: 'absolute', right: 12, width: 54, height: 54, backgroundColor: colors.GREEN_COLOR, justifyContent:'center', alignItems: 'center'}}>
-                {isLoading ? <ActivityIndicator /> : <Arrow />}
+                {isLoading ? <ActivityIndicator color={colors.WHITE_COLOR}/> : <Arrow />}
                 </Button>
               </Input>
                )} />

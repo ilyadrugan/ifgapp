@@ -195,7 +195,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                  <View style={s.buttonContainer}>
                  <View style={s.buttonContent}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Сохранить</IfgText>
-                        {userStore.isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
+                        {userStore.isLoading ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>

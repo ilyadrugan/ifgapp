@@ -156,7 +156,7 @@ export const SubscribeEmailConfirm:
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Проверить</IfgText>
-                    {isLoading ? <ActivityIndicator /> : <AnimatedArrow />}
+                    {isLoading ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>
