@@ -11,6 +11,7 @@ import {
   View,
   Platform,
   SafeAreaView,
+  Linking,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 
@@ -218,7 +219,7 @@ export const StoryListItem = ({
         <View style={styles.backgroundContainer}>
           <Image
             onLoadEnd={() => start()}
-            source={{ uri: `https://abcd.100qrs.ru${content[current].story_image}` }}
+            source={{ uri: `https://appadmin.ifeelgood.life/storage/${content[current].story_image}` }}
             style={[styles.image, storyImageStyle]}
           />
           {load && (
@@ -319,9 +320,18 @@ export const StoryListItem = ({
           </TouchableWithoutFeedback>
         </View>
       </View>
-      <View style={{position: 'absolute', width: '100%', bottom: 0,  alignItems: 'center',justifyContent: 'center', marginBottom: 50}}>
-            <ButtonNext onPress={()=>{onClosePress(); navigation.navigate('ArticleView', {articleId: content[current].article.id});}} style={{width: width - 32 }} title="Читать статью" oliveTitle="+ 1 балл"/>
-      </View>
+      {(content[current].withButton!==0) && <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: height*0.12}}>
+            <ButtonNext onPress={()=>{
+              console.log(content[current].buttonContent?.buttonUrl)
+               if (content[current].buttonContent?.is_article && content[current].article) navigation.navigate('ArticleView', {articleId: content[current].article.id});
+               else {
+                const formattedUrl = content[current].buttonContent?.buttonUrl.startsWith('https') ? content[current].buttonContent?.buttonUrl : `https://${content[current].buttonContent?.buttonUrl}`;
+                Linking.openURL(formattedUrl)
+              }
+               
+               }} style={{width: width - 32 }} title={content[current].buttonContent?.button_text || ''} 
+               />
+      </View>}
       {/* {typeof renderSwipeUpComponent === 'function' ? (
         renderSwipeUpComponent({
           onPress: onSwipeUp,

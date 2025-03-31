@@ -42,19 +42,18 @@ class StoriesStore {
           });
           this.storiesMappedList = uniqueArray.map((cat: IUserStory)=>{
             const subStoriesArticles = result.data['common stories'].filter((item)=>item.category_id === cat.user_id);
-            // console.log('subStoriesArticles', subStoriesArticles);
+            
             return {...cat, stories: subStoriesArticles.map((story, index)=>{
               return {
                 title: story.title,
-                article: story.article,
-                media: story.article.media,
+                article: story.buttonContent.is_article!==0 ? story.article: null,
                 subtitle: story.subtitle,
                 story_image: story.cover,
                 story_id: index,
+                buttonContent: story.withButton?story.buttonContent:null
               };
             })};
           });
-
         //   this.storiesList = {
         //     'Физическая активность': result.data['common stories'].filter((story)=> story.category_title === 'Физическая активность'),
         //     'Правильное питание': result.data['common stories'].filter((story)=> story.category_title === 'Правильное питание'),
@@ -65,7 +64,7 @@ class StoriesStore {
         }
         )
         .catch((err)=>{
-          console.log('ERROR', err.message);
+          console.log('ERROR GET STORIES', err.message);
 
         })
         .finally(()=>{this.isLoading = false;});

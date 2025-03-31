@@ -21,8 +21,13 @@ export interface IUserStory<T = Record<string, any>> {
 
 export interface IUserStoryItem<T = Record<string, any>> {
   title?: string,
-  article: ArticleModel,
-  media?: MediaModel,
+  withButton: number | null,
+  buttonContent: {
+                buttonUrl: string,
+                is_article: number,
+                button_text: string
+  } | null,
+  article: ArticleModel | null,
   subtitle?: string,
   story_id: number;
   story_image: string | undefined;

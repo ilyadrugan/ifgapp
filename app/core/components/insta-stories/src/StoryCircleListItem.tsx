@@ -79,7 +79,7 @@ const StoryCircleListItem = ({
             },
             avatarImageStyle,
           ]}
-          source={{uri: 'https://abcd.100qrs.ru/storage/' + item.user_image}}
+          source={{uri: 'https://appadmin.ifeelgood.life/storage/' + item.user_image}}
           defaultSource={Platform.OS === 'ios' ? DEFAULT_AVATAR : null}
         />
         {showText && (
