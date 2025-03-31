@@ -192,7 +192,7 @@ export const Registration = observer(() => {
 
       return (  <>
      <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={activeTab === 2 ? undefined : Platform.OS === 'ios' ? 'padding' : 'height'}
       style={gs.flex1}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <ScrollView ref={scrollViewRef}>
