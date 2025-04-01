@@ -190,7 +190,7 @@ export const InterviewView = observer(({route}) => {
 
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>{'А также читайте'}</IfgText>
             <View>
-            <ButtonTo onPress={()=>navigation.navigate('Материалы', {resetParams: 'articles'})} title="Все материалы" />
+            <ButtonTo onPress={()=>navigation.navigate('Материалы', {resetParams: 'articles', toArticles: true})} title="Все материалы" />
 
             </View>
           </View>

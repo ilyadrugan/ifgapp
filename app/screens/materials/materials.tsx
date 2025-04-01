@@ -58,12 +58,15 @@ export const MaterialsScreen = observer(({route}) => {
             if (route.params.toInterViews) {
                 setActiveTab(1);
             }
+            else if (route.params.toArticles) {
+                setActiveTab(0);
+            }
             else if (route.params.resetParams) {
                 console.log('route.params.resetParams', route.params.resetParams);
                 switch (route.params.resetParams){
                     case 'articles':
                         articlesStore.clearArticleParams();
-                        setResetParam(1)
+                        setResetParam(1);
                         break;
                     case 'interviews':
                         articlesStore.clearInterViewsParams();
