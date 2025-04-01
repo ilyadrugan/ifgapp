@@ -5,6 +5,7 @@ import { errorToast, successToast } from '../../../app/core/components/toast/toa
 import { StoriesListModel, StoryMappedModel, StoryModel, SubStoryModel } from './models/models';
 import { getStoriesApi } from './storiesStore.api';
 import { IUserStory } from '../../../app/core/components/insta-stories/insta-stories';
+import { InstagramStoriesProps, InstagramStoryProps, StoryItemProps } from '../../../app/core/components/instagram-stories/core/dto/instagramStoriesDTO';
 
 
 class StoriesStore {
@@ -15,7 +16,7 @@ class StoriesStore {
   //   'Снижение стресса': [] as StoryModel[],
   //   'Крепкий сон': [] as StoryModel[],
   // };
-  storiesMappedList: IUserStory[] = [];
+  storiesMappedList: InstagramStoryProps[] = [];
   constructor() {
     makeAutoObservable(this); // Делаем объект реактивным
   }
@@ -26,13 +27,13 @@ class StoriesStore {
       await getStoriesApi()
         .then((result)=>{
 
-          const categories:IUserStory[] = result.data['common stories'].map((cat)=>{
+          const categories:InstagramStoryProps[] = result.data['common stories'].map((cat)=>{
             return {
-              user_name: cat.category_title,
-              user_id: cat.category_id,
-              user_image: cat.category_cover,
-              bgColor: cat.bgColor,
-            };
+              name: cat.category_title,
+              id: `${cat.category_id}`,
+              avatarSource: { uri: 'https://appadmin.ifeelgood.life/storage/' + cat.category_cover},
+              // bgColor: cat.bgColor,
+            } as InstagramStoryProps;
           });
           const uniqueArray = categories.filter((value, index) => {
             const _value = JSON.stringify(value);
@@ -40,20 +41,22 @@ class StoriesStore {
               return JSON.stringify(obj) === _value;
             });
           });
-          this.storiesMappedList = uniqueArray.map((cat: IUserStory)=>{
-            const subStoriesArticles = result.data['common stories'].filter((item)=>item.category_id === cat.user_id);
-            
+          this.storiesMappedList = uniqueArray.map((cat: InstagramStoryProps)=>{
+            const subStoriesArticles = result.data['common stories'].filter((item)=>item.category_id === cat.id);
+
             return {...cat, stories: subStoriesArticles.map((story, index)=>{
               return {
-                title: story.title,
-                article: story.buttonContent.is_article!==0 ? story.article: null,
+                id: index.toString(),
+                article: story.buttonContent.is_article !== 0 ? story.article : null,
                 subtitle: story.subtitle,
-                story_image: story.cover,
+                source: { uri: 'https://appadmin.ifeelgood.life/storage/' + story.cover },
                 story_id: index,
-                buttonContent: story.withButton?story.buttonContent:null
+                buttonContent: story.withButton ? story.buttonContent : null,
+                animationDuration: 6,
               };
-            })};
+            })as StoryItemProps[]};
           });
+          console.log('this.storiesMappedList', this.storiesMappedList);
         //   this.storiesList = {
         //     'Физическая активность': result.data['common stories'].filter((story)=> story.category_title === 'Физическая активность'),
         //     'Правильное питание': result.data['common stories'].filter((story)=> story.category_title === 'Правильное питание'),

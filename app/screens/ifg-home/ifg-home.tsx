@@ -1,6 +1,6 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl} from 'react-native';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking} from 'react-native';
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
@@ -34,7 +34,7 @@ import { categoryColors } from '../../core/colors/categoryColors';
 import { formatRecommendation } from '../../core/utils/textFormatters';
 import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
-import { ScreenWidth } from '../../hooks/useDimensions';
+import { ScreenHeight, ScreenWidth } from '../../hooks/useDimensions';
 import { formatDate } from '../../core/utils/formatDateTime';
 import Delete from '../../../assets/icons/delete.svg';
 import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
@@ -42,6 +42,9 @@ import { PersonalRecommendationModel } from '../../../store/state/recommendation
 import { TimeToDrinkNewBlock } from './blocks/timeToDrinkNew';
 import watterStore from '../../../store/state/watterStore/watterStore';
 import InstaStory from '../../core/components/insta-stories/insta-stories';
+import { InstagramStoriesProps, InstagramStoriesPublicMethods, InstagramStoryProps, StoryItemProps } from '../../core/components/instagram-stories/core/dto/instagramStoriesDTO';
+import InstagramStories from '../../core/components/instagram-stories/components/InstagramStories';
+import { getStoriesApi } from '../../../store/state/storiesStore/storiesStore.api';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -51,7 +54,9 @@ export const IFGHome = observer(() => {
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
+    const [stories, setStories] = useState<InstagramStoryProps[]>([]);
 
+    const ref = useRef<InstagramStoriesPublicMethods>( null );
     useEffect(() => {
       getData();
     }, []);
@@ -59,7 +64,55 @@ export const IFGHome = observer(() => {
     const getData = async () => {
       console.log('GET DATA');
       setIsLoading((prev)=>!prev);
-      storiesStore.getStories();
+      await getStoriesApi()
+              .then((result)=>{
+                const categories:InstagramStoryProps[] = result.data['common stories'].map((cat)=>{
+                  return {
+                    name: cat.category_title,
+                    id: `${cat.category_id}`,
+                    avatarSource: { uri: 'https://appadmin.ifeelgood.life/storage/' + cat.category_cover},
+                    bgColor: cat.bgColor,
+                  } as InstagramStoryProps;
+                });
+                const uniqueArray = categories.filter((value, index) => {
+                  const _value = JSON.stringify(value);
+                  return index === categories.findIndex(obj => {
+                    return JSON.stringify(obj) === _value;
+                  });
+                });
+                const storiesMappedList = uniqueArray.map((cat: InstagramStoryProps)=>{
+                  const subStoriesArticles = result.data['common stories'].filter((item)=>item.category_id == cat.id);
+
+                  return {...cat, stories: subStoriesArticles.map((story, index)=>{
+                    return {
+                      id: index.toString(),
+                      article: story.buttonContent.is_article !== 0 ? story.article : null,
+                      subtitle: story.subtitle,
+                      source: { uri: 'https://appadmin.ifeelgood.life/storage/' + story.cover },
+                      story_id: index,
+                      buttonContent: story.withButton ? story.buttonContent : null,
+                      animationDuration: 6000,
+                      renderFooter: ()=> story.buttonContent ? <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: ScreenHeight * 0.1}}>
+                                  <ButtonNext onPress={()=>{
+                                    console.log(story.buttonContent?.buttonUrl);
+                                     if (story.buttonContent?.is_article && story.article) {
+                                      ref.current?.hide();
+                                      navigation.navigate('ArticleView', {articleId: story.article.id});
+                                    }
+                                     else {
+                                      const formattedUrl = story.buttonContent?.buttonUrl.startsWith('https') ? story.buttonContent?.buttonUrl : `https://${story.buttonContent?.buttonUrl}`;
+                                      Linking.openURL(formattedUrl);
+                                    }
+
+                                     }} style={{width: ScreenWidth - 32 }} title={story.buttonContent?.button_text || ''}
+                                     />
+                            </View> : null,
+                    };
+                  })as StoryItemProps[]};
+                });
+                console.log('this.storiesMappedList', storiesMappedList);
+                setStories([...storiesMappedList]);
+              });
       testingStore.getAllMyTest();
       userStore.getProfile();
       ifgScoreStore.getScoreToday();
@@ -102,23 +155,7 @@ export const IFGHome = observer(() => {
         <IfgText numberOfLines={3} style={[gs.fontCaptionSmall, gs.mt8]}>{subtitle}</IfgText>
         </View>
     </CardContainer>;
-    // const StoryCard = (item: StoryMappedModel, index)=>{
-    //     return (storiesStore.storiesMappedList[index] && storiesStore.storiesMappedList[index].subStories.length > 0) &&
-    //     <CardContainer onPress={() => {
-    //         setCurrentStoryPressed(index);
-    //         // setCurrentStoryPressed(index);
-    //         setModalVisible(true);}} style={[{width: 124, justifyContent: 'space-between', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1, borderColor: item.bgColor, backgroundColor: hexToRgba(item.bgColor, 0.07) }, gs.mr12, index === 0 && gs.ml16]} >
-    //         <View style={[gs.ml12, gs.mt12]}>
-    //         <Eye />
-    //         </View>
-    //         <Image
-    //        source={{uri: 'https://abcd.100qrs.ru/storage/' + storiesStore.storiesMappedList[index].category_cover}}
-    //        style={{width: 100, height: 100, alignSelf: 'center', marginTop: 30, position:'absolute'}}
-    //         resizeMode="contain"
-    //         />
-    //         <IfgText style={[gs.fontLightSmall, gs.regular, {paddingHorizontal: 8, paddingBottom: 8}]}>{storiesStore.storiesMappedList[index].category_title}</IfgText>
 
-    //   </CardContainer>;};
     const StoryShimmerCard = (item, index) => <ShimmerPlaceholder
     style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
     />;
@@ -153,7 +190,7 @@ return <>
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
 
 
-        {storiesStore.isLoading ?
+        {isLoading ?
         <FlatList
         keyExtractor={(_, index) => index.toString()}
         data={[0,1,2]}
@@ -165,15 +202,11 @@ return <>
       />
         : <>
         <View style={gs.mt16} />
-      <InstaStory
-        data={storiesStore.storiesMappedList}
-        duration={6}
-        // showAvatarText={false}
-        renderTextComponent={()=>null}
-        avatarWrapperStyle={{width: 124, justifyContent: 'space-between', alignItems: 'flex-start', overflow: 'hidden', height: 166, padding:0, borderRadius: 16, borderWidth: 1}}
-        avatarImageStyle={{width: 100, height: 100, alignSelf: 'center', marginTop: 20}}
-        // avatarTextStyle={{}}
-      />
+        <InstagramStories
+            ref={ref}
+            stories={[...stories]}
+            showName
+        />
        </>
       }
 
