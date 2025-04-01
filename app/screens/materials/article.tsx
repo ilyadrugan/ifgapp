@@ -250,7 +250,7 @@ export const ArticleView = observer(({route}) => {
 
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>{'А также читайте'}</IfgText>
             <View>
-            <ButtonTo onPress={()=>navigation.navigate('Материалы')} title="Все материалы" />
+            <ButtonTo onPress={()=>navigation.navigate('Материалы', {resetParams: 'articles'})} title="Все материалы" />
 
             </View>
           </View>

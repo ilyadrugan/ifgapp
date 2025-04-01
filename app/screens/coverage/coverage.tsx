@@ -599,7 +599,7 @@ export const Coverage = observer(() => {
         <View style={gs.mt24} />
         {/* <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Последние новости</IfgText>
-            <ButtonTo onPress={()=>navigation.navigate('Материалы')} title="Все материалы" />
+            <ButtonTo onPress={()=>navigation.navigate('Материалы', {resetParams: 'articles'})} title="Все материалы" />
           </View>
           <View style={gs.mt16} />
           <FlatList

@@ -29,8 +29,10 @@ const width = Dimensions.get('screen').width;
 const DropdownBlock: FC<{
   themes: ArticleThemesModel[],
   activeTab: number,
-  activeSwitch: number
-}> = observer(({themes, activeTab, activeSwitch}) => {
+  activeSwitch: number,
+  resetParams: number,
+  setResetParams: (p: number)=>void
+}> = observer(({themes, activeTab, activeSwitch, resetParams, setResetParams}) => {
   const [sortOpen, setSortOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
   const [themeOptions, setThemeOptions] = useState<ArticleThemesModel[]>([ {title: 'Показать все'} as ArticleThemesModel,...themes]);
@@ -112,7 +114,15 @@ const DropdownBlock: FC<{
     setOpenParent(0);
     console.log('articlesStore.articlesQueryParams', articlesStore.articlesQueryParams);
     console.log('articlesStore.interViewsQueryParams', articlesStore.interViewsQueryParams);
+
     if (activeTab === 0) {
+      if (resetParams === 1) {
+        setThemeOption({tag_id: 0, title: 'Показать все'} as ArticleThemesModel);
+        setSearchOption(articlesStore.articlesQueryParams.search || '');
+        setSortOption(sortOptions[0]);
+        setResetParams(0);
+        return;
+      }
       if (articlesStore.articlesQueryParams.tag) {
         const parent = articlesStore.articleThemesList.find((filter)=> filter.children?.some((child)=>child.tag_id === Number(articlesStore.articlesQueryParams.tag)));
         if (parent) {
@@ -159,7 +169,7 @@ const DropdownBlock: FC<{
     );
     }
 
-  },[activeTab]);
+  },[activeTab, resetParams]);
 
   const getMaterialsBySortTheme = (option: ArticleSortModel | ArticleThemesModel | number | string , parent?: ArticleThemesModel) => {
     // if (activeTab === 0) {articlesStore.clearArticles();}
@@ -327,6 +337,7 @@ const DropdownBlock: FC<{
        <TextInputWithIcon
           value={searchOption}
           onChange={handleSearch}
+
           placeholderTextColor="rgba(55, 55, 55, 0.45)"
           placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/>
     <View style={gs.mt16} />

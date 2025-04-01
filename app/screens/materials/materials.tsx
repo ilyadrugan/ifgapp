@@ -17,7 +17,6 @@ import {stripHtmlTags} from '../../core/utils/stripHtmlTags';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { Input, TextInputWithIcon } from '../../core/components/input/input';
-import Search from '../../../assets/icons/search.svg';
 
 const tabss: TabInterface[] = [
     {
@@ -35,6 +34,7 @@ export const MaterialsScreen = observer(({route}) => {
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
+    const [resetParam, setResetParam] = useState(0);
 
     const onSwitch = async (id: number) => {
         if (id === 1) {
@@ -58,7 +58,21 @@ export const MaterialsScreen = observer(({route}) => {
             if (route.params.toInterViews) {
                 setActiveTab(1);
             }
+            else if (route.params.resetParams) {
+                console.log('route.params.resetParams', route.params.resetParams);
+                switch (route.params.resetParams){
+                    case 'articles':
+                        articlesStore.clearArticleParams();
+                        setResetParam(1)
+                        break;
+                    case 'interviews':
+                        articlesStore.clearInterViewsParams();
+                        break;
+                }
+                onRefresh();
+            }
         }
+
         articlesStore.getMaterialFilters().then((res)=>{
             // console.log('res', res);
           });
@@ -70,7 +84,7 @@ export const MaterialsScreen = observer(({route}) => {
         //     console.log(res);
         // });
         console.log(`getQueryParamsString ${articlesStore.articlesQueryParams}`);
-    }, [route]);
+    }, [route.params]);
 
     const renderArtcileItem:FC<{item: ArticleModel, index: number}> = ({item, index}) => {
 
@@ -123,19 +137,19 @@ export const MaterialsScreen = observer(({route}) => {
         </CardContainer>;
       };
 
-    // const onRefresh = async () => {
-    //     setRefreshing(true);
-    //     if (activeTab === 0) {
-    //         await articlesStore.clearArticles();
-    //         await articlesStore.loadMoreArticles(articlesStore.getQueryParamsString());
-    //     }
-    //     if (activeTab === 1) {
-    //         await articlesStore.clearInterViews();
-    //         await articlesStore.loadMoreInterviews(articlesStore.getQueryParamsString());
-    //     }
-    //     console.log(articlesStore.interViews);
-    //     setRefreshing(false);
-    // };
+    const onRefresh = async () => {
+        setRefreshing(true);
+        if (activeTab === 0) {
+            await articlesStore.clearArticles();
+            await articlesStore.loadMoreArticles(articlesStore.getArticleQueryParamsString());
+        }
+        // if (activeTab === 1) {
+        //     await articlesStore.clearInterViews();
+        //     await articlesStore.loadMoreInterviews(articlesStore.getQueryParamsString());
+        // }
+        // console.log(articlesStore.interViews);
+        setRefreshing(false);
+    };
     const onLoadMore = async () => {
         if (activeTab === 0 && articlesStore.articlesList.hasMore) {
             articlesStore.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
@@ -179,7 +193,7 @@ return <>
                 placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/> */}
                 <View style={gs.mt16} />
             {(articlesStore.articleThemesList.length > 0) ?
-                    <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} /> :
+                    <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} resetParams={resetParam} setResetParams={setResetParam}/> :
                     <ShimmerPlaceholder height={200} width={ScreenWidth - 32} />
                     }
                 <View style={s.hashtagsContainer}>
