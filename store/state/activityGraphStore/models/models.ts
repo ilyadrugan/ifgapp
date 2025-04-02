@@ -59,5 +59,6 @@ export type DailyActivitySettingsModel = {
     calories: number,
     floor_spans: number,
     ifg_scores: number,
+    max_ifg: number,
 }
 
