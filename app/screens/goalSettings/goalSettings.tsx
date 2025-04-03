@@ -117,7 +117,7 @@ export const GoalSettings = () => {
               onChangeText={handleInputChange}
               onBlur={onBlur}
               onFocus={()=>setValue(value.split(' ')[0])}
-
+              allowFontScaling={false}
             />
             <Slider
               style={s.slider}

@@ -17,6 +17,7 @@ import AnimatedArrow from '../../../core/components/animatedArrow/animatedArrow'
 import { isValidEmail } from '../../../core/utils/isValidEmail';
 import { isValidPhoneNumber } from '../../../core/utils/isValidPhoneNumber';
 import DeviceInfo, { getApplicationName, getBuildNumber, getVersion } from 'react-native-device-info';
+import { openHealthConnectSettings } from 'react-native-health-connect';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState(userStore.userInfo?.phone || '');
@@ -203,7 +204,25 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             </AnimatedGradientButton>
     </CardContainer>}
 
-    {!onDeleting && <CardContainer style={gs.mt16}>
+    {!onDeleting && <>
+        <CardContainer style={gs.mt16}>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Настройки Health Connect</IfgText>
+        <AnimatedGradientButton style={s.button}
+                disabled={userStore.isLoading}
+                onPress={openHealthConnectSettings}
+                >
+                 <View style={s.buttonContainer}>
+                 <View style={s.buttonContent}>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>К разрешениям</IfgText>
+                       {/* <AnimatedArrow /> */}
+                       <ArrowRight />
+                    </View>
+                    <View />
+                </View>
+
+            </AnimatedGradientButton>
+    </CardContainer>
+    <CardContainer style={gs.mt16}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Удаление профиля</IfgText>
         <Button style={[s.button, {backgroundColor: '#FA5D5D'}]}
                 onPress={onDelete}
@@ -217,7 +236,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 </View>
 
             </Button>
-    </CardContainer>}
+    </CardContainer></>}
     {onDeleting && <CardContainer>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Вы уверены что готовы удалить свой профиль?</IfgText>
         <View style={[gs.mt8, gs.flexRow, gs.alignCenter, {gap: 18}]}>

@@ -14,7 +14,7 @@ export const IfgText: FC<{
 }> = ({ children, style, color, numberOfLines, wrap, onPress,disabled }) => {
 
   return (<>
-    <Text disabled={disabled} numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.PLACEHOLDER_COLOR }]}>{children}</Text>
+    <Text allowFontScaling={false} disabled={disabled} numberOfLines={numberOfLines} onPress={onPress} style={[s.text, wrap && s.wrap, style, {color: color || colors.PLACEHOLDER_COLOR }]}>{children}</Text>
   </>);
 };
 
@@ -49,7 +49,7 @@ export const IfgTextWithLinks: FC<{
         }
 
         // Если обычный текст, просто рендерим
-        return <Text key={index}>{part}</Text>;
+        return <Text allowFontScaling={false} key={index}>{part}</Text>;
       })}
     </Text>
   </>);

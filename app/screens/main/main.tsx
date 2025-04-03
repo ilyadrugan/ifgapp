@@ -62,14 +62,16 @@ export const Main: FC = observer(() => {
             ...gs.fontCaptionSmallMedium,
             bottom: 12,
             marginTop: 12,
+
         },
         headerShown: false,
+        tabBarAllowFontScaling: false,
       })}
     >
       <Tab.Screen name="Профиль" component={ProfileScreen} />
       <Tab.Screen name="Календарь" component={CalendarScreen} />
      <Tab.Screen name="Дом" component={IFGHome}  />
-     {userStore.userInfo !== null ?<Tab.Screen name="Материалы" component={MaterialsScreen}
+     {userStore.userInfo !== null ? <Tab.Screen name="Материалы" component={MaterialsScreen}
       options={{
         tabBarIcon: ({ focused }) => (
           <View>
@@ -79,7 +81,7 @@ export const Main: FC = observer(() => {
             />}
           </View>
         ),
-      }}/>: null}
+      }}/> : null}
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
     </Tab.Navigator>
     </View>

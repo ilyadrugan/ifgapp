@@ -64,7 +64,7 @@ export const IFGHome = observer(() => {
     const getData = async () => {
       console.log('GET DATA');
       setIsLoading((prev)=>!prev);
-      await getStoriesApi()
+      getStoriesApi()
               .then((result)=>{
                 const categories:InstagramStoryProps[] = result.data['common stories'].map((cat)=>{
                   return {
@@ -182,7 +182,7 @@ export const IFGHome = observer(() => {
       return false;
      };
 
-return <>
+return userStore.userInfo !== null && <>
 
       <ScrollView style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
@@ -206,15 +206,13 @@ return <>
             ref={ref}
             stories={[...stories]}
             showName
-            backgroundColor='transparent'
+            backgroundColor="transparent"
         />
        </>
       }
-
-      <View style={gs.mt24} />
-     {isLoading ? <ShimmerPlaceholder style={[{height: 219, width: '100%',  borderRadius: 16 }]}/> :
+     { (isLoading && userStore.roles.includes('user_ins')) ? <ShimmerPlaceholder style={[gs.mt24, {height: 219, width: '100%',  borderRadius: 16 }]}/> :
      (checkTests() && !closeEndSetting) ?
-      <CardContainer style={{borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
+      <CardContainer style={{marginTop: 24,borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
         <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
         <View style={[s.circle]}>
             <Delete />
@@ -228,10 +226,10 @@ return <>
                 <Image resizeMode="contain" style={{height: 160, width: 132, position: 'absolute', bottom: 0, right: 16}} source={require('../../../assets/backgrounds/phone0.4.png')}/>
       </CardContainer>
       :
-      <ImageBackground
+      userStore.roles.includes('user_ins') ? <ImageBackground
           resizeMode="stretch"
           source={require('../../../assets/backgrounds/gradientCard3.png')}
-          style={[s.cardGradientContainer]}
+          style={[s.cardGradientContainer, gs.mt24]}
           >
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Финансовая защита заемщиков кредитов</IfgText>
             <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Узнайте как защитить себя и своих близких на случай непредвиденных ситуаций с жизнью и здоровьем в совместном проекте АльфаСтрахование-Жизнь и ifeelgood!</IfgText>
@@ -241,7 +239,7 @@ return <>
                     <ArrowRight />
                 </>
             </Button>
-      </ImageBackground>}
+      </ImageBackground> : null}
       <View style={gs.mt24} />
 
        <ActivityBlock />
@@ -295,7 +293,7 @@ return <>
         {recommendationStore.personalRecomendationList.length - 3 > 0 &&
           <><View style={gs.mt16} />
         <View style={gs.flexRow}>
-          <Button style={s.buttonTo} onPress={()=>navigation.navigate('PersonalRecommendations')}>
+          <Button style={[s.buttonTo, {maxHeight: 30}]} onPress={()=>navigation.navigate('PersonalRecommendations')}>
               <IfgText color={colors.GRAY_COLOR3} style={[gs.fontBody2, gs.light, {lineHeight: 16}]}>Ранее - {formatRecommendation(recommendationStore.personalRecomendationList.length - 3)}</IfgText>
           </Button>
         </View></>}

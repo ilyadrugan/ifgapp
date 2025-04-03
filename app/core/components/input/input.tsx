@@ -59,7 +59,7 @@ export const Input: FC<{
       value={value}
       onFocus={onFocus}
       defaultValue={defaultValue}
-
+      allowFontScaling={false}
      />
     {children ? children : null }
       </View>
@@ -90,7 +90,7 @@ export const TextInputWithIcon: FC<{
   return (
     <View style={[s.inputContainer, style]}>
       <TextInput
-        
+        allowFontScaling={false}
         value={value}
         style={[s.input2, {color: colors.PLACEHOLDER_COLOR}]}
         placeholder={placeholder}

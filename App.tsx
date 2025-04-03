@@ -39,7 +39,7 @@ const App = () => {
   return (<>
   <Provider {...stores}>
     <GestureHandlerRootView style={{ flex: 1 }}>
-    <StatusBar />
+    <StatusBar hidden />
     <NavigationContainer>
        <SafeAreaProvider>
           <FirebaseComponent/>
