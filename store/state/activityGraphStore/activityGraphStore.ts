@@ -15,6 +15,7 @@ class DailyActivityStore {
   dailyTodayActivityDataLoading = false;
   isGraphLoading = false; // Состояние загрузки
   dailyTodayActivityAddLoading = false;
+  dailyActivitySettingLoading = false;
   dailyActivitySettings: DailyActivitySettingsModel = {
     steps: 10000,
     calories: 1500,
@@ -27,6 +28,7 @@ class DailyActivityStore {
     floor_spans: 50,
     ifg_scores: 100,
   };
+  // max_ifg: number;
 
   constructor() {
     makeAutoObservable(this);
@@ -179,7 +181,7 @@ class DailyActivityStore {
           // .finally(()=>{this.isLoading = false;});
       };
       getDailyActivitySettings = async () => {
-        // this.isLoading = true;
+        this.dailyActivitySettingLoading = true;
       //   this.errorMessage = '';
         console.log('getDailyActivitySettings');
         await getDailyActivitySettingsApi()
@@ -191,8 +193,8 @@ class DailyActivityStore {
           .catch((err)=>{
             console.log('ERROR', err.message);
 
-          });
-          // .finally(()=>{this.isLoading = false;});
+          })
+          .finally(()=>{this.dailyActivitySettingLoading = false;});
       };
       setDailyActivitySettings = async (model: DailyActivitySettingsModel) => {
         // this.isLoading = true;
@@ -201,7 +203,11 @@ class DailyActivityStore {
         await setDailyActivitySettingsApi(model)
           .then((result)=>{
             console.log('setDailyActivitySettings result',result.data);
-            this.dailyActivitySettings = result.data;
+            this.dailyActivitySettings.calories = result.data.calories;
+            this.dailyActivitySettings.steps = result.data.steps;
+            this.dailyActivitySettings.ifg_scores = result.data.ifg_scores;
+            this.dailyActivitySettings.floor_spans = result.data.floor_spans;
+
             successToast('Цели успешно изменены!');
           }
           )

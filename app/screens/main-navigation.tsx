@@ -58,7 +58,7 @@ export const MainNavigation = observer(() => {
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{ headerShown: false }}
+        options={{ statusBarHidden: false,  headerShown: false}}
       />
       <Stack.Screen
         name="Login"

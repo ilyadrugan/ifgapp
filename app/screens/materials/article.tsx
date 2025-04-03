@@ -52,15 +52,17 @@ export const ArticleView = observer(({route}) => {
         loadArticleById(articleId).then(()=>
         setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
         // console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
-        const persRec = recommendationStore.personalRecomendationList.find((rec)=> rec.article.id === articleId);
-        console.log('persRec', persRec);
-        if (persRec) {
-          setPersonalRecommendation(persRec);
-          setIsReaded(persRec.status === 'completed');
-        }
-        else {
-          setIsReaded(true);
-        }
+        
+        // +баллы за прочтение
+        // const persRec = recommendationStore.personalRecomendationList.find((rec)=> rec.article.id === articleId);
+        // console.log('persRec', persRec);
+        // if (persRec) {
+        //   setPersonalRecommendation(persRec);
+        //   setIsReaded(persRec.status === 'completed');
+        // }
+        // else {
+        //   setIsReaded(true);
+        // }
       }
     }, [articleId]);
     const onRefresh = async () => {
@@ -202,9 +204,11 @@ export const ArticleView = observer(({route}) => {
           <IfgText numberOfLines={1} style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.unlike} не нравится</IfgText>
           </Button>
         </View>
-        <InView onChange={(inView: boolean) => {
-          if (!isReaded && inView) {onRead();}
-        }}>
+        <InView 
+        // onChange={(inView: boolean) => {
+        //   if (!isReaded && inView) {onRead();}
+        // }}
+        >
         <View style={gs.mt12} />
         </InView>
 

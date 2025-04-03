@@ -8,7 +8,7 @@ import { Provider } from 'mobx-react';
 import stores from './store/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Linking, LogBox, StatusBar } from 'react-native';
+import { Linking, LogBox, SafeAreaView, StatusBar } from 'react-native';
 import { Toast } from './app/core/components/toast/toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { FirebaseComponent } from './app/core/components/firebase-component/firebase-component';
@@ -39,7 +39,7 @@ const App = () => {
   return (<>
   <Provider {...stores}>
     <GestureHandlerRootView style={{ flex: 1 }}>
-    <StatusBar hidden={true} />
+    <StatusBar />
     <NavigationContainer>
        <SafeAreaProvider>
           <FirebaseComponent/>

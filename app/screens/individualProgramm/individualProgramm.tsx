@@ -223,7 +223,7 @@ export const IndividualProgramm = observer(({route}) => {
          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Ваш персональный план</IfgText>
 
         <View style={gs.mt16} />
-        {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList) && <><CardContainer>
+        {(testingStore.myCurrentResultsTest.id !== 0 && recommendationStore.recommendationList && testingStore.currentTest) && <><CardContainer>
           <CardContainer style={{borderRadius: 12, height: 122, justifyContent: 'space-between',backgroundColor: colors.GREEN_LIGHT_COLOR, flexDirection: 'row'}} >
             <View style={{justifyContent: 'space-between', height: '100%'}}>
               <IfgText color={colors.WHITE_COLOR} style={gs.fontCaptionMedium}>Питание</IfgText>

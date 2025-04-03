@@ -127,7 +127,7 @@ return <CardContainer >
           {userStore.userInfo?.email}
         </IfgText>
       )}
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('GoalSettings')}>
+      <TouchableWithoutFeedback disabled={dailyActivityStore.dailyActivitySettingLoading} onPress={() => navigation.navigate('GoalSettings')}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
           <IfgText color="#747474">Настроить цели</IfgText>
           <GoalSettings />
@@ -184,7 +184,7 @@ return <CardContainer >
   </Animated.View>
 
   </CardContainer>
-  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} maximum={dailyActivityStore.dailyActivitySettings.max_ifg}/>
+  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores>dailyActivityStore.dailyActivitySettings.max_ifg?dailyActivityStore.dailyActivitySettings.max_ifg:dailyActivityStore.dailyActivitySettings.ifg_scores}/>
   <IFGActivity today dailySettings={dailyActivityStore.dailyActivitySettings}/>
   </>
   :

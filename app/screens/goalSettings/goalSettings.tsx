@@ -40,6 +40,7 @@ export const GoalSettings = () => {
     };
     useEffect(() => {
       console.log('dailyActivityStore.dailyActivitySettingsToSend', dailyActivityStore.dailyActivitySettingsToSend);
+      dailyActivityStore.getDailyActivitySettings()
     }, []);
     const onSave = async () => {
       console.log('dailyActivityStore.dailyActivitySettingsToSend', dailyActivityStore.dailyActivitySettingsToSend);
@@ -168,7 +169,7 @@ export const GoalSettings = () => {
 
         <View style={gs.mt16} />
         <CardContainer >
-            <SliderInput title="Цель ifg-баллов" min={1} max={dailyActivityStore.dailyActivitySettings.max_ifg} unit="баллов" initialValue={dailyActivityStore.dailyActivitySettings.ifg_scores} />
+            <SliderInput title="Цель ifg-баллов" min={1} max={dailyActivityStore.dailyActivitySettings.max_ifg} unit="баллов" initialValue={dailyActivityStore.dailyActivitySettings.ifg_scores>dailyActivityStore.dailyActivitySettings.max_ifg?dailyActivityStore.dailyActivitySettings.max_ifg:dailyActivityStore.dailyActivitySettings.ifg_scores} />
             <SliderInput title="Шаги" min={1000} max={30000} unit="шагов" step={500} initialValue={dailyActivityStore.dailyActivitySettings.steps} />
             <SliderInput title="Калории" min={100} max={3000} unit="ккал" step={50} initialValue={dailyActivityStore.dailyActivitySettings.calories} />
             <SliderInput title="Пролёты" min={1} max={50} unit="пролетов" initialValue={dailyActivityStore.dailyActivitySettings.floor_spans} />

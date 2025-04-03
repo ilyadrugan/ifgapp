@@ -459,7 +459,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   );
 
   return (
-    <Modal statusBarTranslucent={statusBarTranslucent} visible={visible} transparent animationType="none" testID="storyRNModal" onRequestClose={onClose}>
+    <Modal statusBarTranslucent={statusBarTranslucent} hitSlop={{top: 10, bottom: 10, left: 0, right: 0}}  visible={visible} transparent animationType="none" testID="storyRNModal" onRequestClose={onClose}>
       <GestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View style={ModalStyles.container} testID="storyModal">
           <Pressable

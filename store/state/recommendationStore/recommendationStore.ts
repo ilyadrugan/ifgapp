@@ -5,6 +5,7 @@ import { errorToast, successToast } from '../../../app/core/components/toast/toa
 import { completeRecommendationApi, deleteRecommendationApi, getPersonalRecommendationsApi, getRecommendationsApi, storeRecommendationApi } from './recommendationStore.api';
 import { PersonalRecommendationModel, RecommendationsModel, StoreRecommendationModel } from './models/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import dailyActivityStore from '../activityGraphStore/activityGraphStore';
 
 
 class RecommendationStore {
@@ -68,6 +69,7 @@ class RecommendationStore {
             this.personalRecomendationList = result.data.map((rec)=>{
               return {...rec, is_viewed: JSON.parse(recs).includes(rec.id)};
             });
+            // dailyActivityStore.max_ifg = result.data.filter((rec)=>rec.status==='completed'||rec.status==='pending').length
             // console.log('this.personalReacomendationList', this.personalRecomendationList);
           }
           )
