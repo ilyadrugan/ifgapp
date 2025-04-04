@@ -25,7 +25,6 @@ export const PersonalRecommendations = observer(() =>{
         navigation.goBack();
     };
     const onCompleted =  async (rec: PersonalRecommendationModel) => {
-      await ifgScoreStore.addScore(1);
       if (rec) {
        // console.log('personalRecommendation.id',personalRecommendation.id);
        await recommendationStore.completeRecommendation(`${rec.id}`);
@@ -34,13 +33,14 @@ export const PersonalRecommendations = observer(() =>{
        const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
        dailyActivityStore.addDailyActivity(categoryEng, newValue);
        await recommendationStore.getPersonalRecommendations();
+       await ifgScoreStore.addScore(1);
       }
      };
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-      return <CardContainer style={gs.mt16} 
+      return <CardContainer style={gs.mt16}
       onPress={()=>{
-        recommendationStore.readRecommendation(rec.id)
-        navigation.navigate('ArticleView', {articleId: rec.article.id})}} 
+        recommendationStore.readRecommendation(rec.id);
+        navigation.navigate('ArticleView', {articleId: rec.article.id});}}
       >
                 <ArticleHeader
                   // isCicleBadge={!rec.is_viewed}

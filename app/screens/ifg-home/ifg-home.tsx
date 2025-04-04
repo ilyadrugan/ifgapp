@@ -160,16 +160,10 @@ export const IFGHome = observer(() => {
     style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
     />;
 
-    const onCompleted =  async (rec: PersonalRecommendationModel) => {
-      await ifgScoreStore.addScore(1);
+    const onCompleted = (rec: PersonalRecommendationModel) => {
       if (rec) {
        // console.log('personalRecommendation.id',personalRecommendation.id);
-       await recommendationStore.completeRecommendation(`${rec.id}`);
-       const categoryEng = RecommendationCategoryToEng(rec.category);
-       // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
-       const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
-       dailyActivityStore.addDailyActivity(categoryEng, newValue);
-       await recommendationStore.getPersonalRecommendations();
+       recommendationStore.completeRecommendation(`${rec.id}`);
       }
      };
      const checkTests = () =>{
@@ -285,7 +279,7 @@ return userStore.userInfo !== null && <>
                     </View>
            {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
           </View>
-          <ButtonNext onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />
+          <ButtonNext isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />
 
         </CardContainer>;
         })}

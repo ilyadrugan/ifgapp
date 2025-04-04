@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { BASE_URL } from '../../../app/core/hosts';
 import axios from 'axios';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
@@ -6,10 +6,16 @@ import { completeRecommendationApi, deleteRecommendationApi, getPersonalRecommen
 import { PersonalRecommendationModel, RecommendationsModel, StoreRecommendationModel } from './models/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dailyActivityStore from '../activityGraphStore/activityGraphStore';
+import { RecommendationCategoryToEng } from '../../../app/core/utils/recommendationFormatter';
+import ifgScoreStore from '../ifgScoreStore/ifgScoreStore';
 
 
 class RecommendationStore {
   isLoading = false; // Состояние загрузки
+  isCompleteLoading = {
+    recId: 0,
+    isLoading: false,
+  }; // Состояние загрузки
   recommendationList: RecommendationsModel = {
      Сон: [],
         Питание: [],
@@ -94,16 +100,36 @@ class RecommendationStore {
         };
     completeRecommendation = async (id: string) => {
           console.log('completeRecommendation');
-            this.isLoading = true;
+            this.isCompleteLoading = {
+              recId: Number(id),
+              isLoading: true,
+            };
             await completeRecommendationApi(id)
               .then((result)=>{
                 console.log('completeRecommendationApi result', result.data);
+
+                runInAction(() => {
+                  const rec = this.personalRecomendationList.find((recc)=>recc.id === Number(id));
+                  if (rec) {
+                    rec.status = 'completed';
+                    const categoryEng = RecommendationCategoryToEng(rec.category);
+                    const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
+                    dailyActivityStore.addDailyActivity(categoryEng, newValue);
+                    ifgScoreStore.addScore(1);
+                  }
+                });
+
               }
               )
               .catch((err)=>{
                 console.log('completeRecommendationApi ERROR', err.message);
               })
-              .finally(()=>{this.isLoading = false;});
+              .finally(()=>{
+                this.isCompleteLoading = {
+                  recId: 0,
+                  isLoading: false,
+                };
+              });
           };
     deleteRecommendation = async (user_recomendation_id: string) => {
             console.log('deleteRecommendation',user_recomendation_id);
