@@ -48,9 +48,6 @@ import { getStoriesApi } from '../../../store/state/storiesStore/storiesStore.ap
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
-    const [isModalVisible, setModalVisible] = useState(false);
-    const [currentStoryPressed, setCurrentStoryPressed] = useState(undefined);
-    const [currentCaregoryStoryPressed, setCurrentCaregoryStoryPressed] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
@@ -328,7 +325,7 @@ return userStore.userInfo !== null && <>
                     />
                 <Button onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
                   <>
-                  <IfgText style={gs.fontBody2}>{!item.winners ? 'Как получить приз' : 'К результатам'}</IfgText>
+                  <IfgText style={gs.fontBody2}>{!(item.winners.length > 0) ? 'Как получить приз' : 'К результатам'}</IfgText>
                   <View style={{marginTop:2}}>
                     <ArrowRightBlack width={12} />
                   </View>

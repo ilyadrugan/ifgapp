@@ -24,7 +24,6 @@ export const ContestView = observer(({route}) => {
     const onBack = () => {
       presentsStore.clearCurrentPresent();
       navigation.goBack();
-
     };
     const { contestId } = route.params;
     useEffect(() => {
@@ -50,7 +49,7 @@ export const ContestView = observer(({route}) => {
         </Button>
         <View style={gs.mt16} />
         <IfgText style={[gs.h2, gs.bold]}>{presentsStore.currentPresent?.title}</IfgText>
-        {presentsStore.currentPresent.winners.length>0 && <>
+        {presentsStore.currentPresent.winners.length > 0 && <>
         <View style={gs.mt16} />
         <CardContainer>
             <IfgText style={[gs.fontCaption, gs.bold]}>
@@ -73,7 +72,7 @@ export const ContestView = observer(({route}) => {
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaptionMedium, gs.bold]}>{stripHtmlTags(presentsStore.currentPresent.mintext)}</IfgText>
             {/* <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall]}>Участвуйте в конкурсе, и победителям мы отправим подарки.</IfgText> */}
              <Image
-                resizeMode='contain'
+                resizeMode="contain"
                 style={{alignSelf: 'center', height: 300, width: '100%'}}
                 source={{uri: `https://ifeelgood.life${presentsStore.currentPresent.media[0].full_path[0]}`}}
             />
@@ -93,10 +92,10 @@ export const ContestView = observer(({route}) => {
         <View style={gs.mt24}/>
         <FeedBack />
 
-       { presentsStore.presentsList.presents.filter((item)=>item.id !== presentsStore.currentPresent.id).length>0 &&<><View style={gs.mt24} />
+       { presentsStore.presentsList.presents.filter((item)=>item.id !== presentsStore.currentPresent.id).length > 0 && <><View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Конкурсы</IfgText>
-            <ButtonTo onPress={onBack} title="Все конкурсы" />  
+            <ButtonTo onPress={onBack} title="Все конкурсы" />
         </View>
         </>}
         <View style={gs.mt24}/>
@@ -114,7 +113,7 @@ export const ContestView = observer(({route}) => {
                     />
                 <Button onPress={()=>navigation.replace('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
                   <>
-                  <IfgText style={gs.fontBody2}>{item.winners.length>0 ? 'Как получить приз' : 'К результатам'}</IfgText>
+                  <IfgText style={gs.fontBody2}>{!(item.winners.length > 0) ? 'Как получить приз' : 'К результатам'}</IfgText>
                   <View style={gs.mt2}>
                     <ArrowRightBlack width={12} />
                   </View>

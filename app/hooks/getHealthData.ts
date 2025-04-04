@@ -91,7 +91,6 @@ export const getHealthData = async (date: Date) => {
         { accessType: 'read', recordType: 'FloorsClimbed' },
         // { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
         { accessType: 'read', recordType: 'TotalCaloriesBurned' },
-        { accessType: 'read', recordType: 'ElevationGained' },
       ]).then((permissions) => {
         console.log('Granted permissions ', { permissions });
       });
@@ -133,18 +132,18 @@ export const getHealthData = async (date: Date) => {
         timeRangeFilter,
       });
       let totalFloors = floorsClimbed.records.reduce((sum, cur) => sum + cur.floors, 0);
-      console.log('totalFloors', totalFloors);
-      if (totalFloors===0) {
-        const steps = await readRecords('Steps', { timeRangeFilter });
-        const elevationData = await readRecords('ElevationGained', { timeRangeFilter });
-        console.log('elevationData', elevationData)
-        if (elevationData.records.length > 0) {
-          const totalElevation = elevationData.records.reduce((sum, item) => sum + item.elevation.inMeters, 0);
-          console.log('totalElevation', totalElevation);
-          const estimatedFloors = totalElevation / 3; // 3 метра — средняя высота этажа
-          totalFloors = estimatedFloors;
-        }
-      }
+      // console.log('totalFloors', totalFloors);
+      // if (totalFloors === 0) {
+      //   const steps = await readRecords('Steps', { timeRangeFilter });
+      //   const elevationData = await readRecords('ElevationGained', { timeRangeFilter });
+      //   console.log('elevationData', elevationData);
+      //   if (elevationData.records.length > 0) {
+      //     const totalElevation = elevationData.records.reduce((sum, item) => sum + item.elevation.inMeters, 0);
+      //     console.log('totalElevation', totalElevation);
+      //     const estimatedFloors = totalElevation / 3; // 3 метра — средняя высота этажа
+      //     totalFloors = estimatedFloors;
+      //   }
+      // }
 
     return {totalSteps, totalCalories, totalFloors};
 
