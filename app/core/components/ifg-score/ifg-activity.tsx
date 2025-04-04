@@ -36,13 +36,13 @@ export const IFGActivity:FC<{dailyActivities?: DailyActivityModel, today?: boole
             color={ActivityStats[name].color}/>
         )} */}
         <ColumnarProgressBar
-            height={(today ? healthData.steps : dailyValues?.steps ||  0) / (dailySettings?.steps || 10000) * 100}
+            height={(today ? healthData.steps : dailyValues?.steps ||  0) / (dailyActivityStore.dailyActivitySettings.steps) * 100}
             color={colors.GREEN_COLOR}/>
         <ColumnarProgressBar
-            height={(today ? healthData.caloriesBurned : dailyValues?.calories || 0) / (dailySettings?.calories || 1500) * 100}
+            height={(today ? healthData.caloriesBurned : dailyValues?.calories || 0) / (dailyActivityStore.dailyActivitySettings.calories) * 100}
             color={colors.OLIVE_COLOR}/>
          <ColumnarProgressBar
-            height={(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0) / (dailySettings?.floor_spans || 50) * 100}
+            height={(today ? healthData.flightsClimbed : dailyValues?.floor_spans ||  0) / (dailyActivityStore.dailyActivitySettings.floor_spans) * 100}
             color={colors.ORANGE_COLOR}/>
         </View>
         <View style={[gs.flexRow]}>

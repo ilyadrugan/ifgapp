@@ -45,8 +45,32 @@ export const Graphs = observer(({refresh}) =>{
     const [graphData, setGraphData] = useState<GraphDataType[]>([]);
     useEffect(() => {
         dailyActivityStore.getIfgScoreActivity('month').then(()=>{
-            if (activeTab === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities.slice(-7));}
-            else {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
+            if (activeTab === 0) {
+                switch (activeSwitch) {
+                    case 0:
+                        convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities.slice(-7));
+                        break;
+                    case 1:
+                        convertToGraphDataType(dailyActivityStore.graphStepsActivities.slice(-7));
+                        break;
+                    case 2:
+                        convertToGraphDataType(dailyActivityStore.graphCaloriesActivities.slice(-7));
+                        break;
+                }
+            }
+            else {
+                switch (activeSwitch) {
+                    case 0:
+                        convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);
+                        break;
+                    case 1:
+                        convertToGraphDataType(dailyActivityStore.graphStepsActivities);
+                        break;
+                    case 2:
+                        convertToGraphDataType(dailyActivityStore.graphCaloriesActivities);
+                        break;
+                }
+            }
         });
         dailyActivityStore.getGraphCaloriesActivity('month');
         dailyActivityStore.getGraphStepsActivity('month');

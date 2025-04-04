@@ -42,7 +42,7 @@ export const CalendarBlock: FC<{setChoosedDate: ()=>void, refresh: boolean}> = o
           <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />
          </> :
          <>
-         <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores}/>
+         <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.max_ifg}/>
          <IFGActivity today={formatDate() === dailyActivityStore.dailyActivityData.date} dailyActivities={dailyActivityStore.dailyActivityData}/></>
 }
     </CardContainer>;
