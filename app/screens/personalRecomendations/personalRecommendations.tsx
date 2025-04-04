@@ -1,7 +1,6 @@
-import { observer } from 'mobx-react';
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, FlatList, StyleSheet } from 'react-native';
 import { categoryColors } from '../../core/colors/categoryColors';
 import { Button, ButtonNext } from '../../core/components/button/button';
@@ -12,10 +11,7 @@ import { ArticleHeader } from '../ifg-home/components/articleHeader';
 import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
 import colors from '../../core/colors/colors';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
-import ifgScoreStore from '../../../store/state/ifgScoreStore/ifgScoreStore';
-import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
-import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
-import { clearObserving } from 'mobx/dist/internal';
+import { observer } from 'mobx-react';
 
 
 
@@ -26,25 +22,22 @@ export const PersonalRecommendations = observer(() =>{
     };
     const onCompleted =  async (rec: PersonalRecommendationModel) => {
       if (rec) {
-       // console.log('personalRecommendation.id',personalRecommendation.id);
        await recommendationStore.completeRecommendation(`${rec.id}`);
-       const categoryEng = RecommendationCategoryToEng(rec.category);
-       // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
-       const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
-       dailyActivityStore.addDailyActivity(categoryEng, newValue);
-       await recommendationStore.getPersonalRecommendations();
-       await ifgScoreStore.addScore(1);
       }
      };
+     useEffect(()=>{
+      recommendationStore.getPersonalRecommendations()
+     },[])
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-      return <CardContainer style={gs.mt16}
+      return <CardContainer key={rec.id.toString()} style={gs.mt16}
       onPress={()=>{
         recommendationStore.readRecommendation(rec.id);
         navigation.navigate('ArticleView', {articleId: rec.article.id});}}
+    
       >
-                <ArticleHeader
-                  // isCicleBadge={!rec.is_viewed}
-                  isNew={!rec.is_viewed}
+      <ArticleHeader
+        // isCicleBadge={!rec.is_viewed}
+        isNew={!rec.is_viewed}
                   time={rec.publish_time}
                   hashTagColor={categoryColors[rec.category]}
                   hashTagText={'#' + rec.category}
@@ -60,10 +53,10 @@ export const PersonalRecommendations = observer(() =>{
                   </View>
                 {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
                 </View>
-                {rec.status === 'pending' && <ButtonNext onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />}
+                {rec.status === 'pending' &&
+                <ButtonNext disabled={recommendationStore.isCompleteLoading.isLoading} isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={async()=> await onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
             </CardContainer>;
     };
-
     return  <FlatList
                 style={s.container}
                 showsVerticalScrollIndicator={false}

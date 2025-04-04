@@ -19,14 +19,14 @@ const width = Dimensions.get('screen').width;
 
 export const CalendarBlock: FC<{setChoosedDate: ()=>void, refresh: boolean}> = observer(({setChoosedDate, refresh}) =>{
   // console.log('🔄 Рендер CalendarBlock');
-      useFocusEffect(
-        React.useCallback(() => {
-            console.log('CalendarBlock');
-            recommendationStore.getPersonalRecommendations();
-            dailyActivityStore.getDailyTodayActivity(formatDate());
-          return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
-        }, [])
-      );
+      // useFocusEffect(
+      //   React.useCallback(() => {
+      //       console.log('CalendarBlock');
+      //       recommendationStore.getPersonalRecommendations();
+      //       dailyActivityStore.getDailyTodayActivity(formatDate());
+      //     return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
+      //   }, [])
+      // );
       useEffect(()=>{
         getDailyActivities();
       },[refresh]);

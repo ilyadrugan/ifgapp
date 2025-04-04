@@ -279,7 +279,7 @@ return userStore.userInfo !== null && <>
                     </View>
            {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
           </View>
-          <ButtonNext isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />
+          <ButtonNext disabled={recommendationStore.isCompleteLoading.isLoading} isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />
 
         </CardContainer>;
         })}

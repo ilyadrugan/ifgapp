@@ -112,6 +112,7 @@ class RecommendationStore {
                   const rec = this.personalRecomendationList.find((recc)=>recc.id === Number(id));
                   if (rec) {
                     rec.status = 'completed';
+                    this.personalRecomendationList = [...this.personalRecomendationList];
                     const categoryEng = RecommendationCategoryToEng(rec.category);
                     const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
                     dailyActivityStore.addDailyActivity(categoryEng, newValue);

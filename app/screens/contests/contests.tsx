@@ -28,14 +28,14 @@ export const ContestsScreen = observer(() => {
                 {/* <IfgText style={[gs.fontCaption3, gs.mt12]}>{item.description}</IfgText> */}
             </View>
             <ButtonTo onPress={()=>navigation.navigate('ContestView', {contestId: item.id})}
-            title={item.winners ? 'К результатам' : 'Как получить приз'} style={{width:item.winners ? 130 : 157}} />
+            title={item.winners.length>0 ? 'К результатам' : 'Как получить приз'} style={{width:item.winners.length>0 ? 130 : 157}} />
         </View>
         <Image
             resizeMode="cover"
             source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
             style={{ width: '65%', height: '130%' ,marginTop: -16 }}
         />
-       {item.winners && <View style={s.isOver}>
+       {item.winners.length>0 && <View style={s.isOver}>
             <IfgText style={[gs.fontCaptionSmallMedium,gs.light]}>Конкурс завершен</IfgText>
         </View>}
     </CardContainer>;

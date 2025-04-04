@@ -44,6 +44,18 @@ export const Graphs = observer(({refresh}) =>{
     const [activeSwitch, setSwitch] = useState(0);
     const [graphData, setGraphData] = useState<GraphDataType[]>([]);
     useEffect(() => {
+        gettingData()
+    }, [refresh]);
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //        gettingData()
+    //       return () => console.log('Ушли с Graphs'); // Опционально: Cleanup при уходе со страницы
+    //     }, [])
+    //   );
+    const gettingData = () => {
+        console.log('refresh GRAPHS')
+        console.log('activeTab', activeTab)
+        console.log('activeSwitch', activeSwitch)
         dailyActivityStore.getIfgScoreActivity('month').then(()=>{
             if (activeTab === 0) {
                 switch (activeSwitch) {
@@ -74,18 +86,7 @@ export const Graphs = observer(({refresh}) =>{
         });
         dailyActivityStore.getGraphCaloriesActivity('month');
         dailyActivityStore.getGraphStepsActivity('month');
-    }, [refresh]);
-    useFocusEffect(
-        React.useCallback(() => {
-            dailyActivityStore.getIfgScoreActivity('month').then(()=>{
-                if (activeTab === 0) {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities.slice(-7));}
-                else {convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);}
-            });
-            dailyActivityStore.getGraphCaloriesActivity('month');
-            dailyActivityStore.getGraphStepsActivity('month');
-          return () => console.log('Ушли с Graphs'); // Опционально: Cleanup при уходе со страницы
-        }, [])
-      );
+    }
     const convertToGraphDataType = (graphsData: DailyCommonModel[]) => {
         // console.log('convertToGraphDataType', graphsData);
         setGraphData(graphsData.map((el)=>{

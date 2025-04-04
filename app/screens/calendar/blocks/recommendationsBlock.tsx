@@ -118,14 +118,7 @@ if (isExpanded) {
 };
 const onCompleted =  (rec: PersonalRecommendationModel) => {
   if (rec) {
-   // console.log('personalRecommendation.id',personalRecommendation.id);
    recommendationStore.completeRecommendation(`${rec.id}`);
-  //  const categoryEng = RecommendationCategoryToEng(rec.category);
-  //  // console.log('categoryEng',categoryEng, dailyActivityStore.dailyTodayActivityData[categoryEng] + 1);
-  //  const newValue = dailyActivityStore.dailyTodayActivityData[categoryEng] + 1 || 1;
-  //  dailyActivityStore.addDailyActivity(categoryEng, newValue);
-  //  await recommendationStore.getPersonalRecommendations();
-    // await ifgScoreStore.addScore(1);
   }
  };
 const renderRecommendation = (rec:PersonalRecommendationModel) => {
@@ -154,7 +147,7 @@ const renderRecommendation = (rec:PersonalRecommendationModel) => {
             {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
             </View>
             {rec.status === 'pending' &&
-            <ButtonNext isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
+            <ButtonNext disabled={recommendationStore.isCompleteLoading.isLoading} isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
         </CardContainer>;
 };
     return <>
