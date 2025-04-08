@@ -155,7 +155,7 @@ export const Testing = observer(() => {
       </CardContainer>
     : (aboutData.slice(1, aboutData.length).map(({text}, index)=><CardContainer key={index.toString()} style={s.cardContainer}  >
         <Benefit />
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, {maxWidth: '90%'}]}>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, {flex: 1}]}>
             {text}
         </IfgText>
     </CardContainer>))}
@@ -171,10 +171,10 @@ export const Testing = observer(() => {
            </View>
     </AnimatedGradientButton>
     <View style={gs.mt16} />
-    {showEmail && <CardContainer style={s.emailBlock}>
-        <View style={[gs.flexRow, gs.alignCenter]}>
+    {showEmail && <CardContainer style={[s.emailBlock, {width: '100%'}]}>
+        <View style={[gs.flexRow, gs.alignCenter, {flex: 1}]}>
             <Email />
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12, {maxWidth: '80%'}]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText onPress={async()=>await Linking.openURL('mailto:ask@ifeelgood.life')} color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
+            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText onPress={async()=>await Linking.openURL('mailto:ask@ifeelgood.life')} color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
         </View>
         <TouchableOpacity onPress={()=>setShowEmail(false)} style={gs.tapArea}>
               <View style={s.circle}>
