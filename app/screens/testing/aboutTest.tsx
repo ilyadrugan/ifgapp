@@ -328,18 +328,18 @@ const s = StyleSheet.create({
         // backgroundColor: colors.WHITE_COLOR,
       },
       paginationContainer: {
-        // paddingVertical: 10,
+        paddingVertical: 0,
         position: 'absolute',
-        top: -32,
-
+        zIndex: 10000
+        // marginTop: -12,
       },
       dotStyle: {
-        width:(width - 32) / carouselItems.length,
+        width:  (width-32) / carouselItems.length,
         height: 6,
         backgroundColor: colors.GREEN_LIGHT_COLOR,
       },
       inactiveDotStyle: {
-        width:(width - 32) / carouselItems.length,
+        width: (width-32) / carouselItems.length,
         height: 6,
         backgroundColor: 'transparent',
       },
