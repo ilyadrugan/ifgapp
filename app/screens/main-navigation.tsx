@@ -46,7 +46,7 @@ export const MainNavigation = observer(() => {
   return (<>
 
     <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' :
-      authStore.isOnBoarded ? 'SuccessfulReg' : 'OnBoarding'}>
+      authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
     {/* userStore.userInfo?.email_verified_at ? 'Main'
       : 'SubscribeEmailConfirm' */}
 
