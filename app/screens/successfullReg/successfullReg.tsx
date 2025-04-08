@@ -110,7 +110,7 @@ const s = StyleSheet.create({
       },
     footer: {
         position: 'absolute',
-        bottom: 55,
+        bottom: 40,
         left: 0,
         right: 0,
         alignItems: 'center',
@@ -162,7 +162,7 @@ const s = StyleSheet.create({
         paddingHorizontal: 18,
         marginBottom: 1,
         position: 'absolute',
-        bottom: 55 + 79,
+        bottom: 40 + 79,
         // zIndex: 9,
         // elevation: 1,
       },
