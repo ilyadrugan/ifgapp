@@ -39,7 +39,6 @@ export const InterviewView = observer(({route}) => {
       if (interviewId !== undefined) {
         loadInterviewById(interviewId);
         console.log(interviewId);
-        console.log(stripHtmlTags(articlesStore.currentInterview.title).split('').length);
         setIsInFavoriet(articlesStore.interViewsUserList.some(event=>event.id === interviewId));
       }
     }, [interviewId]);
@@ -90,13 +89,13 @@ export const InterviewView = observer(({route}) => {
             source={require('../../../assets/backgrounds/gradientCard4.png')}
             style={[s.cardGradientContainer, {borderRadius: stripHtmlTags(articlesStore.currentInterview.title).length > 100 ? 36 : 22}]}
             >
-                <View style={{width: '55%'}}>
+                <View style={{width: '55%', paddingTop: 16, paddingLeft:16, paddingBottom: 16}}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>{stripHtmlTags(articlesStore.currentInterview.thumb_title)}</IfgText>
-                <IfgText  color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>{stripHtmlTags(articlesStore.currentInterview.title)}</IfgText>
+                <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>{stripHtmlTags(articlesStore.currentInterview.title)}</IfgText>
                 <ButtonTo onPress={()=>Linking.openURL(articlesStore.currentInterview.video)} style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Участвовать" whiteIcon/>
                 </View>
-                <Image resizeMode="contain" style={{width: '56%', height: '130%', bottom: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? -16 : 8, right: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? 48 : 32  }}
-                source={{uri: `https://ifeelgood.life${articlesStore.currentInterview.media[0].full_path[0]}`}}/>
+                <Image resizeMode="contain" style={{position: 'absolute',aspectRatio: 1, height: stripHtmlTags(articlesStore.currentInterview.title).length > 60?170:140, bottom: -3, right: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? 0 : -8  }}
+                source={{uri: `https://ifeelgood.life${articlesStore.currentInterview.media[0].full_path[3]}`}}/>
         </ImageBackground>
         <View style={gs.mt16} />
         <CardContainer >
@@ -217,10 +216,10 @@ const s = StyleSheet.create({
     },
     cardGradientContainer:{
         // flex: 1,
-        padding: 16,
-        paddingRight: 0,
+        // padding: 16,
+        // paddingRight: 0,
         flexDirection: 'row',
-        gap: 10,
+        // gap: 10,
         overflow: 'hidden',
         justifyContent: 'space-between',
       },
