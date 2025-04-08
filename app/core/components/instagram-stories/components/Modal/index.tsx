@@ -1,7 +1,7 @@
 import React, {
   forwardRef, memo, useEffect, useImperativeHandle, useState,
 } from 'react';
-import { GestureResponderEvent, Modal, Pressable } from 'react-native';
+import { GestureResponderEvent, Modal, Pressable, StatusBar } from 'react-native';
 import Animated, {
   cancelAnimation, interpolate, runOnJS, useAnimatedGestureHandler, useAnimatedReaction,
   useAnimatedStyle,
@@ -435,16 +435,19 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
 
       if ( currentStory.value !== undefined ) {
 
-        onShow?.( currentStory.value );
 
+        onShow?.( currentStory.value );
+        StatusBar.setHidden(false);
+
+        StatusBar.setBackgroundColor('#000000');
       }
       onLoad?.();
 
       y.value = withTiming( 0, { duration: modalAnimationDuration } );
 
     } else if ( currentStory.value !== undefined && !firstRender.value ) {
-
       onHide?.( currentStory.value );
+      StatusBar.setHidden(true);
 
     }
 
@@ -459,7 +462,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   );
 
   return (
-    <Modal statusBarTranslucent={statusBarTranslucent} hitSlop={{top: 10, bottom: 10, left: 0, right: 0}}  visible={visible} transparent animationType="none" testID="storyRNModal" onRequestClose={onClose}>
+    <Modal statusBarTranslucent={statusBarTranslucent} transparent visible={visible}  animationType="fade" testID="storyRNModal" onRequestClose={onClose}>
       <GestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View style={ModalStyles.container} testID="storyModal">
           <Pressable
