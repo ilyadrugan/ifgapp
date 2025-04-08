@@ -2,7 +2,7 @@ import React from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import colors from '../../../core/colors/colors';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../../../core/components/input/input';
@@ -28,6 +28,7 @@ export const FeedBack = observer(() => {
         }
       });
     return <CardContainer style={s.card}>
+    <View style={{padding:16, gap: 12}}>
         <IfgText style={[gs.fontCaption, gs.bold]}>Написать лайфхак</IfgText>
         <IfgText style={gs.fontCaption2}>Вы знаете, как сделать наш портал лучше? Мы открыты для советов и честных отзывов, напишите, что мы можем изменить и улучшить в проекте!</IfgText>
         <Controller control={control} name={'feedback'}
@@ -42,19 +43,19 @@ export const FeedBack = observer(() => {
             />
         )}/>
         <ButtonNext isLoading={presentsStore.isLoadingSuggestion} onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
-        <Image
-            resizeMode="cover"
-            style={{width: 'auto', height: 180, right: -16}}
-            source={require('../../../../assets/backgrounds/feedback.png')}
-        />
-    </CardContainer>;
+    </View>
+    <Image
+        resizeMode="cover"
+        style={{width: 'auto', height: 190, }}
+        source={{uri: 'https://ifeelgood.life/storage/library/9omV1lkJ7B7fPdbe0.14%D0%9C%D0%B1/full/45RDvQ5NWPCGAosD.png'}}
+    />
+</CardContainer>;
 });
 
 const s = StyleSheet.create({
     card: {
         backgroundColor: colors.BLUE_COLOR,
         overflow: 'hidden',
-        paddingBottom: 0,
-        borderBottomRightRadius: 0,
+        padding: 0,
     },
 });
