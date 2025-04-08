@@ -64,7 +64,7 @@ export const SuccessfulReg = observer(() => {
             <IfgText color={colors.SECONDARY_COLOR} style={gs.fontCaption}>
             Вам доступны:
             </IfgText>
-            <View style={gs.mt32} />
+            <View style={gs.mt16} />
             <View style={s.dottedLine} />
                 {abilities.map(({id, text})=> <View key={id} style={[gs.flexRow, id !== '01' && gs.mt12]}>
                     <View style={s.circle}>
@@ -157,8 +157,8 @@ const s = StyleSheet.create({
         // alignItems: 'center',
         width: '91%',
         backgroundColor: colors.WHITE_COLOR,
-        paddingTop:27,
-        paddingBottom: 55,
+        paddingTop:20,
+        paddingBottom: 20,
         paddingHorizontal: 18,
         marginBottom: 1,
         position: 'absolute',
@@ -192,7 +192,7 @@ const s = StyleSheet.create({
         // zIndex: 9,
         // elevation: 1,
         position: 'absolute',
-        bottom: 40,
+        bottom: 20,
       },
   });
 
