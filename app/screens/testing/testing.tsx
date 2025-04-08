@@ -108,8 +108,8 @@ export const Testing = observer(() => {
     , []);
     return (
 
-      <ScrollView 
-        contentContainerStyle={{ flexGrow: 1 }} 
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         style={s.container}
       >
@@ -174,7 +174,7 @@ export const Testing = observer(() => {
     {showEmail && <CardContainer style={[s.emailBlock, {width: '100%'}]}>
         <View style={[gs.flexRow, gs.alignCenter, {flex: 1}]}>
             <Email />
-            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText onPress={async()=>await Linking.openURL('mailto:ask@ifeelgood.life')} color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
+            <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption3, gs.ml12, {maxWidth: '85%'}]}>Мы постоянно дорабатываем тестирование, делая его более точным и полезным для вас. Если у вас есть вопросы и комментарии, напишите нам на <IfgText onPress={async()=>await Linking.openURL('mailto:ask@ifeelgood.life')} color={colors.GREEN_LIGHT_COLOR} style={gs.fontCaption3}>ask@ifeelgood.life</IfgText></IfgText>
         </View>
         <TouchableOpacity onPress={()=>setShowEmail(false)} style={gs.tapArea}>
               <View style={s.circle}>
@@ -194,7 +194,7 @@ const s = StyleSheet.create({
       flex: 1,
       width: '100%',
       minHeight: ScreenHeight,
-      paddingHorizontal: 16
+      paddingHorizontal: 16,
       },
       cardGradientContainer:{
         flex: 1,
