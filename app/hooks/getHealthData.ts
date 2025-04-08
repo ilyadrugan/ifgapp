@@ -40,7 +40,7 @@ const checkAvailability = async () => {
 
     if (status === SdkAvailabilityStatus.SDK_UNAVAILABLE) {
           console.log('SDK is not available');
-          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья и iFeelGood с Health Connect', [{
+          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья и ifeelgood с Health Connect', [{
                       text: 'Сделаю позже',
                       onPress: () => console.log('Ask me later pressed'),
                       style: 'cancel',
@@ -53,7 +53,7 @@ const checkAvailability = async () => {
           status === SdkAvailabilityStatus.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED
         ) {
           console.log('SDK is not available, provider update required');
-          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья и iFeelGood с Health Connect', [{
+          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья и ifeelgood с Health Connect', [{
             text: 'Сделаю позже',
             onPress: () => console.log('Ask me later pressed'),
             style: 'cancel',
@@ -97,7 +97,7 @@ export const getHealthData = async (date: Date) => {
       const grantedAllPermissions = await getGrantedPermissions();
         // console.log('grantedPermissions', grantedAllPermissions);
         if (grantedAllPermissions.length == 0){
-          showAlert('Разрешение на предоставление данных с Health Connect','Для работы с данными, необходимо выдать разрешение на синхронизацию данных одного из стандартных приложений и iFeelGood с Health Connect', [{
+          showAlert('Разрешение на предоставление данных с Health Connect','Для работы с данными, необходимо выдать разрешение на синхронизацию данных одного из стандартных приложений и ifeelgood с Health Connect', [{
             text: 'Сделаю позже',
             onPress: () => console.log('Ask me later pressed'),
             style: 'cancel',
