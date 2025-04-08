@@ -57,7 +57,7 @@ export const CalendarScreen = () =>{
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
 
-        <View style={gs.mt16} />
+        {/* <View style={gs.mt16} /> */}
         <IfgText style={[gs.h2, gs.bold]} >{'Календарь'}</IfgText>
         {/* {(watterStore.cupsData) ?
               <TimeToDrinkNewBlock />

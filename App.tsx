@@ -15,6 +15,7 @@ import { FirebaseComponent } from './app/core/components/firebase-component/fire
 import { NavigationContainer } from '@react-navigation/native';
 import { requestNotificationPermission } from './app/core/firebase/firebase';
 import 'react-native-gesture-handler';
+import colors from './app/core/colors/colors';
 LogBox.ignoreLogs(['Require cycle:']);
 requestNotificationPermission();
 
@@ -39,7 +40,7 @@ const App = () => {
   return (<>
   <Provider {...stores}>
     <GestureHandlerRootView style={{ flex: 1 }}>
-    <StatusBar hidden />
+    <StatusBar hidden/>
     <NavigationContainer>
        <SafeAreaProvider>
           <FirebaseComponent/>

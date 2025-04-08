@@ -1,7 +1,7 @@
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC, ReactNode, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import Profile from '../../../assets/icons/tabs/profile.svg';
 import Calendar from '../../../assets/icons/tabs/calendar.svg';
 import Home from '../../../assets/icons/tabs/home.svg';
@@ -29,7 +29,10 @@ export const Main: FC = observer(() => {
   const insets = useSafeAreaInsets();
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
-
+  useEffect(()=>{
+    StatusBar.setHidden(false);
+    StatusBar.setBackgroundColor('#757575');
+  },[]);
   return  (
     <View style={{ height: deviceHeight}}>
       <Tab.Navigator initialRouteName="Дом"

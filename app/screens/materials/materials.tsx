@@ -186,7 +186,7 @@ return <>
        </View>}
        ListHeaderComponentStyle={{zIndex: 999, elevation: 999}}
        ListHeaderComponent={<>
-            <View style={gs.mt16} />
+            {/* <View style={gs.mt16} /> */}
                     <IfgText style={[gs.h2, gs.bold]} >{'Материалы'}</IfgText>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />

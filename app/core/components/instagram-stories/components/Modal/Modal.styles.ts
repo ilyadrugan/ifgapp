@@ -4,6 +4,9 @@ import { HEIGHT, WIDTH } from '../../core/constants';
 export default StyleSheet.create( {
   container: {
     flex: 1,
+    backgroundColor: '#000',
+    width: WIDTH,
+    height: HEIGHT,
   },
   absolute: {
     position: 'absolute',

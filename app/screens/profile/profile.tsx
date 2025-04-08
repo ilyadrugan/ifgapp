@@ -1,6 +1,6 @@
 
 
-import { Image, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation, RefreshControl} from 'react-native';
+import { Image, ScrollView, StyleSheet, View, TouchableOpacity, Animated, Easing, Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, UIManager, LayoutAnimation, RefreshControl, StatusBar} from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import { useNavigation } from '@react-navigation/native';
@@ -43,7 +43,7 @@ if (Platform.OS === 'android') {
 export const ProfileScreen = observer(() => {
     const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
-    const [currentMenu, setCurrentMenu] = useState(!userStore.userInfo?.roles.includes('user_pay')?3:4);
+    const [currentMenu, setCurrentMenu] = useState(!userStore.userInfo?.roles.includes('user_pay') ? 3 : 4);
     const [refreshing, setRefreshing] = React.useState(false);
     const {selectImage} = useImageUploader();
     const onRefresh = async () => {
@@ -62,6 +62,7 @@ export const ProfileScreen = observer(() => {
     const exit = async() => {
       testingStore.clearTests();
       await authStore.logout().then(()=>{
+        StatusBar.setHidden(true);
         navigateAndReset(navigation, 'Login');
       });
 
@@ -82,7 +83,7 @@ export const ProfileScreen = observer(() => {
           useNativeDriver: false,
         }),
         Animated.timing(height, {
-          toValue: 64 * (!userStore.userInfo?.roles.includes('user_pay')? 5: 6),
+          toValue: 64 * (!userStore.userInfo?.roles.includes('user_pay') ? 5 : 6),
           duration: 300,
           easing: Easing.ease,
           useNativeDriver: false,
@@ -124,7 +125,7 @@ return <>
       style={gs.flex1}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={s.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <View style={gs.mt16} />
+        {/* <View style={gs.mt16} /> */}
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]} >{menuOptions[currentMenu].name}</IfgText>
         <View style={gs.mt16} />
 
@@ -158,7 +159,7 @@ return <>
           {expanded &&
           <><View style={gs.mt12} />
             {menuOptions.map((option)=>{
-              if (!userStore.userInfo?.roles.includes('user_pay') && option.id === 4) return
+              if (!userStore.userInfo?.roles.includes('user_pay') && option.id === 4) {return;}
              return <Button key={option.id.toString()} onPress={()=>chooseMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
               <View style={[gs.flexRow, gs.alignCenter]}>
                 <View style={s.iconButtonContainer}>
@@ -166,7 +167,7 @@ return <>
                 </View>
                 <IfgText color={currentMenu === option.id ? colors.WHITE_COLOR : colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.regular, gs.ml16]}>{option.name}</IfgText>
               </View>
-            </Button>})}
+            </Button>;})}
             </>}
           </Animated.View>
         </CardContainer>

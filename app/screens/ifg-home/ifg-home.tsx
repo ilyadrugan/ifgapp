@@ -177,7 +177,7 @@ return userStore.userInfo !== null && <>
 
       <ScrollView style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <View style={gs.mt16} />
+        {/* <View style={gs.mt16} /> */}
         <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
 
 

@@ -84,7 +84,7 @@ const carouselItems = [
   ];
 export const AboutTest = () => {
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
-    // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');    
+    // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [activeSlide, setActiveSlide] = useState(0);
@@ -330,16 +330,16 @@ const s = StyleSheet.create({
       paginationContainer: {
         paddingVertical: 0,
         position: 'absolute',
-        zIndex: 10000
+        zIndex: 10000,
         // marginTop: -12,
       },
       dotStyle: {
-        width:  (width-32) / carouselItems.length,
+        width:  (width - 32) / carouselItems.length,
         height: 6,
         backgroundColor: colors.GREEN_LIGHT_COLOR,
       },
       inactiveDotStyle: {
-        width: (width-32) / carouselItems.length,
+        width: (width - 32) / carouselItems.length,
         height: 6,
         backgroundColor: 'transparent',
       },

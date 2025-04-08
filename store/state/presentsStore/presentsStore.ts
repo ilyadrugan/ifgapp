@@ -50,7 +50,6 @@ class PresentsStore {
     // this.articlesQueryParams.page =  `${articlesStore.articlesList.current_page}`;
   }
   async loadMorePresents(query?: string) {
-    console.log('loadMorePresents',this.presentsList );
     if (this.presentsList.isLoading || !this.presentsList.hasMore) {return;}
     this.presentsList.isLoading = true;
     await getPresentsApi(query)

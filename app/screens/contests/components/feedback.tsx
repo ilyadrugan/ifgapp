@@ -45,8 +45,8 @@ export const FeedBack = observer(() => {
         <ButtonNext isLoading={presentsStore.isLoadingSuggestion} onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
     </View>
     <Image
-        resizeMode="cover"
-        style={{width: 'auto', height: 190, }}
+        resizeMode="contain"
+        style={{width: 'auto', height: 190 }}
         source={{uri: 'https://ifeelgood.life/storage/library/9omV1lkJ7B7fPdbe0.14%D0%9C%D0%B1/full/45RDvQ5NWPCGAosD.png'}}
     />
 </CardContainer>;

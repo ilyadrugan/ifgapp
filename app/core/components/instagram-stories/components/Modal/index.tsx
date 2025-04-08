@@ -14,6 +14,7 @@ import { GestureContext, StoryModalProps, StoryModalPublicMethods } from '../../
 import GestureHandler from './gesture';
 import StoryList from '../List';
 import ModalStyles from './Modal.styles';
+import colors from '../../../../colors/colors';
 
 const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   stories, seenStories, duration, videoDuration, storyAvatarSize, textStyle, containerStyle,
@@ -435,19 +436,21 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
 
       if ( currentStory.value !== undefined ) {
 
+        StatusBar.setBackgroundColor('#000');
 
         onShow?.( currentStory.value );
-        StatusBar.setHidden(false);
+        // StatusBar.setHidden(false);
 
-        StatusBar.setBackgroundColor('#000000');
       }
       onLoad?.();
 
       y.value = withTiming( 0, { duration: modalAnimationDuration } );
 
     } else if ( currentStory.value !== undefined && !firstRender.value ) {
+      // StatusBar.setHidden(true);
+      StatusBar.setBackgroundColor('#757575');
+
       onHide?.( currentStory.value );
-      StatusBar.setHidden(true);
 
     }
 
@@ -462,7 +465,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   );
 
   return (
-    <Modal statusBarTranslucent={statusBarTranslucent} transparent visible={visible}  animationType="fade" testID="storyRNModal" onRequestClose={onClose}>
+    <Modal statusBarTranslucent={false} visible={visible} animationType="none" testID="storyRNModal" onRequestClose={onClose}>
       <GestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View style={ModalStyles.container} testID="storyModal">
           <Pressable
@@ -471,7 +474,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
             onLongPress={onLongPress}
             onPressOut={onPressOut}
             delayLongPress={LONG_PRESS_DURATION}
-            style={ModalStyles.container}
+            style={[ModalStyles.container ]}
           >
             <Animated.View style={[ ModalStyles.bgAnimation, backgroundAnimatedStyles ]} />
             <Animated.View style={[ ModalStyles.absolute, animatedStyles, containerStyle ]}>
