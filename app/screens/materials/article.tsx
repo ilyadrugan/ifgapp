@@ -240,7 +240,7 @@ export const ArticleView = observer(({route}) => {
             </Button>
           </View></>}
           <View onLayout={(event)=>handleLayout(event, 'share')}>
-            <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/antistress/kak-snizit-stress/chto-takoe-osoznannost-zachem-eyo-razvivat-i-kak-eto-delat-328')}
+            <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/'+articleId)}
             style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
             <View >
             <Share />

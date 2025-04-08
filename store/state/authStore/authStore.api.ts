@@ -4,7 +4,7 @@ import { API_URL, BASE_URL } from '../../../app/core/hosts';
 import { ForgotPasswordModel, LoginByUserPasswordModel, RegisterFormModel } from './models/models';
 
 export const login = async (model: LoginByUserPasswordModel) => {
-    console.log(Config,`${BASE_URL}/auth/login`);
+    console.log(model,`${BASE_URL}/auth/login`);
     return await HttpClient.post(`${BASE_URL}/auth/login`, model);
 };
 
