@@ -17,7 +17,7 @@ import recommendationStore from '../../../../store/state/recommendationStore/rec
 import { formatDate } from '../../../core/utils/formatDateTime';
 const width = Dimensions.get('screen').width;
 
-export const CalendarBlock: FC<{setChoosedDate: ()=>void, refresh: boolean}> = observer(({setChoosedDate, refresh}) =>{
+export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: boolean}> = observer(({setChoosedDate, refresh}) =>{
   // console.log('🔄 Рендер CalendarBlock');
       // useFocusEffect(
       //   React.useCallback(() => {

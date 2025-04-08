@@ -31,7 +31,7 @@ const months = [
   'Декабрь',
 ];
 
-const CustomCalendar: FC<{setChoosedDate: ()=>void}> = observer(({setChoosedDate}) => {
+const CustomCalendar: FC<{setChoosedDate: (date: string)=>void}> = observer(({setChoosedDate}) => {
   const [currentDate, setCurrentDate] = useState(new Date()); // Текущая дата
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // Выбранная дата
   const [calendarMode, setCalendarMode] = useState<'month' | 'week'>('month');
