@@ -4,9 +4,11 @@ import Animated, { Extrapolation, interpolate, useAnimatedStyle } from 'react-na
 import { HEIGHT, WIDTH } from '../../core/constants';
 import { AnimationProps } from '../../core/dto/componentsDTO';
 import AnimationStyles from './Animation.styles';
+import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const StoryAnimation: FC<AnimationProps> = ( { children, x, index } ) => {
-
+  const frame = useSafeAreaFrame();
+  const deviceHeight = frame.height;
   const angle = Math.PI / 3;
   const ratio = Platform.OS === 'ios' ? 2 : 1.2;
   const offset = WIDTH * index;
@@ -55,7 +57,7 @@ const StoryAnimation: FC<AnimationProps> = ( { children, x, index } ) => {
   return (
     <Animated.View style={[ animatedStyle, AnimationStyles.container, AnimationStyles.cube ]}>
       {children}
-      <Animated.View style={[ maskAnimatedStyles, AnimationStyles.absolute, { width: WIDTH, height: HEIGHT } ]} pointerEvents="none" />
+      <Animated.View style={[ maskAnimatedStyles, AnimationStyles.absolute, { width: WIDTH, height: deviceHeight } ]} pointerEvents="none" />
     </Animated.View>
   );
 

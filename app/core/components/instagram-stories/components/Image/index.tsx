@@ -9,12 +9,14 @@ import { HEIGHT, LOADER_COLORS, WIDTH } from '../../core/constants';
 import ImageStyles from './Image.styles';
 import StoryVideo from './video';
 import { StoryItemProps } from '../../core/dto/instagramStoriesDTO';
+import { useSafeAreaFrame } from 'react-native-safe-area-context';
 
 const StoryImage: FC<StoryImageProps> = ( {
   stories, activeStory, defaultStory, isDefaultVideo, paused, videoProps, isActive,
   mediaContainerStyle, imageStyles, imageProps, videoDuration, onImageLayout, onLoad,
 } ) => {
-
+  const frame = useSafeAreaFrame();
+  const deviceHeight = frame.height;
   const [ data, setData ] = useState<{ data?: StoryItemProps, isVideo?: boolean }>(
     { data: defaultStory, isVideo: isDefaultVideo },
   );
@@ -111,10 +113,10 @@ const StoryImage: FC<StoryImageProps> = ( {
           ) : (
             <Image
               source={data.data.source}
-              style={[ { width: WIDTH, height: HEIGHT }, imageStyles ]}
+              style={[ { width: WIDTH, height: deviceHeight }, imageStyles ]}
               resizeMode="cover"
               testID="storyImageComponent"
-              onLayout={( e ) => onImageLayout( Math.min( HEIGHT, e.nativeEvent.layout.height ) )}
+              onLayout={( e ) => onImageLayout( Math.min( deviceHeight, e.nativeEvent.layout.height ) )}
               onLoad={() => onContentLoad()}
               {...imageProps}
             />

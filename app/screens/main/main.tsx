@@ -29,6 +29,8 @@ export const Main: FC = observer(() => {
   const insets = useSafeAreaInsets();
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
+  console.log('deviceHeight', deviceHeight);
+
   useEffect(()=>{
     StatusBar.setHidden(false);
     StatusBar.setBackgroundColor('#757575');

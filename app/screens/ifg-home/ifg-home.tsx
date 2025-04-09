@@ -89,7 +89,7 @@ export const IFGHome = observer(() => {
                       story_id: index,
                       buttonContent: story.withButton ? story.buttonContent : null,
                       animationDuration: 6000,
-                      renderFooter: ()=> story.buttonContent ? <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: ScreenHeight * 0.1}}>
+                      renderFooter: ()=> story.buttonContent ? <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: 50}}>
                                   <ButtonNext onPress={()=>{
                                     console.log(story.buttonContent?.buttonUrl);
                                      if (story.buttonContent?.is_article && story.article) {

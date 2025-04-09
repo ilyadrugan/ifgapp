@@ -6,14 +6,14 @@ export default StyleSheet.create( {
     flex: 1,
     backgroundColor: '#000',
     width: WIDTH,
-    height: HEIGHT,
+    // height: HEIGHT,
   },
   absolute: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: WIDTH,
-    height: HEIGHT,
+    // height: HEIGHT,
   },
   bgAnimation: StyleSheet.absoluteFillObject,
 } );

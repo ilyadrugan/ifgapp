@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ScreenHeight, ScreenWidth } from '../../../../../hooks/useDimensions';
+import { HEIGHT, WIDTH } from '../../core/constants';
 
 export default StyleSheet.create( {
   container: {
@@ -14,8 +15,8 @@ export default StyleSheet.create( {
   image: {
     // alignItems: 'center',
     // justifyContent: 'center',
-    width: ScreenWidth,
-    height: ScreenHeight,
+    width: WIDTH,
+    height: HEIGHT,
     resizeMode: 'cover',
   },
 } );

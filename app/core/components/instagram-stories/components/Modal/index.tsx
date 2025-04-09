@@ -15,6 +15,7 @@ import GestureHandler from './gesture';
 import StoryList from '../List';
 import ModalStyles from './Modal.styles';
 import colors from '../../../../colors/colors';
+import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   stories, seenStories, duration, videoDuration, storyAvatarSize, textStyle, containerStyle,
@@ -23,11 +24,13 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   statusBarTranslucent, onLoad, onShow, onHide,
   onSeenStoriesChange, onSwipeUp, onStoryStart, onStoryEnd, footerComponent, ...props
 }, ref ) => {
+  const insets = useSafeAreaInsets();
+  const frame = useSafeAreaFrame();
+  const deviceHeight = frame.height;
 
   const [ visible, setVisible ] = useState( false );
-
   const x = useSharedValue( 0 );
-  const y = useSharedValue( HEIGHT );
+  const y = useSharedValue( deviceHeight );
   const animation = useSharedValue( 0 );
   const currentStory = useSharedValue( stories[0]?.stories[0]?.id );
   const paused = useSharedValue( false );
@@ -53,7 +56,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
 
   const animatedStyles = useAnimatedStyle( () => ( { top: y.value } ) );
   const backgroundAnimatedStyles = useAnimatedStyle( () => ( {
-    opacity: interpolate( y.value, [ 0, HEIGHT ], [ 1, 0 ] ),
+    opacity: interpolate( y.value, [ 0, -insets.bottom ], [ 1, 0 ] ),
     backgroundColor,
   } ) );
 
@@ -62,7 +65,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
     'worklet';
 
     y.value = withTiming(
-      HEIGHT,
+      deviceHeight,
       { duration: modalAnimationDuration },
       () => runOnJS( setVisible )( false ),
     );
@@ -467,17 +470,17 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   return (
     <Modal statusBarTranslucent={false} visible={visible} animationType="none" testID="storyRNModal" onRequestClose={onClose}>
       <GestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={ModalStyles.container} testID="storyModal">
+        <Animated.View style={[ModalStyles.container, {height: deviceHeight}]} testID="storyModal">
           <Pressable
             onPressIn={onPressIn}
             onPress={onPress}
             onLongPress={onLongPress}
             onPressOut={onPressOut}
             delayLongPress={LONG_PRESS_DURATION}
-            style={[ModalStyles.container ]}
+            style={[ModalStyles.container, {height: deviceHeight} ]}
           >
             <Animated.View style={[ ModalStyles.bgAnimation, backgroundAnimatedStyles ]} />
-            <Animated.View style={[ ModalStyles.absolute, animatedStyles, containerStyle ]}>
+            <Animated.View style={[ ModalStyles.absolute, {height: deviceHeight}, animatedStyles, containerStyle ]}>
               {stories?.map( ( story, index ) => (
                 <StoryList
                   {...story}

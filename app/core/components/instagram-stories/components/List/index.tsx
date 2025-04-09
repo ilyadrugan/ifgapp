@@ -11,6 +11,7 @@ import { StoryListProps } from '../../core/dto/componentsDTO';
 import { HEIGHT } from '../../core/constants';
 import StoryContent from '../Content';
 import StoryFooter from '../Footer';
+import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const StoryList: FC<StoryListProps> = ( {
   id, stories, index, x, activeUser, activeStory, progress, seenStories, paused,
@@ -18,8 +19,9 @@ const StoryList: FC<StoryListProps> = ( {
   imageProps, progressContainerStyle, imageOverlayView, hideElements, hideOverlayViewOnLongPress,
   videoDuration, ...props
 } ) => {
-
-  const imageHeight = useSharedValue( HEIGHT );
+  const frame = useSafeAreaFrame();
+  const deviceHeight = frame.height
+  const imageHeight = useSharedValue( deviceHeight );
   const isActive = useDerivedValue( () => activeUser.value === id );
 
   const activeStoryIndex = useDerivedValue(
