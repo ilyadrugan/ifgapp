@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { BASE_URL } from '../../../app/core/hosts';
+import { APPADMIN_URL, BASE_URL } from '../../../app/core/hosts';
 import axios from 'axios';
 import { errorToast, successToast } from '../../../app/core/components/toast/toast';
 import { StoriesListModel, StoryMappedModel, StoryModel, SubStoryModel } from './models/models';
@@ -31,7 +31,7 @@ class StoriesStore {
             return {
               name: cat.category_title,
               id: `${cat.category_id}`,
-              avatarSource: { uri: 'https://appadmin.ifeelgood.life/storage/' + cat.category_cover},
+              avatarSource: { uri: `${APPADMIN_URL}/storage/` + cat.category_cover},
               // bgColor: cat.bgColor,
             } as InstagramStoryProps;
           });
@@ -49,7 +49,7 @@ class StoriesStore {
                 id: index.toString(),
                 article: story.buttonContent.is_article !== 0 ? story.article : null,
                 subtitle: story.subtitle,
-                source: { uri: 'https://appadmin.ifeelgood.life/storage/' + story.cover },
+                source: { uri: `${APPADMIN_URL}/storage/` + story.cover },
                 story_id: index,
                 buttonContent: story.withButton ? story.buttonContent : null,
                 animationDuration: 6,

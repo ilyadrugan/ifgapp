@@ -45,6 +45,7 @@ import InstaStory from '../../core/components/insta-stories/insta-stories';
 import { InstagramStoriesProps, InstagramStoriesPublicMethods, InstagramStoryProps, StoryItemProps } from '../../core/components/instagram-stories/core/dto/instagramStoriesDTO';
 import InstagramStories from '../../core/components/instagram-stories/components/InstagramStories';
 import { getStoriesApi } from '../../../store/state/storiesStore/storiesStore.api';
+import { APPADMIN_URL } from '../../core/hosts';
 
 export const IFGHome = observer(() => {
     const navigation = useNavigation<any>();
@@ -67,7 +68,7 @@ export const IFGHome = observer(() => {
                   return {
                     name: cat.category_title,
                     id: `${cat.category_id}`,
-                    avatarSource: { uri: 'https://appadmin.ifeelgood.life/storage/' + cat.category_cover},
+                    avatarSource: { uri: `${APPADMIN_URL}/storage/` + cat.category_cover},
                     bgColor: cat.bgColor,
                   } as InstagramStoryProps;
                 });
@@ -85,7 +86,7 @@ export const IFGHome = observer(() => {
                       id: index.toString(),
                       article: story.buttonContent.is_article !== 0 ? story.article : null,
                       subtitle: story.subtitle,
-                      source: { uri: 'https://appadmin.ifeelgood.life/storage/' + story.cover },
+                      source: { uri: `${APPADMIN_URL}/storage/` + story.cover },
                       story_id: index,
                       buttonContent: story.withButton ? story.buttonContent : null,
                       animationDuration: 6000,

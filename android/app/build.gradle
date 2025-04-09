@@ -87,7 +87,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        resValue 'string', 'build_config_package','com.reactnativeproject'
+        resValue 'string', 'build_config_package','com.ifgapp'
     }
     signingConfigs {
         debug {
