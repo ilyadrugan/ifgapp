@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useRef } from 'react';
-import { ActivityIndicator, Animated, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, Animated, GestureResponderEvent, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import colors from '../../colors/colors';
 import gs from '../../styles/global';
 import { IfgText } from '../text/ifg-text';
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 });
 
 export const ButtonNext:FC<{
-  onPress?: ()=>void,
+  onPress?: (e:GestureResponderEvent) => void,
   title?: string,
   oliveTitle?: string,
   style?: StyleProp<ViewStyle>,
@@ -110,7 +110,7 @@ export const ButtonNext:FC<{
   animated?: boolean,
 }> = ({onPress, title, oliveTitle, style, textStyle, disabled, animated, isLoading}) =>
         <Button disabled={disabled} style={[s.buttonNext, style && style]}
-                onPress={onPress}
+                onPress={(e) => onPress?.(e)}
                 >
                 <View style={{
                     flexDirection: 'row',
@@ -154,7 +154,7 @@ export const ButtonTo:FC<{
 export const Button: FC<{
     children?: ReactNode,
     disabled?: boolean,
-    onPress?: () => void,
+    onPress?: (e:GestureResponderEvent) => void,
     style?: StyleProp<ViewStyle>,
     fullWidth?: boolean
     outlined?: boolean
@@ -176,7 +176,7 @@ export const Button: FC<{
         outlined && s.outline,
       ]}
       disabled={disabled}
-      onPress={onPress}
+      onPress={(e) => onPress?.(e)}
     >
 
           {children ? children : null }

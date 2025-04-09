@@ -45,9 +45,10 @@ export interface CardContainerProps extends ViewProps {
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   onPress?: () => void | null,
+  disabled?: boolean
 }
 
-export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, ...props}) => {
+export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, disabled, ...props}) => {
     return <View {...props}>
     <TouchableOpacity
       style={[
@@ -55,7 +56,7 @@ export const CardContainer: FC<CardContainerProps> = ({children, style, onPress,
         style,
       ]}
       onPress={onPress}
-      disabled={onPress ? false : true}
+      disabled={disabled ? true : onPress ? false : true }
     >
       {children}
     </TouchableOpacity>

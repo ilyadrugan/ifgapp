@@ -125,7 +125,7 @@ export const Testing = observer(() => {
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold ]}>
         {inTest ? 'Ifg-тестирование' : aboutData.length > 0 ? aboutData[0].text : ''}
         </IfgText>
-        {(testingStore.isLoading || aboutData.length === 0) ? <ActivityIndicator /> :
+        {(testingStore.isLoading || aboutData.length === 0) ? <ActivityIndicator style={gs.mt16} /> :
         <>
         <View style={gs.mt16} />
       {inTest ?

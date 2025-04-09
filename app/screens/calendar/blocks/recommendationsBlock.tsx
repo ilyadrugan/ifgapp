@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { FC, useEffect, useRef, useState  } from 'react';
-import { Animated, Dimensions, Easing, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Animated, Dimensions, Easing, TouchableOpacity, View, StyleSheet, GestureResponderEvent } from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
@@ -116,9 +116,9 @@ if (isExpanded) {
   );
 }
 };
-const onCompleted =  (rec: PersonalRecommendationModel) => {
+const onCompleted = async (rec: PersonalRecommendationModel) => {
   if (rec) {
-   recommendationStore.completeRecommendation(`${rec.id}`);
+  await recommendationStore.completeRecommendation(`${rec.id}`);
   }
  };
 const renderRecommendation = (rec:PersonalRecommendationModel) => {
@@ -147,7 +147,12 @@ const renderRecommendation = (rec:PersonalRecommendationModel) => {
             {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
             </View>
             {rec.status === 'pending' &&
-            <ButtonNext disabled={recommendationStore.isCompleteLoading.isLoading} isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
+            <ButtonNext
+            // disabled={recommendationStore.isCompleteLoading.isLoading}
+            isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={(e: GestureResponderEvent)=> {
+                              e.stopPropagation();
+                              onCompleted(rec);
+                              }} title="Сделано" oliveTitle="+ 1 балл" />}
         </CardContainer>;
 };
     return <>

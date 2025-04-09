@@ -1,7 +1,7 @@
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Image, FlatList, StyleSheet, GestureResponderEvent } from 'react-native';
 import { categoryColors } from '../../core/colors/categoryColors';
 import { Button, ButtonNext } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -26,14 +26,16 @@ export const PersonalRecommendations = observer(() =>{
       }
      };
      useEffect(()=>{
-      recommendationStore.getPersonalRecommendations()
-     },[])
+      recommendationStore.getPersonalRecommendations();
+     },[]);
     const renderRecommendation = (rec:PersonalRecommendationModel) => {
-      return <CardContainer key={rec.id.toString()} style={gs.mt16}
+      return <CardContainer
+      // disabled={recommendationStore.isCompleteLoading.isLoading}
+      key={rec.id.toString()} style={gs.mt16}
       onPress={()=>{
         recommendationStore.readRecommendation(rec.id);
         navigation.navigate('ArticleView', {articleId: rec.article.id});}}
-    
+
       >
       <ArticleHeader
         // isCicleBadge={!rec.is_viewed}
@@ -54,7 +56,14 @@ export const PersonalRecommendations = observer(() =>{
                 {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
                 </View>
                 {rec.status === 'pending' &&
-                <ButtonNext disabled={recommendationStore.isCompleteLoading.isLoading} isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={async()=> await onCompleted(rec)}  title="Сделано" oliveTitle="+ 1 балл" />}
+                <ButtonNext
+                // disabled={recommendationStore.isCompleteLoading.isLoading}
+                 isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id}
+                onPress={(e: GestureResponderEvent)=> {
+                  e.stopPropagation();
+                  onCompleted(rec);
+                  }}
+                  title="Сделано" oliveTitle="+ 1 балл" />}
             </CardContainer>;
     };
     return  <FlatList

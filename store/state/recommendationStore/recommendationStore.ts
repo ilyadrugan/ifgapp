@@ -100,10 +100,12 @@ class RecommendationStore {
         };
     completeRecommendation = async (id: string) => {
           console.log('completeRecommendation');
+          if (this.isCompleteLoading.recId === Number(id)) {return;}
             this.isCompleteLoading = {
               recId: Number(id),
               isLoading: true,
             };
+            // setTimeout(async ()=>
             await completeRecommendationApi(id)
               .then((result)=>{
                 console.log('completeRecommendationApi result', result.data);
@@ -131,6 +133,7 @@ class RecommendationStore {
                   isLoading: false,
                 };
               });
+              // , 4000);
           };
     deleteRecommendation = async (user_recomendation_id: string) => {
             console.log('deleteRecommendation',user_recomendation_id);

@@ -1,6 +1,6 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking} from 'react-native';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking, GestureResponderEvent} from 'react-native';
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
@@ -157,10 +157,10 @@ export const IFGHome = observer(() => {
     style={[{width: 124,  height: 166,  borderRadius: 16 }, gs.mr12, index === 0 && gs.ml16]}
     />;
 
-    const onCompleted = (rec: PersonalRecommendationModel) => {
+    const onCompleted = async (rec: PersonalRecommendationModel) => {
       if (rec) {
        // console.log('personalRecommendation.id',personalRecommendation.id);
-       recommendationStore.completeRecommendation(`${rec.id}`);
+       await recommendationStore.completeRecommendation(`${rec.id}`);
       }
      };
      const checkTests = () =>{
@@ -276,7 +276,14 @@ return userStore.userInfo !== null && <>
                     </View>
            {rec.description && <IfgText style={[gs.fontCaptionSmall, gs.ml12, {width: '80%'}]}>{rec.description}</IfgText>}
           </View>
-          <ButtonNext disabled={recommendationStore.isCompleteLoading.isLoading} isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id} onPress={()=>onCompleted(rec)} title="Сделано" oliveTitle="+ 1 балл" />
+          <ButtonNext
+          // disabled={recommendationStore.isCompleteLoading.isLoading}
+          isLoading={recommendationStore.isCompleteLoading.isLoading && recommendationStore.isCompleteLoading.recId === rec.id}
+          onPress={(e: GestureResponderEvent)=> {
+                            e.stopPropagation();
+                            onCompleted(rec);
+                            }}
+          title="Сделано" oliveTitle="+ 1 балл" />
 
         </CardContainer>;
         })}
