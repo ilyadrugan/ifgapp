@@ -77,5 +77,7 @@ yarn-error.log
 ios/tmp.xcconfig
 ios/GoogleService-Info.plist
 .env
+.env.dev
+.env.prod
 android/app/google-services.json
 android/app/key.properties
