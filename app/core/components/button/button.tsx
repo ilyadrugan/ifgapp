@@ -108,8 +108,10 @@ export const ButtonNext:FC<{
   disabled?: boolean,
   isLoading?: boolean,
   animated?: boolean,
-}> = ({onPress, title, oliveTitle, style, textStyle, disabled, animated, isLoading}) =>
+  activeOpacity?: number
+}> = ({onPress, title, oliveTitle, style, textStyle, disabled, animated, isLoading, activeOpacity}) =>
         <Button disabled={disabled} style={[s.buttonNext, style && style]}
+                activeOpacity={activeOpacity}
                 onPress={(e) => onPress?.(e)}
                 >
                 <View style={{
@@ -156,8 +158,9 @@ export const Button: FC<{
     disabled?: boolean,
     onPress?: (e:GestureResponderEvent) => void,
     style?: StyleProp<ViewStyle>,
-    fullWidth?: boolean
-    outlined?: boolean
+    fullWidth?: boolean,
+    outlined?: boolean,
+    activeOpacity?: number
   }> = (
     {
       children,
@@ -166,9 +169,11 @@ export const Button: FC<{
       disabled,
       fullWidth,
       outlined,
+      activeOpacity = 0.2,
     }) => {
     return <>
     <TouchableOpacity
+      activeOpacity={activeOpacity}
       style={[
         s.button,
         style,

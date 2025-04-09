@@ -52,7 +52,7 @@ export const ArticleView = observer(({route}) => {
         loadArticleById(articleId).then(()=>
         setIsInFavorite(articlesStore.articlesUserList.some(article=>article.id === articleId)));
         // console.log('articleId', articleId, articlesStore.currentArticle.body_json || articlesStore.currentArticle.body || '');
-        
+
         // +баллы за прочтение
         // const persRec = recommendationStore.personalRecomendationList.find((rec)=> rec.article.id === articleId);
         // console.log('persRec', persRec);
@@ -141,16 +141,16 @@ export const ArticleView = observer(({route}) => {
                 source={{uri: `https://ifeelgood.life${articlesStore.currentArticle.media[0].full_path[0]}`}}
         />
 
-        <View style={gs.mt16} />
+        {/* <View style={gs.mt16} /> */}
         {(articlesStore.currentArticle.body !== null && articlesStore.currentArticle.body?.length > 20) &&
-        <CardContainer style={{gap:0}}>
+        <CardContainer style={[gs.mt16,{gap:0}]}>
 
           <RenderHTMLView html={articlesStore.currentArticle.body}/>
        </CardContainer>}
 
         {articlesStore.currentArticle.body_json && articlesStore.currentArticle.body_json.map((json)=>{
           if (json.type === 'html'){
-            return <CardContainer style={{gap:0}}>
+            return <CardContainer style={[gs.mt16,{gap:0}]}>
               <RenderHTMLView html={json.data}/>
             </CardContainer>;
           }
@@ -204,7 +204,7 @@ export const ArticleView = observer(({route}) => {
           <IfgText numberOfLines={1} style={[gs.fontCaption2, {marginLeft: 10}]}>{articlesStore.currentArticle.unlike} не нравится</IfgText>
           </Button>
         </View>
-        <InView 
+        <InView
         // onChange={(inView: boolean) => {
         //   if (!isReaded && inView) {onRead();}
         // }}
@@ -240,7 +240,7 @@ export const ArticleView = observer(({route}) => {
             </Button>
           </View></>}
           <View onLayout={(event)=>handleLayout(event, 'share')}>
-            <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/'+articleId)}
+            <Button onPress={async()=> await onShare('https://ifeelgood.life/articles/' + articleId)}
             style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
             <View >
             <Share />

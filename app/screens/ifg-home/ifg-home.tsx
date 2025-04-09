@@ -90,8 +90,10 @@ export const IFGHome = observer(() => {
                       buttonContent: story.withButton ? story.buttonContent : null,
                       animationDuration: 6000,
                       renderFooter: ()=> story.buttonContent ? <View style={{width: '100%', alignItems: 'center',justifyContent: 'center', bottom: 50}}>
-                                  <ButtonNext onPress={()=>{
-                                    console.log(story.buttonContent?.buttonUrl);
+                                  <ButtonNext
+                                    activeOpacity={0.8}
+                                    onPress={()=>{
+                                      console.log(story.buttonContent?.buttonUrl);
                                      if (story.buttonContent?.is_article && story.article) {
                                       ref.current?.hide();
                                       navigation.navigate('ArticleView', {articleId: story.article.id});

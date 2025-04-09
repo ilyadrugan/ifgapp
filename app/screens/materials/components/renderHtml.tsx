@@ -45,7 +45,7 @@ export const RenderHTMLView: FC<{html: string, br?: boolean}> = ({
         if (node.name === 'iframe') {
           const videoUrl = node.attribs?.src;
           if (videoUrl) {
-                  return <View>
+                  return <View style={gs.mt8}>
                     {videoUrl.includes('youtube') ?
                       <YoutubeVideo videoId={youtube_parser(videoUrl) || ''} />
                       :
