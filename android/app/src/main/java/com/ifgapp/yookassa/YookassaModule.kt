@@ -61,7 +61,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             reactApplicationContext,
             confirmationUrl,
             PaymentMethodType.BANK_CARD,
-            "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
+            "live_Oa-PThZ_qm_ChnAHXDUibsIcBzK2FfUf8YeihYIbIZ4",
 //           "488632"
         )
         activity.startActivityForResult(intent, REQUEST_CODE_CONFIRM)
@@ -85,8 +85,8 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             amount = Amount(BigDecimal.valueOf(amount), Currency.getInstance("RUB")),
             title = title,
             subtitle = subtitle,
-            clientApplicationKey = "test_NDAwMjA4m51UR7fcY8omrTVV2JmlV0QCMM0QfodWAtE",
-            shopId = "400208",
+            clientApplicationKey = "live_Oa-PThZ_qm_ChnAHXDUibsIcBzK2FfUf8YeihYIbIZ4",
+            shopId = "374362",
             savePaymentMethod = SavePaymentMethod.ON,
             paymentMethodTypes = paymentMethodTypes,
 //            authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
