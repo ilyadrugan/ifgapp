@@ -21,6 +21,7 @@ import CookieManager from '@react-native-cookies/cookies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { ScreenHeight } from '../../../../hooks/useDimensions';
+import Config from 'react-native-config';
 
 const { YookassaModule } = NativeModules;
 
@@ -43,12 +44,9 @@ export const SubscribeInputs:
     }, [control]);
     const paymentCreate = async () => {
         setIsLoading(true);
-        console.log('paymentCreate');
-        // YookassaModule.initialize('488632','test_NDg4NjMySCwLmX4npSsAaH8af9G51xSqDU3faXWOFcw', '');
-        // console.log('AddCard', YookassaModule.createCalendarEvent('hi', 'world'));
         const cookies = await CookieManager.removeSessionCookies();
         const price = getPrice(tariffsStore.tariffChoosed);
-        YookassaModule.startTokenize('', 'Оплата подписки ifeelgood Pro', '', price,
+        YookassaModule.startTokenize('', 'Оплата подписки ifeelgood Pro', '', Config.KASSA_ID, Config.KASSA_TOKEN, price,
             async (result) => {
               const options = {headers: {
                 'Authorization': `Bearer ${authStore.access_token}`,
@@ -75,7 +73,7 @@ export const SubscribeInputs:
                 });
               }
               else if (res.data.confirmation.confirmation_url) {
-                YookassaModule.start3DSecure(res.data.confirmation.confirmation_url, async (result) => {
+                YookassaModule.start3DSecure(res.data.confirmation.confirmation_url, Config.KASSA_TOKEN, async (result) => {
                   console.log('res', result);
                   if (result.status === 'RESULT_OK') {
                    await axios.get(`${API_URL}/api/lk/payment-callback`, options)

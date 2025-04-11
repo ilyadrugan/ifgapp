@@ -50,7 +50,7 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
     override fun getName(): String = "YookassaModule"
     @ReactMethod
-    fun start3DSecure(confirmationUrl: String, callback: Callback) {
+    fun start3DSecure(confirmationUrl: String, kassaToken: String, callback: Callback) {
         val activity = currentActivity
         this.callback = callback
         if (activity == null) {
@@ -61,13 +61,12 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             reactApplicationContext,
             confirmationUrl,
             PaymentMethodType.BANK_CARD,
-            "live_Oa-PThZ_qm_ChnAHXDUibsIcBzK2FfUf8YeihYIbIZ4",
-//           "488632"
+            kassaToken,
         )
         activity.startActivityForResult(intent, REQUEST_CODE_CONFIRM)
     }
     @ReactMethod
-    fun startTokenize(phoneNumber: String, title: String, subtitle: String, amount: Double, callback: Callback) {
+    fun startTokenize(phoneNumber: String, title: String, subtitle: String, kassaId: String, kassaToken: String, amount: Double, callback: Callback) {
         Log.i("Yookasssa", "startTokenize" + phoneNumber)
         this.callback = callback
         val activity = currentActivity
@@ -85,11 +84,10 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             amount = Amount(BigDecimal.valueOf(amount), Currency.getInstance("RUB")),
             title = title,
             subtitle = subtitle,
-            clientApplicationKey = "live_Oa-PThZ_qm_ChnAHXDUibsIcBzK2FfUf8YeihYIbIZ4",
-            shopId = "374362",
+            clientApplicationKey = kassaToken,
+            shopId = kassaId,
             savePaymentMethod = SavePaymentMethod.ON,
             paymentMethodTypes = paymentMethodTypes,
-//            authCenterClientId = "hitm6hg51j1d3g1u3ln040bajiol903b",
 //            userPhoneNumber = phoneNumber
         )
 
@@ -107,13 +105,13 @@ class YookassaModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
             if (resultCode == Activity.RESULT_OK) {
                 Log.i("Yookasssa", "Activity.RESULT_OK " + resultCode)
 
-                  val tokenResult = createTokenizationResult(data!!)
-                    val resultMap = WritableNativeMap().apply {
-                        putString("status", "RESULT_OK")
-                        putString("paymentToken", tokenResult.paymentToken)
-                        putString("paymentMethodType", tokenResult.paymentMethodType.toString())
-                    }
-                    callback?.invoke(resultMap)
+                val tokenResult = createTokenizationResult(data!!)
+                val resultMap = WritableNativeMap().apply {
+                    putString("status", "RESULT_OK")
+                    putString("paymentToken", tokenResult.paymentToken)
+                    putString("paymentMethodType", tokenResult.paymentMethodType.toString())
+                }
+                callback?.invoke(resultMap)
 
 //                start3DSecure("https://3ds-gate.yoomoney.ru/card-auth?acsUri=https%3A%2F%2Fyookassa.ru%3A443%2Fsandbox%2Fbank-card%2F3ds&PaReq=Q1VSUkVOQ1k9UlVCJk9SREVSPTJmMjkyZmM4LTAwMGYtNTAwMC05MDAwLTFjM2Y3YTc5ZmNlMiZURVJNSU5BTD05OTk5OTgmRVhQX1lFQVI9MjUmQU1PVU5UPTEwLjAwJlJFQ1VSUkVOVF9PUEVSQVRJT05fVFlQRT1Jbml0aWFsJkNBUkRfVFlQRT1QQU4mVFJUWVBFPTAmRVhQPTAyJkNWQzI9NDU2JkNBUkQ9NTU1NTU1NTU1NTU1NDQ3NyZOQU1FPQ%3D%3D&TermUrl=https%3A%2F%2Fpaymentcard.yoomoney.ru%3A443%2F3ds%2Fchallenge%2F241%2F1DM6T20i3QJ46o6lp2cbz1Fh4AcZ..001.202501&MD=1737956361129-22871370505732618456")
 //                val result = data?.let { createTokenizationResult(it) }
