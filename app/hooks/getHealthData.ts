@@ -91,7 +91,7 @@ export const getHealthData = async (date: Date) => {
         { accessType: 'read', recordType: 'FloorsClimbed' },
         // { accessType: 'read', recordType: 'ReadHealthDataHistory' },
         { accessType: 'read', recordType: 'TotalCaloriesBurned' },
-        { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
+        // { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
       ]).then((permissions) => {
         console.log('Granted permissions ', { permissions });
       });
