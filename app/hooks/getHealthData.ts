@@ -72,7 +72,7 @@ export const getHealthData = async (date: Date) => {
     if (Platform.OS !== 'android') {
       return;
     }
-
+    console.log('date', date);
     checkAvailability();
 
     // Android - Health Connect
@@ -108,10 +108,8 @@ export const getHealthData = async (date: Date) => {
         }
       const timeRangeFilter: TimeRangeFilter = {
         operator: 'between',
-        // startTime: '2025-04-15T00:00:00.000Z',
-        // endTime: '2025-04-16T23:59:59.999Z',
-        startTime: new Date(date.setUTCHours(0, 0, 0, 0)).toISOString(),
-        endTime: new Date(date.setUTCHours(23, 59, 59, 999)).toISOString(),
+        endTime: date.toISOString(),
+        startTime: new Date(date.setHours(0, 0, 0, 0)).toISOString(),
       };
       console.log('timeRangeFilter', timeRangeFilter);
       // Steps
