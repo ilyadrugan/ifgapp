@@ -89,8 +89,9 @@ export const getHealthData = async (date: Date) => {
       const grantedPermissions = await requestPermission([
         { accessType: 'read', recordType: 'Steps' },
         { accessType: 'read', recordType: 'FloorsClimbed' },
-        // { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
+        // { accessType: 'read', recordType: 'ReadHealthDataHistory' },
         { accessType: 'read', recordType: 'TotalCaloriesBurned' },
+        { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
       ]).then((permissions) => {
         console.log('Granted permissions ', { permissions });
       });
@@ -107,14 +108,16 @@ export const getHealthData = async (date: Date) => {
         }
       const timeRangeFilter: TimeRangeFilter = {
         operator: 'between',
-        startTime: new Date(date.setHours(0, 0, 0, 0)).toISOString(),
-        endTime: new Date(date.setHours(23, 59, 59, 999)).toISOString(),
+        // startTime: '2025-04-15T00:00:00.000Z',
+        // endTime: '2025-04-16T23:59:59.999Z',
+        startTime: new Date(date.setUTCHours(0, 0, 0, 0)).toISOString(),
+        endTime: new Date(date.setUTCHours(23, 59, 59, 999)).toISOString(),
       };
-
+      console.log('timeRangeFilter', timeRangeFilter);
       // Steps
       // console.log('getting steps');
       const steps = await readRecords('Steps', { timeRangeFilter });
-      // console.log('steps', steps.records);
+      console.log('steps', steps.records.length);
       const totalSteps = steps.records.reduce((sum, cur) => sum + cur.count, 0);
 
       // CALORIES_BURNED
@@ -122,8 +125,8 @@ export const getHealthData = async (date: Date) => {
       const calories = await readRecords('TotalCaloriesBurned', {
       timeRangeFilter,
       });
-      // console.log('calories', calories.records);
-
+      console.log('calories', calories.records);
+      calories.records.forEach((rec)=>console.log(rec.energy.inKilocalories));
       const totalCalories = calories.records.reduce((sum, cur) => sum + cur.energy.inKilocalories, 0);
       // console.log('total_calories', totalCalories);
 
