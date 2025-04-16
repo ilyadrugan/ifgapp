@@ -1,4 +1,4 @@
-import { Image, View } from 'react-native';
+import { Image, ImageBackground, View } from 'react-native';
 import React, { FC, memo, useState } from 'react';
 import {
   runOnJS, useAnimatedReaction, useDerivedValue, useSharedValue,
@@ -99,7 +99,7 @@ const StoryImage: FC<StoryImageProps> = ( {
       <View style={ImageStyles.container}>
         <Loader loading={loading} color={color} size={50} />
       </View>
-      <View style={[ ImageStyles.image, mediaContainerStyle ]}>
+      <ImageBackground blurRadius={60} source={data.data.source} style={[ ImageStyles.image, mediaContainerStyle ]}>
         {data.data?.source && (
           data.isVideo ? (
             <StoryVideo
@@ -114,7 +114,7 @@ const StoryImage: FC<StoryImageProps> = ( {
             <Image
               source={data.data.source}
               style={[ { width: WIDTH, height: deviceHeight }, imageStyles ]}
-              resizeMode="cover"
+              resizeMode="contain"
               testID="storyImageComponent"
               onLayout={( e ) => onImageLayout( Math.min( deviceHeight, e.nativeEvent.layout.height ) )}
               onLoad={() => onContentLoad()}
@@ -122,7 +122,7 @@ const StoryImage: FC<StoryImageProps> = ( {
             />
           )
         )}
-      </View>
+      </ImageBackground>
     </>
   );
 
