@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, ImageBackground, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -13,9 +13,13 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { CommonActions } from '@react-navigation/native';
 import { navigateAndReset } from '../../core/utils/navigateAndReset';
 import { observer } from 'mobx-react';
+import { useSafeAreaFrame } from 'react-native-safe-area-context';
+import { HEIGHT, WIDTH } from '../../core/components/instagram-stories/core/constants';
 
 export const SuccessfulReg = observer(() => {
   const navigation = useNavigation<any>();
+  const frame = useSafeAreaFrame();
+  const deviceHeight = frame.height;
   const abilities = [
         {
             id: '01',
@@ -38,24 +42,23 @@ export const SuccessfulReg = observer(() => {
       testingStore.getAllMyTest();
     }, []);
 
-    return (  <>
+    return (  <ScrollView>
 
         <ImageBackground
             source={require('../../../assets/backgrounds/imageShort.png')}
-            style={[s.container]} >
+            style={[s.container, {maxHeight: HEIGHT+100}]} >
 
         {/* <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
             style={s.shadowGradient}
         /> */}
-      <View style={s.imageContainerStyle}>
-
+      {/* <View style={s.imageContainerStyle}> */}
         <Image
             resizeMode="contain"
             style={s.imageStyle}
             source={require('../../../assets/backgrounds/girl.png')}/>
-       </View>
-
+       {/* </View> */}
+       <View style={s.footer}>
         <View style={s.formCard} >
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBody1,gs.bold]}>
             Ура! Вы зарегистрировались на портале ifeelgood
@@ -77,7 +80,7 @@ export const SuccessfulReg = observer(() => {
                     </IfgText>
                 </View>)}
         </View>
-        <View style={s.footer}>
+        
 
         <AnimatedGradientButton style={s.buttonNext}
                 disabled={testingStore.isLoading}
@@ -98,32 +101,28 @@ export const SuccessfulReg = observer(() => {
 
         </ImageBackground>
 
-    </>
+    </ScrollView>
     );
   });
 const s = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '100%',
+        flexDirection: 'column',
         alignItems:'center',
+        
       },
     footer: {
         position: 'absolute',
-        bottom: 50,
-        left: 0,
-        right: 0,
+        // bottom: 50,
+        // left: 0,
+        // right: 0,
         alignItems: 'center',
         zIndex: 9999,
         elevation: 100,
+        top: HEIGHT*0.3,
+        paddingHorizontal: 16
     },
-      buttonLogin: {
-        backgroundColor: colors.GREEN_COLOR,
-        borderRadius: 16,
-        paddingHorizontal: 24,
-        height: 78,
-        width: '86%',
-      },
     shadowGradient: {
         position: 'absolute',
         bottom: 0,
@@ -138,7 +137,7 @@ const s = StyleSheet.create({
         borderRadius: 16,
         paddingHorizontal: 24,
         height: 78,
-        width: '86%',
+        width: '96%',
       },
       buttonContent: {
         flexDirection: 'row',
@@ -155,14 +154,14 @@ const s = StyleSheet.create({
         borderRadius: 22,
         flexDirection: 'column',
         // alignItems: 'center',
-        width: '91%',
+        width: '100%',
         backgroundColor: colors.WHITE_COLOR,
         paddingTop:20,
         paddingBottom: 20,
         paddingHorizontal: 18,
         marginBottom: 1,
-        position: 'absolute',
-        bottom: 40 + 89,
+        // position: 'absolute',
+        // bottom: 40 + 89,
         // zIndex: 9,
         // elevation: 1,
       },
@@ -185,14 +184,19 @@ const s = StyleSheet.create({
         backgroundColor: colors.GREEN_COLOR,
       },
       imageStyle: {
-        maxWidth: '90%',
-        alignSelf: 'center',
+        maxWidth: WIDTH,
+        maxHeight: 420
+        // alignSelf: 'center',
+        // position: 'absolute',
+        // top: 100,
       },
       imageContainerStyle: {
         // zIndex: 9,
         // elevation: 1,
         position: 'absolute',
-        bottom: 20,
+        top: 0
+        // bottom: 20,
+
       },
   });
 
