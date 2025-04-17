@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
@@ -11,7 +11,7 @@ import { errorToast } from '../../../core/components/toast/toast';
 import presentsStore from '../../../../store/state/presentsStore/presentsStore';
 import { observer } from 'mobx-react';
 
-export const FeedBack = observer(() => {
+export const FeedBack: FC<{present_id?: number, event_id?: number}> = observer(({present_id, event_id}) => {
     const {
         control,
         handleSubmit,
@@ -24,7 +24,13 @@ export const FeedBack = observer(() => {
             errorToast('Слишком короткий отзыв');
         }
         else {
-            await presentsStore.sendSuggestion(data.feedback.trim());
+            await presentsStore.sendSuggestion(present_id?{
+                message: data.feedback.trim(),
+                present_id: present_id,
+            }:{
+                message: data.feedback.trim(),
+                event_id: event_id
+            });
         }
       });
     return <CardContainer style={s.card}>

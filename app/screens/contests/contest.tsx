@@ -90,7 +90,7 @@ export const ContestView = observer(({route}) => {
             <RenderHTMLView br html={presentsStore.currentPresent.desc} />
         </CardContainer>
         <View style={gs.mt24}/>
-        <FeedBack />
+        <FeedBack present_id={presentsStore.currentPresent.id}/>
 
        { presentsStore.presentsList.presents.filter((item)=>item.id !== presentsStore.currentPresent.id).length > 0 && <><View style={gs.mt24} />
         <View style={[gs.flexRow, {justifyContent: 'space-between', alignItems: 'center'}]}>

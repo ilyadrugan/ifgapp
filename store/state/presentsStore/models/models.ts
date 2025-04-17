@@ -31,3 +31,9 @@ export type WinnerModel = {
     name: string,
     last: string,
 }
+
+export type LifehackModel = {
+    event_id?: number,
+    present_id?: number,
+    message: string,
+}

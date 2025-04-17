@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { PresentListModel, PresentViewModel } from './models/models';
+import { LifehackModel, PresentListModel, PresentViewModel } from './models/models';
 import { getPresentByIdApi, getPresentsApi, sendSuggestionApi } from './presentsStore.api';
 import { successToast } from '../../../app/core/components/toast/toast';
 
@@ -87,10 +87,10 @@ class PresentsStore {
       })
       .finally(()=>{this.isLoading = false;});
   }
-  async sendSuggestion(message: string) {
-    console.log('sendSuggestion',message );
+  async sendSuggestion(model: LifehackModel) {
+    console.log('sendSuggestion',model );
     this.isLoadingSuggestion = true;
-    await sendSuggestionApi(message)
+    await sendSuggestionApi(model)
       .then((result)=>{
         // console.log(result.data);
         successToast(result.data.message);
