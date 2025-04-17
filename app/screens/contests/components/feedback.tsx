@@ -35,8 +35,8 @@ export const FeedBack: FC<{present_id?: number, event_id?: number}> = observer((
       });
     return <CardContainer style={s.card}>
     <View style={{padding:16, gap: 12}}>
-        <IfgText style={[gs.fontCaption, gs.bold]}>Написать лайфхак</IfgText>
-        <IfgText style={gs.fontCaption2}>Вы знаете, как сделать наш портал лучше? Мы открыты для советов и честных отзывов, напишите, что мы можем изменить и улучшить в проекте!</IfgText>
+        <IfgText style={[gs.fontCaption, gs.bold]}>Участвовать</IfgText>
+        <IfgText style={gs.fontCaption2}>Запишите Ваш ответ в форме ниже, согласно условиям конкурса.</IfgText>
         <Controller control={control} name={'feedback'}
             render={({ field: { onChange, onBlur, value } }) => (
                 <Input
@@ -48,7 +48,7 @@ export const FeedBack: FC<{present_id?: number, event_id?: number}> = observer((
                 // error={authStore.loginByUserPassword.loginInputError}
             />
         )}/>
-        <ButtonNext isLoading={presentsStore.isLoadingSuggestion} onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Оставить отзыв'} />
+        <ButtonNext isLoading={presentsStore.isLoadingSuggestion} onPress={onSubmit} textStyle={[gs.fontBodyMedium]} style={{height: 78}} title={'Отправить'} />
     </View>
     <Image
         resizeMode="contain"
