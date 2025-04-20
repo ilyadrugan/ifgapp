@@ -31,7 +31,35 @@ import { CheckAppState } from './checkAppState';
 //         // },
 //         {text: 'Скачать', onPress: ()=>Linking.openURL('market://details?id=com.google.android.apps.healthdata')},
 //       ]);
+function getTimeProgress(startTime: Date, endTime: Date): number {
+  const now = new Date();
+  const startMs = startTime.getTime();
+  const endMs = endTime.getTime();
+  const nowMs = now.getTime();
 
+  // Если текущее время раньше начала промежутка
+  if (nowMs < startMs) {return 0;}
+
+  // Если текущее время позже конца промежутка
+  if (nowMs > endMs) {return 1;}
+
+  // Вычисляем общую длину промежутка и пройденное время
+  const totalDuration = endMs - startMs;
+  const elapsed = nowMs - startMs;
+
+  // Возвращаем долю (от 0 до 1)
+  return elapsed / totalDuration;
+}
+function getHoursDifference(date1: Date, date2: Date): number {
+  // Разница в миллисекундах
+  const diffMs = Math.abs(date1.getTime() - date2.getTime());
+
+  // Переводим миллисекунды в часы (1 час = 3_600_000 мс)
+  const diffHours = diffMs / (1000 * 60 * 60);
+
+  // Возвращаем с округлением до 4 знаков (можно изменить)
+  return parseFloat(diffHours.toFixed(4));
+}
 const checkAvailability = async () => {
     const status = await getSdkStatus();
     if (status === SdkAvailabilityStatus.SDK_AVAILABLE) {
@@ -115,7 +143,7 @@ export const getHealthData = async (date: Date) => {
       // Steps
       // console.log('getting steps');
       const steps = await readRecords('Steps', { timeRangeFilter });
-      console.log('steps', steps.records.length);
+      // console.log('steps', steps.records);
       const totalSteps = steps.records.reduce((sum, cur) => sum + cur.count, 0);
 
       // CALORIES_BURNED
@@ -123,9 +151,14 @@ export const getHealthData = async (date: Date) => {
       const calories = await readRecords('TotalCaloriesBurned', {
       timeRangeFilter,
       });
-      console.log('calories', calories.records);
+      // console.log('calories', calories.records);
       calories.records.forEach((rec)=>console.log(rec.energy.inKilocalories));
-      const totalCalories = calories.records.reduce((sum, cur) => sum + cur.energy.inKilocalories, 0);
+      const totalCalories = calories.records.reduce((sum, cur, index, arr) => {
+        if (cur.metadata?.dataOrigin === 'com.google.android.apps.fitness' && (index === arr.length - 1)){
+          return sum + (cur.energy.inKilocalories * getTimeProgress(new Date(cur.startTime), new Date(cur.endTime)));
+        }
+        return sum + cur.energy.inKilocalories;
+      }, 0);
       // console.log('total_calories', totalCalories);
 
       // Floors climbed
