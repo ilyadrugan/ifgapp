@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View, Image, ImageBackground, ActivityIndicator, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, View, Image, ImageBackground, ActivityIndicator, RefreshControl, Platform } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -10,9 +10,11 @@ import { ContestType } from './models/models';
 import presentsStore from '../../../store/state/presentsStore/presentsStore';
 import { PresentModel } from '../../../store/state/presentsStore/models/models';
 import { observer } from 'mobx-react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const ContestsScreen = observer(() => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [refreshing, setRefreshing] = useState(false);
     useEffect(()=>{
@@ -57,7 +59,7 @@ export const ContestsScreen = observer(() => {
                 <View style={{height: 100}} /></>}
             ListHeaderComponent={<>
             {/* <View style={gs.mt16} /> */}
-            <IfgText style={[gs.h2, gs.bold]} >{'Конкурсы'}</IfgText>
+            <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{'Конкурсы'}</IfgText>
             <View style={gs.mt16} />
             <ImageBackground
             resizeMode="stretch"

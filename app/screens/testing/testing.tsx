@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
+import { StyleSheet, ScrollView, View, Touchable, TouchableOpacity, ActivityIndicator, Linking, Platform } from 'react-native';
 import colors from '../../core/colors/colors';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -23,9 +23,11 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import authStore from '../../../store/state/authStore/authStore';
 import { ScreenHeight } from '../../hooks/useDimensions';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const Testing = observer(() => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
     const [aboutData, setAboutData] = useState<{text: string}[]>([]);
@@ -113,8 +115,7 @@ export const Testing = observer(() => {
         showsVerticalScrollIndicator={false}
         style={s.container}
       >
-        <View style={gs.mt16} />
-        <Button style={s.buttonBack} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:16}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

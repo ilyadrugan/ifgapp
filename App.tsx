@@ -44,7 +44,9 @@ const App = () => {
     <NavigationContainer>
        <SafeAreaProvider>
           <FirebaseComponent/>
+          
           <MainNavigation/>
+          
           <Toast/>
       </SafeAreaProvider>
     </NavigationContainer>

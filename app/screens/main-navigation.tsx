@@ -53,7 +53,7 @@ export const MainNavigation = observer(() => {
       <Stack.Screen
         name="OnBoarding"
         component={Onboarding}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, }}
       />
       <Stack.Screen
         name="Main"

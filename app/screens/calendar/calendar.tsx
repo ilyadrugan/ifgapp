@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Animated, RefreshControl } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Image, Animated, RefreshControl, Platform } from 'react-native';
 import colors from '../../core/colors/colors';
 import gs from '../../core/styles/global';
 import { Graphs } from './blocks/graphs';
@@ -34,9 +34,11 @@ import { TimeToDrinkNewBlock } from '../ifg-home/blocks/timeToDrinkNew';
 import watterStore from '../../../store/state/watterStore/watterStore';
 import { RecommendationBlock } from '../ifg-home/blocks/recommendationBlock';
 import { RecommendationsBlock } from './blocks/recommendationsBlock';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const CalendarScreen = () =>{
   // console.log('🔄 Рендер CalendarScreen');
+    const insets = useSafeAreaInsets();
     const [refreshing, setRefreshing] = useState(false);
     const [choosedDate, setChoosedDate] = useState(formatDate());
 
@@ -58,7 +60,7 @@ export const CalendarScreen = () =>{
     >
 
         {/* <View style={gs.mt16} /> */}
-        <IfgText style={[gs.h2, gs.bold]} >{'Календарь'}</IfgText>
+        <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{'Календарь'}</IfgText>
         {/* {(watterStore.cupsData) ?
               <TimeToDrinkNewBlock />
             : <ShimmerPlaceholder style={{borderRadius: 22}} height={450} width={ScreenWidth - 32} />} */}

@@ -34,6 +34,7 @@ import paymentsStore from '../../../store/state/paymentsStore/paymentsStore';
 import tariffsStore from '../../../store/state/tariffsStore/tariffsStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { navigateAndReset } from '../../core/utils/navigateAndReset';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
@@ -41,6 +42,7 @@ if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 export const ProfileScreen = observer(() => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
     const [currentMenu, setCurrentMenu] = useState(!userStore.userInfo?.roles.includes('user_pay') ? 3 : 4);
@@ -126,7 +128,7 @@ return <>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={s.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* <View style={gs.mt16} /> */}
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]} >{menuOptions[currentMenu].name}</IfgText>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{menuOptions[currentMenu].name}</IfgText>
         <View style={gs.mt16} />
 
         <CardContainer style={{gap: 0}}>

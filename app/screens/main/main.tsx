@@ -1,7 +1,7 @@
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC, ReactNode, useEffect } from 'react';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import Profile from '../../../assets/icons/tabs/profile.svg';
 import Calendar from '../../../assets/icons/tabs/calendar.svg';
 import Home from '../../../assets/icons/tabs/home.svg';
@@ -32,11 +32,14 @@ export const Main: FC = observer(() => {
   console.log('deviceHeight', deviceHeight);
 
   useEffect(()=>{
-    StatusBar.setHidden(false);
-    StatusBar.setBackgroundColor('#757575');
+    //if (Platform.OS!=='ios'){
+      StatusBar.setHidden(false);
+      StatusBar.setBackgroundColor(Platform.OS==='ios'?'transparent':'#757575');
+    //}
   },[]);
   return  (
-    <View style={{ height: deviceHeight}}>
+    <>
+    
       <Tab.Navigator initialRouteName="Дом"
         // headerShown={false}
       screenOptions={({ route }) => ({
@@ -89,7 +92,7 @@ export const Main: FC = observer(() => {
       }}/> : null}
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
     </Tab.Navigator>
-    </View>
+    </>
   );
 });
 

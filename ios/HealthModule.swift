@@ -4,7 +4,7 @@ import HealthKit
 @objc(HealthModule)
 class HealthModule: NSObject {
     private let healthStore = HKHealthStore()
-    @objc func requestAuthorization(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  @objc func requestAuthorization(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         print("requestAuth")
         guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount),
                 let flightsClimbedType = HKObjectType.quantityType(forIdentifier: .flightsClimbed),
@@ -29,7 +29,7 @@ class HealthModule: NSObject {
               }
           }
     }
-    @objc func fetchHealthData(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  @objc func fetchHealthData(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
         let flightsType = HKQuantityType.quantityType(forIdentifier: .flightsClimbed)!
         let caloriesType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!

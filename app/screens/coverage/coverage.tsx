@@ -33,6 +33,7 @@ import articlesStore from '../../../store/state/articlesStore/articlesStore';
 import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlayer/youtubePlayer';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 import { Accordion } from '../../core/components/accordion/accordion';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const width = Dimensions.get('screen').width;
 const faqData = [
@@ -327,6 +328,7 @@ const paymentHistory = [
     },
 ];
 export const Coverage = observer(() => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const url = 'https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/i/82jQ8PQ_rRCJeg';
     const [activeSlide, setActiveSlide] = useState(0);
@@ -420,7 +422,7 @@ export const Coverage = observer(() => {
 
      <ScrollView
       style={s.container}>
-        <Button style={s.buttonBack} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

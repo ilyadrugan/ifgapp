@@ -1,6 +1,6 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking, GestureResponderEvent} from 'react-native';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking, GestureResponderEvent, Platform} from 'react-native';
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
@@ -46,8 +46,10 @@ import { InstagramStoriesProps, InstagramStoriesPublicMethods, InstagramStoryPro
 import InstagramStories from '../../core/components/instagram-stories/components/InstagramStories';
 import { getStoriesApi } from '../../../store/state/storiesStore/storiesStore.api';
 import { APPADMIN_URL } from '../../core/hosts';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const IFGHome = observer(() => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -181,7 +183,7 @@ return userStore.userInfo !== null && <>
       <ScrollView style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* <View style={gs.mt16} /> */}
-        <IfgText style={[gs.h2, gs.bold]} >{'Дом IFG'}</IfgText>
+        <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{'Дом IFG'}</IfgText>
 
 
         {isLoading ?

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState, useRef } from 'react';
-import { Image, View, ActivityIndicator, Text, StyleSheet, FlatList, Dimensions, ScrollView, Linking, StyleProp, TextStyle, ViewStyle, RefreshControl } from 'react-native';
+import { Image, View, ActivityIndicator, Text, StyleSheet, FlatList, Dimensions, ScrollView, Linking, StyleProp, TextStyle, ViewStyle, RefreshControl, Platform } from 'react-native';
 import colors from '../../core/colors/colors';
 import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -32,10 +32,12 @@ import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlaye
 import Accept from '../../../assets/icons/accept-article.svg';
 import { RenderHTMLView } from './components/renderHtml';
 import { ScreenWidth } from '../../hooks/useDimensions';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export const ArticleView = observer(({route}) => {
     const navigation = useNavigation<any>();
+    const insets = useSafeAreaInsets()
     const onBack = () => {
       articlesStore.clearCurrentArticle();
       navigation.goBack();
@@ -133,7 +135,7 @@ export const ArticleView = observer(({route}) => {
       style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View style={gs.mt48} />
+        <View style={[gs.mt48, Platform.OS==='ios' && gs.mt96]} />
         <IfgText style={[gs.h2, gs.bold]}>{articlesStore.currentArticle?.title}</IfgText>
         <View style={gs.mt16} />
         <Image
@@ -271,7 +273,7 @@ export const ArticleView = observer(({route}) => {
         />
         <View style={{height: 100}} />
     </IOScrollView>}
-    <Button onPress={onBack} style={[s.roundButton]}>
+    <Button onPress={onBack} style={[s.roundButton, {marginTop: insets.top}]}>
       <ArrowBack />
         </Button>
     </>;
@@ -429,7 +431,7 @@ const s = StyleSheet.create({
       },
       roundButton: {
         position: 'absolute',
-        top: 16,
+        //top: 16,
         left: 16,
         width: 40,
         height: 40,

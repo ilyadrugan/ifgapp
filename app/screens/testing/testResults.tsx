@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Linking, ActivityIndicator } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, Linking, ActivityIndicator, Platform } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -22,9 +22,11 @@ import recommendationStore from '../../../store/state/recommendationStore/recomm
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RenderHTMLContent from '../../screens/materials/components/renderHTMLJson';
 import { ScreenWidth } from '../../hooks/useDimensions';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ResultTest = ({route}) => {
     // const url = 'https://rutube.ru/video/678aa2fab3084ec54829979c92bc2281/';
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [balanceLvlData, setBalanceLvlData] = useState<HtmlOnConditionScore>();
     const {testId, activiti_value_json} = route.params;
@@ -69,8 +71,7 @@ export const ResultTest = ({route}) => {
     }, [testId, activiti_value_json]);
     return balanceLvlData ? <>
     <ScrollView style={s.container}>
-        <View style={gs.mt16} />
-        <Button style={s.buttonBack} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-8:16}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

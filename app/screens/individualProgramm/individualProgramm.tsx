@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, Linking } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, Linking, Platform } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -33,6 +33,7 @@ import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 import { TimeZone } from '../../hooks/useTimezone';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { RouteProp } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export type CheckBoxesTypes = {
   'Питание': boolean[],
   'Сон': boolean[],
@@ -41,6 +42,7 @@ export type CheckBoxesTypes = {
 }
 
 export const IndividualProgramm = observer(({route}) => {
+    const insets = useSafeAreaInsets();
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
     // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
@@ -186,8 +188,7 @@ export const IndividualProgramm = observer(({route}) => {
   };
     return (<>
     <ScrollView style={s.container}>
-        <View style={gs.mt16} />
-        {!route.params && <Button style={s.buttonBack} onPress={onBack}>
+        {!route.params && <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:16}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

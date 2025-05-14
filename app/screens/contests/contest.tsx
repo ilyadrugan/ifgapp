@@ -17,9 +17,11 @@ import { PresentModel, WinnerModel } from '../../../store/state/presentsStore/mo
 import { stripHtmlTags } from '../../core/utils/stripHtmlTags';
 import { observer } from 'mobx-react';
 import { RenderHTMLView } from '../materials/components/renderHtml';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export const ContestView = observer(({route}) => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const onBack = () => {
       presentsStore.clearCurrentPresent();
@@ -40,7 +42,7 @@ export const ContestView = observer(({route}) => {
       <ActivityIndicator size={'large'} animating/>
       </View>}
       { presentsStore.currentPresent.id !== 0 && <ScrollView
-      style={s.container}>
+      style={[s.container, {marginTop: Platform.OS==='ios'?insets.top-16:0}]}>
         <Button style={s.buttonBack} onPress={onBack}>
             <>
                 <ArrowBack />

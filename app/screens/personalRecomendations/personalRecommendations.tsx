@@ -1,7 +1,7 @@
 import recommendationStore from '../../../store/state/recommendationStore/recommendationStore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { View, Image, FlatList, StyleSheet, GestureResponderEvent } from 'react-native';
+import { View, Image, FlatList, StyleSheet, GestureResponderEvent, Platform } from 'react-native';
 import { categoryColors } from '../../core/colors/categoryColors';
 import { Button, ButtonNext } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -12,10 +12,12 @@ import { PersonalRecommendationModel } from '../../../store/state/recommendation
 import colors from '../../core/colors/colors';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import { observer } from 'mobx-react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 
 export const PersonalRecommendations = observer(() =>{
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const onBack = () => {
         navigation.goBack();
@@ -69,7 +71,7 @@ export const PersonalRecommendations = observer(() =>{
     return  <FlatList
                 style={s.container}
                 showsVerticalScrollIndicator={false}
-                ListHeaderComponent={ <Button style={s.buttonBack} onPress={onBack}>
+                ListHeaderComponent={ <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} onPress={onBack}>
                 <>
                     <ArrowBack />
                     <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

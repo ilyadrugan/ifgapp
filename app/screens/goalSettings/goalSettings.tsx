@@ -23,6 +23,7 @@ import Slider from '@react-native-community/slider';
 import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 import { formatNumber } from '../../core/utils/formatNumber';
 import { ArticleModel } from '../../../store/state/articlesStore/models/models';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width } = Dimensions.get('window');
 interface SliderInputProps {
     title: string;
@@ -34,6 +35,7 @@ interface SliderInputProps {
   }
 
 export const GoalSettings = () => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const onBack = () => {
       navigation.goBack();
@@ -157,8 +159,8 @@ export const GoalSettings = () => {
       style={{flex: 1}}>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
-      style={s.container}>
-        <Button style={s.buttonBack} onPress={onBack}>
+      style={[s.container,  ]}>
+        <Button style={[s.buttonBack,{marginTop: Platform.OS==='ios'?insets.top:0}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

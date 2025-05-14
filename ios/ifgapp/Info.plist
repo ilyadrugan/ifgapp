@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>1.0.0</string>
+	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -24,12 +24,6 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSHealthShareUsageDescription</key>
-	<string>We need access to your health data to show your steps, calories, and flights climbed.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>We need access to update your health data.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to the photo library for selecting images</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -37,8 +31,23 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We need access to your health data to show your steps, calories, and flights climbed.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need access to update your health data.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>tilda-sans_black.ttf</string>
+		<string>tilda-sans_bold.ttf</string>
+		<string>tilda-sans_extra-bold.ttf</string>
+		<string>tilda-sans_light.ttf</string>
+		<string>tilda-sans_medium.ttf</string>
+		<string>tilda-sans_regular.ttf</string>
+		<string>tilda-sans_semibold.ttf</string>
+		<string>tilda-sans_vf.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -53,16 +62,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>tilda-sans_black.ttf</string>
-		<string>tilda-sans_bold.ttf</string>
-		<string>tilda-sans_extra-bold.ttf</string>
-		<string>tilda-sans_light.ttf</string>
-		<string>tilda-sans_medium.ttf</string>
-		<string>tilda-sans_regular.ttf</string>
-		<string>tilda-sans_semibold.ttf</string>
-		<string>tilda-sans_vf.ttf</string>
-	</array>
 </dict>
 </plist>

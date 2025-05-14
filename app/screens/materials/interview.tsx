@@ -23,10 +23,12 @@ import { onShare } from '../../core/components/share/share';
 import { youtube_parser, YoutubeVideo } from '../../core/components/youtubePlayer/youtubePlayer';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
 import { ScreenWidth } from '../../hooks/useDimensions';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const width = Dimensions.get('screen').width;
 
 export const InterviewView = observer(({route}) => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const onBack = () => {
       articlesStore.clearCurrentInterView();
@@ -75,7 +77,7 @@ export const InterviewView = observer(({route}) => {
       </View>}
       {articlesStore.currentInterview.id !== 0 && <ScrollView
       style={s.container}>
-        <Button style={s.buttonBack} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableOpacity, RefreshControl, ActivityIndicator, ImageBackground } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View, Image, SafeAreaView, TouchableOpacity, RefreshControl, ActivityIndicator, ImageBackground, Platform } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import { TabInterface, TabsMaterials } from './components/tabs';
@@ -17,6 +17,7 @@ import {stripHtmlTags} from '../../core/utils/stripHtmlTags';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { Input, TextInputWithIcon } from '../../core/components/input/input';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const tabss: TabInterface[] = [
     {
@@ -30,6 +31,7 @@ const tabss: TabInterface[] = [
 ];
 
 export const MaterialsScreen = observer(({route}) => {
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
@@ -187,7 +189,7 @@ return <>
        ListHeaderComponentStyle={{zIndex: 999, elevation: 999}}
        ListHeaderComponent={<>
             {/* <View style={gs.mt16} /> */}
-                    <IfgText style={[gs.h2, gs.bold]} >{'Материалы'}</IfgText>
+                    <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{'Материалы'}</IfgText>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
                 {/* <View style={gs.mt16} /> */}
@@ -239,7 +241,7 @@ const s = StyleSheet.create({
         borderRadius: 8,
     },
     interview: {
-        width: 94,
+        minWidth: 94,
         backgroundColor: colors.WHITE_COLOR,
         borderRadius: 8,
         flexDirection: 'row',

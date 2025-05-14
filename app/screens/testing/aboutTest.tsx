@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View, Image, Dimensions, TouchableOpacity, Text, Platform } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -19,6 +19,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import RutubeView from '../../core/components/rutubeView/rutubeVideo';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const width = Dimensions.get('screen').width;
 const dataSteps = [
@@ -83,6 +84,7 @@ const carouselItems = [
     },
   ];
 export const AboutTest = () => {
+    const insets = useSafeAreaInsets();
     const url = 'https://rutube.ru/video/private/fb4fd0fdc5520a114eb563e4490e14fe/?r=wd&p=S4UX6EpNrCYgzrV8mjZmpw';
     // const thumbnail1 = require('../../../assets/thumbnails/thumbnail1.png');
     const navigation = useNavigation<any>();
@@ -115,8 +117,7 @@ export const AboutTest = () => {
       };
     return (<>
     <ScrollView style={s.container}>
-        <View style={gs.mt16} />
-        <Button style={s.buttonBack} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:16}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
