@@ -59,10 +59,35 @@ async function requestUserPermissionIos() {
     console.log('Authorization status:', authStatus);
   }
 }
+const requestNotificationPermissionAndroid = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      'android.permission.POST_NOTIFICATIONS',
+      {
+        title: 'MyApp notifications Permission',
+        message:
+          'MyApp needs your permission to send you ' + 'notifications .',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
 
+    console.log('granted', granted);
+    //granted is denied always whether i click "OK" or "Ask me Later", why is that?
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('GRANTED');
+    } else {
+      console.log('Notifications permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
 export async function requestNotificationPermission() {
   if (Platform.OS === 'android') {
-    await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    console.log('requestNotificationPermission');
+    await requestNotificationPermissionAndroid();
   } else {
     await requestUserPermissionIos();
   }
