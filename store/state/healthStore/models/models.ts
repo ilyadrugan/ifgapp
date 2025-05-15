@@ -1,25 +1,14 @@
-import { TariffModel } from '../../tariffsStore/models/models';
+export type HelthData = {
+    caloriesBurned: number;
+    flightsClimbed: number;
+    steps: number;
+}
 
-export type CouponModel = {
-    code: string;
-    tariff_id: number;
-};
-
-export type CouponViewModel = {
-    id: number,
-    code: string,
-    description: string,
-    discount: number,
-    type: number,
-    email: string | null,
-    tariff_id: number,
-    end_date: string | null,
-    status: number,
-    count: number
-};
-
-export type CouponResponseModel = {
-    coupon: CouponViewModel,
-    tariff: TariffModel,
-    error: string | boolean
+export type StepData = {
+    created_at: string;
+    steps: number;
+}
+export type CalorieData = {
+    created_at: string;
+    calories: number;
 }

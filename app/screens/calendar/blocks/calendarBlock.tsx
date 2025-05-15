@@ -15,6 +15,7 @@ import { Dimensions } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import recommendationStore from '../../../../store/state/recommendationStore/recommendationStore';
 import { formatDate } from '../../../core/utils/formatDateTime';
+import healthStore from '../../../../store/state/healthStore/healthStore';
 const width = Dimensions.get('screen').width;
 
 export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: boolean}> = observer(({setChoosedDate, refresh}) =>{
@@ -31,7 +32,8 @@ export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: b
         getDailyActivities();
       },[refresh]);
       const getDailyActivities = async()=> {
-        if (!dailyActivityStore.dailyActivityData)
+                await healthStore.getStepsMonth();
+            if (!dailyActivityStore.dailyActivityData)
           {await dailyActivityStore.getDailyActivity(formatDate());}
         console.log('dailyActivityStore.dailyActivityData', dailyActivityStore.dailyActivityData);
 
@@ -42,7 +44,7 @@ export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: b
           <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />
          </> :
          <>
-         <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores>dailyActivityStore.dailyActivitySettings.max_ifg?dailyActivityStore.dailyActivitySettings.max_ifg:dailyActivityStore.dailyActivitySettings.ifg_scores}/>
+         <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores > dailyActivityStore.dailyActivitySettings.max_ifg ? dailyActivityStore.dailyActivitySettings.max_ifg : dailyActivityStore.dailyActivitySettings.ifg_scores}/>
          <IFGActivity today={formatDate() === dailyActivityStore.dailyActivityData.date} dailyActivities={dailyActivityStore.dailyActivityData}/></>
 }
     </CardContainer>;

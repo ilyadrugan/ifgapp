@@ -11,6 +11,7 @@ import { observer } from 'mobx-react';
 import { DailyCaloriesModel, DailyCommonModel, DailyIfgScoreModel, GraphDataType } from '../../../../store/state/activityGraphStore/models/models';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import { useFocusEffect } from '@react-navigation/native';
+import healthStore from '../../../../store/state/healthStore/healthStore';
 const tabss: TabInterface[] = [
     {
         id: 0,
@@ -44,7 +45,7 @@ export const Graphs = observer(({refresh}) =>{
     const [activeSwitch, setSwitch] = useState(0);
     const [graphData, setGraphData] = useState<GraphDataType[]>([]);
     useEffect(() => {
-        gettingData()
+        gettingData();
     }, [refresh]);
     // useFocusEffect(
     //     React.useCallback(() => {
@@ -53,9 +54,9 @@ export const Graphs = observer(({refresh}) =>{
     //     }, [])
     //   );
     const gettingData = () => {
-        console.log('refresh GRAPHS')
-        console.log('activeTab', activeTab)
-        console.log('activeSwitch', activeSwitch)
+        console.log('refresh GRAPHS');
+        console.log('activeTab', activeTab);
+        console.log('activeSwitch', activeSwitch);
         dailyActivityStore.getIfgScoreActivity('month').then(()=>{
             if (activeTab === 0) {
                 switch (activeSwitch) {
@@ -63,10 +64,10 @@ export const Graphs = observer(({refresh}) =>{
                         convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities.slice(-7));
                         break;
                     case 1:
-                        convertToGraphDataType(dailyActivityStore.graphStepsActivities.slice(-7));
+                        convertToGraphDataType(healthStore.stepsData.slice(-7));
                         break;
                     case 2:
-                        convertToGraphDataType(dailyActivityStore.graphCaloriesActivities.slice(-7));
+                        convertToGraphDataType(healthStore.caloriesData.slice(-7));
                         break;
                 }
             }
@@ -76,17 +77,17 @@ export const Graphs = observer(({refresh}) =>{
                         convertToGraphDataType(dailyActivityStore.graphIfgScoreActivities);
                         break;
                     case 1:
-                        convertToGraphDataType(dailyActivityStore.graphStepsActivities);
+                        convertToGraphDataType(healthStore.stepsData);
                         break;
                     case 2:
-                        convertToGraphDataType(dailyActivityStore.graphCaloriesActivities);
+                        convertToGraphDataType(healthStore.caloriesData);
                         break;
                 }
             }
         });
         dailyActivityStore.getGraphCaloriesActivity('month');
         dailyActivityStore.getGraphStepsActivity('month');
-    }
+    };
     const convertToGraphDataType = (graphsData: DailyCommonModel[]) => {
         // console.log('convertToGraphDataType', graphsData);
         setGraphData(graphsData.map((el)=>{
@@ -101,20 +102,20 @@ export const Graphs = observer(({refresh}) =>{
     const onSwitch = (id: number) => {
         if (id !== activeSwitch){
             if (id === 0) {convertToGraphDataType(activeTab === 0 ? dailyActivityStore.graphIfgScoreActivities.slice(-7) : dailyActivityStore.graphIfgScoreActivities);}
-            if (id === 1) {convertToGraphDataType(activeTab === 0 ? dailyActivityStore.graphStepsActivities.slice(-7) : dailyActivityStore.graphStepsActivities);}
-            if (id === 2) {convertToGraphDataType(activeTab === 0 ? dailyActivityStore.graphCaloriesActivities.slice(-7) : dailyActivityStore.graphCaloriesActivities);}
+            if (id === 1) {convertToGraphDataType(activeTab === 0 ? healthStore.stepsData.slice(-7) : healthStore.stepsData);}
+            if (id === 2) {convertToGraphDataType(activeTab === 0 ? healthStore.caloriesData.slice(-7) : healthStore.caloriesData);}
             setSwitch(id);
         }
     };
 
     const onTabClick = async (id: number) => {
-        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphIfgScoreActivities);
-        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphStepsActivities);
-        console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphCaloriesActivities);
+        // console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphIfgScoreActivities);
+        // console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphStepsActivities);
+        // console.log('dailyActivityStore.graphIfgScoreActivities', dailyActivityStore.graphCaloriesActivities);
         if (id !== activeTab){
             if (activeSwitch === 0) {convertToGraphDataType(id === 0 ? dailyActivityStore.graphIfgScoreActivities.slice(-7) : dailyActivityStore.graphIfgScoreActivities);}
-            if (activeSwitch === 1) {convertToGraphDataType(id === 0 ? dailyActivityStore.graphStepsActivities.slice(-7) : dailyActivityStore.graphStepsActivities);}
-            if (activeSwitch === 2) {convertToGraphDataType(id === 0 ? dailyActivityStore.graphCaloriesActivities.slice(-7) : dailyActivityStore.graphCaloriesActivities);}
+            if (activeSwitch === 1) {convertToGraphDataType(id === 0 ? healthStore.stepsData.slice(-7) : healthStore.stepsData);}
+            if (activeSwitch === 2) {convertToGraphDataType(id === 0 ? healthStore.caloriesData.slice(-7) : healthStore.caloriesData);}
             setActiveTab(id);
         }
     };

@@ -9,8 +9,10 @@ import {
     openHealthConnectDataManagement,
     openHealthConnectSettings,
     revokeAllPermissions,
+    aggregateGroupByPeriod,
+    AggregateRequest,
   } from 'react-native-health-connect';
-import { Permission } from 'react-native-health-connect/lib/typescript/types';
+import { AggregateGroupByPeriodRequest, Permission } from 'react-native-health-connect/lib/typescript/types';
 import { TimeRangeFilter } from 'react-native-health-connect/lib/typescript/types/base.types';
 import { SdkAvailabilityStatus } from 'react-native-health-connect/src/constants';
 import { showAlert } from '../core/utils/showAlert';
@@ -134,6 +136,7 @@ export const getHealthData = async (date: Date) => {
           {text: 'К разрешениям', onPress: openHealthConnectSettings},
         ],);
         }
+
       const timeRangeFilter: TimeRangeFilter = {
         operator: 'between',
         endTime: date.toISOString(),
@@ -180,7 +183,69 @@ export const getHealthData = async (date: Date) => {
       // }
 
     return {totalSteps, totalCalories, totalFloors};
-
-
-
   };
+
+
+const getStartOfDay = (date: Date) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+};
+
+const getEndOfDay = (date: Date) => {
+  const d = new Date(date);
+  d.setHours(23, 59, 59, 999);
+  return d.toISOString();
+};
+
+export async function fetchStepsAndCaloriesLast30Days() {
+  const now = new Date();
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(now.getDate() - 29); // включительно 30 дней
+
+  const timeRangeFilter = {
+    operator: 'between',
+    startTime: getStartOfDay(thirtyDaysAgo),
+    endTime: getEndOfDay(now),
+  } as const;
+
+  const timeRangeSlicer = {
+    period: 'DAYS',
+    length: 1,
+  } as const;
+
+  // Получаем шаги
+  const stepResults = await aggregateGroupByPeriod<'Steps'>({
+    recordType: 'Steps',
+    timeRangeFilter,
+    timeRangeSlicer,
+  });
+  console.log('stepResults', stepResults.length);
+  // Получаем калории
+  const calorieResults = await aggregateGroupByPeriod<'TotalCaloriesBurned'>({
+    recordType: 'TotalCaloriesBurned',
+    timeRangeFilter,
+    timeRangeSlicer,
+  });
+  // console.log('calorieResults', calorieResults.length);
+  const stepsData = stepResults.map((stepItem, index, arr)=>{
+    return {
+      created_at: stepItem.startTime,
+      steps: (stepItem.result.COUNT_TOTAL || 0),
+      // calories: clr,
+    };
+  });
+  const caloriesData = calorieResults.map((calorieItem, index, arr)=>{
+    const clr = (calorieItem.result.dataOrigins.includes('com.google.android.apps.fitness') && (index === arr.length - 1)) ? Math.ceil(calorieItem.result.ENERGY_TOTAL.inKilocalories * getTimeProgress(new Date(calorieItem.startTime), new Date(calorieItem.endTime))) : Math.ceil(calorieItem.result.ENERGY_TOTAL.inKilocalories || 0);
+    return {
+      created_at: calorieItem.startTime,
+      // steps: (stepItem.result.COUNT_TOTAL || 0),
+      calories: clr,
+    };
+  });
+  // Объединяем результаты по дате
+
+  console.log('mergedData', stepsData, caloriesData);
+  // return mergedData;
+  return {stepsData, caloriesData};
+}

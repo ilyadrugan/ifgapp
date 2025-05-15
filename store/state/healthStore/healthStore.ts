@@ -1,12 +1,21 @@
-import { successToast, errorToast } from '../../../app/core/components/toast/toast';
-import tariffsStore from '../tariffsStore/tariffsStore';
-import { CouponResponseModel } from './models/models';
+import { fetchStepsAndCaloriesLast30Days } from '../../../app/hooks/getHealthData';
+import { CalorieData, HelthData, StepData } from './models/models';
 
 class HealthStore {
-  isLoading = false; // Состояние загрузки
-  couponData: CouponResponseModel;
-  healthData = null;
+  healthData: HelthData[] = [];
+  caloriesData: CalorieData[] = [];
+  stepsData: StepData[] = [];
 
+  setHealthData (data: HelthData[]) {
+    this.healthData = data;
+  }
+  async getStepsMonth () {
+    // console.log('getStepsMonth');
+    const res = await fetchStepsAndCaloriesLast30Days();
+    console.log('getStepsMonth',res);
+    this.caloriesData = res.caloriesData;
+    this.stepsData = res.stepsData;
+  }
 }
 
 const healthStore = new HealthStore();
