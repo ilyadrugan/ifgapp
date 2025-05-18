@@ -14,6 +14,7 @@ import CalendarIcon from '../../../../assets/icons/calendar.svg';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
 import { observer } from 'mobx-react';
 import { formatDate } from '../../../core/utils/formatDateTime';
+import healthStore from '../../../../store/state/healthStore/healthStore';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const months = [
@@ -109,10 +110,11 @@ const CustomCalendar: FC<{setChoosedDate: (date: string)=>void}> = observer(({se
 
   // Выбор дня
   const handleDayPress = async (date: Date) => {
-    // console.log();
+    console.log('handleDayPress',date);
     setSelectedDate(date);
     setChoosedDate(formatDate(date));
-    // console.log('date date',date.toLocaleDateString());
+      await healthStore.getHealthDataByDate(date);
+
     await dailyActivityStore.getDailyActivity(formatDate(date));
   };
 

@@ -12,3 +12,9 @@ export type CalorieData = {
     created_at: string;
     calories: number;
 }
+
+export type HealthDataByDate = {
+    date: string;
+    calories: number;
+    steps: number;
+}

@@ -98,6 +98,17 @@ const checkAvailability = async () => {
         return isInitialized;
       };
 
+const getStartOfDay = (date: Date) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+};
+
+const getEndOfDay = (date: Date) => {
+  const d = new Date(date);
+  d.setHours(23, 59, 59, 999);
+  return d.toISOString();
+};
 export const getHealthData = async (date: Date) => {
     if (Platform.OS !== 'android') {
       return;
@@ -185,18 +196,53 @@ export const getHealthData = async (date: Date) => {
     return {totalSteps, totalCalories, totalFloors};
   };
 
+function isDateInFuture(selectedDate: Date): boolean {
+  const now = new Date();
+  return selectedDate.getTime() > now.getTime();
+}
+export async function fetchStepsAndCaloriesByDate(date: Date) {
+  if (isDateInFuture(date)) {
+    return {
+      date: date.toISOString().slice(0, 10),
+      steps: 0,
+      calories: 0,
+    };
+  }
+  const timeRangeFilter = {
+    operator: 'between',
+    startTime: getStartOfDay(date),
+    endTime: getEndOfDay(date),
+  } as const;
 
-const getStartOfDay = (date: Date) => {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d.toISOString();
-};
+  const timeRangeSlicer = {
+    period: 'DAYS',
+    length: 1,
+  } as const;
 
-const getEndOfDay = (date: Date) => {
-  const d = new Date(date);
-  d.setHours(23, 59, 59, 999);
-  return d.toISOString();
-};
+  // Получаем шаги
+  const stepResults = await aggregateGroupByPeriod<'Steps'>({
+    recordType: 'Steps',
+    timeRangeFilter,
+    timeRangeSlicer,
+  });
+
+  // Получаем калории
+  const calorieResults = await aggregateGroupByPeriod<'TotalCaloriesBurned'>({
+    recordType: 'TotalCaloriesBurned',
+    timeRangeFilter,
+    timeRangeSlicer,
+  });
+
+  const steps = stepResults[0]?.result?.COUNT_TOTAL || 0;
+  const calories =
+    Math.ceil(calorieResults[0]?.result?.ENERGY_TOTAL?.inKilocalories) || 0;
+
+  return {
+    date: date.toISOString().slice(0, 10),
+    steps,
+    calories,
+  };
+}
 
 export async function fetchStepsAndCaloriesLast30Days() {
   const now = new Date();
@@ -249,3 +295,4 @@ export async function fetchStepsAndCaloriesLast30Days() {
   // return mergedData;
   return {stepsData, caloriesData};
 }
+

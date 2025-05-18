@@ -19,20 +19,13 @@ import healthStore from '../../../../store/state/healthStore/healthStore';
 const width = Dimensions.get('screen').width;
 
 export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: boolean}> = observer(({setChoosedDate, refresh}) =>{
-  // console.log('🔄 Рендер CalendarBlock');
-      // useFocusEffect(
-      //   React.useCallback(() => {
-      //       console.log('CalendarBlock');
-      //       recommendationStore.getPersonalRecommendations();
-      //       dailyActivityStore.getDailyTodayActivity(formatDate());
-      //     return () => console.log('Ушли с CalendarBlock'); // Опционально: Cleanup при уходе со страницы
-      //   }, [])
-      // );
+
       useEffect(()=>{
         getDailyActivities();
       },[refresh]);
       const getDailyActivities = async()=> {
                 await healthStore.getStepsMonth();
+                // await healthStore.getHealthDataByDate(new Date(date))
             if (!dailyActivityStore.dailyActivityData)
           {await dailyActivityStore.getDailyActivity(formatDate());}
         console.log('dailyActivityStore.dailyActivityData', dailyActivityStore.dailyActivityData);
@@ -45,7 +38,7 @@ export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: b
          </> :
          <>
          <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores > dailyActivityStore.dailyActivitySettings.max_ifg ? dailyActivityStore.dailyActivitySettings.max_ifg : dailyActivityStore.dailyActivitySettings.ifg_scores}/>
-         <IFGActivity today={formatDate() === dailyActivityStore.dailyActivityData.date} dailyActivities={dailyActivityStore.dailyActivityData}/></>
+         <IFGActivity today={formatDate() === dailyActivityStore.dailyActivityData.date} dailyActivities={healthStore.healthDataByDate ? healthStore.healthDataByDate : dailyActivityStore.dailyActivityData}/></>
 }
     </CardContainer>;
 });
