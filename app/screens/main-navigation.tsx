@@ -19,6 +19,7 @@ import { SubscribeEmailConfirm } from './registration/components/subscribeReg/su
 import { GoalSettings } from './goalSettings/goalSettings';
 import { observer } from 'mobx-react';
 import userStore from '../../store/state/userStore/userStore';
+import { StartPage } from './startPage/startPage';
 
 type RootStackParamList = {
   OnBoarding: undefined;
@@ -37,6 +38,7 @@ type RootStackParamList = {
   Coverage: undefined;
   PersonalRecommendations: undefined;
   GoalSettings: undefined;
+  StartPage: {withNoback: boolean };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -45,20 +47,23 @@ export const MainNavigation = observer(() => {
 
   return (<>
 
-    <Stack.Navigator initialRouteName={authStore.isAuthenticated ? 'Main' :
-      authStore.isOnBoarded ? 'Login' : 'OnBoarding'}>
+    <Stack.Navigator
+    // initialRouteName="StartPage"
+    initialRouteName={authStore.isAuthenticated ? 'Main' :
+      authStore.isOnBoarded ? 'Login' : 'OnBoarding'}
+      >
     {/* userStore.userInfo?.email_verified_at ? 'Main'
       : 'SubscribeEmailConfirm' */}
 
       <Stack.Screen
         name="OnBoarding"
         component={Onboarding}
-        options={{ headerShown: false, }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{  headerShown: false}}
+        options={{ headerShown: false}}
       />
       <Stack.Screen
         name="Login"
@@ -130,7 +135,11 @@ export const MainNavigation = observer(() => {
       component={GoalSettings}
       options={{ headerShown: false }}
       />
-
+      <Stack.Screen
+      name="StartPage"
+      component={StartPage}
+      options={{ headerShown: false }}
+      />
   </Stack.Navigator>
   </>);
 });

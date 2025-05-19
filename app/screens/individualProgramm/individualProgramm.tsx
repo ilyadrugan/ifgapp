@@ -188,14 +188,14 @@ export const IndividualProgramm = observer(({route}) => {
   };
     return (<>
     <ScrollView style={s.container}>
-        {!route.params && <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:16}]} onPress={onBack}>
+        {!route.params && <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 16}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
                 </>
         </Button>}
         <View style={gs.mt16} />
-
+         {route.params && <View style={ {marginTop:Platform.OS === 'ios' ? insets.top - 16 : insets.top }} />}
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]}>
         Индивидуальная i<IfgText color={colors.GREEN_LIGHT_COLOR} style={[gs.h2, gs.bold]}>feel</IfgText>good программа
         </IfgText>

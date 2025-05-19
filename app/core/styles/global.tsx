@@ -37,6 +37,12 @@ const gs = StyleSheet.create({
     marginTop: 9,
     marginBottom: 9,
   },
+  h1Big: {
+    fontFamily: 'Inter-Black',
+    // fontWeight: 'bold',
+    fontSize: 48,
+    lineHeight: 50,
+  },
   h1Intro: {
     fontFamily: 'tilda-sans_medium',
     fontSize: 44,

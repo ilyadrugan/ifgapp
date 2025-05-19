@@ -31,8 +31,9 @@ const DropdownBlock: FC<{
   activeTab: number,
   activeSwitch: number,
   resetParams: number,
-  setResetParams: (p: number)=>void
-}> = observer(({themes, activeTab, activeSwitch, resetParams, setResetParams}) => {
+  setResetParams: (p: number)=>void,
+  defaultTheme?: number,
+}> = observer(({themes, activeTab, activeSwitch, resetParams, setResetParams, defaultTheme}) => {
   const [sortOpen, setSortOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
   const [themeOptions, setThemeOptions] = useState<ArticleThemesModel[]>([ {title: 'Показать все'} as ArticleThemesModel,...themes]);
@@ -123,7 +124,15 @@ const DropdownBlock: FC<{
         setResetParams(0);
         return;
       }
-      if (articlesStore.articlesQueryParams.tag) {
+      if (defaultTheme) {
+        const parent = articlesStore.articleThemesList.find((filter)=> filter.children?.some((child)=>child.tag_id === Number(defaultTheme)));
+        if (parent) {
+          console.log('parent', parent);
+          setParentThemeOption(parent);
+          setThemeOption(parent.children?.find((child)=>child.tag_id === Number(defaultTheme)));
+        }
+      }
+      else if (articlesStore.articlesQueryParams.tag) {
         const parent = articlesStore.articleThemesList.find((filter)=> filter.children?.some((child)=>child.tag_id === Number(articlesStore.articlesQueryParams.tag)));
         if (parent) {
           console.log('parent', parent);

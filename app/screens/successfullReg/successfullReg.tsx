@@ -15,6 +15,7 @@ import { navigateAndReset } from '../../core/utils/navigateAndReset';
 import { observer } from 'mobx-react';
 import { useSafeAreaFrame } from 'react-native-safe-area-context';
 import { HEIGHT, WIDTH } from '../../core/components/instagram-stories/core/constants';
+import userStore from '../../../store/state/userStore/userStore';
 
 export const SuccessfulReg = observer(() => {
   const navigation = useNavigation<any>();
@@ -40,13 +41,14 @@ export const SuccessfulReg = observer(() => {
     ];
     useEffect(() => {
       testingStore.getAllMyTest();
+      userStore.getProfile();
     }, []);
 
     return (  <ScrollView>
 
         <ImageBackground
             source={require('../../../assets/backgrounds/imageShort.png')}
-            style={[s.container, {maxHeight: HEIGHT+100}]} >
+            style={[s.container, {maxHeight: HEIGHT + 100}]} >
 
         {/* <LinearGradient
             colors={['transparent', 'rgba(0, 0, 0, 0.75)' ]}
@@ -55,10 +57,10 @@ export const SuccessfulReg = observer(() => {
       {/* <View style={s.imageContainerStyle}> */}
         <Image
             resizeMode="contain"
-            style={s.imageStyle}
+            style={[s.imageStyle, gs.mt64]}
             source={require('../../../assets/backgrounds/girl.png')}/>
        {/* </View> */}
-       <View style={s.footer}>
+       <View style={[s.footer,  gs.mt64]}>
         <View style={s.formCard} >
             <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBody1,gs.bold]}>
             Ура! Вы зарегистрировались на портале ifeelgood
@@ -80,11 +82,14 @@ export const SuccessfulReg = observer(() => {
                     </IfgText>
                 </View>)}
         </View>
-        
+
 
         <AnimatedGradientButton style={s.buttonNext}
-                disabled={testingStore.isLoading}
-                onPress={()=>testingStore.testsList.length > 0 ?
+                disabled={testingStore.isLoading || userStore.isLoading}
+                onPress={()=>
+                  userStore.roles.includes('user_wb') ?
+                  navigateAndReset(navigation, 'StartPage', {withNoBack: true})
+                  : testingStore.testsList.length > 0 ?
                   navigateAndReset(navigation, 'IndividualProgramm', {withNoBack: true})
                   :
                   navigateAndReset(navigation, 'Main')}
@@ -92,7 +97,7 @@ export const SuccessfulReg = observer(() => {
                 <View style={gs.buttonContent}>
                 <View style={gs.buttonContentRow}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Быть здоровым</IfgText>
-                        {authStore.isLoading ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
+                        {authStore.isLoading || userStore.isLoading ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
                     </View>
                     <View />
                 </View>
@@ -110,7 +115,7 @@ const s = StyleSheet.create({
         width: '100%',
         flexDirection: 'column',
         alignItems:'center',
-        
+
       },
     footer: {
         position: 'absolute',
@@ -120,8 +125,8 @@ const s = StyleSheet.create({
         alignItems: 'center',
         zIndex: 9999,
         elevation: 100,
-        top: HEIGHT*0.3,
-        paddingHorizontal: 16
+        top: HEIGHT * 0.3,
+        paddingHorizontal: 16,
     },
     shadowGradient: {
         position: 'absolute',
@@ -185,7 +190,7 @@ const s = StyleSheet.create({
       },
       imageStyle: {
         maxWidth: WIDTH,
-        maxHeight: 420
+        maxHeight: 420,
         // alignSelf: 'center',
         // position: 'absolute',
         // top: 100,
@@ -194,7 +199,7 @@ const s = StyleSheet.create({
         // zIndex: 9,
         // elevation: 1,
         position: 'absolute',
-        top: 0
+        top: 0,
         // bottom: 20,
 
       },

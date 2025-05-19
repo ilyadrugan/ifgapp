@@ -42,18 +42,18 @@ export const Login = observer(() => {
       );
       const onSubmit = handleSubmit(async (data) => {
         console.log(data);
-        
+
         if (!data.email) {authStore.fillEmailError('Заполните поле');}
-        else if (!isValidEmail(data.email)){
-          authStore.fillEmailError('Некорректный Email');
-        }
+        // else if (!isValidEmail(data.email)){
+        //   authStore.fillEmailError('Некорректный Email');
+        // }
         if (forgotPassword) {
-          if (!isValidEmail(data.email)) return
-          await authStore.forgotPassword(data.email)
-          return
+          if (!isValidEmail(data.email)) {return;}
+          await authStore.forgotPassword(data.email);
+          return;
         }
         if (!data.password) {authStore.fillPasswordError('Заполните поле');}
-        if (isValidEmail(data.email) && data.email && data.password) {authStore.login(data, ()=>navigation.replace('Main'));}
+        if (data.email && data.password) {authStore.login(data, ()=>navigation.replace('Main'));}
       });
 
       const clearLogin = () => {
@@ -74,9 +74,9 @@ export const Login = observer(() => {
         source={require('../../../assets/backgrounds/imageShort.png')}
         style={[s.container]}  >
         <IfgText color={colors.WHITE_COLOR} style={[gs.h1Intro,  {textAlign: 'center', marginTop: 44}]}>
-             {forgotPassword?'Восстановить пароль':'Начните прямо сейчас'} 
+             {forgotPassword ? 'Восстановить пароль' : 'Начните прямо сейчас'}
         </IfgText>
-        {forgotPassword?
+        {forgotPassword ?
         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2,  {textAlign: 'center', marginTop: 31, maxWidth: 322}]}>
        После заполнения формы мы отправим специальную ссылку на указанный электронный адрес, перейдя по которой вы сможете задать новый пароль
         </IfgText>
@@ -94,7 +94,7 @@ export const Login = observer(() => {
                 value={value}
                 onChange={(event)=>{
                   authStore.clearEmailError();
-                  onChange(event)}}
+                  onChange(event);}}
                 placeholder="Электронная почта"
                 keyboardType="email-address"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
@@ -122,7 +122,7 @@ export const Login = observer(() => {
                 >
                 <View style={gs.buttonContent}>
                 <View style={gs.buttonContentRow}>
-                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{forgotPassword?'Отправить':'Войти'}</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>{forgotPassword ? 'Отправить' : 'Войти'}</IfgText>
                         {authStore.isLoading ? <ActivityIndicator color={colors.WHITE_COLOR}/> : <AnimatedArrow />}
                     </View>
                     <View />
@@ -139,7 +139,7 @@ export const Login = observer(() => {
                         <IfgText style={[gs.fontBody1, { fontSize: 21, textAlign: 'center'}]}>Войти с Apple</IfgText>
                     </View>
             </Button> */}
-            {forgotPassword?
+            {forgotPassword ?
             <View style={{flexDirection:'row', justifyContent: 'center'}}>
                 <IfgText onPress={()=>setForgotPassword((prev)=>!prev)} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Войти в личный кабинет</IfgText>
             </View>

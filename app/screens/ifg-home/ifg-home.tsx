@@ -45,8 +45,9 @@ import InstaStory from '../../core/components/insta-stories/insta-stories';
 import { InstagramStoriesProps, InstagramStoriesPublicMethods, InstagramStoryProps, StoryItemProps } from '../../core/components/instagram-stories/core/dto/instagramStoriesDTO';
 import InstagramStories from '../../core/components/instagram-stories/components/InstagramStories';
 import { getStoriesApi } from '../../../store/state/storiesStore/storiesStore.api';
-import { APPADMIN_URL } from '../../core/hosts';
+import { APPADMIN_URL, PROD_URL } from '../../core/hosts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import VideoBackground from '../../core/components/video-background/video-background';
 
 export const IFGHome = observer(() => {
     const insets = useSafeAreaInsets();
@@ -183,7 +184,7 @@ return userStore.userInfo !== null && <>
       <ScrollView style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* <View style={gs.mt16} /> */}
-        <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{'Дом IFG'}</IfgText>
+        <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} >{'Дом IFG'}</IfgText>
 
 
         {isLoading ?
@@ -236,6 +237,22 @@ return userStore.userInfo !== null && <>
                 </>
             </Button>
       </ImageBackground> : null}
+      {!isLoading && userStore.roles.includes('user_wb') &&
+      <CardContainer style={{padding: 0,  marginTop: 16, borderRadius: 22, overflow: 'hidden'}}>
+        <VideoBackground
+          source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
+          style={{padding: 16}}
+          >
+            <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Используйте все возможности iFeelGood для достижения результатов</IfgText>
+            {/* <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Узнайте как защитить себя и своих близких на случай непредвиденных ситуаций с жизнью и здоровьем в совместном проекте АльфаСтрахование-Жизнь и ifeelgood!</IfgText> */}
+            <Button onPress={()=>navigation.navigate('StartPage')} style={{backgroundColor: colors.GREEN_COLOR,flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: colors.WHITE_COLOR, paddingHorizontal: 16, borderRadius: 12, height: 60, marginTop: 32}}>
+                <>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Навигатор ifg</IfgText>
+                    <ArrowRight />
+                </>
+            </Button>
+      </VideoBackground>
+      </CardContainer>}
       <View style={gs.mt24} />
 
        <ActivityBlock />

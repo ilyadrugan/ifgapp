@@ -46,15 +46,17 @@ export interface CardContainerProps extends ViewProps {
   style?: StyleProp<ViewStyle>,
   onPress?: () => void | null,
   disabled?: boolean
+  activeOpacity?: number
 }
 
-export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, disabled, ...props}) => {
+export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, disabled, activeOpacity, ...props}) => {
     return <View {...props}>
     <TouchableOpacity
       style={[
         s.container,
         style,
       ]}
+      activeOpacity={activeOpacity || 0}
       onPress={onPress}
       disabled={disabled ? true : onPress ? false : true }
     >

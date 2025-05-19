@@ -56,14 +56,15 @@ export const MaterialsScreen = observer(({route}) => {
     };
 
     useEffect(() => {
+        console.log('route.params', route.params);
         if (route.params){
             if (route.params.toInterViews) {
                 setActiveTab(1);
             }
-            else if (route.params.toArticles) {
+            if (route.params.toArticles) {
                 setActiveTab(0);
             }
-            else if (route.params.resetParams) {
+            if (route.params.resetParams) {
                 console.log('route.params.resetParams', route.params.resetParams);
                 switch (route.params.resetParams){
                     case 'articles':
@@ -74,6 +75,11 @@ export const MaterialsScreen = observer(({route}) => {
                         articlesStore.clearInterViewsParams();
                         break;
                 }
+                onRefresh();
+            }
+            if (route.params.tagId) {
+                console.log('route.params.tagId', route.params.tagId);
+                articlesStore.setArticleQueryParam('tag', route.params.tagId);
                 onRefresh();
             }
         }
@@ -189,7 +195,7 @@ return <>
        ListHeaderComponentStyle={{zIndex: 999, elevation: 999}}
        ListHeaderComponent={<>
             {/* <View style={gs.mt16} /> */}
-                    <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{'Материалы'}</IfgText>
+                    <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} >{'Материалы'}</IfgText>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
                 {/* <View style={gs.mt16} /> */}
@@ -198,7 +204,7 @@ return <>
                 placeholder={`Поиск по ${activeTab === 0 ? 'статьям' : 'интервью'}`}/> */}
                 <View style={gs.mt16} />
             {(articlesStore.articleThemesList.length > 0) ?
-                    <DropdownBlock activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} resetParams={resetParam} setResetParams={setResetParam}/> :
+                    <DropdownBlock defaultTheme={route.params?.tagId || null} activeSwitch={activeSwitch} activeTab={activeTab} themes={articlesStore.articleThemesList} resetParams={resetParam} setResetParams={setResetParam}/> :
                     <ShimmerPlaceholder height={200} width={ScreenWidth - 32} />
                     }
                 <View style={s.hashtagsContainer}>
