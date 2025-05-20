@@ -25,7 +25,7 @@ import authStore from '../../../store/state/authStore/authStore';
 
 const Tab = createBottomTabNavigator();
 
-export const Main: FC = observer(() => {
+export const Main: FC = observer(({}) => {
   const insets = useSafeAreaInsets();
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
@@ -34,12 +34,12 @@ export const Main: FC = observer(() => {
   useEffect(()=>{
     //if (Platform.OS!=='ios'){
       StatusBar.setHidden(false);
-      StatusBar.setBackgroundColor(Platform.OS==='ios'?'transparent':'#757575');
+      StatusBar.setBackgroundColor(Platform.OS === 'ios' ? 'transparent' : '#757575');
     //}
   },[]);
   return  (
     <>
-    
+
       <Tab.Navigator initialRouteName="Дом"
         // headerShown={false}
       screenOptions={({ route }) => ({
@@ -78,7 +78,7 @@ export const Main: FC = observer(() => {
     >
       <Tab.Screen name="Профиль" component={ProfileScreen} />
       <Tab.Screen name="Календарь" component={CalendarScreen} />
-     <Tab.Screen name="Дом" component={IFGHome}  />
+     <Tab.Screen name="Дом" component={IFGHome} />
      {userStore.userInfo !== null ? <Tab.Screen name="Материалы" component={MaterialsScreen}
       options={{
         tabBarIcon: ({ focused }) => (

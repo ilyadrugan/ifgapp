@@ -88,7 +88,13 @@ export const SuccessfulReg = observer(() => {
                 disabled={testingStore.isLoading || userStore.isLoading}
                 onPress={()=>
                   userStore.roles.includes('user_wb') ?
-                  navigateAndReset(navigation, 'StartPage', {withNoBack: true})
+                  navigation.reset({
+                    index: 1,
+                    routes: [
+                      { name: 'Main' },
+                      { name: 'StartPage', params:{withNoBack: true} },
+                    ],
+                  })
                   : testingStore.testsList.length > 0 ?
                   navigateAndReset(navigation, 'IndividualProgramm', {withNoBack: true})
                   :

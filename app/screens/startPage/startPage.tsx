@@ -58,12 +58,12 @@ export const StartPage = observer(({route}) => {
 
      <ScrollView
       style={s.container}>
-         {!route.params && <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : insets.top}]} onPress={onBack}>
+         <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : insets.top}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
                 </>
-        </Button>}
+        </Button>
         <View style={gs.mt16} />
 
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold]}>

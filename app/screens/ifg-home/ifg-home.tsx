@@ -247,7 +247,7 @@ return userStore.userInfo !== null && <>
             {/* <IfgText  color={colors.WHITE_COLOR} style={gs.fontCaptionSmall}>Узнайте как защитить себя и своих близких на случай непредвиденных ситуаций с жизнью и здоровьем в совместном проекте АльфаСтрахование-Жизнь и ifeelgood!</IfgText> */}
             <Button onPress={()=>navigation.navigate('StartPage')} style={{backgroundColor: colors.GREEN_COLOR,flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: colors.WHITE_COLOR, paddingHorizontal: 16, borderRadius: 12, height: 60, marginTop: 32}}>
                 <>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Навигатор ifg</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Моя программа</IfgText>
                     <ArrowRight />
                 </>
             </Button>
