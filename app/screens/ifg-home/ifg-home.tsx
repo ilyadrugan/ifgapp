@@ -207,7 +207,7 @@ return userStore.userInfo !== null && <>
         />
        </>
       }
-     { (isLoading && userStore.roles.includes('user_ins')) ? <ShimmerPlaceholder style={[gs.mt24, {height: 219, width: '100%',  borderRadius: 16 }]}/> :
+     { (isLoading && userStore.roles.includes('user_ins')) || (isLoading && userStore.roles.includes('user_wb')) ? <ShimmerPlaceholder style={[gs.mt24, {height: 219, width: '100%',  borderRadius: 16 }]}/> :
      (checkTests() && !closeEndSetting) ?
       <CardContainer style={{marginTop: 24,borderRadius: 16,backgroundColor: colors.GREEN_COLOR, flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden'}}>
         <TouchableOpacity onPress={()=>setCloseEndSetting((prev)=>!prev)} style={[gs.tapArea, {position: 'absolute', right: 16, top: 16}]}>
