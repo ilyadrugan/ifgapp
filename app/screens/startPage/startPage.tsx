@@ -121,24 +121,41 @@ export const StartPage = observer(({route}) => {
       <View style={gs.mt24}/>
       <CardContainer style={{padding: 0, overflow: 'hidden'}} >
         <VideoBackground
-        style={{paddingHorizontal: 28, paddingTop: 32, backgroundColor: 'blue'}}
-        // source={{uri: PROD_URL + '/images/fon2.mp4'}}
+    style={{ paddingHorizontal: 28, paddingTop: 32, backgroundColor: 'blue', paddingBottom: 270 }} // добавлен paddingBottom
+  // source={{uri: PROD_URL + '/images/fon2.mp4'}}
         source={require('../../../assets/videos/fon2.mp4')}
-         >
-          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
-            {'Пройдите тестирование и получите\nперсональные рекомендации по\nпитанию, сну, физическим активностям\nи снижению стресса!'}
-          </IfgText>
-          <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.regular, gs.mt24]}>
-            {'Это займет всего несколько минут и поможет нам\nподобрать для вас оптимальную программу.'}
-          </IfgText>
-          <View style={gs.mt24} />
-          <Button onPress={()=>navigation.navigate('Testing')} style={{height: 64, backgroundColor: colors.GREEN_COLOR, borderRadius: 12, alignItems: 'center'}}>
-            <IfgText style={[gs.fontCaptionMedium]} color={colors.WHITE_COLOR}>Пройти тестирование</IfgText>
-          </Button>
-          <View style={gs.mt32}/>
-          <View style={{height: 250}}/>
-           <Image style={{position: 'absolute', width: '100%', bottom:-4, alignSelf: 'center' }} resizeMode="contain" height={260} source={{uri: 'https://ifeelgood.life/images/Group%2014891.png'}} />
-        </VideoBackground>
+  >
+    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
+      {'Пройдите тестирование и получите\nперсональные рекомендации по\nпитанию, сну, физическим активностям\nи снижению стресса!'}
+    </IfgText>
+
+    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.regular, gs.mt24]}>
+      {'Это займет всего несколько минут и поможет нам\nподобрать для вас оптимальную программу.'}
+    </IfgText>
+
+    <View style={gs.mt24} />
+    <Button
+      onPress={() => navigation.navigate('Testing')}
+      style={{ height: 64, backgroundColor: colors.GREEN_COLOR, borderRadius: 12, alignItems: 'center' }}
+    >
+      <IfgText style={[gs.fontCaptionMedium]} color={colors.WHITE_COLOR}>
+        Пройти тестирование
+      </IfgText>
+    </Button>
+
+    {/* 👇 Абсолютно позиционированное изображение */}
+    <Image
+      source={{ uri: 'https://ifeelgood.life/images/Group%2014891.png' }}
+      resizeMode="contain"
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        height: 260,
+        alignSelf: 'center',
+      }}
+    />
+  </VideoBackground>
       </CardContainer>
       <IfgText color="#BBBBBB" style={[gs.mt32,gs.fontCaption2]}>
         02 / 05
