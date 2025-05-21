@@ -113,7 +113,9 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
         {/* Ось X */}
         <VictoryAxis
         tickFormat={(t, index) => {
-          return monthly ? (((index + 1) % 3) === 0 ? t.split('.')[0] : '') : dataWeekNames[Math.abs(new Date().getDay() - 6 + index)];}} // Показать каждую пятую метку
+          const todayIndex = new Date().getDay(); // 0 (вс) ... 6 (сб)
+          const shiftedIndex = (todayIndex + 1 + index) % 7; // сдвиг на завтра
+          return monthly ? (((index + 1) % 3) === 0 ? t.split('.')[0] : '') : dataWeekNames[shiftedIndex];}} // Показать каждую пятую метку
           style={{
             axis: { stroke: 'transparent' },
             tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'tilda-sans_medium' },
