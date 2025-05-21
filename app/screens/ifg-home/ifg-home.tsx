@@ -1,6 +1,6 @@
 
 
-import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking, GestureResponderEvent, Platform} from 'react-native';
+import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking, GestureResponderEvent, Platform, ActivityIndicator} from 'react-native';
 import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
@@ -56,10 +56,14 @@ export const IFGHome = observer(() => {
     const [isLoading, setIsLoading] = useState(false);
     const [closeEndSetting, setCloseEndSetting] = useState(false);
     const [stories, setStories] = useState<InstagramStoryProps[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const ref = useRef<InstagramStoriesPublicMethods>( null );
     useEffect(() => {
+
+
       getData();
+
     }, []);
 
     const getData = async () => {
@@ -134,14 +138,21 @@ export const IFGHome = observer(() => {
       // }
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
       await recommendationStore.getPersonalRecommendations();
+      const timer = setTimeout(() => setLoading(false), 1000);
+
       setIsLoading((prev)=>!prev);
+      return () => clearTimeout(timer);
     };
 
     const onRefresh = async () => {
       if (refreshing) {return;}
+      setLoading(true);
       setRefreshing((prev)=>!prev);
       await getData();
+      // const timer = setTimeout(() => setLoading(false), 1000);
+
       setRefreshing((prev)=>!prev);
+      // return () => clearTimeout(timer);
     };
 
     const MaterialCard = ({title, media, subtitle, id}, index)=>
@@ -238,9 +249,13 @@ return userStore.userInfo !== null && <>
             </Button>
       </ImageBackground> : null}
       {!isLoading && userStore.roles.includes('user_wb') &&
+      <>
+
+
       <CardContainer style={{padding: 0,  marginTop: 16, borderRadius: 22, overflow: 'hidden'}}>
         <VideoBackground
-          source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
+          // source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
+          source={require('../../../assets/videos/bg-video.mp4')}
           style={{padding: 16}}
           >
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.bold]}>Используйте все возможности iFeelGood для достижения результатов</IfgText>
@@ -252,7 +267,12 @@ return userStore.userInfo !== null && <>
                 </>
             </Button>
       </VideoBackground>
-      </CardContainer>}
+      {loading && (
+              <View style={s.loaderOverlay}>
+                {/* <ActivityIndicator size="large"  /> */}
+              </View>
+            )}
+      </CardContainer></>}
       <View style={gs.mt24} />
 
        <ActivityBlock />
@@ -474,5 +494,14 @@ const s = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 8,
       },
+      loaderOverlay: {
+          // растягивает на весь экран
+              ...StyleSheet.absoluteFillObject, // растягивает на весь экран
+
+          backgroundColor: colors.BACKGROUND_COLOR,
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10,
+        },
   });
 

@@ -22,6 +22,7 @@ class StoriesStore {
   }
 
   getStories = async () => {
+      if (storiesStore.isLoading) {return;}
       this.isLoading = true;
     //   this.errorMessage = '';
       await getStoriesApi()

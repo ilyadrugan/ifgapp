@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView, Platform, View, StyleSheet, Image, FlatList } from 'react-native';
+import { ScrollView, Platform, View, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import colors from '../../core/colors/colors';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -27,6 +27,13 @@ export const StartPage = observer(({route}) => {
     const navigation = useNavigation<any>();
     const flatlistRef = useRef<FlatList<ArticleModel>>(null);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      // Показываем лоадер на 0.5 сек
+      const timer = setTimeout(() => setLoading(false), 1500);
+      return () => clearTimeout(timer);
+    }, []);
     const onBack = () => {
       navigation.goBack();
     };
@@ -73,7 +80,8 @@ export const StartPage = observer(({route}) => {
       <CardContainer style={{padding: 0, height: flag ? 380 : 430, borderRadius: 32, overflow: 'hidden'}} >
         <VideoBackground
         style={{paddingHorizontal: 24}}
-        source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
+        // source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
+        source={require('../../../assets/videos/bg-video.mp4')}
         >
           <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt32]} >
             {flag ? 'Здоровый образ жизни!' : 'Похудеем с умом!'}
@@ -114,7 +122,8 @@ export const StartPage = observer(({route}) => {
       <CardContainer style={{padding: 0, overflow: 'hidden'}} >
         <VideoBackground
         style={{paddingHorizontal: 28, paddingTop: 32, backgroundColor: 'blue'}}
-        source={{uri: PROD_URL + '/images/fon2.mp4'}}
+        // source={{uri: PROD_URL + '/images/fon2.mp4'}}
+        source={require('../../../assets/videos/fon2.mp4')}
          >
           <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
             {'Пройдите тестирование и получите\nперсональные рекомендации по\nпитанию, сну, физическим активностям\nи снижению стресса!'}
@@ -127,7 +136,8 @@ export const StartPage = observer(({route}) => {
             <IfgText style={[gs.fontCaptionMedium]} color={colors.WHITE_COLOR}>Пройти тестирование</IfgText>
           </Button>
           <View style={gs.mt32}/>
-          <Image style={{width: '100%'}} resizeMode="contain"  height={260} source={{uri: 'https://ifeelgood.life/images/Group%2014891.png'}} />
+          <View style={{height: 250}}/>
+           <Image style={{position: 'absolute', width: '100%', bottom:-4, alignSelf: 'center' }} resizeMode="contain" height={260} source={{uri: 'https://ifeelgood.life/images/Group%2014891.png'}} />
         </VideoBackground>
       </CardContainer>
       <IfgText color="#BBBBBB" style={[gs.mt32,gs.fontCaption2]}>
@@ -203,7 +213,13 @@ export const StartPage = observer(({route}) => {
         <Image style={{position: 'absolute', width: '100%', bottom:-10, left: 0 }} resizeMode="contain" height={340} source={{uri: `${PROD_URL}/images/Group 14885.png`}}/>
       </CardContainer>
       <View style={{height: 100}} />
-    </ScrollView></>;});
+    </ScrollView>
+    {loading && (
+        <View style={s.loaderOverlay}>
+          <ActivityIndicator size="large"  />
+        </View>
+      )}
+    </>;});
 
 const s = StyleSheet.create({
     container: {
@@ -241,4 +257,11 @@ const s = StyleSheet.create({
         borderColor: 'rgba(64, 64, 64, 0.5)',
         alignItems: 'center',
       },
+      loaderOverlay: {
+    ...StyleSheet.absoluteFillObject, // растягивает на весь экран
+    backgroundColor: colors.BACKGROUND_COLOR,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
 });
