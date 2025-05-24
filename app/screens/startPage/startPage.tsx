@@ -79,18 +79,32 @@ export const StartPage = observer(({route}) => {
       <View style={gs.mt16} />
       <CardContainer style={{padding: 0, height: flag ? 380 : 430, borderRadius: 32, overflow: 'hidden'}} >
         <VideoBackground
-        style={{paddingHorizontal: 24}}
+        style={{backgroundColor: 'blue'}}
         // source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
         source={require('../../../assets/videos/bg-video.mp4')}
         >
-          <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt32]} >
-            {flag ? 'Здоровый образ жизни!' : 'Похудеем с умом!'}
-          </IfgText>
+          <View style={{paddingHorizontal: 24}}>
+            <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt32]} >
+              {flag ? 'Здоровый образ жизни!' : 'Похудеем с умом!'}
+            </IfgText>
+          </View>
+          <View style={{paddingHorizontal: 24}}>
           <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.mt16]}>
            {'Ваш персональный путь к\nстройности'}
           </IfgText>
-          <Image style={{position: 'absolute', zIndex: 4, bottom: 0, alignSelf: 'center', width: '100%'}} resizeMode="contain" width={ScreenWidth - 96} height={flag ? 206 : 270} source={{uri: 'https://ifeelgood.life/images/fc758c5e057cfe1536da069939ab1635.png'}} />
-          <IfgText color={colors.WHITE_COLOR} style={[{position: 'absolute', left: 40, bottom: flag ? 40 : 70}, gs.h1Big]}>IFEELGOOD</IfgText>
+          </View>
+          <Image
+          resizeMode="contain"
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '50%',
+            alignSelf: 'center',
+            zIndex: 4,
+          }}
+         source={{uri: 'https://ifeelgood.life/images/fc758c5e057cfe1536da069939ab1635.png'}} />
+          <IfgText color={colors.WHITE_COLOR} style={[{position: 'absolute', left: '10%', bottom: flag ? 40 : 70}, gs.h1Big]}>IFEELGOOD</IfgText>
         </VideoBackground>
       </CardContainer>
       {flag ? null : <CardContainer style={{padding: 24, marginTop: -46}}>
@@ -121,19 +135,22 @@ export const StartPage = observer(({route}) => {
       <View style={gs.mt24}/>
       <CardContainer style={{padding: 0, overflow: 'hidden'}} >
         <VideoBackground
-    style={{ paddingHorizontal: 28, paddingTop: 32, backgroundColor: 'blue', paddingBottom: 270 }} // добавлен paddingBottom
+    style={{ paddingTop: 32, backgroundColor: 'blue', paddingBottom: ScreenWidth * 0.72 }} // добавлен paddingBottom
   // source={{uri: PROD_URL + '/images/fon2.mp4'}}
         source={require('../../../assets/videos/fon2.mp4')}
   >
-    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
-      {'Пройдите тестирование и получите\nперсональные рекомендации по\nпитанию, сну, физическим активностям\nи снижению стресса!'}
-    </IfgText>
+    <View style={{paddingHorizontal: 28}}>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
+          {'Пройдите тестирование и получите\nперсональные рекомендации по\nпитанию, сну, физическим активностям\nи снижению стресса!'}
+        </IfgText>
+    </View>
 
-    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.regular, gs.mt24]}>
-      {'Это займет всего несколько минут и поможет нам\nподобрать для вас оптимальную программу.'}
-    </IfgText>
-
-    <View style={gs.mt24} />
+    <View style={{paddingHorizontal: 28}}>
+        <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.regular, gs.mt24]}>
+          {'Это займет всего несколько минут и поможет нам\nподобрать для вас оптимальную программу.'}
+        </IfgText>
+    </View>
+    <View style={[gs.mt24, {paddingHorizontal: 28}]} >
     <Button
       onPress={() => navigation.navigate('Testing')}
       style={{ height: 64, backgroundColor: colors.GREEN_COLOR, borderRadius: 12, alignItems: 'center' }}
@@ -142,6 +159,7 @@ export const StartPage = observer(({route}) => {
         Пройти тестирование
       </IfgText>
     </Button>
+    </View>
 
     {/* 👇 Абсолютно позиционированное изображение */}
     <Image
@@ -151,7 +169,7 @@ export const StartPage = observer(({route}) => {
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        height: 260,
+        height: ScreenWidth * 0.7,
         alignSelf: 'center',
       }}
     />
