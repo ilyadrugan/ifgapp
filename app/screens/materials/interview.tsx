@@ -77,7 +77,7 @@ export const InterviewView = observer(({route}) => {
       </View>}
       {articlesStore.currentInterview.id !== 0 && <ScrollView
       style={s.container}>
-        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
@@ -96,7 +96,7 @@ export const InterviewView = observer(({route}) => {
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaptionSmall, gs.mt12]}>{stripHtmlTags(articlesStore.currentInterview.title)}</IfgText>
                 <ButtonTo onPress={()=>Linking.openURL(articlesStore.currentInterview.video)} style={[s.buttonTo, gs.mt16]} textColor={colors.WHITE_COLOR} title="Участвовать" whiteIcon/>
                 </View>
-                <Image resizeMode="contain" style={{position: 'absolute',aspectRatio: 1, height: stripHtmlTags(articlesStore.currentInterview.title).length > 60?170:140, bottom: -3, right: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? 0 : -8  }}
+                <Image resizeMode="contain" style={{position: 'absolute',aspectRatio: 1, height: stripHtmlTags(articlesStore.currentInterview.title).length > 60 ? 170 : 140, bottom: -3, right: stripHtmlTags(articlesStore.currentInterview.title).length > 180 ? 0 : -8  }}
                 source={{uri: `https://ifeelgood.life${articlesStore.currentInterview.media[0].full_path[3]}`}}/>
         </ImageBackground>
         <View style={gs.mt16} />
@@ -151,7 +151,7 @@ export const InterviewView = observer(({route}) => {
 
         <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
           {(widthElements > ScreenWidth - 44) ? <View style={[gs.flexRow, {gap: 8}]}>
-            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <Button disabled style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             <View style={{ top: -1}}>
             <EyeViews/>
             </View>
@@ -163,7 +163,7 @@ export const InterviewView = observer(({route}) => {
             </Button>
           </View> : <>
           <View onLayout={(event)=>handleLayout(event)}>
-            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <Button disabled style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             <View style={{ top: -1}}>
             <EyeViews/>
             </View>
@@ -177,7 +177,7 @@ export const InterviewView = observer(({route}) => {
             </Button>
           </View></>}
           <View onLayout={(event)=>handleLayout(event)}>
-            <Button onPress={async()=> await onShare('https://ifeelgood.life/event/'+interviewId)}
+            <Button onPress={async()=> await onShare('https://ifeelgood.life/event/' + interviewId)}
             style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 8,borderRadius: 12, backgroundColor: '#FBF4E0',borderWidth: 1, borderColor: '#E7E7E7',paddingHorizontal: 12, paddingVertical: 8}]} >
             <View >
             <Share />

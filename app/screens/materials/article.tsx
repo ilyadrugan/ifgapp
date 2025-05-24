@@ -37,7 +37,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const ArticleView = observer(({route}) => {
     const navigation = useNavigation<any>();
-    const insets = useSafeAreaInsets()
+    const insets = useSafeAreaInsets();
     const onBack = () => {
       articlesStore.clearCurrentArticle();
       navigation.goBack();
@@ -135,7 +135,7 @@ export const ArticleView = observer(({route}) => {
       style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View style={[gs.mt48, Platform.OS==='ios' && gs.mt96]} />
+        <View style={[gs.mt48, Platform.OS === 'ios' && gs.mt96]} />
         <IfgText style={[gs.h2, gs.bold]}>{articlesStore.currentArticle?.title}</IfgText>
         <View style={gs.mt16} />
         <Image
@@ -216,7 +216,7 @@ export const ArticleView = observer(({route}) => {
 
         <View style={[gs.flexRow, { justifyContent: 'space-between'}]}>
           {(widthElements > ScreenWidth - 44) ? <View style={[gs.flexRow, {gap: 8}]}>
-            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <Button disabled style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             <View style={{ top: -1}}>
             <EyeViews/>
             </View>
@@ -228,7 +228,7 @@ export const ArticleView = observer(({route}) => {
             </Button>
           </View> : <>
           <View onLayout={(event)=>handleLayout(event, 'eye')}>
-            <Button style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
+            <Button disabled style={[gs.flexRow, gs.alignCenter, {height: 46,gap: 2,borderRadius: 12, backgroundColor: 'transparent', borderWidth: 1, borderColor: '#E7E7E7', paddingHorizontal: 12, paddingVertical: 8}]} >
             <View style={{ top: -1}}>
             <EyeViews/>
             </View>
