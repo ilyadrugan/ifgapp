@@ -135,7 +135,7 @@ export const ArticleView = observer(({route}) => {
       style={s.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View style={[gs.mt48, Platform.OS === 'ios' && gs.mt96]} />
+        <View style={[gs.mt32, Platform.OS === 'ios' && gs.mt96]} />
         <IfgText style={[gs.h2, gs.bold]}>{articlesStore.currentArticle?.title}</IfgText>
         <View style={gs.mt16} />
         <Image
@@ -273,7 +273,7 @@ export const ArticleView = observer(({route}) => {
         />
         <View style={{height: 100}} />
     </IOScrollView>}
-    <Button onPress={onBack} style={[s.roundButton, {marginTop: insets.top}]}>
+    <Button onPress={onBack} style={[s.roundButton, {marginTop: insets.top + 8}]}>
       <ArrowBack />
         </Button>
     </>;
