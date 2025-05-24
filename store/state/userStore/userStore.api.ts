@@ -30,10 +30,11 @@ export const uploadProfileImage = async (imageUri: string) => {
       name: fileName,
       type: 'image/jpeg', // Замените на реальный тип изображения, если требуется
     });
-    formData.append('name', userStore.userInfo?.name || '');
-    formData.append('last_name', userStore.userInfo?.last_name || '');
-    formData.append('email', userStore.userInfo?.email || '');
+    // formData.append('name', userStore.userInfo?.name || '');
+    // formData.append('last_name', userStore.userInfo?.last_name || '');
+    // formData.append('email', userStore.userInfo?.email || '');
     // Выполняем запрос на сервер
+    // console.log('formData', formData);
     const response = await fetch(`${BASE_URL}/lk/update-profile`, {
       method: 'POST',
       headers: {
