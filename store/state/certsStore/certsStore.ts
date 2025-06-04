@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { CertListModel } from './models/models';
 import { getCertsApi } from './certsStore.api';
-import { certs } from './mock';
 
 class CertsStore {
   certsList: CertListModel = {
@@ -13,8 +12,6 @@ class CertsStore {
   };
   errorMessage: string = '';
   isLoading: boolean = false;
-
-  
 
   constructor() {
    makeAutoObservable(this); // Делаем объект реактивным

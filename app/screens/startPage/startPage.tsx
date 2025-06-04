@@ -76,11 +76,11 @@ export const StartPage = observer(({route}) => {
          Моя программа
         </IfgText>
       <View style={gs.mt16} />
-      {/* <CardContainer style={{padding: 0, height: flag ? 380 : 430, borderRadius: 32, overflow: 'hidden'}} >
+      <CardContainer style={{padding: 0, height: flag ? 380 : 430, borderRadius: 32, overflow: 'hidden'}} >
         <VideoBackground
         style={{backgroundColor: 'blue'}}
         // source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
-        // source={require('../../../assets/videos/bg-video.mp4')}
+        source={require('../../../assets/videos/bg-video.mp4')}
         >
           <View style={{paddingHorizontal: 24}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt32]} >
@@ -136,7 +136,7 @@ export const StartPage = observer(({route}) => {
         <VideoBackground
     style={{ paddingTop: 32, backgroundColor: 'blue', paddingBottom: ScreenWidth * 0.72 }} // добавлен paddingBottom
   // source={{uri: PROD_URL + '/images/fon2.mp4'}}
-        // source={require('../../../assets/videos/fon2.mp4')}
+        source={require('../../../assets/videos/fon2.mp4')}
   >
     <View style={{paddingHorizontal: 28}}>
         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
@@ -172,7 +172,7 @@ export const StartPage = observer(({route}) => {
       }}
     />
   </VideoBackground>
-      </CardContainer>*/}
+      </CardContainer>
       <IfgText color="#BBBBBB" style={[gs.mt32,gs.fontCaption2]}>
         02 / 05
       </IfgText>
