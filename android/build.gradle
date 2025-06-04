@@ -8,6 +8,8 @@ buildscript {
         kotlinVersion = "1.9.22"
         versionCode = 1
         versionName = "1.0.32"
+        googlePlayServicesAuthVersion = "20.7.0"
+        firebaseAuthVersion = '22.3.1'
         // build_gradle_version = '8.7'
         // kotlin_version = '1.9.23'
         // dokka_version = '0.9.17'

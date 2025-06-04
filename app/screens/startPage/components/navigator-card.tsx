@@ -47,10 +47,12 @@ export const NavigatorCard: FC<NavigatorCardType> = ({
     const navigation = useNavigation<any>();
     const onPress = () => {
         if (buttonLink.startsWith('/articles/')){
-            navigation.navigate('Main', { screen: 'Материалы', params: {tagId: 85,resetParams: 'articles', toArticles: true} });
+            navigation.navigate('Материалы', {tagId: 85,resetParams: 'articles', toArticles: true, fromStartPage: true });
         }
         else if (buttonLink.startsWith('/articles')){
-            navigation.navigate('Main', { screen: 'Материалы', params: {resetParams: 'articles', toArticles: true}});
+            navigation.navigate('Материалы', {resetParams: 'articles', toArticles: true, fromStartPage: true});
+
+            // navigation.replace('Main', {screen:})'Материалы', { params: {resetParams: 'articles', toArticles: true, fromStartPage: true}});
             // navigation.navigate('Материалы', {tagId: 85, resetParams: 'articles'});
         }
         else {
@@ -58,7 +60,7 @@ export const NavigatorCard: FC<NavigatorCardType> = ({
         }
     };
     return <CardContainer style={{paddingHorizontal: 28, paddingBottom: 28, paddingTop:0, backgroundColor: bgColor, alignItems: 'center', marginVertical: 7}}>
-        <View style={[gs.flexRow, {padding: 18,alignSelf: 'flex-start',alignItems: 'center', gap: 12 }]}>
+        <View style={[gs.flexRow, {paddingTop: 18,alignItems: 'center', gap: 10 }]}>
             {getIcon(icon)}
             <IfgText color={colors.WHITE_COLOR} style={[gs.fontBodyMedium,{ maxWidth: '90%'} ]}>{title}</IfgText>
         </View>

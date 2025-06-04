@@ -20,6 +20,7 @@ import { GoalSettings } from './goalSettings/goalSettings';
 import { observer } from 'mobx-react';
 import userStore from '../../store/state/userStore/userStore';
 import { StartPage } from './startPage/startPage';
+import { MaterialsStackScreen } from './materials/materialsStack';
 
 type RootStackParamList = {
   OnBoarding: undefined;
@@ -140,6 +141,12 @@ export const MainNavigation = observer(() => {
       component={StartPage}
       options={{ headerShown: false }}
       />
+      {/* <Stack.Screen
+      name="MaterialsStackScreen"
+      component={MaterialsStackScreen}
+      options={{ headerShown: false }}
+      /> */}
+
   </Stack.Navigator>
   </>);
 });

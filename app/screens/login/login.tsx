@@ -13,6 +13,7 @@ import { LoginByUserPasswordModel } from '../../../store/state/authStore/models/
 import { observer } from 'mobx-react';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
+import { GoogleSignInButton } from '../../core/components/google-signin/google-signin';
 const height = Dimensions.get('screen').height;
 
 export const Login = observer(() => {
@@ -129,6 +130,7 @@ export const Login = observer(() => {
                 </View>
 
             </AnimatedGradientButton>
+            {/* <GoogleSignInButton /> */}
             {/* <Button fullWidth style={[s.buttonLogin, {backgroundColor: colors.BLACK_COLOR}]}
                 // onPress={}
                 >

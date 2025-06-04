@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import { NavigationContainer } from '@react-navigation/native';
 // import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -8,16 +8,23 @@ import { Provider } from 'mobx-react';
 import stores from './store/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Linking, LogBox, SafeAreaView, StatusBar } from 'react-native';
+import { BackHandler, Linking, LogBox, SafeAreaView, StatusBar } from 'react-native';
 import { Toast } from './app/core/components/toast/toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { FirebaseComponent } from './app/core/components/firebase-component/firebase-component';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { requestNotificationPermission } from './app/core/firebase/firebase';
 import 'react-native-gesture-handler';
 import colors from './app/core/colors/colors';
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 LogBox.ignoreLogs(['Require cycle:']);
 requestNotificationPermission();
+
+
+// GoogleSignin.configure({
+//   webClientId: 'ВАШ_WEB_CLIENT_ID_ИЗ_FIREBASE',
+// });
 
 const App = () => {
   // AsyncStorage.clear();
@@ -37,6 +44,7 @@ const App = () => {
 //     Linking.removeAllListeners('url');
 //   };
 // }, []);
+
   return (<>
   <Provider {...stores}>
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -44,9 +52,9 @@ const App = () => {
     <NavigationContainer>
        <SafeAreaProvider>
           <FirebaseComponent/>
-          
+
           <MainNavigation/>
-          
+
           <Toast/>
       </SafeAreaProvider>
     </NavigationContainer>

@@ -6,7 +6,7 @@ import gs from '../../core/styles/global';
 import { TabInterface, TabsMaterials } from './components/tabs';
 import { CardContainer, HashtagContainer } from '../../core/components/card/cardContainer';
 import colors from '../../core/colors/colors';
-import { ButtonTo } from '../../core/components/button/button';
+import { Button, ButtonTo } from '../../core/components/button/button';
 import DropdownBlock from './components/dropdown';
 import { hashTags, interViews, InterViewType, switchs } from './data/data';
 import articlesStore from '../../../store/state/articlesStore/articlesStore';
@@ -18,6 +18,7 @@ import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { Input, TextInputWithIcon } from '../../core/components/input/input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ArrowBack from '../../../assets/icons/arrow-back.svg';
 
 const tabss: TabInterface[] = [
     {
@@ -30,14 +31,16 @@ const tabss: TabInterface[] = [
     },
 ];
 
-export const MaterialsScreen = observer(({route}) => {
+export const MaterialsStackScreen = observer(({route}) => {
     const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [activeTab, setActiveTab] = useState(0);
     const [activeSwitch, setSwitch] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
     const [resetParam, setResetParam] = useState(0);
-
+    const onBack = () => {
+      navigation.goBack();
+    };
     const onSwitch = async (id: number) => {
         if (id === 1) {
             // await articlesStore.clearInterViews('actual');
@@ -54,44 +57,12 @@ export const MaterialsScreen = observer(({route}) => {
         // articlesStore.clearParams();
         setActiveTab(id);
     };
-    useFocusEffect(
-    React.useCallback(() => {
-      // экран в фокусе — ничего не делаем
 
-      return () => {
-        // пользователь УШЁЛ с экрана — сбрасываем параметр
-        if (route.params?.fromStartPage) {
-          navigation.setParams({ fromStartPage: undefined });
-        }
-      };
-    }, [route.params?.fromStartPage])
-  );
-    useFocusEffect(
-    React.useCallback(() => {
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-        if (route.params?.fromStartPage) {
-            navigation.navigate('StartPage');
-            return true;
-        }
-        return false;
-        });
-
-        return () => backHandler.remove();
-    }, [route.params])
-    );
     useEffect(() => {
         console.log('route.params', route.params);
         // const state = navigation.getState();
         // console.log(JSON.stringify(state, null, 2));
         if (route.params){
-            // console.log('route.params.fromStartPage', route.params.params.fromStartPage);
-            // if (route.params.params.fromStartPage) {
-            //     // console.log('route.params.fromPage', route.params.fromPage);
-            //     BackHandler.addEventListener('hardwareBackPress', () => {
-            //         navigation.replace('StartPage');
-            //         return true;
-            //     });
-            // }
             if (route.params.toInterViews) {
                 setActiveTab(1);
             }
@@ -234,6 +205,13 @@ return <>
        ListHeaderComponentStyle={{zIndex: 999, elevation: 999}}
        ListHeaderComponent={<>
             {/* <View style={gs.mt16} /> */}
+            <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} onPress={onBack}>
+            <>
+                <ArrowBack />
+                <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
+            </>
+        </Button>
+        <View style={gs.mt16} />
                     <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} >{'Материалы'}</IfgText>
                 <View style={gs.mt16} />
                 <TabsMaterials activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
@@ -314,5 +292,17 @@ const s = StyleSheet.create({
         borderTopWidth: 0,
         borderColor: '#E7E7E7',
         flexDirection: 'row',
+    },
+    buttonBack: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 6,
+            backgroundColor: 'transparent',
+            borderColor: colors.BORDER_COLOR2,
+            borderWidth: 0.75,
+            borderRadius: 8,
+            width: 84,
+            height: 26,
     },
 });

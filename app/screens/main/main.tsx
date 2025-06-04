@@ -1,7 +1,7 @@
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC, ReactNode, useEffect } from 'react';
-import { View, StyleSheet, StatusBar, Platform } from 'react-native';
+import { View, StyleSheet, StatusBar, Platform, Alert, BackHandler } from 'react-native';
 import Profile from '../../../assets/icons/tabs/profile.svg';
 import Calendar from '../../../assets/icons/tabs/calendar.svg';
 import Home from '../../../assets/icons/tabs/home.svg';
@@ -21,7 +21,6 @@ import { observer } from 'mobx-react';
 import { ContestsScreen } from '../contests/contests';
 import { CalendarScreen } from '../calendar/calendar';
 import userStore from '../../../store/state/userStore/userStore';
-import authStore from '../../../store/state/authStore/authStore';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +28,6 @@ export const Main: FC = observer(({}) => {
   const insets = useSafeAreaInsets();
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
-  console.log('deviceHeight', deviceHeight);
 
   useEffect(()=>{
     //if (Platform.OS!=='ios'){
@@ -42,6 +40,7 @@ export const Main: FC = observer(({}) => {
 
       <Tab.Navigator initialRouteName="Дом"
         // headerShown={false}
+        backBehavior={'history'}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           switch (route.name) {

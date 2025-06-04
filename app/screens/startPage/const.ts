@@ -34,7 +34,7 @@ export const NavigationCards: NavigatorCardType[] = [
         title: 'ifg-помощник',
         image: '/images/Group%2014892.png',
         desc: 'Поможем разобраться как пользоваться платформой чтобы получить максимум пользы для вашего здоровья',
-        buttonText: 'Перейти к помошнику',
+        buttonText: 'Перейти к помощнику',
         buttonLink: 'tel:88007003531',
         bgColor: 'rgb(195, 225, 84)',
     },

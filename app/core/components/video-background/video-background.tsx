@@ -21,6 +21,7 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({ source, children, sty
         resizeMode="cover"
         rate={1.0}
         ignoreSilentSwitch="obey"
+        hideShutterView
         onLoad={() => setVideoLoaded(true)}
       />
       {children}

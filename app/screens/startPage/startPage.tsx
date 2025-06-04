@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { ScrollView, Platform, View, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import colors from '../../core/colors/colors';
@@ -30,12 +30,11 @@ export const StartPage = observer(({route}) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      // Показываем лоадер на 0.5 сек
       const timer = setTimeout(() => setLoading(false), 1500);
       return () => clearTimeout(timer);
     }, []);
     const onBack = () => {
-      navigation.goBack();
+      navigation.navigate('Дом');
     };
     const flag = route.params ? false : true;
     const renderNavigatorCard = (item: NavigatorCardType) => <NavigatorCard {...item}/>;
@@ -77,11 +76,11 @@ export const StartPage = observer(({route}) => {
          Моя программа
         </IfgText>
       <View style={gs.mt16} />
-      <CardContainer style={{padding: 0, height: flag ? 380 : 430, borderRadius: 32, overflow: 'hidden'}} >
+      {/* <CardContainer style={{padding: 0, height: flag ? 380 : 430, borderRadius: 32, overflow: 'hidden'}} >
         <VideoBackground
         style={{backgroundColor: 'blue'}}
         // source={{uri: PROD_URL + '/images/home/bg-video.mp4'}}
-        source={require('../../../assets/videos/bg-video.mp4')}
+        // source={require('../../../assets/videos/bg-video.mp4')}
         >
           <View style={{paddingHorizontal: 24}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.h2Intro, gs.mt32]} >
@@ -104,7 +103,7 @@ export const StartPage = observer(({route}) => {
             zIndex: 4,
           }}
          source={{uri: 'https://ifeelgood.life/images/fc758c5e057cfe1536da069939ab1635.png'}} />
-          <IfgText color={colors.WHITE_COLOR} style={[{position: 'absolute', left: '10%', bottom: flag ? 40 : 70}, gs.h1Big]}>IFEELGOOD</IfgText>
+          <IfgText color={colors.WHITE_COLOR} style={[{position: 'absolute', left: '10%', bottom: flag ? 40 : 70}, gs.h1Big]}>ifeelgood</IfgText>
         </VideoBackground>
       </CardContainer>
       {flag ? null : <CardContainer style={{padding: 24, marginTop: -46}}>
@@ -137,7 +136,7 @@ export const StartPage = observer(({route}) => {
         <VideoBackground
     style={{ paddingTop: 32, backgroundColor: 'blue', paddingBottom: ScreenWidth * 0.72 }} // добавлен paddingBottom
   // source={{uri: PROD_URL + '/images/fon2.mp4'}}
-        source={require('../../../assets/videos/fon2.mp4')}
+        // source={require('../../../assets/videos/fon2.mp4')}
   >
     <View style={{paddingHorizontal: 28}}>
         <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>
@@ -161,7 +160,6 @@ export const StartPage = observer(({route}) => {
     </Button>
     </View>
 
-    {/* 👇 Абсолютно позиционированное изображение */}
     <Image
       source={{ uri: 'https://ifeelgood.life/images/Group%2014891.png' }}
       resizeMode="contain"
@@ -174,7 +172,7 @@ export const StartPage = observer(({route}) => {
       }}
     />
   </VideoBackground>
-      </CardContainer>
+      </CardContainer>*/}
       <IfgText color="#BBBBBB" style={[gs.mt32,gs.fontCaption2]}>
         02 / 05
       </IfgText>
@@ -185,8 +183,8 @@ export const StartPage = observer(({route}) => {
         {'Используйте все возможности iFeelGood для достижения результатов'}
       </IfgText>
       <View style={gs.mt16}/>
-      {NavigationCards.map((item)=>
-        <View>
+      {NavigationCards.map((item, index)=>
+        <View key={index.toString()}>
           {renderNavigatorCard(item)}
         </View>)
       }
@@ -249,11 +247,11 @@ export const StartPage = observer(({route}) => {
       </CardContainer>
       <View style={{height: 100}} />
     </ScrollView>
-    {loading && (
+    {/* {loading && (
         <View style={s.loaderOverlay}>
           <ActivityIndicator size="large"  />
         </View>
-      )}
+      )} */}
     </>;});
 
 const s = StyleSheet.create({
