@@ -30,3 +30,11 @@ export function formatDate(date = new Date()) {
 
     return [year, month, day].join('-');
 }
+
+export function formatCertDate(date: string) {
+  const [datePart, timePart] = date.split(' ');
+  const [year, month, day] = datePart.split('-');
+  const [hours, minutes] = timePart.split(':');
+
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+}

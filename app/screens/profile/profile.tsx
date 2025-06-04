@@ -35,6 +35,7 @@ import tariffsStore from '../../../store/state/tariffsStore/tariffsStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import { navigateAndReset } from '../../core/utils/navigateAndReset';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MyCerts } from './myCerts/myCerts';
 
 const backCardHeight = 180;
 if (Platform.OS === 'android') {
@@ -45,8 +46,14 @@ export const ProfileScreen = observer(() => {
     const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const [expanded, setExpanded] = useState(false); // Состояние раскрытия
-    const [currentMenu, setCurrentMenu] = useState(!userStore.userInfo?.roles.includes('user_pay') ? 3 : 4);
+    const [currentMenu, setCurrentMenu] = useState(userStore.roles.includes('user_pay') ? 5 : 4);
     const [refreshing, setRefreshing] = React.useState(false);
+    const count = userStore.roles.reduce((acc,role)=>{
+      console.log('counter', acc,role);
+      if (role === 'user_wb') {return acc + 1;}
+      if (role === 'user_pay') {return acc + 1;}
+      return acc;
+    },5);
     const {selectImage} = useImageUploader();
     const onRefresh = async () => {
       if (refreshing) {return;}
@@ -85,7 +92,7 @@ export const ProfileScreen = observer(() => {
           useNativeDriver: false,
         }),
         Animated.timing(height, {
-          toValue: 64 * (!userStore.userInfo?.roles.includes('user_pay') ? 5 : 6),
+          toValue: 64 * Number(count),
           duration: 300,
           easing: Easing.ease,
           useNativeDriver: false,
@@ -110,7 +117,7 @@ export const ProfileScreen = observer(() => {
     };
 
     const chooseMenu = (id: number) => {
-      if (id === 5) {exit();}
+      if (id === 6) {exit();}
       setCurrentMenu(id);
       toggleExpand();
     };
@@ -128,7 +135,7 @@ return <>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={s.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {/* <View style={gs.mt16} /> */}
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} >{menuOptions[currentMenu].name}</IfgText>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.h2, gs.bold, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} >{menuOptions[currentMenu].name}</IfgText>
         <View style={gs.mt16} />
 
         <CardContainer style={{gap: 0}}>
@@ -161,7 +168,8 @@ return <>
           {expanded &&
           <><View style={gs.mt12} />
             {menuOptions.map((option)=>{
-              if (!userStore.userInfo?.roles.includes('user_pay') && option.id === 4) {return;}
+              if (!userStore.roles.includes('user_wb') && option.id === 3) {return;}
+              if (!userStore.roles.includes('user_pay') && option.id === 5) {return;}
              return <Button key={option.id.toString()} onPress={()=>chooseMenu(option.id)} style={currentMenu === option.id ? s.menuButtonActive : s.menuButton}>
               <View style={[gs.flexRow, gs.alignCenter]}>
                 <View style={s.iconButtonContainer}>
@@ -178,8 +186,9 @@ return <>
         {currentMenu === 0 && <MyEvents />}
         {currentMenu === 1 && <MyTests />}
         {currentMenu === 2 && <MyMaterials />}
-        {currentMenu === 3 && <Settings onRefresh={onRefresh} />}
-        {currentMenu === 4 && <Subscription />}
+        {currentMenu === 3 && <MyCerts />}
+        {currentMenu === 4 && <Settings onRefresh={onRefresh} />}
+        {currentMenu === 5 && <Subscription />}
 
         <View style={{height: 70}}/>
       </ScrollView>
@@ -309,6 +318,7 @@ const s = StyleSheet.create({
       backgroundColor: colors.GREEN_COLOR,
       padding: 16,
       borderRadius: 12,
+      marginTop: 6,
     },
     iconButtonContainer: {
       width: 25,

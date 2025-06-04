@@ -10,6 +10,8 @@ import Settings from '../../../../assets/icons/menuOptions/settings';
 import SettingsActive from '../../../../assets/icons/menuOptions/settingsActive';
 import Subscription from '../../../../assets/icons/menuOptions/subscription';
 import SubscriptionActive from '../../../../assets/icons/menuOptions/subscriptionActive';
+import Cert from '../../../../assets/icons/menuOptions/cert';
+import CertActive from '../../../../assets/icons/menuOptions/certActive';
 
 const Icon = (icon: string, active?: boolean) => {
     switch (icon){
@@ -21,6 +23,9 @@ const Icon = (icon: string, active?: boolean) => {
         }
         case 'materials':{
             return active ? <MaterialsActive/> : <Materials/>;
+        }
+        case 'certs':{
+            return active ? <CertActive/> : <Cert/>;
         }
         case 'settings':{
             return active ? <SettingsActive/> : <Settings/>;
@@ -55,18 +60,24 @@ export const menuOptions = [
     },
     {
         id: 3,
+        name: 'Мои сертификаты',
+        icon: Icon('certs'),
+        iconActive: Icon('certs', true),
+    },
+    {
+        id: 4,
         name: 'Настройки',
         icon: Icon('settings'),
         iconActive: Icon('settings', true),
     },
     {
-        id: 4,
+        id: 5,
         name: 'Подписка',
         icon: Icon('subscription'),
         iconActive: Icon('subscription', true),
     },
     {
-        id: 5,
+        id: 6,
         name: 'Выйти',
         icon: Icon('exit'),
         iconActive: Icon('exit', true),
