@@ -17,6 +17,7 @@ import { TimeRangeFilter } from 'react-native-health-connect/lib/typescript/type
 import { SdkAvailabilityStatus } from 'react-native-health-connect/src/constants';
 import { showAlert } from '../core/utils/showAlert';
 import { CheckAppState } from './checkAppState';
+import { logMessage } from '../core/utils/logger';
 // const showAlert = () =>
 //     Alert.alert(
 //       'Внимание!',
@@ -109,6 +110,23 @@ const getEndOfDay = (date: Date) => {
   d.setHours(23, 59, 59, 999);
   return d.toISOString();
 };
+
+interface LogMessage {
+        text: string,
+        steps: {
+          result: number | string,
+          dataOrigin: string,
+        },
+        calories: {
+          result: number | string,
+          dataOrigin: string,
+        },
+}
+
+const logSending = (msg: LogMessage) => {
+  logMessage(`${msg.text}; stepsResult: ${msg.steps.result}; stepsOrigin: ${msg.steps.dataOrigin}; caloriesResult: ${msg.calories.result}; caloriesOrigin: ${msg.calories.dataOrigin};`);
+};
+
 export const getHealthData = async (date: Date) => {
     if (Platform.OS !== 'android') {
       return;
@@ -147,7 +165,17 @@ export const getHealthData = async (date: Date) => {
           {text: 'К разрешениям', onPress: openHealthConnectSettings},
         ],);
         }
-
+      const logMsg = {
+        text: 'getHealthDataToday',
+        steps: {
+          result: 0,
+          dataOrigin: '',
+        },
+        calories: {
+          result: 0,
+          dataOrigin: '',
+        },
+      };
       const timeRangeFilter: TimeRangeFilter = {
         operator: 'between',
         endTime: date.toISOString(),
@@ -158,7 +186,10 @@ export const getHealthData = async (date: Date) => {
       // console.log('getting steps');
       const steps = await readRecords('Steps', { timeRangeFilter });
       // console.log('steps', steps.records);
-      const totalSteps = steps.records.reduce((sum, cur) => sum + cur.count, 0);
+      const totalSteps = steps.records.reduce((sum, cur, index) => {
+        if (index === 0) {logMsg.steps.dataOrigin = cur.metadata?.dataOrigin || '';}
+        return sum + cur.count;
+      }, 0);
 
       // CALORIES_BURNED
       // console.log('getting total_calories');
@@ -166,13 +197,17 @@ export const getHealthData = async (date: Date) => {
       timeRangeFilter,
       });
       // console.log('calories', calories.records);
-      calories.records.forEach((rec)=>console.log(rec.energy.inKilocalories));
+      calories.records.forEach((rec)=>{
+        console.log('rec.energy.inKilocalories', rec);
+        logMsg.calories.dataOrigin = rec.metadata?.dataOrigin || '';
+      });
       const totalCalories = calories.records.reduce((sum, cur, index, arr) => {
         if (cur.metadata?.dataOrigin === 'com.google.android.apps.fitness' && (index === arr.length - 1)){
           return sum + (cur.energy.inKilocalories * getTimeProgress(new Date(cur.startTime), new Date(cur.endTime)));
         }
         return sum + cur.energy.inKilocalories;
       }, 0);
+      logMsg.calories.result = totalCalories;
       // console.log('total_calories', totalCalories);
 
       // Floors climbed
@@ -192,7 +227,9 @@ export const getHealthData = async (date: Date) => {
       //     totalFloors = estimatedFloors;
       //   }
       // }
-
+    logMsg.steps.result = totalSteps;
+    logMsg.calories.result = totalCalories;
+    logSending(logMsg);
     return {totalSteps, totalCalories, totalFloors};
   };
 
@@ -236,7 +273,18 @@ export async function fetchStepsAndCaloriesByDate(date: Date) {
   const steps = stepResults[0]?.result?.COUNT_TOTAL || 0;
   const calories =
     Math.ceil(calorieResults[0]?.result?.ENERGY_TOTAL?.inKilocalories) || 0;
-
+  const logMsg = {
+        text: 'fetchStepsAndCaloriesByDate ' + date.toISOString().slice(0, 10),
+        steps: {
+          result: steps,
+          dataOrigin: stepResults[0]?.result.dataOrigins[0] || '',
+        },
+        calories: {
+          result: calories,
+          dataOrigin: calorieResults[0]?.result.dataOrigins[0] || '',
+        },
+      };
+  logSending(logMsg);
   return {
     date: date.toISOString().slice(0, 10),
     steps,
@@ -282,6 +330,7 @@ export async function fetchStepsAndCaloriesLast30Days() {
     };
   });
   const caloriesData = calorieResults.map((calorieItem, index, arr)=>{
+
     const clr = (calorieItem.result.dataOrigins.includes('com.google.android.apps.fitness') && (index === arr.length - 1)) ? Math.ceil(calorieItem.result.ENERGY_TOTAL.inKilocalories * getTimeProgress(new Date(calorieItem.startTime), new Date(calorieItem.endTime))) : Math.ceil(calorieItem.result.ENERGY_TOTAL.inKilocalories || 0);
     return {
       created_at: calorieItem.startTime,
@@ -290,7 +339,18 @@ export async function fetchStepsAndCaloriesLast30Days() {
     };
   });
   // Объединяем результаты по дате
-
+  const logMsg = {
+        text: 'fetchStepsAndCaloriesLast30Days',
+        steps: {
+          result: stepsData.map(step=>step.steps.toString()).join(' '),
+          dataOrigin: stepResults[0]?.result.dataOrigins[0] || '',
+        },
+        calories: {
+          result: caloriesData.map(cal=>cal.calories.toString()).join(' '),
+          dataOrigin: calorieResults[0]?.result.dataOrigins[0] || '',
+        },
+      };
+  logSending(logMsg);
   console.log('mergedData', stepsData, caloriesData);
   // return mergedData;
   return {stepsData, caloriesData};

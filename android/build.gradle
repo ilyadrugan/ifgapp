@@ -7,7 +7,7 @@ buildscript {
         ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.22"
         versionCode = 1
-        versionName = "1.0.33"
+        versionName = "1.0.35"
         googlePlayServicesAuthVersion = "20.7.0"
         firebaseAuthVersion = '22.3.1'
         // build_gradle_version = '8.7'

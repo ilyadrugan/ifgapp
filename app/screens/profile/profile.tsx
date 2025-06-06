@@ -49,7 +49,6 @@ export const ProfileScreen = observer(() => {
     const [currentMenu, setCurrentMenu] = useState(userStore.roles.includes('user_pay') ? 5 : 4);
     const [refreshing, setRefreshing] = React.useState(false);
     const count = userStore.roles.reduce((acc,role)=>{
-      console.log('counter', acc,role);
       if (role === 'user_wb') {return acc + 1;}
       if (role === 'user_pay') {return acc + 1;}
       return acc;

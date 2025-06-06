@@ -18,6 +18,7 @@ import { isValidEmail } from '../../../core/utils/isValidEmail';
 import { isValidPhoneNumber } from '../../../core/utils/isValidPhoneNumber';
 import DeviceInfo, { getApplicationName, getBuildNumber, getVersion } from 'react-native-device-info';
 import { openHealthConnectSettings } from 'react-native-health-connect';
+import { downloadLogFile, shareLogFile } from '../../../core/utils/logger';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState(userStore.userInfo?.phone || '');
@@ -205,12 +206,12 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     </CardContainer>}
 
     {!onDeleting && <>
-        {Platform.OS!=='ios' && <CardContainer style={gs.mt16}>
+        {Platform.OS !== 'ios' && <CardContainer style={gs.mt16}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Настройки Health Connect</IfgText>
-         <AnimatedGradientButton style={s.button}
-                disabled={userStore.isLoading}
-                onPress={openHealthConnectSettings}
-                >
+            <AnimatedGradientButton style={s.button}
+                    disabled={userStore.isLoading}
+                    onPress={openHealthConnectSettings}
+                    >
                  <View style={s.buttonContainer}>
                  <View style={s.buttonContent}>
                     <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>К разрешениям</IfgText>
@@ -219,7 +220,19 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                     </View>
                     <View />
                 </View>
-
+            </AnimatedGradientButton>
+            <AnimatedGradientButton style={s.button}
+                    disabled={userStore.isLoading}
+                    onPress={shareLogFile}
+                    >
+                 <View style={s.buttonContainer}>
+                 <View style={s.buttonContent}>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontBody1, { fontSize: 21}]}>Поделиться логами</IfgText>
+                       {/* <AnimatedArrow /> */}
+                       <ArrowRight />
+                    </View>
+                    <View />
+                </View>
             </AnimatedGradientButton>
     </CardContainer>}
     <CardContainer style={gs.mt16}>
