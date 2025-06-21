@@ -1,14 +1,7 @@
 import { observer } from 'mobx-react';
 import React, { FC, useEffect, useRef, useState  } from 'react';
 import { Animated, Dimensions, Easing, TouchableOpacity, View, StyleSheet, GestureResponderEvent } from 'react-native';
-import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
-import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
-import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 import { CardContainer } from '../../../core/components/card/cardContainer';
-import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
-import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
-import { formatDate } from '../../../core/utils/formatDateTime';
-import CustomCalendar from './calendar';
 import PhysicalActivity18 from '../../../../assets/icons/physical-activity.svg';
 
 import Open from '../../../../assets/icons/open-down.svg';
@@ -18,15 +11,12 @@ import Antistress18 from '../../../../assets/icons/antistress18.svg';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { PersonalRecommendationModel } from '../../../../store/state/recommendationStore/models/models';
 import recommendationStore from '../../../../store/state/recommendationStore/recommendationStore';
-import watterStore from '../../../../store/state/watterStore/watterStore';
 import { categoryColors } from '../../../core/colors/categoryColors';
 import colors from '../../../core/colors/colors';
 import { ButtonNext } from '../../../core/components/button/button';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
-import { RecommendationCategoryToEng } from '../../../core/utils/recommendationFormatter';
-import { ScreenWidth } from '../../../hooks/useDimensions';
-import { TimeToDrinkNewBlock } from '../../ifg-home/blocks/timeToDrinkNew';
+
 import { ArticleHeader } from '../../ifg-home/components/articleHeader';
 import { Image } from 'react-native';
 

@@ -1,8 +1,8 @@
-import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
-import { Input } from '../../core/components/input/input';
+import { Input, TextInputWithIconEye } from '../../core/components/input/input';
 import { AnimatedGradientButton, Button } from '../../core/components/button/button';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -14,15 +14,40 @@ import { observer } from 'mobx-react';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
 import { GoogleSignInButton } from '../../core/components/google-signin/google-signin';
+import { TextInputMask } from 'react-native-masked-text';
 const height = Dimensions.get('screen').height;
 
 export const Login = observer(() => {
+    const [phone, setPhone] = useState<string>('');
     const navigation = useNavigation<any>();
     const toRegistraition = () =>{
       authStore.clearMessageError();
       navigation.replace('Registration');
     };
     const [forgotPassword, setForgotPassword] = useState(false);
+    const handlePhoneChange = (text) => {
+        const cleaned = text.replace(/\D/g, '');
+
+        let formatted = cleaned;
+
+        if (cleaned.length > 0) {
+          formatted = `+${cleaned.slice(0, 1)}`;
+        }
+        if (cleaned.length > 1) {
+          formatted += ` (${cleaned.slice(1, 4)}`;
+        }
+        if (cleaned.length > 4) {
+          formatted += `) ${cleaned.slice(4, 7)}`;
+        }
+        if (cleaned.length > 7) {
+          formatted += `-${cleaned.slice(7, 9)}`;
+        }
+        if (cleaned.length > 9) {
+          formatted += `-${cleaned.slice(9, 11)}`;
+        }
+
+        setPhone(formatted);
+      };
     const {
         control,
         handleSubmit,
@@ -64,7 +89,26 @@ export const Login = observer(() => {
       const clearPassword = () => {
         setValue('password', '');
       };
+  // const [valueEP, setValueEP] = useState('');
+  // const [isPhone, setIsPhone] = useState(false);
 
+  // const detectInputType = (text: string) => {
+  //   const onlyDigits = text.replace(/\D/g, '');
+  //   const looksLikePhone = onlyDigits.length >= 6 && /^[\d+\-\s()]+$/.test(text);
+  //   const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+
+  //   if (looksLikeEmail) {
+  //     setIsPhone(false);
+  //   } else if (looksLikePhone) {
+  //     setIsPhone(true);
+  //   } else {
+  //     // Можно не менять isPhone, пока не уверены
+  //     setIsPhone(false);
+  //   }
+
+  //   setValueEP(text);
+  // };
+const [isHide, setHide] = useState(true);
     return (
      <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -96,23 +140,50 @@ export const Login = observer(() => {
                 onChange={(event)=>{
                   authStore.clearEmailError();
                   onChange(event);}}
-                placeholder="Электронная почта"
+                placeholder="E-mail или телефон"
                 keyboardType="email-address"
                 style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={authStore.loginByUserPassword.loginInputError}
             />
         )}/>
+        {/* {isPhone ? (
+                <TextInputMask
+                  type={'custom'}
+                  options={{
+                    mask: '+7 (999) 999-99-99',
+                  }}
+                  value={valueEP}
+                  onChangeText={detectInputType}
+                  keyboardType="email-address"
+                  style={[s.input, gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                  placeholder="E-mail или телефон"
+                  onFocus={authStore.clearEmailError}
+                  placeholderTextColor={colors.PLACEHOLDER_COLOR}
+                />
+              ) : (
+                <TextInput
+                  value={valueEP}
+                  onChangeText={detectInputType}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  style={[s.input, gs.fontCaption, {color: colors.BLACK_COLOR}]}
+                  placeholder="E-mail или телефон"
+                  onFocus={authStore.clearEmailError}
+                  placeholderTextColor={colors.PLACEHOLDER_COLOR}
+                />
+              )} */}
         {!forgotPassword && <Controller control={control} name={'password'}
             render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+            <TextInputWithIconEye
                 onFocus={authStore.clearPasswordError}
-                fullWidth
                 value={value}
                 onChange={onChange}
                 placeholder="Пароль"
-                style={[gs.fontCaption, {color: colors.BLACK_COLOR}]}
-                secureTextEntry={true}
+                style={[s.input, gs.fontCaption, {color: colors.BLACK_COLOR}]}
                 error={authStore.loginByUserPassword.passwordInputError}
+                fullWidth
+                onIcon={()=>setHide((prev)=>!prev)}
+                secureTextEntry={isHide}
             />
             )}/>}
           {/* {authStore.errorMessage && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
@@ -188,4 +259,14 @@ const s = StyleSheet.create({
         alignSelf:'center',
         gap: 5,
       },
+      input: {
+            height: 78,
+            justifyContent: 'center',
+            borderRadius: 16,
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: colors.BORDER_COLOR,
+            padding: 24,
+            width: '100%',
+          },
   });

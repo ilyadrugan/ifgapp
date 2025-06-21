@@ -21,7 +21,8 @@ import colors from './app/core/colors/colors';
 LogBox.ignoreLogs(['Require cycle:']);
 requestNotificationPermission();
 
-
+LogBox.ignoreLogs(['Reanimated']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notificatio
 // GoogleSignin.configure({
 //   webClientId: 'ВАШ_WEB_CLIENT_ID_ИЗ_FIREBASE',
 // });

@@ -25,7 +25,7 @@ export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: b
       },[refresh]);
       const getDailyActivities = async()=> {
                 await healthStore.getStepsMonth();
-                // await healthStore.getHealthDataByDate(new Date(date))
+                // await healthStore.getHealthDataByDate(new Date());
             if (!dailyActivityStore.dailyActivityData)
           {await dailyActivityStore.getDailyActivity(formatDate());}
         console.log('dailyActivityStore.dailyActivityData', dailyActivityStore.dailyActivityData);
@@ -33,12 +33,12 @@ export const CalendarBlock: FC<{setChoosedDate: (date: string)=>void, refresh: b
       };
     return <CardContainer>
         <CustomCalendar setChoosedDate={setChoosedDate} />
-        {(dailyActivityStore.isLoading || !dailyActivityStore.dailyActivityData) ? <>
+        {(dailyActivityStore.isLoading) ? <>
           <ShimmerPlaceholder style={{borderRadius: 16}} height={145} width={width - 64} />
          </> :
          <>
          <IFGScoreLine score={dailyActivityStore.dailyActivityData ? dailyActivityStore.dailyActivityData.score.score : ifgScoreStore.todayScore} title={'ifg-баллы'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores > dailyActivityStore.dailyActivitySettings.max_ifg ? dailyActivityStore.dailyActivitySettings.max_ifg : dailyActivityStore.dailyActivitySettings.ifg_scores}/>
-         <IFGActivity today={formatDate() === dailyActivityStore.dailyActivityData.date} dailyActivities={healthStore.healthDataByDate ? healthStore.healthDataByDate : dailyActivityStore.dailyActivityData}/></>
+         <IFGActivity dailyActivities={healthStore.healthDataByDate ? healthStore.healthDataByDate : dailyActivityStore.dailyActivityData}/></>
 }
     </CardContainer>;
 });

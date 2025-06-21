@@ -1,4 +1,4 @@
-import React, { useState, useMemo, FC } from 'react';
+import React, { useState, useMemo, FC, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import dailyActivityStore from '../../../../store/state/activityGraphStore/activ
 import { observer } from 'mobx-react';
 import { formatDate } from '../../../core/utils/formatDateTime';
 import healthStore from '../../../../store/state/healthStore/healthStore';
+import { useFocusEffect } from '@react-navigation/native';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const months = [
@@ -37,12 +38,16 @@ const CustomCalendar: FC<{setChoosedDate: (date: string)=>void}> = observer(({se
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // Выбранная дата
   const [calendarMode, setCalendarMode] = useState<'month' | 'week'>('month');
   const [boxWidth, setBoxWidth] = useState(0);
+  useEffect(()=>{
+    healthStore.getHealthDataByDate(new Date());
+  },[]);
   const toggleCalendarMode = () => {
     setCalendarMode((prevMode) => {
       const newMode = prevMode === 'month' ? 'week' : 'month';
       return newMode;
     });
   };
+
   // Получить дни текущего месяца
   const getDaysInMonth = (year: number, month: number) => {
     const days: Date[] = [];
@@ -113,9 +118,9 @@ const CustomCalendar: FC<{setChoosedDate: (date: string)=>void}> = observer(({se
     console.log('handleDayPress',date);
     setSelectedDate(date);
     setChoosedDate(formatDate(date));
-      await healthStore.getHealthDataByDate(date);
+    await healthStore.getHealthDataByDate(date);
 
-    await dailyActivityStore.getDailyActivity(formatDate(date));
+    // await dailyActivityStore.getDailyActivity(formatDate(date));
   };
 
   // Проверить, выбран ли день

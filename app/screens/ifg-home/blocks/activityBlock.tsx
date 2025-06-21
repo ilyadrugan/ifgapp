@@ -19,7 +19,6 @@ import { useNavigation } from '@react-navigation/native';
 import userStore from '../../../../store/state/userStore/userStore';
 import { observer } from 'mobx-react';
 import { IFGScoreLine } from '../../../core/components/ifg-score/ifg-score-line';
-import { IFGActivity } from '../../../core/components/ifg-score/ifg-activity';
 import { useImageUploader } from '../../../core/components/imagePicker/imagePicker';
 import ifgScoreStore from '../../../../store/state/ifgScoreStore/ifgScoreStore';
 import dailyActivityStore from '../../../../store/state/activityGraphStore/activityGraphStore';
@@ -31,6 +30,7 @@ import { ScreenWidth } from '../../../hooks/useDimensions';
 import { API_URL } from '../../../core/hosts';
 import testingStore from '../../../../store/state/testingStore/testingStore';
 import { clearObserving } from 'mobx/dist/internal';
+import { IFGActivityToday } from '../../../core/components/ifg-score/ifg-activityToday';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -93,8 +93,8 @@ export const ActivityBlock = observer(() => {
     };
 
     useEffect(() => {
-      console.log('dailyActivitySettings', dailyActivityStore.dailyActivitySettings);
-      console.log('lastTest', testingStore.myCurrentResultsTest);
+      // console.log('dailyActivitySettings', dailyActivityStore.dailyActivitySettings);
+      // console.log('lastTest', testingStore.myCurrentResultsTest);
     }, []);
 
 return <CardContainer >
@@ -184,8 +184,8 @@ return <CardContainer >
   </Animated.View>
 
   </CardContainer>
-  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores>dailyActivityStore.dailyActivitySettings.max_ifg?dailyActivityStore.dailyActivitySettings.max_ifg:dailyActivityStore.dailyActivitySettings.ifg_scores}/>
-  <IFGActivity today dailySettings={dailyActivityStore.dailyActivitySettings}/>
+  <IFGScoreLine score={ifgScoreStore.todayScore} title={'ifg-баллы за сегодня'} maximum={dailyActivityStore.dailyActivitySettings.ifg_scores > dailyActivityStore.dailyActivitySettings.max_ifg ? dailyActivityStore.dailyActivitySettings.max_ifg : dailyActivityStore.dailyActivitySettings.ifg_scores}/>
+  <IFGActivityToday dailySettings={dailyActivityStore.dailyActivitySettings}/>
   </>
   :
 

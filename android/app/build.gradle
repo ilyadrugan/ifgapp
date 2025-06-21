@@ -120,7 +120,7 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-config')
-    implementation("androidx.health.connect:connect-client:1.1.0-alpha10")
+    implementation("androidx.health.connect:connect-client:1.1.0-rc02")
     // implementation project(':yookassa-module')
     // implementation 'ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.11.0'
     // https://mavenlibs.com/maven/dependency/ru.yoomoney.sdk.kassa.payments/yookassa-android-sdk

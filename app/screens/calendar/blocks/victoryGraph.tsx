@@ -67,7 +67,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
     return number; // Если число меньше 0, просто возвращаем его
   };
   useEffect(() => {
-    console.log('graphdata', graphData, 'monthly', monthly);
+    // console.log('graphdata', graphData, 'monthly', monthly);
     setSelectedPoint(null);
     setRendered(false);
     if (graphData.length === 0) {return;}
@@ -185,7 +185,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
 
             }}
             flyoutHeight={24}
-            flyoutWidth={29}
+            flyoutWidth={38}
             dx={-10}
             // dx={(datum, index) => (index>14 ? -10 : 10)}
             active

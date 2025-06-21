@@ -1,7 +1,7 @@
 
 
 import { ScrollView, StyleSheet, View, Image, ImageBackground, TouchableOpacity, FlatList, Alert, RefreshControl, Linking, GestureResponderEvent, Platform, ActivityIndicator} from 'react-native';
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { IfgText } from '../../core/components/text/ifg-text';
@@ -48,6 +48,7 @@ import { getStoriesApi } from '../../../store/state/storiesStore/storiesStore.ap
 import { APPADMIN_URL, PROD_URL } from '../../core/hosts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import VideoBackground from '../../core/components/video-background/video-background';
+import healthStore from '../../../store/state/healthStore/healthStore';
 
 export const IFGHome = observer(() => {
     const insets = useSafeAreaInsets();
@@ -60,12 +61,26 @@ export const IFGHome = observer(() => {
 
     const ref = useRef<InstagramStoriesPublicMethods>( null );
     useEffect(() => {
-
-
       getData();
-
     }, []);
+    // useLayoutEffect(() => {
+    //   first
 
+    //   return () => {
+    //     second
+    //   };
+    // }, [third])
+    useFocusEffect(
+  useCallback(() => {
+    console.log('useFocusEffect, getHealthDataToday');
+    healthStore.getHealthDataToday(true);
+
+    // Если нужен очиститель эффекта:
+    return () => {
+      console.log('Screen unfocused');
+    };
+  }, [])
+);
     const getData = async () => {
       console.log('GET DATA');
       setIsLoading((prev)=>!prev);
@@ -117,7 +132,7 @@ export const IFGHome = observer(() => {
                     };
                   })as StoryItemProps[]};
                 });
-                console.log('this.storiesMappedList', storiesMappedList);
+                console.log('this.storiesMappedList', storiesMappedList[0].stories);
                 setStories([...storiesMappedList]);
               });
       testingStore.getAllMyTest();
@@ -137,10 +152,12 @@ export const IFGHome = observer(() => {
       //   await dailyActivityStore.addDailyActivity('watter', 0);
       // }
       // dailyActivityStore.getDailyActivity(new Date().toISOString().split('T')[0]);
+
       await recommendationStore.getPersonalRecommendations();
       const timer = setTimeout(() => setLoading(false), 1000);
 
       setIsLoading((prev)=>!prev);
+
       return () => clearTimeout(timer);
     };
 

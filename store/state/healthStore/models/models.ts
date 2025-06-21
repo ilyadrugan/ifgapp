@@ -17,4 +17,5 @@ export type HealthDataByDate = {
     date: string;
     calories: number;
     steps: number;
+    floors?: number;
 }

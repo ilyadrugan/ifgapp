@@ -9,6 +9,7 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import { YoutubeVideo, youtube_parser } from '../../../core/components/youtubePlayer/youtubePlayer';
 import { useNavigation } from '@react-navigation/native';
 import RutubeView from '../../../core/components/rutubeView/rutubeVideo';
+import WebView from 'react-native-webview';
 
 const width = Dimensions.get('screen').width;
 
@@ -18,7 +19,7 @@ export const RenderHTMLView: FC<{html: string, br?: boolean}> = ({
 }) => {
       const navigation = useNavigation<any>();
 
-    const containsImage = (node) => {
+      const containsImage = (node) => {
         return node.children?.some((child) => child.name === 'img');
       };
       const containsVideo = (node) => {
@@ -43,13 +44,30 @@ export const RenderHTMLView: FC<{html: string, br?: boolean}> = ({
         }
 
         if (node.name === 'iframe') {
-          const videoUrl = node.attribs?.src;
+          // const videoUrl = node.attribs?.src;
+          const videoUrl = node.attribs?.src.replace(/&amp;/g, '&');
+          console.log('videoUrl', videoUrl);
           if (videoUrl) {
                   return <View style={gs.mt8}>
                     {videoUrl.includes('youtube') ?
                       <YoutubeVideo videoId={youtube_parser(videoUrl) || ''} />
                       :
-                      <RutubeView url={videoUrl}/>
+                      <View style={{position: 'relative',
+                          borderRadius: 20,
+                          height: 195,
+                          backgroundColor: 'black',
+                          width: '100%'}}>
+                          <WebView
+                                source={{ uri: videoUrl }}
+                                style={{ flex: 1 }}
+                                javaScriptEnabled
+                                domStorageEnabled
+                                allowsFullscreenVideo
+                                mediaPlaybackRequiresUserAction={false}
+                              />
+                      </View>
+
+                      // <RutubeView url={videoUrl}/>
                     }
                   </View>;
           }

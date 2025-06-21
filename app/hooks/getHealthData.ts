@@ -18,6 +18,7 @@ import { SdkAvailabilityStatus } from 'react-native-health-connect/src/constants
 import { showAlert } from '../core/utils/showAlert';
 import { CheckAppState } from './checkAppState';
 import { logMessage } from '../core/utils/logger';
+import { formatDate } from '../core/utils/formatDateTime';
 // const showAlert = () =>
 //     Alert.alert(
 //       'Внимание!',
@@ -35,6 +36,7 @@ import { logMessage } from '../core/utils/logger';
 //         {text: 'Скачать', onPress: ()=>Linking.openURL('market://details?id=com.google.android.apps.healthdata')},
 //       ]);
 function getTimeProgress(startTime: Date, endTime: Date): number {
+  console.log('getTimeProgress:', startTime, endTime);
   const now = new Date();
   const startMs = startTime.getTime();
   const endMs = endTime.getTime();
@@ -71,7 +73,7 @@ const checkAvailability = async () => {
 
     if (status === SdkAvailabilityStatus.SDK_UNAVAILABLE) {
           console.log('SDK is not available');
-          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья и ifeelgood с Health Connect', [{
+          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья (рекомендуем использовать Google Fit для стабильной работы) и ifeelgood с Health Connect', [{
                       text: 'Сделаю позже',
                       onPress: () => console.log('Ask me later pressed'),
                       style: 'cancel',
@@ -84,7 +86,7 @@ const checkAvailability = async () => {
           status === SdkAvailabilityStatus.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED
         ) {
           console.log('SDK is not available, provider update required');
-          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений здоровья и ifeelgood с Health Connect', [{
+          showAlert('Синхронизация с Health Connect','Для работы с данными, необходимо установить приложение Health Connect и выдать разрешение на чтение данных одного из стандартных приложений (рекомендуем использовать Google Fit для стабильной работы) здоровья и ifeelgood с Health Connect', [{
             text: 'Сделаю позже',
             onPress: () => console.log('Ask me later pressed'),
             style: 'cancel',
@@ -127,13 +129,61 @@ const logSending = (msg: LogMessage) => {
   logMessage(`${msg.text}; stepsResult: ${msg.steps.result}; stepsOrigin: ${msg.steps.dataOrigin}; caloriesResult: ${msg.calories.result}; caloriesOrigin: ${msg.calories.dataOrigin};`);
 };
 
+const readSampleData = async (date: Date) => {
+  // initialize the client
+  // const isInitialized = await initialize();
+
+  // request permissions
+  // const grantedPermissions = await requestPermission([
+  //   { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
+  // ]);
+
+  // check if granted
+  const timeRangeFilter = {
+    operator: 'between',
+    startTime: getStartOfDay(date),
+    endTime: getEndOfDay(date),
+  } as const;
+
+  const timeRangeSlicer = {
+    period: 'DAYS',
+    length: 1,
+  } as const;
+  const result = await readRecords('ActiveCaloriesBurned', {
+    timeRangeFilter,
+  });
+  console.log('readSampleData', result);
+  // {
+  //   result: [
+  //     {
+  //       startTime: '2023-01-09T12:00:00.405Z',
+  //       endTime: '2023-01-09T23:53:15.405Z',
+  //       energy: {
+  //         inCalories: 15000000,
+  //         inJoules: 62760000.00989097,
+  //         inKilojoules: 62760.00000989097,
+  //         inKilocalories: 15000,
+  //       },
+  //       metadata: {
+  //         id: '239a8cfd-990d-42fc-bffc-c494b829e8e1',
+  //         lastModifiedTime: '2023-01-17T21:06:23.335Z',
+  //         clientRecordId: null,
+  //         dataOrigin: 'com.healthconnectexample',
+  //         clientRecordVersion: 0,
+  //         device: 0,
+  //       },
+  //     },
+  //   ],
+  // }
+};
+
 export const getHealthData = async (date: Date) => {
     if (Platform.OS !== 'android') {
       return;
     }
     console.log('date', date);
     checkAvailability();
-
+    await readSampleData(date);
     // Android - Health Connect
 
       // initialize the client
@@ -150,14 +200,14 @@ export const getHealthData = async (date: Date) => {
         { accessType: 'read', recordType: 'FloorsClimbed' },
         // { accessType: 'read', recordType: 'ReadHealthDataHistory' },
         { accessType: 'read', recordType: 'TotalCaloriesBurned' },
-        // { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
+        { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
       ]).then((permissions) => {
         console.log('Granted permissions ', { permissions });
       });
       const grantedAllPermissions = await getGrantedPermissions();
         // console.log('grantedPermissions', grantedAllPermissions);
         if (grantedAllPermissions.length == 0){
-          showAlert('Разрешение на предоставление данных с Health Connect','Для работы с данными, необходимо выдать разрешение на синхронизацию данных одного из стандартных приложений и ifeelgood с Health Connect', [{
+          showAlert('Разрешение на предоставление данных с Health Connect','Для работы с данными, необходимо выдать разрешение на синхронизацию данных одного из стандартных приложений (рекомендуем использовать Google Fit для стабильной работы) и ifeelgood с Health Connect', [{
             text: 'Сделаю позже',
             onPress: () => console.log('Ask me later pressed'),
             style: 'cancel',
@@ -185,18 +235,19 @@ export const getHealthData = async (date: Date) => {
       // Steps
       // console.log('getting steps');
       const steps = await readRecords('Steps', { timeRangeFilter });
-      // console.log('steps', steps.records);
+      console.log('steps', steps.records);
       const totalSteps = steps.records.reduce((sum, cur, index) => {
+
         if (index === 0) {logMsg.steps.dataOrigin = cur.metadata?.dataOrigin || '';}
         return sum + cur.count;
       }, 0);
-
+      console.log('totalSteps', steps.records);
       // CALORIES_BURNED
       // console.log('getting total_calories');
       const calories = await readRecords('TotalCaloriesBurned', {
-      timeRangeFilter,
+        timeRangeFilter,
       });
-      // console.log('calories', calories.records);
+      console.log('calories', calories.records);
       calories.records.forEach((rec)=>{
         console.log('rec.energy.inKilocalories', rec);
         logMsg.calories.dataOrigin = rec.metadata?.dataOrigin || '';
@@ -238,6 +289,7 @@ function isDateInFuture(selectedDate: Date): boolean {
   return selectedDate.getTime() > now.getTime();
 }
 export async function fetchStepsAndCaloriesByDate(date: Date) {
+
   if (isDateInFuture(date)) {
     return {
       date: date.toISOString().slice(0, 10),
@@ -245,6 +297,43 @@ export async function fetchStepsAndCaloriesByDate(date: Date) {
       calories: 0,
     };
   }
+  if (Platform.OS !== 'android') {
+      return;
+    }
+    console.log('date', formatDate(date));
+    checkAvailability();
+    // await readSampleData(date);
+    // Android - Health Connect
+
+      // initialize the client
+     const result  = initializeHealthConnect();
+      if (!result) {
+        console.log('!isInitialized', result);
+        return;
+      }
+      // revokeAllPermissions();
+      console.log('request permissions');
+      // request permissions
+      const grantedPermissions = await requestPermission([
+        { accessType: 'read', recordType: 'Steps' },
+        { accessType: 'read', recordType: 'FloorsClimbed' },
+        // { accessType: 'read', recordType: 'ReadHealthDataHistory' },
+        { accessType: 'read', recordType: 'TotalCaloriesBurned' },
+        { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
+      ]).then((permissions) => {
+        console.log('Granted permissions ', { permissions });
+      });
+      const grantedAllPermissions = await getGrantedPermissions();
+        // console.log('grantedPermissions', grantedAllPermissions);
+        if (grantedAllPermissions.length == 0){
+          showAlert('Разрешение на предоставление данных с Health Connect','Для работы с данными, необходимо выдать разрешение на синхронизацию данных одного из стандартных приложений (рекомендуем использовать Google Fit для стабильной работы) и ifeelgood с Health Connect', [{
+            text: 'Сделаю позже',
+            onPress: () => console.log('Ask me later pressed'),
+            style: 'cancel',
+          },
+          {text: 'К разрешениям', onPress: openHealthConnectSettings},
+        ],);
+        }
   const timeRangeFilter = {
     operator: 'between',
     startTime: getStartOfDay(date),
@@ -255,39 +344,70 @@ export async function fetchStepsAndCaloriesByDate(date: Date) {
     period: 'DAYS',
     length: 1,
   } as const;
+  console.log('Получаем шаги', timeRangeFilter);
 
   // Получаем шаги
-  const stepResults = await aggregateGroupByPeriod<'Steps'>({
-    recordType: 'Steps',
-    timeRangeFilter,
-    timeRangeSlicer,
-  });
+   const stepResults = await readRecords('Steps', { timeRangeFilter });
 
   // Получаем калории
-  const calorieResults = await aggregateGroupByPeriod<'TotalCaloriesBurned'>({
-    recordType: 'TotalCaloriesBurned',
-    timeRangeFilter,
-    timeRangeSlicer,
-  });
+  // const calorieResults = await aggregateGroupByPeriod<'TotalCaloriesBurned'>({
+  //   recordType: 'TotalCaloriesBurned',
+  //   timeRangeFilter,
+  //   timeRangeSlicer,
+  // });
+  console.log('stepResults', stepResults.records);
+  let dataOriginSteps: string[] = [];
+        const totalSteps = stepResults.records.reduce((sum, cur, index) => {
+          console.log('cur', cur);
+        if (cur.metadata?.dataOrigin && !dataOriginSteps.includes(cur.metadata?.dataOrigin)) {
+              dataOriginSteps.push(cur.metadata.dataOrigin);
+            }
+        // if (index === 0) {logMsg.steps.dataOrigin = cur.metadata?.dataOrigin || '';}
+        return sum + cur.count;
+      }, 0);
+  let dataOriginCalories = '';
+  console.log('dataOriginSteps', dataOriginSteps);
+  console.log('Получаем калории');
+  const caloriess = await readRecords('TotalCaloriesBurned', {
+        timeRangeFilter,
+      });
+      console.log('caloriess.records', caloriess);
+      // caloriess.records.forEach((rec, index)=>{
+      //   console.log('rec.energy.inKilocalories', index,rec);
+      //   // logMsg.calories.dataOrigin = rec.metadata?.dataOrigin || '';
+      // });
+  const calorieResults = caloriess.records.reduce((sum, cur, index, arr) => {
+        console.log('calorieResults cur', index, cur);
+        if (cur.metadata?.dataOrigin === 'com.google.android.apps.fitness' && (index === arr.length - 1)){
+          // logMsg.calories.dataOrigin = cur.metadata?.dataOrigin || '';
+          dataOriginCalories = 'com.google.android.apps.fitness';
+          console.log(cur.energy.inKilocalories * getTimeProgress(new Date(cur.startTime), new Date(cur.endTime)));
+          return sum + (cur.energy.inKilocalories * getTimeProgress(new Date(cur.startTime), new Date(cur.endTime)));
+        }
+        return sum + cur.energy.inKilocalories;
+      }, 0);
+  const calories = Math.round(calorieResults);
+  console.log('calorieResults', calorieResults);
+  // const steps = stepResults[0]?.result?.COUNT_TOTAL || 0;
+  // const calories = calorieResults[0].result.dataOrigins.includes('com.google.android.apps.fitness') ?
+  //   Math.ceil(calorieResults[0]?.result?.ENERGY_TOTAL?.inKilocalories * getTimeProgress(new Date(calorieResults[0].startTime), new Date(calorieResults[0].endTime))) :
+  //   Math.ceil(calorieResults[0]?.result?.ENERGY_TOTAL?.inKilocalories) || 0;
 
-  const steps = stepResults[0]?.result?.COUNT_TOTAL || 0;
-  const calories =
-    Math.ceil(calorieResults[0]?.result?.ENERGY_TOTAL?.inKilocalories) || 0;
   const logMsg = {
-        text: 'fetchStepsAndCaloriesByDate ' + date.toISOString().slice(0, 10),
+        text: 'fetchStepsAndCaloriesByDate ' + formatDate(date),
         steps: {
-          result: steps,
-          dataOrigin: stepResults[0]?.result.dataOrigins[0] || '',
+          result: totalSteps,
+          dataOrigin: dataOriginSteps.join(', '),
         },
         calories: {
           result: calories,
-          dataOrigin: calorieResults[0]?.result.dataOrigins[0] || '',
+          dataOrigin: dataOriginCalories,
         },
       };
   logSending(logMsg);
   return {
-    date: date.toISOString().slice(0, 10),
-    steps,
+    date: formatDate(date),
+    steps: totalSteps,
     calories,
   };
 }
@@ -307,7 +427,7 @@ export async function fetchStepsAndCaloriesLast30Days() {
     period: 'DAYS',
     length: 1,
   } as const;
-
+  console.log('timeRangeFilter', timeRangeFilter);
   // Получаем шаги
   const stepResults = await aggregateGroupByPeriod<'Steps'>({
     recordType: 'Steps',
@@ -321,23 +441,53 @@ export async function fetchStepsAndCaloriesLast30Days() {
     timeRangeFilter,
     timeRangeSlicer,
   });
-  // console.log('calorieResults', calorieResults.length);
   const stepsData = stepResults.map((stepItem, index, arr)=>{
     return {
       created_at: stepItem.startTime,
       steps: (stepItem.result.COUNT_TOTAL || 0),
-      // calories: clr,
     };
   });
+  const timeRangeTodayFilter = {
+    operator: 'between',
+    startTime: getStartOfDay(new Date()),
+    endTime: getEndOfDay(new Date()),
+  } as const;
+    const caloriess = await readRecords('TotalCaloriesBurned', {
+        timeRangeFilter: timeRangeTodayFilter,
+      });
+      // console.log('caloriess.records', caloriess.records.length);
+      // caloriess.records.forEach((rec, index)=>{
+      //   console.log('rec.energy.inKilocalories', index,rec);
+      //   // logMsg.calories.dataOrigin = rec.metadata?.dataOrigin || '';
+      // });
+  const caloriesTodayResults = caloriess.records.reduce((sum, cur, index, arr) => {
+        // console.log('calorieResults cur', index, cur);
+        if (cur.metadata?.dataOrigin === 'com.google.android.apps.fitness' && (index === arr.length - 1)){
+          // logMsg.calories.dataOrigin = cur.metadata?.dataOrigin || '';
+          // dataOriginCalories = 'com.google.android.apps.fitness';
+          console.log(cur.energy.inKilocalories * getTimeProgress(new Date(cur.startTime), new Date(cur.endTime)));
+          return sum + (cur.energy.inKilocalories * getTimeProgress(new Date(cur.startTime), new Date(cur.endTime)));
+        }
+        return sum + cur.energy.inKilocalories;
+      }, 0);
+  const caloriesToday = Math.round(caloriesTodayResults);
+  const caloriesOrigins: string[] = [];
   const caloriesData = calorieResults.map((calorieItem, index, arr)=>{
 
-    const clr = (calorieItem.result.dataOrigins.includes('com.google.android.apps.fitness') && (index === arr.length - 1)) ? Math.ceil(calorieItem.result.ENERGY_TOTAL.inKilocalories * getTimeProgress(new Date(calorieItem.startTime), new Date(calorieItem.endTime))) : Math.ceil(calorieItem.result.ENERGY_TOTAL.inKilocalories || 0);
+    if (!caloriesOrigins.includes(calorieItem.result.dataOrigins[0])) {
+      caloriesOrigins.push(calorieItem.result.dataOrigins[0]);
+    }
+    if (calorieItem.result.dataOrigins[0] === '_platform') {
+      return {created_at: calorieItem.startTime,
+      calories: 0};
+    }
+    const clr = (calorieItem.result.dataOrigins.includes('com.google.android.apps.fitness') && (index === arr.length - 1)) ? caloriesToday : Math.round(calorieItem.result.ENERGY_TOTAL.inKilocalories || 0);
     return {
       created_at: calorieItem.startTime,
-      // steps: (stepItem.result.COUNT_TOTAL || 0),
       calories: clr,
     };
   });
+
   // Объединяем результаты по дате
   const logMsg = {
         text: 'fetchStepsAndCaloriesLast30Days',
@@ -347,11 +497,11 @@ export async function fetchStepsAndCaloriesLast30Days() {
         },
         calories: {
           result: caloriesData.map(cal=>cal.calories.toString()).join(' '),
-          dataOrigin: calorieResults[0]?.result.dataOrigins[0] || '',
+          dataOrigin: caloriesOrigins.join(', ') || '',
         },
       };
   logSending(logMsg);
-  console.log('mergedData', stepsData, caloriesData);
+  // console.log('mergedData', stepsData, caloriesData);
   // return mergedData;
   return {stepsData, caloriesData};
 }

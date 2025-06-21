@@ -1,7 +1,7 @@
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { NativeModules, Platform } from 'react-native';
-import { getHealthData } from './getHealthData';
+import { fetchStepsAndCaloriesByDate, getHealthData } from './getHealthData';
 import dailyActivityStore from '../../store/state/activityGraphStore/activityGraphStore';
 import { StoreDailyActivities } from '../../store/state/activityGraphStore/models/models';
 
@@ -41,16 +41,16 @@ export function useHealthData(date?: Date) {
     };
 
     const requestHealthData = async () => {
-      const result = await getHealthData(date || new Date());
+      const result = await fetchStepsAndCaloriesByDate(date || new Date());
       // console.log(`Steps: ${result?.totalSteps} | Flights: ${result?.totalFloors} | Calories: ${result?.totalCalories}`);
       setHealthData({
-        caloriesBurned: result?.totalCalories || 0,
-        steps: result?.totalSteps || 0,
+        caloriesBurned: result?.calories || 0,
+        steps: result?.steps || 0,
         flightsClimbed: result?.totalFloors || 0,
       });
       setDataToDailyActivities({
-        steps: result?.totalSteps,
-        calories: result?.totalCalories,
+        steps: result?.steps,
+        calories: result?.calories,
         floor_spans: result?.totalFloors,
       });
       setIsRequesting(false);
