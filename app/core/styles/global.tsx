@@ -157,7 +157,14 @@ const gs = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 0 },
   },
-
+  shadowOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40, // подбираешь по вкусу
+    zIndex: 0,
+  },
   mt2: { marginTop: 2 },
   mt4: { marginTop: 4 },
   mt8: { marginTop: 8 },

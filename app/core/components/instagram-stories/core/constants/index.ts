@@ -2,7 +2,7 @@ import { Dimensions } from 'react-native';
 
 const { width: width, height: height } = Dimensions.get( 'screen' );
 export const WIDTH = width;
-export const HEIGHT = height - 40;
+export const HEIGHT = WIDTH * 16 / 9;
 
 export const STORAGE_KEY = '@birdwingo/react-native-instagram-stories';
 

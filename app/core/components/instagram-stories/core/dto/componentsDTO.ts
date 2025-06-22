@@ -113,6 +113,7 @@ export interface StoryImageProps {
   videoDuration?: number;
   onImageLayout: ( height: number ) => void;
   onLoad: ( duration?: number ) => void;
+  children?: ReactNode
 }
 
 export interface StoryProgressProps {

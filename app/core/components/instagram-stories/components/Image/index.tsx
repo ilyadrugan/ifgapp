@@ -13,7 +13,7 @@ import { useSafeAreaFrame } from 'react-native-safe-area-context';
 
 const StoryImage: FC<StoryImageProps> = ( {
   stories, activeStory, defaultStory, isDefaultVideo, paused, videoProps, isActive,
-  mediaContainerStyle, imageStyles, imageProps, videoDuration, onImageLayout, onLoad,
+  mediaContainerStyle, imageStyles, imageProps, videoDuration, onImageLayout, onLoad, children,
 } ) => {
   const frame = useSafeAreaFrame();
   const deviceHeight = frame.height;
@@ -93,13 +93,16 @@ const StoryImage: FC<StoryImageProps> = ( {
     }
 
   };
-
+  // console.log(data.data?.source);
   return (
     <>
       <View style={ImageStyles.container}>
         <Loader loading={loading} color={color} size={50} />
       </View>
-      <ImageBackground blurRadius={60} source={data.data.source} style={[ ImageStyles.image, mediaContainerStyle ]}>
+      {/* <ImageBackground blurRadius={60}
+      // source={data.data.source}
+      source={require('./photo.jpg')}
+       style={[ ImageStyles.image916, mediaContainerStyle ]}> */}
         {data.data?.source && (
           data.isVideo ? (
             <StoryVideo
@@ -111,18 +114,27 @@ const StoryImage: FC<StoryImageProps> = ( {
               {...videoProps}
             />
           ) : (
-            <Image
-              source={data.data.source}
-              style={[ { width: WIDTH, height: deviceHeight }, imageStyles ]}
-              resizeMode="contain"
-              testID="storyImageComponent"
-              onLayout={( e ) => onImageLayout( Math.min( deviceHeight, e.nativeEvent.layout.height ) )}
-              onLoad={() => onContentLoad()}
-              {...imageProps}
-            />
+            <ImageBackground blurRadius={200}
+            source={data.data.source}
+            style={[ mediaContainerStyle ]}
+            >
+              <ImageBackground
+                // source={require('./photo.jpg')}
+                source={data.data.source}
+
+                style={[ ImageStyles.image ]}
+                resizeMode="contain"
+                testID="storyImageComponent"
+                onLayout={( e ) => onImageLayout( Math.min( deviceHeight, e.nativeEvent.layout.height ) )}
+                onLoad={() => onContentLoad()}
+                {...imageProps}
+                >
+                {children}
+              </ImageBackground>
+            </ImageBackground>
           )
         )}
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </>
   );
 

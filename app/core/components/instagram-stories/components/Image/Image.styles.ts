@@ -17,6 +17,6 @@ export default StyleSheet.create( {
     // justifyContent: 'center',
     width: WIDTH,
     height: HEIGHT,
-    resizeMode: 'cover',
+    // resizeMode: 'cover',
   },
 } );

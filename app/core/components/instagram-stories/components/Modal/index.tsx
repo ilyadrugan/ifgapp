@@ -470,17 +470,17 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
   return (
     <Modal statusBarTranslucent={false} visible={visible} animationType="none" testID="storyRNModal" onRequestClose={onClose}>
       <GestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={[ModalStyles.container, {height: deviceHeight}]} testID="storyModal">
+        <Animated.View style={[ModalStyles.container, {height: HEIGHT}]} testID="storyModal">
           <Pressable
             onPressIn={onPressIn}
             onPress={onPress}
             onLongPress={onLongPress}
             onPressOut={onPressOut}
             delayLongPress={LONG_PRESS_DURATION}
-            style={[ModalStyles.container, {height: deviceHeight} ]}
+            style={[ModalStyles.container, {height: HEIGHT} ]}
           >
             <Animated.View style={[ ModalStyles.bgAnimation, backgroundAnimatedStyles ]} />
-            <Animated.View style={[ ModalStyles.absolute, {height: deviceHeight}, animatedStyles, containerStyle ]}>
+            <Animated.View style={[ ModalStyles.absolute, {height: HEIGHT}, animatedStyles, containerStyle ]}>
               {stories?.map( ( story, index ) => (
                 <StoryList
                   {...story}
