@@ -141,33 +141,26 @@ export const TextInputWithIconEye: FC<{
   }) => {
     const [isHide, setHide] = useState(true);
   return (
-   <View style={s.container}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-      <TextInput
-        allowFontScaling={false}
-        value={value}
-        style={[s.input,gs.fontCaption, {color: colors.PLACEHOLDER_COLOR}, fullWidth && s.fullWidth,
-        error && s.error]}
-        placeholder={placeholder}
-        placeholderTextColor={placeholderTextColor || colors.PLACEHOLDER_COLOR}
-        onFocus={onFocus}
-        onChangeText={onChange}
-        onBlur={onBlur}
-        secureTextEntry={isHide}
-      />
-      {/* <View style={[s.icon, {left: -32}]} >
-        {isHide ? <TouchableOpacity onPress={()=>setHide(prev=>!prev)}>
-          <EyeHide/>
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={()=>setHide(prev=>!prev)}>
-            <EyeOpen/>
-          </TouchableOpacity>}
-      </View> */}
-    </View>
-     {error && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
-    {error || 'Что-то пошло не так'}</IfgText>}
-    </View>
+    <View style={s.container}>
+   <View style={[s.inputWrapper, fullWidth && s.fullWidth, error && s.error]}>
+  <TextInput
+    allowFontScaling={false}
+    value={value}
+    style={[s.input3, gs.fontCaption]}
+    placeholder={placeholder}
+    placeholderTextColor={placeholderTextColor || colors.PLACEHOLDER_COLOR}
+    onFocus={onFocus}
+    onChangeText={onChange}
+    onBlur={onBlur}
+    secureTextEntry={isHide}
+    keyboardType={keyboardType}
+  />
+  <TouchableOpacity onPress={() => setHide(prev => !prev)} style={s.iconHide}>
+    {isHide ? <EyeHide /> : <EyeOpen />}
+  </TouchableOpacity>
+</View>
+{error && <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+    {error || 'Что-то пошло не так'}</IfgText>}</View>
   );
 };
 
@@ -204,6 +197,20 @@ const s = StyleSheet.create({
       height: 56,
       backgroundColor: 'rgba(255,255,255, 0.35)',
     },
+     inputWrapper: {
+      position: 'relative',
+      borderWidth: 1,
+      borderColor: colors.BORDER_COLOR,
+      borderRadius: 16,
+      justifyContent: 'center',
+      height: 78,
+    },
+    input3: {
+      paddingLeft: 24,
+      paddingRight: 48, // Оставляем место под иконку
+      color: colors.PLACEHOLDER_COLOR,
+      height: '100%',
+    },
     input2: {
       flex: 1, // Расширяет TextInput, чтобы занимать все доступное пространство
       ...gs.fontCaption2,
@@ -212,5 +219,14 @@ const s = StyleSheet.create({
       marginLeft: 6, // Отступ между TextInput и иконкой
       marginRight: 4,
     },
-
+    iconHide: {
+        position: 'absolute',
+        right: 16,
+        top: '50%',
+        transform: [{ translateY: -12 }], // центрирование по вертикали
+        height: 24,
+        width: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
   });

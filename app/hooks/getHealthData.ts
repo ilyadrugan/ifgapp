@@ -11,6 +11,8 @@ import {
     revokeAllPermissions,
     aggregateGroupByPeriod,
     AggregateRequest,
+    aggregateRecord,
+    aggregateGroupByDuration,
   } from 'react-native-health-connect';
 import { AggregateGroupByPeriodRequest, Permission } from 'react-native-health-connect/lib/typescript/types';
 import { TimeRangeFilter } from 'react-native-health-connect/lib/typescript/types/base.types';
@@ -344,7 +346,7 @@ export async function fetchStepsAndCaloriesByDate(date: Date) {
     period: 'DAYS',
     length: 1,
   } as const;
-  console.log('Получаем шаги', timeRangeFilter);
+  // console.log('Получаем шаги', timeRangeFilter);
 
   // Получаем шаги
    const stepResults = await readRecords('Steps', { timeRangeFilter });
@@ -355,7 +357,7 @@ export async function fetchStepsAndCaloriesByDate(date: Date) {
   //   timeRangeFilter,
   //   timeRangeSlicer,
   // });
-  console.log('stepResults', stepResults.records);
+  // console.log('stepResults', stepResults.records);
   let dataOriginSteps: string[] = [];
         const totalSteps = stepResults.records.reduce((sum, cur, index) => {
           console.log('cur', cur);
@@ -366,12 +368,12 @@ export async function fetchStepsAndCaloriesByDate(date: Date) {
         return sum + cur.count;
       }, 0);
   let dataOriginCalories = '';
-  console.log('dataOriginSteps', dataOriginSteps);
-  console.log('Получаем калории');
+  // console.log('dataOriginSteps', dataOriginSteps);
+  // console.log('Получаем калории');
   const caloriess = await readRecords('TotalCaloriesBurned', {
         timeRangeFilter,
       });
-      console.log('caloriess.records', caloriess);
+      // console.log('caloriess.records', caloriess);
       // caloriess.records.forEach((rec, index)=>{
       //   console.log('rec.energy.inKilocalories', index,rec);
       //   // logMsg.calories.dataOrigin = rec.metadata?.dataOrigin || '';
@@ -427,19 +429,24 @@ export async function fetchStepsAndCaloriesLast30Days() {
     period: 'DAYS',
     length: 1,
   } as const;
-  console.log('timeRangeFilter', timeRangeFilter);
+  console.log('Получаем шаги timeRangeFilter', timeRangeFilter);
   // Получаем шаги
-  const stepResults = await aggregateGroupByPeriod<'Steps'>({
+    const stepResults = await aggregateGroupByDuration<'Steps'>({
     recordType: 'Steps',
     timeRangeFilter,
-    timeRangeSlicer,
+    timeRangeSlicer: { duration: 'DAYS', length: 1 },
   });
-  console.log('stepResults', stepResults.length);
-  // Получаем калории
-  const calorieResults = await aggregateGroupByPeriod<'TotalCaloriesBurned'>({
+  // const stepResults = await readRecords('Steps', { timeRangeFilter });
+  console.log('stepResults 30', stepResults);
+  // const stepResultsMap = stepResults.records.map((rec)=>{
+  //   console.log('stepResultsMap rec', rec);
+  //   aggregateRecord
+  // });
+  // // Получаем калории
+  const calorieResults = await aggregateGroupByDuration<'TotalCaloriesBurned'>({
     recordType: 'TotalCaloriesBurned',
     timeRangeFilter,
-    timeRangeSlicer,
+    timeRangeSlicer: { duration: 'DAYS', length: 1 },
   });
   const stepsData = stepResults.map((stepItem, index, arr)=>{
     return {
