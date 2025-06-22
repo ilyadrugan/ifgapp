@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { FC}  from 'react';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
-import { ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
+import { isTablet, ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
 
 export const Step4:FC = () => {
 
@@ -22,7 +22,7 @@ export const Step4:FC = () => {
     </View>
       <Image
           resizeMode="contain"
-          style={{ width: '100%',top: ScreenHeight < 850 ? 0 : '15%',  position: 'absolute', alignSelf: 'center'}}
+          style={[{ width: '100%', position: 'absolute', alignSelf: 'center'}, ScreenHeight  < 850 &&{top: '15%'}, isTablet && { bottom: 0}]}
           source={require('../../../../assets/backgrounds/girl.png')}/>
     </View>
     </>;

@@ -12,6 +12,8 @@ import Testing from '../../../../assets/icons/regulartesting.svg';
 import Content from '../../../../assets/icons/trustedcontent.svg';
 import Motivation from '../../../../assets/icons/mymotivation.svg';
 import PersonalPlan from '../../../../assets/icons/personalplan.svg';
+import { isTablet } from '../../../hooks/useDimensions';
+import { perfectSize } from '../../../core/utils/pixelPerfect';
 const { width } = Dimensions.get('screen');
 export const Step2:FC = () => {
     const [activeSlide, setActiveSlide] = useState(0);
@@ -73,7 +75,7 @@ export const Step2:FC = () => {
             </IfgText>
 
             <View style={gs.mt44}/>
-            <View style={s.roundedScrollCard}>
+            <View style={[s.roundedScrollCard, isTablet && {marginTop: perfectSize(100)}]}>
             <Pagination
               dotsLength={carouselItems.length}
               activeDotIndex={activeSlide}
@@ -88,8 +90,8 @@ export const Step2:FC = () => {
             <Carousel
                 data={carouselItems}
                 renderItem={({ item }) => <Card item={item} />}
-                sliderWidth={width * 0.9}
-                itemWidth={width * 0.9}
+                sliderWidth={isTablet?width * 0.5:width * 0.9}
+                itemWidth={isTablet?width * 0.5:width * 0.9}
                 loop={false}
                 // useScrollView={false}
                 autoplayDelay={0.2}
@@ -113,12 +115,12 @@ const s = StyleSheet.create({
         justifyContent: 'center',
     },
     roundedScrollCard:{
-        width: '90%',
-        height: 400,
+        width: isTablet?'60%':'90%',
+        height: isTablet?600:400,
         borderTopRightRadius: 16,
         borderTopLeftRadius: 16,
         overflow: 'hidden',
-
+        alignItems: 'center',
     },
       absolute: {
         ...StyleSheet.absoluteFillObject,

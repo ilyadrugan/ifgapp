@@ -6,8 +6,8 @@ import { IfgText } from '../../../core/components/text/ifg-text';
 import colors from '../../../core/colors/colors';
 import gs from '../../../core/styles/global';
 import { AnimatedTags } from '../components/animatedTags';
-import { ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
-
+import { isTablet, ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
+import {perfectSize} from '../../../core/utils/pixelPerfect'
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 
@@ -31,12 +31,23 @@ export const Step1:FC = () => {
            <View style={{marginTop: Platform.OS === 'ios' ? 32 : 0, width: width, padding:0}}>
             <AnimatedTags />
             </View>
-           <View style={{marginLeft: width * 0.1,top: 72, alignItems: 'flex-start', width: '100%'}}>
+            {isTablet? <View>
+            <View style={{marginRight: width * 0.1,top: 100, alignItems: 'flex-start', width: '100%'}}>
+                <IfgText color={colors.WHITE_COLOR} style={[gs.bold, {fontSize: perfectSize(100), lineHeight: perfectSize(100)}]}>i feel</IfgText>
+            </View>
+            <View style={{marginLeft: width * 0.1, alignItems: 'flex-end', width: '100%', marginTop: 52}}>
+                <IfgText color={colors.WHITE_COLOR} style={[gs.bold, {fontSize: perfectSize(100), lineHeight: perfectSize(100)}]}>good</IfgText>
+            </View>
+            </View>
+            :<>
+            <View style={{marginLeft: width * 0.1,top: 72, alignItems: 'flex-start', width: '100%'}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.medium, {fontSize: 110, lineHeight: 110}]}>i feel</IfgText>
             </View>
            <View style={{marginRight: width * 0.1, alignItems: 'flex-end', width: '100%', marginTop: 26}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.medium, {fontSize: 110, lineHeight: 110}]}>good</IfgText>
-           </View>
+           </View></>
+            }
+           
            {/* </View> */}
         <ImageBackground
             resizeMode="contain"
@@ -53,8 +64,8 @@ export const Step1:FC = () => {
                             style={{width: '100%',  marginLeft: 0, marginRight: index === 1 ? 8 : 0}}
                         />;}
                     }
-                        sliderWidth={ScreenWidth * 0.6}
-                        itemWidth={ScreenWidth * 0.6}
+                        sliderWidth={isTablet? 310:ScreenWidth * 0.6}
+                        itemWidth={isTablet? 310:ScreenWidth * 0.6}
                         scrollEnabled={false} // Отключение скроллинга
                         // useScrollView={true}
                         // autoplayDelay={0.2}

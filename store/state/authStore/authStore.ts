@@ -126,7 +126,7 @@ class AuthStore {
         this.setIsOnBoarded();
         console.log('login updateFirebaseMessagingToken');
         updateFirebaseMessagingToken()
-          .then(res=> console.log(res.data))
+          .then(res=> console.log('updateFirebaseMessagingToken', res.data))
           .catch((err)=>{
             console.log('updateFirebaseMessagingToken Error',err.message);
             errorToast(err.message);
@@ -261,6 +261,7 @@ class AuthStore {
   }
   async checkIsOnBoarded() {
     const isBoarded = await AsyncStorage.getItem('isOnBoarded');
+    console.log('checkIsOnBoarded isBoarded',isBoarded)
     if (isBoarded) {
       this.isOnBoarded = true;
     }
@@ -269,6 +270,8 @@ class AuthStore {
   async setIsOnBoarded() {
     await AsyncStorage.setItem('isOnBoarded', 'true');
     this.isOnBoarded = true;
+     const isBoarded = await AsyncStorage.getItem('isOnBoarded');
+    console.log('setIsOnBoarded isBoarded',isBoarded)
   }
 
   // Выход из аккаунта

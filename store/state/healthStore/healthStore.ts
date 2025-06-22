@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { fetchStepsAndCaloriesByDate, fetchStepsAndCaloriesLast30Days, getHealthData } from '../../../app/hooks/getHealthData';
 import { CalorieData, HealthDataByDate, HelthData, StepData } from './models/models';
+import { Platform } from 'react-native';
 
 class HealthStore {
   healthData: HelthData[] = [];
@@ -25,6 +26,7 @@ class HealthStore {
     this.healthData = data;
   }
   async getStepsMonth () {
+    if (Platform.OS === 'ios') return
     // console.log('getStepsMonth');
     const res = await fetchStepsAndCaloriesLast30Days();
     console.log('getStepsMonth',res);
@@ -33,6 +35,7 @@ class HealthStore {
   }
 
   async getHealthDataByDate(date: Date, withNoload?: boolean) {
+    if (Platform.OS === 'ios') return
     this.isLoading = withNoload ? false : true;
     console.log('getHealthDataByDate');
     await fetchStepsAndCaloriesByDate(date)
@@ -51,6 +54,7 @@ class HealthStore {
     this.isLoading = false;
   }
   async getHealthDataToday(withNoload?: boolean) {
+    if (Platform.OS === 'ios') return
     this.isLoading = withNoload ? false : true;
     console.log('getHealthDataToday');
     await fetchStepsAndCaloriesByDate(new Date())

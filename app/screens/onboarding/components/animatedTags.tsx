@@ -4,6 +4,7 @@ import colors from '../../../core/colors/colors';
 import { AnimatedHashtagContainer, HashtagContainer } from '../../../core/components/card/cardContainer';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
+import { perfectSize } from '../../../core/utils/pixelPerfect';
 
 const width = Dimensions.get('screen').width;
 
@@ -14,7 +15,7 @@ export const AnimatedTags = () => {
         {
             name: '#питание',
             style: {
-                top: 40, left: width * 0.3,  width: 100,
+                top: perfectSize(30), left: width * 0.3,  width: perfectSize(100),
             },
             bgColor: colors.ORANGE_COLOR,
             startAngle: 0,
@@ -23,7 +24,7 @@ export const AnimatedTags = () => {
         {
             name: '#антистресс',
             style: {
-                top: 50, right: width * 0.05, transform: [{ rotate: '-17deg' }],
+                top: perfectSize(50), right:width * 0.05, transform: [{ rotate: '-17deg' }],
             },
             bgColor: '#C3E154',
             startAngle: -17,
@@ -32,7 +33,7 @@ export const AnimatedTags = () => {
         {
             name: '#сон',
             style: {
-                top: 110, right: width * 0.12, width: 80, height: 34,
+                top: perfectSize(110), right: width * 0.12, width: perfectSize(80), height: 34,
             },
             bgColor: colors.OCEAN_COLOR,
             startAngle: 0,
@@ -41,7 +42,7 @@ export const AnimatedTags = () => {
         {
             name: '#мотивация',
             style: {
-                top: 210, left: width * 0.05 , width: 120 , transform: [{ rotate: '-50deg' }],
+                top: perfectSize(210), left: width * 0.05 , width: perfectSize(120) , transform: [{ rotate: '-50deg' }],
             },
             bgColor: '#FDCD00',
             startAngle: -50,
@@ -50,7 +51,7 @@ export const AnimatedTags = () => {
         {
             name: '#Физическая активность',
             style: {
-                top: 260, right: width * 0.11,
+                top: perfectSize(260), right: width * 0.11,
             },
             bgColor: colors.PINK_COLOR,
             startAngle: 0,
@@ -113,7 +114,7 @@ export const AnimatedTags = () => {
                 { translateX: index === 0 ? 50 : 0  },  // Возвращаем элемент обратно
               ]} ]}
              bgcolor={hashtag.bgColor} >
-                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.light, {lineHeight: 16}]}>{hashtag.name}</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption2, gs.light, {fontSize: perfectSize(16), lineHeight: perfectSize(16)}]}>{hashtag.name}</IfgText>
                 </AnimatedHashtagContainer>;
 
         }

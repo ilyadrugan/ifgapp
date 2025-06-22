@@ -15,6 +15,7 @@ import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
 import {isValidEmail} from '../../core/utils/isValidEmail';
 import { GoogleSignInButton } from '../../core/components/google-signin/google-signin';
 import { TextInputMask } from 'react-native-masked-text';
+import { isTablet } from '../../hooks/useDimensions';
 const height = Dimensions.get('screen').height;
 
 export const Login = observer(() => {
@@ -239,7 +240,7 @@ const s = StyleSheet.create({
         borderRadius: 22,
         flexDirection: 'column',
         alignItems: 'center',
-        width: '90%',
+        width: isTablet?'60%':'90%',
         backgroundColor: colors.WHITE_COLOR,
         paddingVertical:20,
         paddingHorizontal: 18,

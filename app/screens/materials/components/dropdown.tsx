@@ -372,7 +372,7 @@ const DropdownBlock: FC<{
       </View>
 
       {/* Выбрать тему */}
-      <View style={[styles.dropdownContainer, {zIndex: -100, elevation: -100}]}>
+      <View style={[styles.dropdownContainer, Platform.OS==='android' && {zIndex: -100, elevation: -100}]}>
         <TouchableOpacity onPress={toggleThemeDropdown} style={[styles.dropdownHeader]}>
         <View>
             <IfgText color="#A0A0A0" style={gs.fontCaptionSmallSmall}>Выбрать тему</IfgText>

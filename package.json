@@ -43,6 +43,7 @@
     "react-native-localize": "^3.4.1",
     "react-native-masked-text": "^1.13.0",
     "react-native-modalbox": "^2.0.2",
+    "react-native-pixel-perfect": "^1.0.2",
     "react-native-radial-gradient": "^1.1.5",
     "react-native-reanimated": "^3.17.5",
     "react-native-render-html": "^6.3.4",

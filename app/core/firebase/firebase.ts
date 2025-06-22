@@ -5,6 +5,12 @@ import { FirebaseApi } from './firebase.api';
 import { FirebaseMessagingTokenUpdateModel, FirebaseMessagingTokenDeleteModel } from './firebase.model';
 
 export async function updateFirebaseMessagingToken() {
+  if (Platform.OS==='ios') {
+    const apnsToken = await messaging().getAPNSToken();
+    console.log('APNS Token:', apnsToken);
+    
+    await messaging().registerDeviceForRemoteMessages();
+  }
   const fcm_token = await messaging().getToken();
   console.log('fcm_token',fcm_token);
   const deviceName = getModel();
