@@ -6,6 +6,7 @@ import { FC}  from 'react';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
 import { isTablet, ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
+import { perfectSize } from '../../../core/utils/pixelPerfect';
 
 export const Step4:FC = () => {
 
@@ -22,7 +23,7 @@ export const Step4:FC = () => {
     </View>
       <Image
           resizeMode="contain"
-          style={[{ width: '100%', position: 'absolute', alignSelf: 'center'}, ScreenHeight  < 850 &&{top: '15%'}, isTablet && { bottom: 0}]}
+          style={[{ width: isTablet ? perfectSize(500) : '100%', position: 'absolute', top: perfectSize(110) }, isTablet && { bottom: 0}]}
           source={require('../../../../assets/backgrounds/girl.png')}/>
     </View>
     </>;

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import colors from '../../colors/colors';
+import { perfectSize } from '../../utils/pixelPerfect';
 
 
 export const Dot: FC<{
@@ -16,18 +17,18 @@ export const Dot: FC<{
 
   const s = StyleSheet.create({
     circle: {
-        width: 20,
-        height: 20,
-        borderRadius: 10,
+        width: perfectSize(20),
+        height: perfectSize(20),
+        borderRadius: perfectSize(10),
         // flex:1,
         alignItems: 'center',
         justifyContent:'center',
         backgroundColor: '#00000025',
      },
      circleInside: {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
+        width: perfectSize(10),
+        height: perfectSize(10),
+        borderRadius: perfectSize(5),
         backgroundColor: colors.GREEN_COLOR,
      },
   });

@@ -7,7 +7,7 @@ import colors from '../../../core/colors/colors';
 import gs from '../../../core/styles/global';
 import { AnimatedTags } from '../components/animatedTags';
 import { isTablet, ScreenHeight, ScreenWidth } from '../../../hooks/useDimensions';
-import {perfectSize} from '../../../core/utils/pixelPerfect'
+import {perfectSize} from '../../../core/utils/pixelPerfect';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 
@@ -31,7 +31,7 @@ export const Step1:FC = () => {
            <View style={{marginTop: Platform.OS === 'ios' ? 32 : 0, width: width, padding:0}}>
             <AnimatedTags />
             </View>
-            {isTablet? <View>
+            {isTablet ? <View>
             <View style={{marginRight: width * 0.1,top: 100, alignItems: 'flex-start', width: '100%'}}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.bold, {fontSize: perfectSize(100), lineHeight: perfectSize(100)}]}>i feel</IfgText>
             </View>
@@ -39,7 +39,7 @@ export const Step1:FC = () => {
                 <IfgText color={colors.WHITE_COLOR} style={[gs.bold, {fontSize: perfectSize(100), lineHeight: perfectSize(100)}]}>good</IfgText>
             </View>
             </View>
-            :<>
+            : <>
             <View style={{marginLeft: width * 0.1,top: 72, alignItems: 'flex-start', width: '100%'}}>
             <IfgText color={colors.WHITE_COLOR} style={[gs.medium, {fontSize: 110, lineHeight: 110}]}>i feel</IfgText>
             </View>
@@ -47,14 +47,14 @@ export const Step1:FC = () => {
             <IfgText color={colors.WHITE_COLOR} style={[gs.medium, {fontSize: 110, lineHeight: 110}]}>good</IfgText>
            </View></>
             }
-           
+
            {/* </View> */}
         <ImageBackground
             resizeMode="contain"
             style={s.phoneContainer}
             source={require('../../../../assets/backgrounds/onboarding/emptyPhone.png')}>
                         <Carousel
-                        containerCustomStyle={{bottom: '5%'}}
+                        containerCustomStyle={{bottom: isTablet ? perfectSize(60) : 55}}
                         // contentContainerCustomStyle={{}}
                         data={carouselItems}
                         renderItem={({ item, index }) =>{
@@ -64,8 +64,8 @@ export const Step1:FC = () => {
                             style={{width: '100%',  marginLeft: 0, marginRight: index === 1 ? 8 : 0}}
                         />;}
                     }
-                        sliderWidth={isTablet? 310:ScreenWidth * 0.6}
-                        itemWidth={isTablet? 310:ScreenWidth * 0.6}
+                        sliderWidth={isTablet ? perfectSize(250) : ScreenWidth * 0.6}
+                        itemWidth={isTablet ? perfectSize(250) : ScreenWidth * 0.6}
                         scrollEnabled={false} // Отключение скроллинга
                         // useScrollView={true}
                         // autoplayDelay={0.2}
@@ -96,10 +96,10 @@ const s = StyleSheet.create({
         // gap: 10,
         // overflow: 'hidden',
         // borderRadius: 22,
-        width: ScreenWidth * 0.7,
+        width: isTablet ? perfectSize(333) : ScreenWidth * 0.75,
         // bottom: -200,
         alignItems: 'center',
         position: 'absolute',
-        bottom: -250,
+        bottom: isTablet ? -450 : -250,
       },
   });

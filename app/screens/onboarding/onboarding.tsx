@@ -16,6 +16,8 @@ import { Step4 } from './steps/step4';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import authStore from '../../../store/state/authStore/authStore';
 import AnimatedArrow from '../../core/components/animatedArrow/animatedArrow';
+import { perfectSize } from '../../core/utils/pixelPerfect';
+import { isTablet } from '../../hooks/useDimensions';
 
 
 export const Onboarding = () => {
@@ -88,7 +90,7 @@ export const Onboarding = () => {
                 </View>
 
             </Button>}
-            <View style={[gs.mt16,{flexDirection:'row', alignItems:'center', gap: 12}]}>
+            <View style={[gs.mt16,{flexDirection:'row', alignItems:'center', gap: perfectSize(12)}]}>
                 <Dot active={step === 0}/>
                 <Dot active={step === 1}/>
                 <Dot active={step === 2}/>
@@ -110,7 +112,7 @@ const s = StyleSheet.create({
       },
     footer: {
         position: 'absolute',
-        bottom: 55,
+        bottom: perfectSize(40),
         left: 0,
         right: 0,
         alignItems: 'center',
@@ -130,8 +132,8 @@ const s = StyleSheet.create({
         backgroundColor: colors.GREEN_COLOR,
         borderRadius: 16,
         paddingHorizontal: 24,
-        height: 78,
-        width: '86%',
+        height: perfectSize(78),
+        maxWidth: isTablet ? '50%' : '86%',
       },
       buttonOutline: {
         backgroundColor: 'transparent',

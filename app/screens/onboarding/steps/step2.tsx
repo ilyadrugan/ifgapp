@@ -74,8 +74,8 @@ export const Step2:FC = () => {
                 Зачем мне нужен ifeelgood?
             </IfgText>
 
-            <View style={gs.mt44}/>
-            <View style={[s.roundedScrollCard, isTablet && {marginTop: perfectSize(100)}]}>
+            {!isTablet && <View style={gs.mt44}/>}
+            <View style={[s.roundedScrollCard, isTablet && {marginTop: perfectSize(40)}]}>
             <Pagination
               dotsLength={carouselItems.length}
               activeDotIndex={activeSlide}
@@ -90,8 +90,8 @@ export const Step2:FC = () => {
             <Carousel
                 data={carouselItems}
                 renderItem={({ item }) => <Card item={item} />}
-                sliderWidth={isTablet?width * 0.5:width * 0.9}
-                itemWidth={isTablet?width * 0.5:width * 0.9}
+                sliderWidth={isTablet ? width * 0.5 : width * 0.9}
+                itemWidth={isTablet ? width * 0.5 : width * 0.9}
                 loop={false}
                 // useScrollView={false}
                 autoplayDelay={0.2}
@@ -115,8 +115,8 @@ const s = StyleSheet.create({
         justifyContent: 'center',
     },
     roundedScrollCard:{
-        width: isTablet?'60%':'90%',
-        height: isTablet?600:400,
+        width: isTablet ? '60%' : '90%',
+        height: isTablet ? perfectSize(250) : perfectSize(400),
         borderTopRightRadius: 16,
         borderTopLeftRadius: 16,
         overflow: 'hidden',
@@ -142,15 +142,17 @@ const s = StyleSheet.create({
       },
       paginationContainer: {
         paddingVertical: 10,
+        // marginLeft: 122,
         marginTop: -12,
+        width: isTablet ? width * 0.6 : width * 0.9,
       },
       dotStyle: {
-        width: 0.9 * width / 5,
+        width: isTablet ? width * 0.6 / 5 : width * 0.9 / 5,
         height: 6,
         backgroundColor: colors.GREEN_LIGHT_COLOR,
       },
       inactiveDotStyle: {
-        width: 0.9 * width / 5,
+        width: isTablet ? width * 0.6 / 5 : width * 0.9 / 5,
         height: 6,
         backgroundColor: 'transparent',
       },
