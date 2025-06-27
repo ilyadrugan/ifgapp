@@ -187,7 +187,7 @@ export const SubscribeInputs:
                 >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Зарегистрироваться</IfgText>
                     {(authStore.isLoading || isLoading) ? <ActivityIndicator color={colors.WHITE_COLOR} /> : <AnimatedArrow />}
 
                     </View>

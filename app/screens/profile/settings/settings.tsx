@@ -1,6 +1,6 @@
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import React, { FC, useEffect, useState } from 'react';
-import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Linking, Platform, StyleSheet, View } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
@@ -249,7 +249,16 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                 </View>
 
             </Button>
-    </CardContainer></>}
+    </CardContainer>
+        <View style={gs.mt16}/>
+        <Button
+            style={s.buttonSupport}
+            onPress={()=>Linking.openURL('mailto:support@ifeelgood.life')}>
+          <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaptionMedium, gs.regular]}>Служба поддержки</IfgText>
+        </Button>
+    </>
+
+    }
     {onDeleting && <CardContainer>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Вы уверены что готовы удалить свой профиль?</IfgText>
         <View style={[gs.mt8, gs.flexRow, gs.alignCenter, {gap: 18}]}>
@@ -261,6 +270,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             </Button>
           </View>
     </CardContainer>}
+
     <View style={[gs.mt16, gs.alignCenter]}>
         <IfgText style={gs.fontCaption2}>ver. {getVersion()}</IfgText>
     </View>
@@ -303,4 +313,15 @@ const s = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
       },
+    buttonSupport: {
+        backgroundColor: colors.WHITE_COLOR,
+        borderRadius: 12,
+        paddingHorizontal: 52,
+        // paddingVertical: 22,
+        borderWidth: 1,
+        borderColor: colors.GREEN_LIGHT_COLOR,
+        alignItems: 'center',
+        height: 70,
+        alignSelf: 'center',
+    },
   });

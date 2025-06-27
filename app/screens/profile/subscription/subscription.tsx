@@ -100,7 +100,7 @@ export const Subscription: FC = observer(() =>{
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption, gs.bold]}>Подписка действует до 24 мая</IfgText>
 
           <CardContainer style={s.subsriptionCard}>
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка ifeelgood Pro</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Доступ Pro</IfgText>
             <View style={gs.mt6} />
             <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>499 ₽</IfgText>
             <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>Спишется 24 мая</IfgText>
@@ -129,7 +129,7 @@ export const Subscription: FC = observer(() =>{
           </TouchableOpacity>
           </View>
             <View style={gs.mt6} />
-            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Подписка ifeelgood Pro</IfgText>
+            <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.bold]}>Доступ Pro</IfgText>
 
             <IfgText color={colors.PLACEHOLDER_COLOR} style={gs.h1}>
             {getPrice(tariffsStore.tariffs[activeDiscount])} {`₽/${getPeriod(tariffsStore.tariffs[activeDiscount].period)}`}

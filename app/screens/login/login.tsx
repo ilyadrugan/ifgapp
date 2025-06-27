@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, Linking, Platform, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { IfgText } from '../../core/components/text/ifg-text';
 import gs from '../../core/styles/global';
 import colors from '../../core/colors/colors';
@@ -223,6 +223,12 @@ const [isHide, setHide] = useState(true);
                 <IfgText onPress={()=>setForgotPassword((prev)=>!prev)} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption2, gs.underline]}>Забыли пароль?</IfgText>
             </View>}
         </View>
+        <View style={gs.mt32}/>
+        <Button
+          style={s.buttonSupport}
+          onPress={()=>Linking.openURL('mailto:support@ifeelgood.life')}>
+          <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaptionMedium, gs.regular]}>Служба поддержки</IfgText>
+        </Button>
     </ImageBackground>
     </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -240,7 +246,7 @@ const s = StyleSheet.create({
         borderRadius: 22,
         flexDirection: 'column',
         alignItems: 'center',
-        width: isTablet?'60%':'90%',
+        width: isTablet ? '60%' : '90%',
         backgroundColor: colors.WHITE_COLOR,
         paddingVertical:20,
         paddingHorizontal: 18,
@@ -252,6 +258,17 @@ const s = StyleSheet.create({
         paddingHorizontal: 24,
         height: 78,
       },
+    buttonSupport: {
+        backgroundColor: colors.WHITE_COLOR,
+        borderRadius: 12,
+        paddingHorizontal: 52,
+        // paddingVertical: 22,
+        borderWidth: 1,
+        borderColor: colors.GREEN_LIGHT_COLOR,
+        alignItems: 'center',
+        // height: 70,
+        alignSelf: 'center',
+    },
       appleButton: {
         flexDirection: 'row',
         justifyContent: 'center',

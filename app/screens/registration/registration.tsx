@@ -37,13 +37,13 @@ const tabss: TabInterface[] = [
     },
     {
         id: 2,
-        name: 'По подписке',
+        name: 'Доступ Pro',
     },
 ];
 export const Registration = observer(() => {
     const [personalChecked, setPersonalChecked] = useState(true);
     const [infoChecked, setInfoChecked] = useState(true);
-    const [activeTab, setActiveTab] = useState(2);
+    const [activeTab, setActiveTab] = useState(1);
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [phone, setPhone] = useState('');
     const navigation = useNavigation<any>();
@@ -58,6 +58,7 @@ export const Registration = observer(() => {
         authStore.clearMessageError();
         navigation.replace('Login');
     };
+
     const onChecked = (type: string) => {
         switch (type) {
             case 'personal': setPersonalChecked((prev)=> !prev);
@@ -72,7 +73,7 @@ export const Registration = observer(() => {
         setActiveTab(id);
     };
     useEffect(() => {
-        onTabClick(2);
+        onTabClick(1);
         // scrollToBottom();
     }, []);
 
@@ -337,10 +338,10 @@ export const Registration = observer(() => {
                 />
             }
             <View style={s.acceptContainer}>
-                <View style={[s.acceptsBlock]}>
+                <View style={[s.acceptsBlock, {flex: 0.9}]}>
                     <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
-                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2, {maxWidth: '85%'}]}>
-                    Согласие на обработку <IfgText onPress={()=> Linking.openURL('https://ifeelgood.life/policy')} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    Согласие на обработку <IfgText onPress={()=> Linking.openURL('https://ifeelgood.life/personal-data')} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
                     </IfgText>
                 </View>
                 {!personalChecked &&
@@ -348,9 +349,9 @@ export const Registration = observer(() => {
                 {'Вы должны дать согласие на обработку персональных данных'}</IfgText>}
             </View>
             <View style={s.acceptContainer}>
-                <View style={s.acceptsBlock}>
+                <View style={[s.acceptsBlock, {flex: 0.9}]}>
                     <CheckBox  onPress={()=>onChecked('info')} checked={infoChecked}/>
-                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2, {maxWidth: '85%'}]}>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
                     Согласен на информационную рассылку
                     </IfgText>
                 </View>
@@ -406,7 +407,12 @@ export const Registration = observer(() => {
         </View>}
         <View style={gs.mt32}/>
         <Tabs activeTab={activeTab} onTabClicked={onTabClick} tabs={tabss} />
-
+        <View style={gs.mt32}/>
+        <Button
+          style={s.buttonSupport}
+          onPress={()=>Linking.openURL('mailto:support@ifeelgood.life')}>
+          <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaptionMedium, gs.regular]}>Служба поддержки</IfgText>
+        </Button>
         <View style={{height: 60}} />
         </ImageBackground>
 
@@ -466,5 +472,15 @@ const s = StyleSheet.create({
         justifyContent: 'flex-start',
         width: '100%',
       },
-
+    buttonSupport: {
+        backgroundColor: colors.WHITE_COLOR,
+        borderRadius: 12,
+        paddingHorizontal: 52,
+        // paddingVertical: 22,
+        borderWidth: 1,
+        borderColor: colors.GREEN_LIGHT_COLOR,
+        alignItems: 'center',
+        // height: 70,
+        alignSelf: 'center',
+    },
   });

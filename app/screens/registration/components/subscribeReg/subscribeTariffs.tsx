@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from 'react';
 import colors from '../../../../core/colors/colors';
 import { observer } from 'mobx-react';
-import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import tariffsStore from '../../../../../store/state/tariffsStore/tariffsStore';
 import { IfgText } from '../../../../core/components/text/ifg-text';
 import gs from '../../../../core/styles/global';
@@ -17,6 +17,7 @@ import { TariffModel } from '../../../../../store/state/tariffsStore/models/mode
 import { CouponViewModel } from '../../../../../store/state/couponStore/models/models';
 import { getPercent, getPrice, getPeriod } from '../../../../core/utils/tariffUtils';
 import { useNavigation } from '@react-navigation/native';
+import { CheckBox } from '../../../../core/components/checkbox/checkbox';
 
 export const SubscribeTariffs:
     FC<{
@@ -24,6 +25,8 @@ export const SubscribeTariffs:
         onChangeDiscount: (id:number)=> void,
         onNext: ()=> void,
     }> = observer(({activeDiscount, onChangeDiscount, onNext}) => {
+    const [personalChecked, setPersonalChecked] = useState(true);
+    const [infoChecked, setInfoChecked] = useState(true);
 
       const navigation = useNavigation<any>();
       const [currentCoupon, setCurrentCoupon] = useState<CouponViewModel | null>(null);
@@ -42,6 +45,14 @@ export const SubscribeTariffs:
           onChangeDiscount(couponActivated?.id - 1);
         }
       }, []);
+      const onChecked = (type: string) => {
+        switch (type) {
+            case 'personal': setPersonalChecked((prev)=> !prev);
+                break;
+            case 'info': setInfoChecked((prev)=> !prev);
+                break;
+        }
+    };
      const onSubmitCoupon = handleSubmit(async (data) => {
       setIsLoading(true);
       console.log(data.coupon);
@@ -55,6 +66,14 @@ export const SubscribeTariffs:
         authStore.clearMessageError();
         navigation.replace('Login');
     };
+
+    const benefitBlock = (text: string, index: number) => <View key={index.toString()} style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
+        <Benefit />
+        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16, {flex: 0.9}]}>
+        {text}
+        </IfgText>
+      </View>;
+
     return tariffsStore.tariffs.length > 0 && <><View style={s.discounts}>
       <TouchableOpacity onPress={()=>onChangeDiscount(0)} style={[s.dicountValue, activeDiscount === 0 && s.discountValueActive]} >
           <IfgText color={activeDiscount === 0 ? colors.WHITE_COLOR : colors.BLACK_COLOR}>{tariffsStore.tariffs[0].title}</IfgText>
@@ -71,7 +90,7 @@ export const SubscribeTariffs:
       </TouchableOpacity>
       </View>
       <View style={gs.mt16}/>
-      <IfgText color={colors.SECONDARY_COLOR} style={gs.h2}>Подписка ifeelgood Pro</IfgText>
+      <IfgText color={colors.SECONDARY_COLOR} style={gs.h2}>Доступ Pro</IfgText>
       <View style={gs.mt16}/>
       <View style={[gs.flexRow, gs.alignCenter]}>
         <IfgText color={colors.SECONDARY_COLOR} style={gs.h1Intro}>
@@ -100,24 +119,10 @@ export const SubscribeTariffs:
       </> : null}
       <View style={gs.mt4}/>
       {tariffsStore.tariffs[activeDiscount].description && <IfgText color={colors.SECONDARY_COLOR} style={gs.fontLightSmall}>{tariffsStore.tariffs[activeDiscount].description}</IfgText>}
-      <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
-        <Benefit />
-        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>
-        Эксклюзивные материалы
-        </IfgText>
-      </View>
-      <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
-        <Benefit />
-        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>
-        Интервью с экспертами
-        </IfgText>
-      </View>
-      <View style={[gs.flexRow, gs.alignCenter, gs.mt16]}>
-        <Benefit />
-        <IfgText color={colors.SECONDARY_COLOR} style={[gs.fontCaption, gs.ml16]}>
-        Участие в конкурсах
-        </IfgText>
-      </View>
+      {['Эксклюзивные материалы', 'Интервью с экспертами', 'Участие в конкурсах', 'Тестирование и персональные рекомендации', 'Доступ к закрытым онлайн-интенсивам', 'Консультация well-being специалиста'].map((text, index)=>
+      benefitBlock(text, index)
+      )}
+
       <View style={s.personalRecommendation} >
         <View style={[gs.flexRow, gs.alignCenter]}>
           <View style={s.plusContainer}>
@@ -134,8 +139,9 @@ export const SubscribeTariffs:
         </View>
       </View>
       <View>
-
-      <View style={gs.mt16} />
+      <View style={gs.mt8} />
+      <IfgText onPress={()=>Linking.openURL('https://ifeelgood.life/pro')} color={colors.GREEN_COLOR} style={gs.underline}>Подробнее</IfgText>
+      <View style={gs.mt8} />
       <Controller control={control} name={'coupon'}
                  render={({ field: { onChange, onBlur, value } }) => (
                     <Input
@@ -168,12 +174,36 @@ export const SubscribeTariffs:
       </Input> */}
       </View>
       <View style={gs.mt16} />
+      <View style={s.acceptContainer}>
+                <View style={[s.acceptsBlock, {flex: 0.9}]}>
+                    <CheckBox onPress={()=>onChecked('personal')} checked={personalChecked}/>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    Согласие на обработку <IfgText onPress={()=> Linking.openURL('https://ifeelgood.life/personal-data')} color={colors.GREEN_COLOR} style={[gs.underline,gs.fontCaption2, gs.bold]}>персональных данных</IfgText>
+                    </IfgText>
+                </View>
+                {!personalChecked &&
+                <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+                {'Вы должны дать согласие на обработку персональных данных'}</IfgText>}
+            </View>
+            <View style={gs.mt16} />
+            <View style={s.acceptContainer}>
+                <View style={[s.acceptsBlock, {flex: 0.9}]}>
+                    <CheckBox  onPress={()=>onChecked('info')} checked={infoChecked}/>
+                    <IfgText color={colors.SECONDARY_COLOR} style={[gs.ml12, gs.fontCaption2]}>
+                    Согласен на информационную рассылку
+                    </IfgText>
+                </View>
+                {!infoChecked &&
+                <IfgText color={colors.RED_COLOR} style={gs.fontCaptionSmallSmall}>
+                {'Вы должны согласится на информационную рассылку'}</IfgText>}
+            </View>
+      <View style={gs.mt16} />
       <AnimatedGradientButton style={s.buttonLogin}
                 onPress={onNext}
                 >
                 <View style={s.buttonContent}>
                     <View style={s.buttonContentRow}>
-                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Подписаться</IfgText>
+                    <IfgText color={colors.WHITE_COLOR} style={gs.fontBodyMedium}>Зарегистрироваться</IfgText>
                         <AnimatedArrow />
                     </View>
                     <View />
@@ -275,4 +305,16 @@ export const SubscribeTariffs:
               borderStyle: 'dashed',
               paddingRight: 70,
     },
+    acceptsBlock: {
+        flexDirection :'row',
+        justifyContent: 'flex-start',
+        // width: '100%',
+        alignItems: 'center',
+      },
+    acceptContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        width: '100%',
+      },
+
   });
