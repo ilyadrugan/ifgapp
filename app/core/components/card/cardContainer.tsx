@@ -50,19 +50,15 @@ export interface CardContainerProps extends ViewProps {
 }
 
 export const CardContainer: FC<CardContainerProps> = ({children, style, onPress, disabled, activeOpacity, ...props}) => {
-    return <View {...props}>
-    <TouchableOpacity
-      style={[
-        s.container,
-        style,
-      ]}
-      activeOpacity={activeOpacity || 0}
+    return  <TouchableOpacity
+      {...props}
+      style={[s.container, style]}
+      activeOpacity={activeOpacity || 0.8} // 0 — слишком резкое исчезновение, лучше 0.8
       onPress={onPress}
-      disabled={disabled ? true : onPress ? false : true }
+      disabled={disabled ?? !onPress} // Более лаконичная запись
     >
       {children}
-    </TouchableOpacity>
-    </View>;
+    </TouchableOpacity>;
 };
 
 const s = StyleSheet.create({

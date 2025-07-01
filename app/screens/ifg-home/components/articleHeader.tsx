@@ -16,9 +16,11 @@ export const ArticleHeader:FC<{
     time?: string,
     isNew?: boolean,
     isCicleBadge?: boolean,
-  }> = ({hashTagText, hashTagColor, time, isNew, isCicleBadge }) =>
+    title?: string
+  }> = ({hashTagText, hashTagColor, time, isNew, isCicleBadge, title }) =>
     <View style={[gs.flexRow, {justifyContent: 'space-between'}]}>
             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                {title && <IfgText style={[gs.fontCaption, gs.bold]}>{title}</IfgText>}
                 {time && <View style={s.timeContainer}>
                         <Time />
                         <IfgText style={[gs.fontCaption3, gs.medium]} >

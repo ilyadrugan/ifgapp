@@ -49,6 +49,7 @@ import { APPADMIN_URL, PROD_URL } from '../../core/hosts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import VideoBackground from '../../core/components/video-background/video-background';
 import healthStore from '../../../store/state/healthStore/healthStore';
+import {FoodTrackerWidget} from './foodTracker/foodTrackerWidget';
 
 export const IFGHome = observer(() => {
     const insets = useSafeAreaInsets();
@@ -61,7 +62,7 @@ export const IFGHome = observer(() => {
 
     const ref = useRef<InstagramStoriesPublicMethods>( null );
     useEffect(() => {
-      getData();
+      // getData();
     }, []);
     // useLayoutEffect(() => {
     //   first
@@ -306,6 +307,8 @@ return userStore.userInfo !== null && <>
             </Button>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
+        <View style={gs.mt16}/>
+        <FoodTrackerWidget />
         {(watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 
