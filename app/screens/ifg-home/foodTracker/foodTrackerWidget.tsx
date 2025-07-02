@@ -8,10 +8,11 @@ import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
 import { RingFoodComponent } from './components/ringFood';
 import { Button, ButtonNext } from '../../../core/components/button/button';
+import { useNavigation } from '@react-navigation/native';
 // import { RingFoodComponent } from './components/RingFood';
 
 export const FoodTrackerWidget: FC = () => {
-
+    const navigation = useNavigation<any>();
     return <CardContainer>
         <ArticleHeader title="Дневник питания" hashTagColor={colors.GREEN_COLOR} hashTagText="#Питание"
              />
@@ -25,7 +26,7 @@ export const FoodTrackerWidget: FC = () => {
                         Ещё калорий
                     </IfgText>
                 </View>
-                <RingFoodComponent big goal={1200} color="#5CC280" label="K" value={230}/>
+                <RingFoodComponent dimension="кал" big goal={1200} color="#5CC280" label="K" value={230}/>
                 {/* <CircularProgress value={240} maxValue={2200} /> */}
         </CardContainer>
         <View style={[{flexDirection: 'row', gap: 8,justifyContent: 'space-between'}]}>
@@ -33,23 +34,23 @@ export const FoodTrackerWidget: FC = () => {
                 <IfgText style={[gs.bold, {fontSize: 20}]}>0гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё белков</IfgText>
                 <View />
-                <RingFoodComponent goal={1200} color="#FFAC44" label="Б" value={230}/>
+                <RingFoodComponent dimension="г" goal={1200} color="#FFAC44" label="Б" value={230}/>
             </CardContainer>
             <CardContainer style={s.miniContainer}>
                 <IfgText style={[gs.bold, {fontSize: 20}]}>0гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё жиров</IfgText>
                 <View />
-                <RingFoodComponent goal={1200} color="#C3E154" label="Ж" value={230}/>
+                <RingFoodComponent dimension="г" goal={1200} color="#C3E154" label="Ж" value={230}/>
             </CardContainer>
             <CardContainer style={s.miniContainer}>
                 <IfgText style={[gs.bold, {fontSize: 20}]}>0гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё углеводов</IfgText>
                 <View />
-                <RingFoodComponent goal={200} color="#FE99C4" label="У" value={230}/>
+                <RingFoodComponent dimension="г" goal={200} color="#FE99C4" label="У" value={230}/>
             </CardContainer>
         </View>
         <ButtonNext
-            onPress={()=>{}}
+            onPress={()=>navigation.navigate('FoodTrackerScreen')}
             title="Задать цель"
             />
     </CardContainer>;

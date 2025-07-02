@@ -11,6 +11,7 @@ interface RingFoodType {
   value: number;
   goal: number;
   big?: boolean;
+  dimension: string;
 }
 
 export const RingFoodComponent: FC<RingFoodType> = ({
@@ -19,6 +20,7 @@ export const RingFoodComponent: FC<RingFoodType> = ({
   value,
   goal,
   big,
+  dimension,
 }) => {
   const sizee = big ? 80 : 60;
   const strokeWidth = big ? 10 : 8; // Толщина окружности
@@ -76,7 +78,7 @@ export const RingFoodComponent: FC<RingFoodType> = ({
         <IfgText color={colors.BLACK_COLOR} style={{fontSize: big ? 26 : 21, textAlign: 'center', top:2}}>{label}</IfgText>
       </View>
       </Svg>
-      <IfgText color={colors.PLACEHOLDER_COLOR} style={{fontSize: 16}}>{value}</IfgText>
+      <IfgText color={colors.PLACEHOLDER_COLOR} style={{fontSize: 16}}>{value} {dimension}</IfgText>
     </View>
   );
 };

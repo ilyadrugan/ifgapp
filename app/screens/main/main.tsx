@@ -21,6 +21,7 @@ import { observer } from 'mobx-react';
 import { ContestsScreen } from '../contests/contests';
 import { CalendarScreen } from '../calendar/calendar';
 import userStore from '../../../store/state/userStore/userStore';
+import { FoodTrackerScreen } from '../ifg-home/foodTracker/foodTrackerScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -90,6 +91,14 @@ export const Main: FC = observer(({}) => {
         ),
       }}/> : null}
       <Tab.Screen name="Конкурсы" component={ContestsScreen}   />
+      {/* Скрытый экран */}
+      <Tab.Screen
+        name="FoodTrackerScreen"
+        component={FoodTrackerScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </Tab.Navigator>
     </>
   );
