@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import colors from '../../../core/colors/colors';
 import { ArticleHeader } from '../components/articleHeader';
@@ -17,6 +17,8 @@ import DeleteIcon from '../../../../assets/icons/trash.svg';
 import Left from '../../../../assets/icons/left.svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { ModalAddGoal } from './components/modalAddGoal';
+import foodStore from '../../../../store/state/foodStore/foodStore';
 
 interface MealType {
     food: string;
@@ -52,10 +54,16 @@ const getDisplayDate = (date: Date): string => {
 export const FoodTrackerScreen: FC = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [haveGoal, setHaveGoal] = useState(true);
+    const [modalAddGoal, setModalAddGoal] = useState(false);
     const insets = useSafeAreaInsets();
 
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
+
+    useEffect(() => {
+      foodStore.loadFood();
+    }, []);
+
 
     const goPrevDay = () => {
         const newDate = new Date(selectedDate);
@@ -96,19 +104,19 @@ export const FoodTrackerScreen: FC = () => {
             <IfgText style={gs.bold}>Боул с киноа и тофу</IfgText>
             <IfgText color="#747474" style={[gs.fontCaptionSmallMedium, gs.regular]}>Перекус, 240 г, 20:17</IfgText>
             <View style={[gs.flexRow, gs.mt4]}>
-                <View style={gs.flexRow}>
+                <View style={[gs.flexRow, {minWidth: 60}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#54B6764D'}]}>
                         <IfgText style={s.nutrientText}>К</IfgText>
                     </View>
                     <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{153}кал</IfgText>
                 </View>
-                <View style={[gs.flexRow, gs.ml12]}>
+                <View style={[gs.flexRow, gs.ml12, {minWidth: 40}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#FFAC444D'}]}>
                         <IfgText style={s.nutrientText}>Б</IfgText>
                     </View>
                     <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{22}гр</IfgText>
                 </View>
-                <View style={[gs.flexRow, gs.ml12]}>
+                <View style={[gs.flexRow, gs.ml12, {minWidth: 40}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#C3E1544D'}]}>
                         <IfgText style={s.nutrientText}>Ж</IfgText>
                     </View>
@@ -124,9 +132,21 @@ export const FoodTrackerScreen: FC = () => {
         </CardContainer>;
     };
 
-    return <ScrollView style={s.container}>
+    return <><ScrollView style={s.container}>
 
-    <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : insets.top + 16}]} onPress={onBack}>
+
+    {haveGoal &&
+    // <FlatList
+    //     data={[0,1]}
+    //     renderItem={renderMeal}
+    //     />
+    <View style={{marginHorizontal: -16}}>
+       <SwipeListView
+            data={[0,1]}
+            renderItem={renderMeal}
+            renderHiddenItem={renderHiddenItem}
+            ListHeaderComponent={<View style={{marginHorizontal:16}}>
+                <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : insets.top + 16}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
@@ -150,7 +170,7 @@ export const FoodTrackerScreen: FC = () => {
             </TouchableOpacity>
             )}
         </View>
-        {haveGoal && <Button style={s.buttonGoal}>
+        {haveGoal && <Button onPress={()=>setModalAddGoal(true)} style={s.buttonGoal}>
             <IfgText color={colors.WHITE_COLOR}>Задать цель</IfgText>
         </Button>}
     </View>
@@ -187,7 +207,7 @@ export const FoodTrackerScreen: FC = () => {
             </CardContainer>
     </View>
     <View style={gs.mt24}/>
-    <Button style={s.addGoalButton}>
+    <Button onPress={()=>navigation.navigate('FoodTrackerAddEditScreen')} style={s.addGoalButton}>
         <View style={[gs.flexRow, gs.alignCenter, {gap:4}]}>
             <PlusWhite />
             <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>{haveGoal ? 'Добавить' : 'Задать цель'}</IfgText>
@@ -198,23 +218,20 @@ export const FoodTrackerScreen: FC = () => {
             <IfgText color={'#747474'} style={gs.fontCaption}>Сначала необходимо задать цель</IfgText>
     </View>}
     <View style={gs.mt12}/>
-    {haveGoal &&
-    // <FlatList
-    //     data={[0,1]}
-    //     renderItem={renderMeal}
-    //     />
-    <SwipeListView
-    data={[0,1]}
-    renderItem={renderMeal}
-    renderHiddenItem={renderHiddenItem}
-    ItemSeparatorComponent={<View style={gs.mt12} />}
-    rightOpenValue={-100} // ширина двух кнопок
-    disableRightSwipe
-    keyExtractor={(item, index) => index.toString()}
-    />
+            </View>}
+            ItemSeparatorComponent={<View style={gs.mt12} />}
+            rightOpenValue={-110} // ширина двух кнопок
+            disableRightSwipe
+            keyExtractor={(item, index) => index.toString()}
+            />
+    </View>
+
     }
     <View style={{height: 70}}/>
-    </ScrollView>;
+    <ModalAddGoal modalOpen={modalAddGoal} setModalOpen={setModalAddGoal}/>
+
+    </ScrollView>
+    </>;
 };
 
 
@@ -267,11 +284,17 @@ const s = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 8,
         gap: 4,
+
     },
     mealContainer: {
         padding: 10,
         gap: 0,
         borderRadius: 8,
+        // backgroundColor: 'transparent',
+        // marginLeft: 16,
+        // marginRight: 16,
+        alignSelf: 'center',
+        width: '94%',
     },
     squareNutrient: {
         width: 16,
@@ -289,10 +312,15 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
     flex: 1,
-    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
     overflow: 'hidden',
+    marginRight: 16,
+     width: '90%',
   },
   hiddenBtn: {
     width: 50,

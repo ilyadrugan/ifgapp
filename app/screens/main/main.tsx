@@ -22,6 +22,7 @@ import { ContestsScreen } from '../contests/contests';
 import { CalendarScreen } from '../calendar/calendar';
 import userStore from '../../../store/state/userStore/userStore';
 import { FoodTrackerScreen } from '../ifg-home/foodTracker/foodTrackerScreen';
+import { FoodTrackerAddEditScreen } from '../ifg-home/foodTracker/foodTrackerEditScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,8 +50,11 @@ export const Main: FC = observer(({}) => {
               return focused ? <ProfileActive /> : <Profile />;
             case 'Календарь':
               return focused ? <CalendarActive /> : <Calendar />;
+            // case 'FoodTrackerScreen':
+            //   return focused ? <HomeActive /> : <Home />;
             case 'Дом':
               return focused ? <HomeActive /> : <Home />;
+
             // case 'Материалы':
             //   return focused ? <MaterialsActive /> : <Materials />;
             case 'Конкурсы':
@@ -95,6 +99,13 @@ export const Main: FC = observer(({}) => {
       <Tab.Screen
         name="FoodTrackerScreen"
         component={FoodTrackerScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Tab.Screen
+        name="FoodTrackerAddEditScreen"
+        component={FoodTrackerAddEditScreen}
         options={{
           tabBarButton: () => null,
         }}

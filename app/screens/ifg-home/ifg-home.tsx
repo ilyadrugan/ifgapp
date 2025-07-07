@@ -62,7 +62,7 @@ export const IFGHome = observer(() => {
 
     const ref = useRef<InstagramStoriesPublicMethods>( null );
     useEffect(() => {
-      // getData();
+      getData();
     }, []);
     // useLayoutEffect(() => {
     //   first

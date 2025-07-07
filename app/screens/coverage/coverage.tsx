@@ -391,7 +391,7 @@ export const Coverage = observer(() => {
           </View>
       </CardContainer>;
     const renderBenefits = ({item, index}) => {
-        return <CardContainer key={index.toString()} style={[index === 0 && gs.ml16,gs.mr12,{width: 220, height: 'auto'}]} >
+        return <CardContainer key={index.toString()} style={[index === 0 && gs.ml16,gs.mr12,{width: 220, minHeight:270}]} >
             <CheckedFilled />
             <IfgText style={[gs.fontCaption, gs.bold]}>
             {item.title}
@@ -422,7 +422,7 @@ export const Coverage = observer(() => {
 
      <ScrollView
       style={s.container}>
-        <Button style={[s.buttonBack, {marginTop: Platform.OS==='ios'?insets.top-16:0}]} onPress={onBack}>
+        <Button style={[s.buttonBack, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 0}]} onPress={onBack}>
             <>
                 <ArrowBack />
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
