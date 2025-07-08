@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import colors from '../../../core/colors/colors';
 import { ArticleHeader } from '../components/articleHeader';
@@ -8,7 +8,7 @@ import { FlatList, Platform, ScrollView, StyleSheet, TouchableOpacity } from 're
 import { View } from 'react-native';
 import { RingFoodComponent } from './components/ringFood';
 import { Button, ButtonNext } from '../../../core/components/button/button';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 // import { RingFoodComponent } from './components/RingFood';
 import ArrowBack from '../../../../assets/icons/arrow-back.svg';
 import PlusWhite from '../../../../assets/icons/plus-white.svg';
@@ -23,6 +23,9 @@ import { DropdownInput, InputFlat } from '../../../core/components/input/input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import foodStore from '../../../../store/state/foodStore/foodStore';
 import { observer } from 'mobx-react';
+import { createMealApi } from '../../../../store/state/foodStore/foodStore.api';
+import { FoodMealModel, FoodModel } from '../../../../store/state/foodStore/models/models';
+import { errorToast, successToast } from '../../../core/components/toast/toast';
 
 interface MealType {
     food: string;
@@ -37,7 +40,8 @@ interface MealType {
 
 export const FoodTrackerAddEditScreen: FC = observer(() => {
     const [showResults, setShowResults] = useState(false);
-
+    const [choosedFood, setChoosedFood] = useState<FoodModel | null>();
+    const params = useRoute().params;
     const insets = useSafeAreaInsets();
 
     const navigation = useNavigation<any>();
@@ -50,6 +54,79 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
             formState: { errors },
           } = useForm<MealType>();
 
+    useEffect(()=>{
+        console.log('params', params);
+    }, [params]);
+    function updateNutrientsByAmount(amountStr: string, choosedFood: FoodModel | null, setValue: Function) {
+        if (!choosedFood) {return;}
+
+        const amount = parseFloat(amountStr);
+        if (isNaN(amount)) {return;}
+
+        const ratio = amount / 100;
+
+        const format = (value: number, suffix: string) => `${Math.round(value * ratio)} ${suffix}`;
+
+        setValue('calories', format(choosedFood.calories, 'кал'));
+        setValue('proteins', format(choosedFood.proteins, 'г'));
+        setValue('fats', format(choosedFood.fats, 'г'));
+        setValue('carbohydrates', format(choosedFood.carbohydrates, 'г'));
+    }
+    const onSubmit = handleSubmit(async (data) => {
+        if (!choosedFood) {
+            errorToast('Выберите блюдо из списка');
+            return;
+        }
+
+        if (
+            !data.amount ||
+            !data.calories ||
+            !data.proteins ||
+            !data.fats ||
+            !data.carbohydrates ||
+            !data.type ||
+            !data.eat_at
+        ) {
+            errorToast('Заполните все поля');
+            return;
+        }
+
+        try {
+            const parseNumber = (str: string): number => {
+            const cleaned = str.replace(/[^\d.,]/g, '').replace(',', '.');
+            const num = parseFloat(cleaned);
+            return isNaN(num) ? 0 : num;
+            };
+            const now = new Date();
+            const [hours, minutes] = data.eat_at.split(':');
+            const eatDate = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                parseInt(hours, 10),
+                parseInt(minutes, 10)
+            );
+            const eatAtISO = eatDate.toISOString();
+            const model: FoodMealModel = {
+                food_id: choosedFood.id,
+                amount: parseNumber(data.amount),
+                calories: parseNumber(data.calories),
+                proteins: parseNumber(data.proteins),
+                fats: parseNumber(data.fats),
+                carbohydrates: parseNumber(data.carbohydrates),
+                type: data.type,
+                eat_at: eatAtISO,
+            };
+
+            console.log('Final model to save:', model);
+            await foodStore.createMyMeal(model);
+            successToast('Запись успешно сохранена');
+            navigation.goBack();
+        } catch (error) {
+            console.error('Ошибка при сохранении:', error);
+            errorToast('Ошибка при сохранении записи');
+        }
+    });
 
     return <><ScrollView keyboardShouldPersistTaps="handled" style={s.container}>
 
@@ -80,21 +157,28 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
                                 onChange(text); // Обновляем значение в форме
                                 setShowResults(true); // Показываем дропдаун
                             }}
+                            style={{borderBottomLeftRadius: showResults ? 0 : 12,
+    borderBottomRightRadius: showResults ? 0 : 12}}
                             onBlur={() => setTimeout(() => setShowResults(false), 200)}
                             />
 
                             {showResults && filtered.length > 0 && (
-                            <View style={{
-                                backgroundColor: 'white',
-                                borderWidth: 1,
-                                borderColor: '#ccc',
-                                borderRadius: 8,
-                                maxHeight: 150,
-                                marginTop: 4,
-                            }}>
+                            <View style={{ position: 'absolute',
+                                    top: 56,
+                                    left: 0,
+                                    right: 0,
+                                    backgroundColor: 'white',
+                                    borderBottomLeftRadius: 12,
+                                    borderBottomRightRadius: 12,
+                                    borderWidth: 1,
+                                    borderTopWidth: 0,
+                                    borderColor: colors.BORDER_COLOR,
+                                    maxHeight: 150,
+                                    zIndex: 999}}>
                                 <FlatList
                                 keyboardShouldPersistTaps="handled"
                                 data={filtered}
+
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
@@ -102,7 +186,12 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
                                         console.log(item);
                                         onChange(item.name); // Устанавливаем в форму значение!
                                         setShowResults(false);
-
+                                        setChoosedFood(item);
+                                        setValue('amount', '100 грамм');
+                                        setValue('calories', item.calories + ' кал');
+                                        setValue('proteins', item.proteins + ' г');
+                                        setValue('fats', item.fats + ' г');
+                                        setValue('carbohydrates', item.carbohydrates + ' г');
                                     }}
                                     style={{
                                         padding: 12,
@@ -170,11 +259,17 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
                     // maxLength={6}
                     onFocus={()=>{
                         if (value)
-                        {setValue('amount', value.split(' ')[0]);}
+                        {
+                            setValue('amount', value.split(' ')[0]);
+
+                        }
                     }}
                     onBlur={()=>{
                         if (value)
-                        {setValue('amount', value + ' грамм');}
+                        {
+                            updateNutrientsByAmount(value, choosedFood || null, setValue);
+                            setValue('amount', value + ' грамм');
+                        }
                     }}
                 />
             )}/>
@@ -259,7 +354,7 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
             )}/>
         </View>
         <View style={gs.mt12} />
-        <Button onPress={onBack} style={s.addGoalButton}>
+        <Button onPress={onSubmit} style={s.addGoalButton}>
                 <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>{'Сохранить'}</IfgText>
         </Button>
     <View style={{height: 70}}/>

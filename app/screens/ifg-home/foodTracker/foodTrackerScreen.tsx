@@ -4,7 +4,7 @@ import colors from '../../../core/colors/colors';
 import { ArticleHeader } from '../components/articleHeader';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
-import { FlatList, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { View } from 'react-native';
 import { RingFoodComponent } from './components/ringFood';
 import { Button, ButtonNext } from '../../../core/components/button/button';
@@ -19,6 +19,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { ModalAddGoal } from './components/modalAddGoal';
 import foodStore from '../../../../store/state/foodStore/foodStore';
+import { observer } from 'mobx-react';
+import { FoodMealModel } from '../../../../store/state/foodStore/models/models';
+import { formatDateToYYYYMMDD, formatTimeWithMoment } from '../../../core/utils/formatDateTime';
 
 interface MealType {
     food: string;
@@ -51,36 +54,43 @@ const getDisplayDate = (date: Date): string => {
   return result; // 15 февр. 2025
 };
 
-export const FoodTrackerScreen: FC = () => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [haveGoal, setHaveGoal] = useState(true);
-    const [modalAddGoal, setModalAddGoal] = useState(false);
-    const insets = useSafeAreaInsets();
 
+
+export const FoodTrackerScreen: FC = observer(() => {
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [modalAddGoal, setModalAddGoal] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
+    const insets = useSafeAreaInsets();
     const navigation = useNavigation<any>();
     const onBack = () => navigation.goBack();
 
     useEffect(() => {
-      foodStore.loadFood();
+    //  console.log('isloadgin', foodStore.isLoading);
+    foodStore.loadFood();
     }, []);
 
 
-    const goPrevDay = () => {
+    const goPrevDay = async () => {
         const newDate = new Date(selectedDate);
         newDate.setDate(newDate.getDate() - 1);
         setSelectedDate(newDate);
+        await getFoodDataByDate(formatDateToYYYYMMDD(newDate));
     };
 
-    const goNextDay = () => {
+    const goNextDay = async () => {
         const newDate = new Date(selectedDate);
         newDate.setDate(newDate.getDate() + 1);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
         setSelectedDate(newDate);
-        // if (newDate <= today) {
-        // setSelectedDate(newDate);
-        // }
+        await getFoodDataByDate(formatDateToYYYYMMDD(newDate));
+
     };
+
+    const getFoodDataByDate = async (date: string) => {
+        await foodStore.getMyFoodGoal(date);
+        await foodStore.getMyMeals(date);
+    };
+
+
 
     const isToday = (() => {
         const today = new Date();
@@ -99,34 +109,34 @@ export const FoodTrackerScreen: FC = () => {
             </TouchableOpacity>
         </View>
         );
-    const renderMeal = ({item, index}) => {
+    const renderMeal:FC<{item: FoodMealModel, index: number}> = ({item, index}) => {
         return <CardContainer key={index.toString()} style={s.mealContainer}>
-            <IfgText style={gs.bold}>Боул с киноа и тофу</IfgText>
-            <IfgText color="#747474" style={[gs.fontCaptionSmallMedium, gs.regular]}>Перекус, 240 г, 20:17</IfgText>
+            <IfgText style={gs.bold}>{foodStore.products.find((product)=>product.id === item.food_id)?.name}</IfgText>
+            <IfgText color="#747474" style={[gs.fontCaptionSmallMedium, gs.regular]}>{item.type}, {item.amount} г, {formatTimeWithMoment(item.eat_at, '+00:00')}</IfgText>
             <View style={[gs.flexRow, gs.mt4]}>
                 <View style={[gs.flexRow, {minWidth: 60}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#54B6764D'}]}>
                         <IfgText style={s.nutrientText}>К</IfgText>
                     </View>
-                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{153}кал</IfgText>
+                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{item.calories}кал</IfgText>
                 </View>
                 <View style={[gs.flexRow, gs.ml12, {minWidth: 40}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#FFAC444D'}]}>
                         <IfgText style={s.nutrientText}>Б</IfgText>
                     </View>
-                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{22}гр</IfgText>
+                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{item.proteins}гр</IfgText>
                 </View>
                 <View style={[gs.flexRow, gs.ml12, {minWidth: 40}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#C3E1544D'}]}>
                         <IfgText style={s.nutrientText}>Ж</IfgText>
                     </View>
-                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{9}гр</IfgText>
+                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{item.fats}гр</IfgText>
                 </View>
                 <View style={[gs.flexRow, gs.ml12]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#FE99C44D'}]}>
                         <IfgText style={s.nutrientText}>У</IfgText>
                     </View>
-                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{12}гр</IfgText>
+                    <IfgText style={[s.nutrientText, gs.semiBold, gs.ml4]}>{item.carbohydrates}гр</IfgText>
                 </View>
             </View>
         </CardContainer>;
@@ -135,14 +145,9 @@ export const FoodTrackerScreen: FC = () => {
     return <><ScrollView style={s.container}>
 
 
-    {haveGoal &&
-    // <FlatList
-    //     data={[0,1]}
-    //     renderItem={renderMeal}
-    //     />
     <View style={{marginHorizontal: -16}}>
        <SwipeListView
-            data={[0,1]}
+            data={!foodStore.isLoading ? foodStore.myMeals : []}
             renderItem={renderMeal}
             renderHiddenItem={renderHiddenItem}
             ListHeaderComponent={<View style={{marginHorizontal:16}}>
@@ -170,54 +175,57 @@ export const FoodTrackerScreen: FC = () => {
             </TouchableOpacity>
             )}
         </View>
-        {haveGoal && <Button onPress={()=>setModalAddGoal(true)} style={s.buttonGoal}>
+        {foodStore.haveGoal && <Button onPress={()=>setModalAddGoal(true)} style={s.buttonGoal}>
             <IfgText color={colors.WHITE_COLOR}>Задать цель</IfgText>
         </Button>}
     </View>
+    {foodStore.isLoading ? <ActivityIndicator style={gs.mt16} size={'large'} /> : <>
     <CardContainer style={s.commonContainer}>
                 <View style={{flexDirection: 'column',gap: 0}}>
                     <IfgText style={[gs.h1, gs.bold, {fontSize: 36}]}>
-                        850
+                        {foodStore.myCurrentGoal.calories.goal - foodStore.myCurrentGoal.calories.current >= 0 ? foodStore.myCurrentGoal.calories.goal - foodStore.myCurrentGoal.calories.current : 0}
                     </IfgText>
                     <IfgText color="#747474" style={[gs.fontCaption, {fontSize: 16, bottom: 10}]}>
                         Ещё калорий
                     </IfgText>
                 </View>
-                <RingFoodComponent dimension="кал" big goal={1200} color="#5CC280" label="K" value={230}/>
-                {/* <CircularProgress value={240} maxValue={2200} /> */}
+                <RingFoodComponent dimension="кал" big goal={foodStore.myCurrentGoal.calories.goal} color="#5CC280" label="K" value={foodStore.myCurrentGoal.calories.current}/>
     </CardContainer>
     <View style={[{flexDirection: 'row', gap: 8,justifyContent: 'space-between', marginTop: 12}]}>
             <CardContainer style={s.miniContainer}>
-                <IfgText style={[gs.bold, {fontSize: 20}]}>0гр</IfgText>
+                <IfgText style={[gs.bold, {fontSize: 20}]}>{foodStore.myCurrentGoal.proteins.goal - foodStore.myCurrentGoal.proteins.current >= 0 ? foodStore.myCurrentGoal.proteins.goal - foodStore.myCurrentGoal.proteins.current : 0}гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё белков</IfgText>
                 <View />
-                <RingFoodComponent dimension="г" goal={1200} color="#FFAC44" label="Б" value={230}/>
+                <RingFoodComponent dimension="г" goal={foodStore.myCurrentGoal.proteins.goal} color="#FFAC44" label="Б" value={foodStore.myCurrentGoal.proteins.current}/>
             </CardContainer>
             <CardContainer style={s.miniContainer}>
-                <IfgText style={[gs.bold, {fontSize: 20}]}>0гр</IfgText>
+                <IfgText style={[gs.bold, {fontSize: 20}]}>{foodStore.myCurrentGoal.fats.goal - foodStore.myCurrentGoal.fats.current >= 0 ? foodStore.myCurrentGoal.fats.goal - foodStore.myCurrentGoal.fats.current : 0}гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё жиров</IfgText>
                 <View />
-                <RingFoodComponent dimension="г" goal={1200} color="#C3E154" label="Ж" value={230}/>
+                <RingFoodComponent dimension="г" goal={foodStore.myCurrentGoal.fats.goal} color="#C3E154" label="Ж" value={foodStore.myCurrentGoal.fats.current}/>
             </CardContainer>
             <CardContainer style={s.miniContainer}>
-                <IfgText style={[gs.bold, {fontSize: 20}]}>0гр</IfgText>
+                <IfgText style={[gs.bold, {fontSize: 20}]}>{foodStore.myCurrentGoal.carbohydrates.goal - foodStore.myCurrentGoal.carbohydrates.current >= 0 ? foodStore.myCurrentGoal.carbohydrates.goal - foodStore.myCurrentGoal.carbohydrates.current : 0}гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё углеводов</IfgText>
                 <View />
-                <RingFoodComponent dimension="г" goal={200} color="#FE99C4" label="У" value={230}/>
+                <RingFoodComponent dimension="г" goal={foodStore.myCurrentGoal.carbohydrates.goal} color="#FE99C4" label="У" value={foodStore.myCurrentGoal.carbohydrates.current}/>
             </CardContainer>
     </View>
     <View style={gs.mt24}/>
-    <Button onPress={()=>navigation.navigate('FoodTrackerAddEditScreen')} style={s.addGoalButton}>
+    <Button onPress={()=>{
+        foodStore.haveGoal ? navigation.navigate('FoodTrackerAddEditScreen') : setModalAddGoal(prev=>!prev);
+        }} style={s.addGoalButton}>
         <View style={[gs.flexRow, gs.alignCenter, {gap:4}]}>
             <PlusWhite />
-            <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>{haveGoal ? 'Добавить' : 'Задать цель'}</IfgText>
+            <IfgText color={colors.WHITE_COLOR} style={gs.fontCaption}>{foodStore.haveGoal ? 'Добавить' : 'Задать цель'}</IfgText>
         </View>
     </Button>
-    <IfgText style={[gs.fontBodyMedium, gs.bold, gs.mt24]}>Рацион</IfgText>
-    {!haveGoal && <View style={[gs.flexRow, gs.alignCenter, gs.mt12, {gap:4, justifyContent: 'center'}]}>
+    {foodStore.myMeals.length > 0  && <IfgText style={[gs.fontBodyMedium, gs.bold, gs.mt24]}>Рацион</IfgText>}
+    {!foodStore.haveGoal && <View style={[gs.flexRow, gs.alignCenter, gs.mt12, {gap:4, justifyContent: 'center'}]}>
             <IfgText color={'#747474'} style={gs.fontCaption}>Сначала необходимо задать цель</IfgText>
     </View>}
     <View style={gs.mt12}/>
+    </>}
             </View>}
             ItemSeparatorComponent={<View style={gs.mt12} />}
             rightOpenValue={-110} // ширина двух кнопок
@@ -226,13 +234,13 @@ export const FoodTrackerScreen: FC = () => {
             />
     </View>
 
-    }
+
     <View style={{height: 70}}/>
     <ModalAddGoal modalOpen={modalAddGoal} setModalOpen={setModalAddGoal}/>
 
     </ScrollView>
     </>;
-};
+});
 
 
 const s = StyleSheet.create({

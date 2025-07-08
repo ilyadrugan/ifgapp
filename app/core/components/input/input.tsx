@@ -319,7 +319,7 @@ export const InputFlat: FC<{
 
   return (
     <View style={[s.container, style && style]}>
-      <View style={[s.inputWrapper, fullWidth && s.fullWidth, error && s.error,{backgroundColor: colors.WHITE_COLOR}, {height: 56, borderRadius: 12}]}>
+      <View style={[s.inputWrapper, fullWidth && s.fullWidth, error && s.error,{backgroundColor: colors.WHITE_COLOR}, {height: 56, borderRadius: 12}, style && style]}>
         <Animated.Text style={labelStyle}>{placeholder}</Animated.Text>
         <TextInput
           style={[s.inputText, style]}
@@ -446,6 +446,7 @@ export const DropdownInput: FC<DropdownInputProps> = ({
         <View style={s.dropdown}>
           <FlatList
             data={options}
+            keyboardShouldPersistTaps="handled"
             keyExtractor={(item) => item}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -479,8 +480,8 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
   },
    dropdown: {
-    // position: 'absolute',
-    // top: 40,
+    position: 'absolute',
+    top: 56,
     left: 0,
     right: 0,
     backgroundColor: 'white',

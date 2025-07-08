@@ -1,12 +1,16 @@
-import { Modal, StyleSheet, Pressable, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, StyleSheet, Pressable, TouchableOpacity, TouchableWithoutFeedback, View, ActivityIndicator } from 'react-native';
 import { CardContainer } from '../../../../core/components/card/cardContainer';
 import { Button } from '../../../../core/components/button/button';
 import { IfgText } from '../../../../core/components/text/ifg-text';
 import colors from '../../../../core/colors/colors';
 import gs from '../../../../core/styles/global';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { InputFlat } from '../../../../core/components/input/input';
 import { Controller, useForm } from 'react-hook-form';
+import { observer } from 'mobx-react';
+import foodStore from '../../../../../store/state/foodStore/foodStore';
+import { errorToast } from '../../../../core/components/toast/toast';
+import { GoalModel } from '../../../../../store/state/foodStore/models/models';
 
 interface ModalProps {
     modalOpen: boolean,
@@ -30,7 +34,7 @@ interface NutrientsForm {
     fats: string;
 }
 
-export const ModalAddGoal: FC<ModalProps> = ({modalOpen, setModalOpen}) => {
+export const ModalAddGoal: FC<ModalProps> = observer(({modalOpen, setModalOpen}) => {
     const {
             control,
             handleSubmit,
@@ -38,10 +42,45 @@ export const ModalAddGoal: FC<ModalProps> = ({modalOpen, setModalOpen}) => {
             formState: { errors },
           } = useForm<NutrientsForm>();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const {haveGoal, myCurrentGoal, createMyFoodGoal} = foodStore;
+
     useEffect(()=>{
         control._reset();
+        if (haveGoal) {
+            setValue('calories', myCurrentGoal.calories.goal.toString() + ' кал');
+            setValue('proteins', myCurrentGoal.proteins.goal.toString() + ' г');
+            setValue('fats', myCurrentGoal.fats.goal.toString() + ' г');
+            setValue('carbohydrates', myCurrentGoal.carbohydrates.goal.toString() + ' г');
+        }
+        else {
+            setValue('calories', '2200 кал');
+            setValue('proteins', '90 г');
+            setValue('fats', '80 г');
+            setValue('carbohydrates', '300 г');
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
+
+      const onSubmit = handleSubmit(async (data) => {
+        console.log(data);
+
+        if (data.calories && data.proteins && data.fats && data.carbohydrates) {
+            const model: GoalModel = {
+                calories: Number(data.calories.split(' ')[0]),
+                proteins: Number(data.proteins.split(' ')[0]),
+                fats: Number(data.fats.split(' ')[0]),
+                carbohydrates: Number(data.carbohydrates.split(' ')[0]),
+            };
+            console.log(model);
+            await createMyFoodGoal(model);
+            setModalOpen(false);
+        }
+        else {
+            errorToast('Заполните все поля цели');
+        }
+      });
+
     return <Modal
             visible={modalOpen}
             transparent
@@ -135,14 +174,14 @@ export const ModalAddGoal: FC<ModalProps> = ({modalOpen, setModalOpen}) => {
                             )}/>
                         </View>
                         <View style={gs.mt12} />
-                        <Button onPress={()=>setModalOpen(false)} style={s.addGoalButton}>
-                                <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>{'Сохранить'}</IfgText>
+                        <Button disabled={isLoading} onPress={onSubmit} style={s.addGoalButton}>
+                               {isLoading ? <ActivityIndicator /> : <IfgText color={colors.WHITE_COLOR} style={[gs.fontCaption, gs.medium]}>{'Сохранить'}</IfgText>}
                         </Button>
                     </View>
                     </TouchableWithoutFeedback>
                     </Pressable>
     </Modal>;
-};
+});
 
 const s = StyleSheet.create({
      overlay: {

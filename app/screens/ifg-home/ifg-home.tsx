@@ -35,7 +35,7 @@ import { formatRecommendation } from '../../core/utils/textFormatters';
 import dailyActivityStore from '../../../store/state/activityGraphStore/activityGraphStore';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenHeight, ScreenWidth } from '../../hooks/useDimensions';
-import { formatDate } from '../../core/utils/formatDateTime';
+import { formatDate, formatDateToYYYYMMDD } from '../../core/utils/formatDateTime';
 import Delete from '../../../assets/icons/delete.svg';
 import { RecommendationCategoryToEng } from '../../core/utils/recommendationFormatter';
 import { PersonalRecommendationModel } from '../../../store/state/recommendationStore/models/models';
@@ -50,6 +50,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import VideoBackground from '../../core/components/video-background/video-background';
 import healthStore from '../../../store/state/healthStore/healthStore';
 import {FoodTrackerWidget} from './foodTracker/foodTrackerWidget';
+import foodStore from '../../../store/state/foodStore/foodStore';
 
 export const IFGHome = observer(() => {
     const insets = useSafeAreaInsets();
@@ -149,6 +150,7 @@ export const IFGHome = observer(() => {
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
       dailyActivityStore.getDailyTodayActivity();
       await dailyActivityStore.getDailyActivitySettings();
+      await foodStore.getMyFoodGoal(formatDateToYYYYMMDD(new Date()));
       // if (dailyActivityStore.dailyTodayActivityData?.watter === undefined) {
       //   await dailyActivityStore.addDailyActivity('watter', 0);
       // }
@@ -308,7 +310,7 @@ return userStore.userInfo !== null && <>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
         <View style={gs.mt16}/>
-        <FoodTrackerWidget />
+        {foodStore.myCurrentGoal ? <FoodTrackerWidget /> : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
         {(watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 
