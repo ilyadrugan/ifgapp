@@ -410,8 +410,9 @@ return userStore.userInfo !== null && <>
         <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 36, gap: 0}}>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, {textAlign: 'center'}]}>
             {'Все рекомендации в этом приложении\nоснованы на научных доказательствах.\n'}
-            {'Узнайте больше '}<IfgText onPress={()=>Linking.openURL('https://ifeelgood.life/articles/info')} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3,gs.underline, {textAlign: 'center'}]}>здесь</IfgText>
           </IfgText>
+          <IfgText onPress={()=>Linking.openURL('https://ifeelgood.life/articles/info')} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3,gs.underline, {textAlign: 'center',bottom:12}]}>Узнайте больше здесь</IfgText>
+
         </View>
         <View style={{height: 60}}/>
        {/* {(currentStoryPressed !== undefined && storiesStore.storiesMappedList.length > 0 && storiesStore.storiesMappedList[currentStoryPressed].subStories) ?
