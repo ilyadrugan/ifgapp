@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ru</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>ifeelgood</string>
 	<key>CFBundleExecutable</key>
@@ -34,7 +34,9 @@
 	<key>NSHealthShareUsageDescription</key>
 	<string>We need access to your health data to show your steps, calories, and flights climbed.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>We need access to update your health data.</string>
+	<string>We need access to update your health data.</string>	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We use your photo library to let you choose a photo for your profile avatar.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>
@@ -73,6 +75,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

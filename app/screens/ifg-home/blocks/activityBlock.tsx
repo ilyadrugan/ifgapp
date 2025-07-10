@@ -31,6 +31,7 @@ import { API_URL } from '../../../core/hosts';
 import testingStore from '../../../../store/state/testingStore/testingStore';
 import { clearObserving } from 'mobx/dist/internal';
 import { IFGActivityToday } from '../../../core/components/ifg-score/ifg-activityToday';
+import FastImage from 'react-native-fast-image'
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -104,7 +105,7 @@ return <CardContainer >
   <View style={[gs.flexRow, gs.alignCenter, { flexShrink: 1 }]}>
     <View style={s.photo}>
       {userStore.userInfo?.profile_photo_url ? (
-        <Image
+        <FastImage
           style={{ width: '100%', height: '100%' }}
           source={{
             uri: `${!userStore.userInfo?.profile_photo_url.startsWith('https://') ? API_URL + '/storage/' : ''}${userStore.userInfo?.profile_photo_url}`,

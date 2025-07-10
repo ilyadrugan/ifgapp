@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,20 +22,20 @@
 	<string>1</string>
 	<key>UIAppFonts</key>
 	<array>
-	<string>Inter-Black.otf</string>
-	<string>Inter-Bold.otf</string>
-	<string>Inter-ExtraBold.otf</string>
-	<string>Inter-Medium.otf</string>
-	<string>Inter-Regular.otf</string>
-	<string>Inter-SemiBold.otf</string>
-	<string>tilda-sans_black.ttf</string>
-	<string>tilda-sans_bold.ttf</string>
-	<string>tilda-sans_extra-bold.ttf</string>
-	<string>tilda-sans_light.ttf</string>
-	<string>tilda-sans_medium.ttf</string>
-	<string>tilda-sans_regular.ttf</string>
-	<string>tilda-sans_semibold.ttf</string>
-	<string>tilda-sans_vf.ttf</string>
+		<string>Inter-Black.otf</string>
+		<string>Inter-Bold.otf</string>
+		<string>Inter-ExtraBold.otf</string>
+		<string>Inter-Medium.otf</string>
+		<string>Inter-Regular.otf</string>
+		<string>Inter-SemiBold.otf</string>
+		<string>tilda-sans_black.ttf</string>
+		<string>tilda-sans_bold.ttf</string>
+		<string>tilda-sans_extra-bold.ttf</string>
+		<string>tilda-sans_light.ttf</string>
+		<string>tilda-sans_medium.ttf</string>
+		<string>tilda-sans_regular.ttf</string>
+		<string>tilda-sans_semibold.ttf</string>
+		<string>tilda-sans_vf.ttf</string>
 	</array>
 </dict>
 </plist>

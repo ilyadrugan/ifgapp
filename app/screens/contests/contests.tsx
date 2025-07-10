@@ -34,7 +34,7 @@ export const ContestsScreen = observer(() => {
         </View>
         <Image
             resizeMode="cover"
-            source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+            source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
             style={{ width: '65%', height: '130%' ,marginTop: -16 }}
         />
        {item.winners.length > 0 && <View style={s.isOver}>

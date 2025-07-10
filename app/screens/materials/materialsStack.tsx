@@ -115,7 +115,7 @@ export const MaterialsStackScreen = observer(({route}) => {
                 navigation.navigate('ArticleView', {articleId: item.id});
                 }}
                 key={activeTab + index + activeTab} style={s.articleCard}>
-            {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+            {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
             style={{ width: '40%'}}
              /> : <View />}
             {(item.is_new) &&
@@ -141,7 +141,7 @@ export const MaterialsStackScreen = observer(({route}) => {
     const renderInterviewItem:FC<{item: InterViewModel, index:number}> = ({item, index}) => {
         return <CardContainer onPress={()=>navigation.navigate('InterviewView', {interviewId: item.id})} key={activeTab + index + activeTab} style={s.interviewCard}>
                 <>
-            {(index % 2 === 0 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+            {(index % 2 === 0 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
             style={{ width: '40%', height: '100%' }}
             />}
             <View style={{flex: 1,justifyContent: 'space-between', paddingHorizontal: 15,paddingVertical: 12, flexDirection: 'column'}}>
@@ -151,7 +151,7 @@ export const MaterialsStackScreen = observer(({route}) => {
                 </View>
             <ButtonTo onPress={()=>navigation.navigate('InterviewView', {interviewId: item.id})} style={{width: 114, height: 26}} title="Подробнее" />
             </View>
-            {(index % 2 === 1 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[3]}`}}
+            {(index % 2 === 1 && item.media.length > 0) && <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
             style={{ width: '40%', height: '100%' }}
             />}
 </>

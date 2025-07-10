@@ -73,16 +73,17 @@ export const IFGHome = observer(() => {
     //   };
     // }, [third])
     useFocusEffect(
-  useCallback(() => {
-    console.log('useFocusEffect, getHealthDataToday');
-    healthStore.getHealthDataToday(true);
+      useCallback(() => {
+        console.log('useFocusEffect, getHealthDataToday');
+        healthStore.getHealthDataToday(true);
 
-    // Если нужен очиститель эффекта:
-    return () => {
-      console.log('Screen unfocused');
-    };
-  }, [])
-);
+
+        // Если нужен очиститель эффекта:
+        return () => {
+          console.log('Screen unfocused');
+        };
+      }, [])
+    );
     const getData = async () => {
       console.log('GET DATA');
       setIsLoading((prev)=>!prev);
@@ -310,7 +311,7 @@ return userStore.userInfo !== null && <>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
         <View style={gs.mt16}/>
-        {foodStore.myCurrentGoal ? <FoodTrackerWidget /> : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
+        {Platform.OS!=='ios' && foodStore.myCurrentGoal ? <FoodTrackerWidget /> : Platform.OS!=='ios' && <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
         {(watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 
@@ -391,7 +392,7 @@ return userStore.userInfo !== null && <>
                 renderItem={({item, index})=>
                 item.id !== presentsStore.currentPresent.id && <CardContainer style={[{width: 190, height: 236, padding:14, borderWidth: 1, borderColor: '#E7E7E7', justifyContent: 'space-between' }, gs.mr12, index === 0 && gs.ml16 ]} >
                     <IfgText numberOfLines={2} style={[gs.fontCaption2, gs.bold]}>{item.title}</IfgText>
-                    <Image resizeMode="contain"  source={{uri: `https://ifeelgood.life${item.media[0].full_path[1]}`}}
+                    <Image resizeMode="contain"  source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
                     style={{ height: 114, width: '100%' }}
                     />
                 <Button onPress={()=>navigation.navigate('ContestView', {contestId: item.id})} fullWidth style={[gs.flexRow, gs.alignCenter,{paddingHorizontal: 12, height: 30,borderWidth: 0.75, borderRadius: 6, borderColor: '#E6E6E6', justifyContent: 'space-between' }]}>
@@ -406,8 +407,13 @@ return userStore.userInfo !== null && <>
             </CardContainer>}
         />
 
-
-        <View style={{height: 70}}/>
+        <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 36, gap: 0}}>
+          <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, {textAlign: 'center'}]}>
+            {'Все рекомендации в этом приложении\nоснованы на научных доказательствах.\n'}
+            {'Узнайте больше '}<IfgText onPress={()=>Linking.openURL('https://ifeelgood.life/articles/info')} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3,gs.underline, {textAlign: 'center'}]}>здесь</IfgText>
+          </IfgText>
+        </View>
+        <View style={{height: 60}}/>
        {/* {(currentStoryPressed !== undefined && storiesStore.storiesMappedList.length > 0 && storiesStore.storiesMappedList[currentStoryPressed].subStories) ?
        <StoryModal
         stories={storiesStore.storiesMappedList[currentStoryPressed].subStories}

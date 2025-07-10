@@ -1,6 +1,6 @@
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import React, { FC, useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, Platform, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import gs from '../../../core/styles/global';
 import colors from '../../../core/colors/colors';
@@ -19,6 +19,7 @@ import { isValidPhoneNumber } from '../../../core/utils/isValidPhoneNumber';
 import DeviceInfo, { getApplicationName, getBuildNumber, getVersion } from 'react-native-device-info';
 import { openHealthConnectSettings } from 'react-native-health-connect';
 import { downloadLogFile, shareLogFile } from '../../../core/utils/logger';
+import { requestHealthKitAuthorizationIOS } from '../../../hooks/useHealthDataIOS';
 
 export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     const [phone, setPhone] = useState(userStore.userInfo?.phone || '');
@@ -95,6 +96,20 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
             setOnDeleting((prev)=>!prev);
         }
       };
+      const openAppSettings = () => {
+        Linking.openURL('app-settings:')
+            .catch(() => Alert.alert('Ошибка', 'Не удалось открыть настройки'));
+        };
+    const openHealthKitSettings = () => {
+            Alert.alert(
+            'Доступ к Здоровью',
+            'Для работы приложения нужно разрешение на доступ к данным в Здоровье. Перейдите в настройки и включите доступ.',
+            [
+                { text: 'Отмена', style: 'cancel' },
+                { text: 'Открыть настройки', onPress: openAppSettings },
+            ]
+    );
+    }
     return <>
     {!onDeleting && <CardContainer style={{gap: 18}}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>
@@ -206,11 +221,11 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
     </CardContainer>}
 
     {!onDeleting && <>
-        {Platform.OS !== 'ios' && <CardContainer style={gs.mt16}>
-        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Настройки Health Connect</IfgText>
+        <CardContainer style={gs.mt16}>
+        <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>{Platform.OS !== 'ios' ? 'Настройки Health Connect' : 'Настроить Health'}</IfgText>
             <AnimatedGradientButton style={s.button}
                     disabled={userStore.isLoading}
-                    onPress={openHealthConnectSettings}
+                    onPress={Platform.OS!=='ios'?openHealthConnectSettings:openHealthKitSettings}
                     >
                  <View style={s.buttonContainer}>
                  <View style={s.buttonContent}>
@@ -234,7 +249,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                     <View />
                 </View>
             </AnimatedGradientButton>
-    </CardContainer>}
+    </CardContainer>
     <CardContainer style={gs.mt16}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Удаление профиля</IfgText>
         <Button style={[s.button, {backgroundColor: '#FA5D5D'}]}
