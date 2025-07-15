@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { CardContainer } from '../../../core/components/card/cardContainer';
 import colors from '../../../core/colors/colors';
 import { ArticleHeader } from '../components/articleHeader';
@@ -8,7 +8,7 @@ import { ActivityIndicator, FlatList, Platform, ScrollView, StyleSheet, Touchabl
 import { View } from 'react-native';
 import { RingFoodComponent } from './components/ringFood';
 import { Button, ButtonNext } from '../../../core/components/button/button';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 // import { RingFoodComponent } from './components/RingFood';
 import ArrowBack from '../../../../assets/icons/arrow-back.svg';
 import PlusWhite from '../../../../assets/icons/plus-white.svg';
@@ -67,8 +67,8 @@ export const FoodTrackerScreen: FC = observer(() => {
     useEffect(() => {
     //  console.log('isloadgin', foodStore.isLoading);
     foodStore.loadFood();
+    getFoodDataByDate(formatDateToYYYYMMDD(new Date(selectedDate)));
     }, []);
-
 
     const goPrevDay = async () => {
         const newDate = new Date(selectedDate);
@@ -99,12 +99,23 @@ export const FoodTrackerScreen: FC = observer(() => {
         sel.setHours(0, 0, 0, 0);
         return sel.getTime() === today.getTime();
     })();
-    const renderHiddenItem = ({ item }) => (
+
+    const deleteItem = async (id: number) => {
+        try {
+            await foodStore.deleteMyMeal(id);
+            await getFoodDataByDate(formatDateToYYYYMMDD(new Date(selectedDate)));
+        }
+        catch {
+            console.log('Error deleteItem');
+        }
+    };
+
+    const renderHiddenItem:FC<{item: FoodMealModel, index: number}> = ({ item, index }) => (
         <View style={s.hiddenButtons}>
-            <TouchableOpacity style={[s.hiddenBtn, { flex:1,backgroundColor: '#FFA726', alignItems: 'flex-end', paddingRight: 16 }]}>
+            <TouchableOpacity onPress={()=>navigation.navigate('FoodTrackerAddEditScreen', {meal: item})} style={[s.hiddenBtn, { flex:1,backgroundColor: '#FFA726', alignItems: 'flex-end', paddingRight: 16 }]}>
             <EditIcon />
             </TouchableOpacity>
-            <TouchableOpacity style={[s.hiddenBtn, { backgroundColor: '#EF5350' }]}>
+            <TouchableOpacity onPress={()=>deleteItem(item.id)} style={[s.hiddenBtn, { backgroundColor: '#EF5350' }]}>
             <DeleteIcon />
             </TouchableOpacity>
         </View>
@@ -213,7 +224,7 @@ export const FoodTrackerScreen: FC = observer(() => {
     </View>
     <View style={gs.mt24}/>
     <Button onPress={()=>{
-        foodStore.haveGoal ? navigation.navigate('FoodTrackerAddEditScreen') : setModalAddGoal(prev=>!prev);
+        foodStore.haveGoal ? navigation.navigate('FoodTrackerAddEditScreen', {date: selectedDate}) : setModalAddGoal(prev=>!prev);
         }} style={s.addGoalButton}>
         <View style={[gs.flexRow, gs.alignCenter, {gap:4}]}>
             <PlusWhite />

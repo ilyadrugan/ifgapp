@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Pressable, TouchableOpacity, TouchableWithoutFeedback, View, ActivityIndicator } from 'react-native';
+import { Modal, StyleSheet, Pressable, TouchableOpacity, TouchableWithoutFeedback, View, ActivityIndicator, ScrollView } from 'react-native';
 import { CardContainer } from '../../../../core/components/card/cardContainer';
 import { Button } from '../../../../core/components/button/button';
 import { IfgText } from '../../../../core/components/text/ifg-text';
@@ -43,15 +43,14 @@ export const ModalAddGoal: FC<ModalProps> = observer(({modalOpen, setModalOpen})
           } = useForm<NutrientsForm>();
 
     const [isLoading, setIsLoading] = useState(false);
-    const {haveGoal, myCurrentGoal, createMyFoodGoal} = foodStore;
 
     useEffect(()=>{
         control._reset();
-        if (haveGoal) {
-            setValue('calories', myCurrentGoal.calories.goal.toString() + ' кал');
-            setValue('proteins', myCurrentGoal.proteins.goal.toString() + ' г');
-            setValue('fats', myCurrentGoal.fats.goal.toString() + ' г');
-            setValue('carbohydrates', myCurrentGoal.carbohydrates.goal.toString() + ' г');
+        if (foodStore.haveGoal) {
+            setValue('calories', foodStore.myCurrentGoal.calories.goal.toString() + ' кал');
+            setValue('proteins', foodStore.myCurrentGoal.proteins.goal.toString() + ' г');
+            setValue('fats', foodStore.myCurrentGoal.fats.goal.toString() + ' г');
+            setValue('carbohydrates', foodStore.myCurrentGoal.carbohydrates.goal.toString() + ' г');
         }
         else {
             setValue('calories', '2200 кал');
@@ -73,7 +72,7 @@ export const ModalAddGoal: FC<ModalProps> = observer(({modalOpen, setModalOpen})
                 carbohydrates: Number(data.carbohydrates.split(' ')[0]),
             };
             console.log(model);
-            await createMyFoodGoal(model);
+            await foodStore.createMyFoodGoal(model);
             setModalOpen(false);
         }
         else {
@@ -91,12 +90,12 @@ export const ModalAddGoal: FC<ModalProps> = observer(({modalOpen, setModalOpen})
                     <View style={s.card}>
                         <IfgText style={[gs.fontBody1, gs.bold]}>Задать цель</IfgText>
                         <IfgText color="#747474" style={[gs.fontCaptionSmallMedium, gs.regular, gs.mt4]}>Укажите сколько калорий, белков, жиров и углеводов вы планируете употреблять каждый день, а мы поможем не потеряться в расчётах</IfgText>
-                        <View style={gs.mt36} />
+                        <View style={gs.mt12} />
                             <Controller control={control} name={'calories'}
                                 render={({ field: { onChange, onBlur, value } }) => (
                                 <InputFlat
                                     keyboardType="number-pad"
-                                    style={gs.flex1}
+                                    // style={gs.flex1}
                                     placeholder="Калории"
                                     value={value}
                                     onChange={onChange}
@@ -112,14 +111,14 @@ export const ModalAddGoal: FC<ModalProps> = observer(({modalOpen, setModalOpen})
                                     }}
                                 />
                             )}/>
-                        <View style={gs.mt36} />
+                        <View style={gs.mt12} />
 
                         <View style={[gs.flexRow, {gap: 10}]}>
                             <Controller control={control} name={'proteins'}
                                 render={({ field: { onChange, onBlur, value } }) => (
                                 <InputFlat
                                     keyboardType="number-pad"
-                                    style={gs.flex1}
+                                    style={[gs.flex1, {height: 50}]}
                                     placeholder="Белков"
                                     value={value}
                                     onChange={onChange}

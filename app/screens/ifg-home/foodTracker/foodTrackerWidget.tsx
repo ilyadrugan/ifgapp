@@ -17,49 +17,48 @@ import { formatDateToYYYYMMDD } from '../../../core/utils/formatDateTime';
 export const FoodTrackerWidget: FC = observer(() => {
     const navigation = useNavigation<any>();
 
-    const {myCurrentGoal, haveGoal, isLoading} = foodStore;
-    useEffect(() => {
-      console.log('myCurrentGoal', myCurrentGoal);
-    }, []);
+    useEffect(()=>{
+        foodStore.getMyFoodGoal(formatDateToYYYYMMDD(new Date()))
+    }, [])
 
-    return myCurrentGoal && <CardContainer>
+    return foodStore.myCurrentGoal && <CardContainer>
         <ArticleHeader title="Дневник питания" hashTagColor={colors.GREEN_COLOR} hashTagText="#Питание"
              />
-        <IfgText style={[gs.fontCaptionSmall]}>{haveGoal ? 'Каждый приём пищи — это вклад в ваш результат. Заполняйте дневник питания, чтобы оставаться на курсе и отслеживать прогресс.' : 'Чтобы дневник питания работал на вас, выберите свою цель — она поможет строить рацион осознанно и эффективно.'}</IfgText>
+        <IfgText style={[gs.fontCaptionSmall]}>{foodStore.haveGoal ? 'Каждый приём пищи — это вклад в ваш результат. Заполняйте дневник питания, чтобы оставаться на курсе и отслеживать прогресс.' : 'Чтобы дневник питания работал на вас, выберите свою цель — она поможет строить рацион осознанно и эффективно.'}</IfgText>
         <CardContainer style={s.commonContainer}>
                 <View style={{flexDirection: 'column',gap: 0}}>
                     <IfgText style={[gs.h1, gs.bold, {fontSize: 36}]}>
-                        {myCurrentGoal.calories.goal - myCurrentGoal.calories.current >= 0 ? myCurrentGoal.calories.goal - myCurrentGoal.calories.current : 0}
+                        {foodStore.myCurrentGoal.calories.goal - foodStore.myCurrentGoal.calories.current >= 0 ? foodStore.myCurrentGoal.calories.goal - foodStore.myCurrentGoal.calories.current : 0}
                     </IfgText>
                     <IfgText color="#747474" style={[gs.fontCaption, {fontSize: 16, bottom: 10}]}>
                         Ещё калорий
                     </IfgText>
                 </View>
-                <RingFoodComponent dimension="кал" big goal={myCurrentGoal.calories.goal} color="#5CC280" label="K" value={myCurrentGoal.calories.current}/>
+                <RingFoodComponent dimension="кал" big goal={foodStore.myCurrentGoal.calories.goal} color="#5CC280" label="K" value={foodStore.myCurrentGoal.calories.current}/>
         </CardContainer>
         <View style={[{flexDirection: 'row', gap: 8,justifyContent: 'space-between'}]}>
             <CardContainer style={s.miniContainer}>
-                <IfgText style={[gs.bold, {fontSize: 20}]}>{myCurrentGoal.proteins.goal - myCurrentGoal.proteins.current >= 0 ? myCurrentGoal.proteins.goal - myCurrentGoal.proteins.current : 0}гр</IfgText>
+                <IfgText style={[gs.bold, {fontSize: 20}]}>{foodStore.myCurrentGoal.proteins.goal - foodStore.myCurrentGoal.proteins.current >= 0 ? foodStore.myCurrentGoal.proteins.goal - foodStore.myCurrentGoal.proteins.current : 0}гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё белков</IfgText>
                 <View />
-                <RingFoodComponent dimension="г" goal={myCurrentGoal.proteins.goal} color="#FFAC44" label="Б" value={myCurrentGoal.proteins.current}/>
+                <RingFoodComponent dimension="г" goal={foodStore.myCurrentGoal.proteins.goal} color="#FFAC44" label="Б" value={foodStore.myCurrentGoal.proteins.current}/>
             </CardContainer>
             <CardContainer style={s.miniContainer}>
-                <IfgText style={[gs.bold, {fontSize: 20}]}>{myCurrentGoal.fats.goal - myCurrentGoal.fats.current >= 0 ? myCurrentGoal.fats.goal - myCurrentGoal.fats.current : 0}гр</IfgText>
+                <IfgText style={[gs.bold, {fontSize: 20}]}>{foodStore.myCurrentGoal.fats.goal - foodStore.myCurrentGoal.fats.current >= 0 ? foodStore.myCurrentGoal.fats.goal - foodStore.myCurrentGoal.fats.current : 0}гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё жиров</IfgText>
                 <View />
-                <RingFoodComponent dimension="г" goal={myCurrentGoal.fats.goal} color="#C3E154" label="Ж" value={myCurrentGoal.fats.current}/>
+                <RingFoodComponent dimension="г" goal={foodStore.myCurrentGoal.fats.goal} color="#C3E154" label="Ж" value={foodStore.myCurrentGoal.fats.current}/>
             </CardContainer>
             <CardContainer style={s.miniContainer}>
-                <IfgText style={[gs.bold, {fontSize: 20}]}>{myCurrentGoal.carbohydrates.goal - myCurrentGoal.carbohydrates.current >= 0 ? myCurrentGoal.carbohydrates.goal - myCurrentGoal.carbohydrates.current : 0}гр</IfgText>
+                <IfgText style={[gs.bold, {fontSize: 20}]}>{foodStore.myCurrentGoal.carbohydrates.goal - foodStore.myCurrentGoal.carbohydrates.current >= 0 ? foodStore.myCurrentGoal.carbohydrates.goal - foodStore.myCurrentGoal.carbohydrates.current : 0}гр</IfgText>
                 <IfgText style={[gs.regular, {fontSize: 14}]}>Ещё углеводов</IfgText>
                 <View />
-                <RingFoodComponent dimension="г" goal={myCurrentGoal.carbohydrates.goal} color="#FE99C4" label="У" value={myCurrentGoal.carbohydrates.current}/>
+                <RingFoodComponent dimension="г" goal={foodStore.myCurrentGoal.carbohydrates.goal} color="#FE99C4" label="У" value={foodStore.myCurrentGoal.carbohydrates.current}/>
             </CardContainer>
         </View>
         <ButtonNext
             onPress={()=>navigation.navigate('FoodTrackerScreen')}
-            title={haveGoal ? 'Открыть' : 'Задать цель'}
+            title={foodStore.haveGoal ? 'Открыть' : 'Задать цель'}
             />
     </CardContainer>;
 });

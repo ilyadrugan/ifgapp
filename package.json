@@ -34,7 +34,6 @@
     "react-native": "0.76.0",
     "react-native-config": "^1.5.3",
     "react-native-device-info": "^14.0.1",
-    "react-native-fast-image": "^8.6.3",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-health-connect": "^3.3.3",

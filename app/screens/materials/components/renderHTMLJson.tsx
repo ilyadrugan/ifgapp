@@ -8,10 +8,12 @@ import colors from '../../../core/colors/colors';
 import { IfgText } from '../../../core/components/text/ifg-text';
 import { youtube_parser, YoutubeVideo } from '../../../core/components/youtubePlayer/youtubePlayer';
 import RutubeView from '../../../core/components/rutubeView/rutubeVideo';
+import { useNavigation } from '@react-navigation/native';
 
 const width = Dimensions.get('screen').width;
 export const RenderHTMLContent = ({ content, fromBodyJson }) => {
   // console.log('content', content);
+  const navigation = useNavigation();
   let styleText: StyleProp<ViewStyle | TextStyle> = {};
   const renderNode = (node, index) => {
     if (node.text) {
@@ -139,11 +141,13 @@ export const RenderHTMLContent = ({ content, fromBodyJson }) => {
           );
         case 'a':
           styleText = [styleText, styles.link];
+          const link = node.attributes?.href;
+
           return (
             <Text
               key={index}
               style={styles.link}
-              onPress={() => Linking.openURL(node.attributes?.href)}>
+              onPress={() => link.includes('ifeelgood.life/articles/info') ? navigation.navigate('LifehackPrincipsPage') : Linking.openURL(link)}>
               {node.children.map((child, childIndex) => renderNode(child, childIndex))}
               </Text>
           );

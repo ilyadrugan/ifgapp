@@ -26,6 +26,7 @@ import { observer } from 'mobx-react';
 import { createMealApi } from '../../../../store/state/foodStore/foodStore.api';
 import { FoodMealModel, FoodModel } from '../../../../store/state/foodStore/models/models';
 import { errorToast, successToast } from '../../../core/components/toast/toast';
+import { formatDateToYYYYMMDD, formatTimeWithMoment } from '../../../core/utils/formatDateTime';
 
 interface MealType {
     food: string;
@@ -41,11 +42,11 @@ interface MealType {
 export const FoodTrackerAddEditScreen: FC = observer(() => {
     const [showResults, setShowResults] = useState(false);
     const [choosedFood, setChoosedFood] = useState<FoodModel | null>();
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const params = useRoute().params;
     const insets = useSafeAreaInsets();
 
     const navigation = useNavigation<any>();
-    const onBack = () => navigation.goBack();
 
     const {
             control,
@@ -56,7 +57,20 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
 
     useEffect(()=>{
         console.log('params', params);
+        if (params?.meal) {
+            setValuesByParams(params?.meal);
+        }
+        if (params?.date) {
+            setSelectedDate(params?.date);
+        }
     }, [params]);
+
+    const onBack = () => {
+        control._reset();
+        navigation.goBack();
+    };
+
+
     function updateNutrientsByAmount(amountStr: string, choosedFood: FoodModel | null, setValue: Function) {
         if (!choosedFood) {return;}
 
@@ -72,6 +86,17 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
         setValue('fats', format(choosedFood.fats, 'г'));
         setValue('carbohydrates', format(choosedFood.carbohydrates, 'г'));
     }
+    const setValuesByParams = (meal: FoodMealModel) => {
+        if (!meal) {return;}
+        const food = foodStore.products.find((product)=>product.id === meal.food_id);
+        if (!food) {return;}
+        setChoosedFood(foodStore.products.find((product)=>product.id === meal.food_id));
+        setValue('food', food?.name || '');
+        setValue('type', meal.type);
+        setValue('eat_at', formatTimeWithMoment(meal.eat_at, '+00:00'));
+        setValue('amount', meal.amount.toString());
+        updateNutrientsByAmount(meal.amount.toString(), food, setValue);
+    };
     const onSubmit = handleSubmit(async (data) => {
         if (!choosedFood) {
             errorToast('Выберите блюдо из списка');
@@ -97,12 +122,11 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
             const num = parseFloat(cleaned);
             return isNaN(num) ? 0 : num;
             };
-            const now = new Date();
             const [hours, minutes] = data.eat_at.split(':');
             const eatDate = new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate(),
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                selectedDate.getDate(),
                 parseInt(hours, 10),
                 parseInt(minutes, 10)
             );
@@ -118,15 +142,24 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
                 eat_at: eatAtISO,
             };
 
-            console.log('Final model to save:', model);
-            await foodStore.createMyMeal(model);
+            console.log('Final model to save:', params?.meal, model);
+
+            if (params?.meal) {
+                await foodStore.updateMyMeal(params.meal.id, model);
+            }
+            else {
+                await foodStore.createMyMeal(model);
+            }
             successToast('Запись успешно сохранена');
-            navigation.goBack();
+            await foodStore.getMyMeals(formatDateToYYYYMMDD(selectedDate));
+            await foodStore.getMyFoodGoal(formatDateToYYYYMMDD(selectedDate));
+            onBack();
         } catch (error) {
             console.error('Ошибка при сохранении:', error);
             errorToast('Ошибка при сохранении записи');
         }
     });
+
 
     return <><ScrollView keyboardShouldPersistTaps="handled" style={s.container}>
 
@@ -136,7 +169,7 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
                 <IfgText color={colors.GRAY_COLOR3} style={gs.fontBody2}>Назад</IfgText>
                 </>
         </Button>
-    <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 16, minHeight: 60}]} >{'Новая запись'}</IfgText>
+    <IfgText style={[gs.h2, gs.bold, {marginTop: Platform.OS === 'ios' ? insets.top - 16 : 16, minHeight: 60}]} >{params?.meal ? choosedFood?.name : 'Новая запись'}</IfgText>
           <View style={gs.mt24} />
             <Controller control={control} name={'food'}
                 render={({ field: { onChange, onBlur, value } }) => {

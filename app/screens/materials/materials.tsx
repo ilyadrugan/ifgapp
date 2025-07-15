@@ -18,7 +18,6 @@ import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { Input, TextInputWithIcon } from '../../core/components/input/input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import FastImage from 'react-native-fast-image'
 
 const tabss: TabInterface[] = [
     {
@@ -144,7 +143,7 @@ export const MaterialsScreen = observer(({route}) => {
                 navigation.navigate('ArticleView', {articleId: item.id});
                 }}
                 key={activeTab + index + activeTab} style={s.articleCard}>
-            {item.media.length > 0 ? <FastImage resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
+            {item.media.length > 0 ? <Image resizeMode="cover" source={{uri: `https://ifeelgood.life${item.media[0].full_path[0]}`}}
             style={{ width: '40%'}}
              /> : <View />}
             {(item.is_new) &&

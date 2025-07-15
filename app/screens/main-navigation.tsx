@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding } from './onboarding/onboarding';
 import { Login } from './login/login';
@@ -18,9 +18,8 @@ import { PersonalRecommendations } from './personalRecomendations/personalRecomm
 import { SubscribeEmailConfirm } from './registration/components/subscribeReg/subscribeEmailConfirm';
 import { GoalSettings } from './goalSettings/goalSettings';
 import { observer } from 'mobx-react';
-import userStore from '../../store/state/userStore/userStore';
 import { StartPage } from './startPage/startPage';
-import { MaterialsStackScreen } from './materials/materialsStack';
+import { LifehackPrincipsPage } from './lifehackPrincips/lifehackPrincips';
 
 type RootStackParamList = {
   OnBoarding: undefined;
@@ -40,6 +39,7 @@ type RootStackParamList = {
   PersonalRecommendations: undefined;
   GoalSettings: undefined;
   StartPage: {withNoback: boolean };
+  LifehackPrincipsPage: undefined
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -139,6 +139,11 @@ export const MainNavigation = observer(() => {
       <Stack.Screen
       name="StartPage"
       component={StartPage}
+      options={{ headerShown: false }}
+      />
+      <Stack.Screen
+      name="LifehackPrincipsPage"
+      component={LifehackPrincipsPage}
       options={{ headerShown: false }}
       />
       {/* <Stack.Screen

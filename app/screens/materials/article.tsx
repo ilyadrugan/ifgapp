@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState, useRef } from 'react';
-import { Image, View, ActivityIndicator, Text, StyleSheet, FlatList, Dimensions, ScrollView, Linking, StyleProp, TextStyle, ViewStyle, RefreshControl, Platform } from 'react-native';
+import { Image, View, ActivityIndicator, Text, StyleSheet, FlatList, Dimensions, ScrollView, Linking, StyleProp, TextStyle, ViewStyle, RefreshControl, Platform, TouchableHighlight, TouchableOpacity } from 'react-native';
 import colors from '../../core/colors/colors';
 import { Button, ButtonTo } from '../../core/components/button/button';
 import { CardContainer } from '../../core/components/card/cardContainer';
@@ -33,6 +33,7 @@ import Accept from '../../../assets/icons/accept-article.svg';
 import { RenderHTMLView } from './components/renderHtml';
 import { ScreenWidth } from '../../hooks/useDimensions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { InfoModal } from './components/infoModal';
 
 
 export const ArticleView = observer(({route}) => {
@@ -47,6 +48,7 @@ export const ArticleView = observer(({route}) => {
     const [isInFavorite, setIsInFavorite] = useState(false);
     const [isReaded, setIsReaded] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [infoModalOpen, setInfoModalOpen] = useState(false);
     const [personalRecommendation, setPersonalRecommendation] = useState<PersonalRecommendationModel>();
     useEffect(() => {
       // console.log(articleId,'articlesStore.currentArticle.id', articlesStore.currentArticle.id);
@@ -126,6 +128,8 @@ export const ArticleView = observer(({route}) => {
       setWidthElements((prev)=>prev + width);
     };
 
+
+
     return <>
     {articlesStore.isLoading && <View style={{justifyContent: 'center', alignItems: 'center', height: '100%' }}>
       <ActivityIndicator size={'large'} animating/>
@@ -161,25 +165,71 @@ export const ArticleView = observer(({route}) => {
 
 
         <View style={gs.mt24} />
-        <View style={[gs.flexRow, {gap: 12,width: '100%', justifyContent: 'space-between', alignItems: 'center'} ]}>
-        <View style={gs.flex1}>
-       <CardContainer style={[gs.flexRow, {justifyContent: 'space-between', borderRadius: 12, flexWrap: 'wrap'}]}>
-          <IfgText style={[gs.fontCaption]}>Опубликовано:</IfgText>
-          <IfgText style={[gs.fontCaption, gs.bold]}>{formatDateWithParamsMoment(articlesStore.currentArticle.datetime_publish, '+03:00', 'D.MM.YYYY')}</IfgText>
-        </CardContainer>
-        </View>
+       <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            gap: 12,
+          }}
+        >
+          {/* Левый контейнер растягивается */}
+          <View style={{ flex: 1 }}>
+            <CardContainer
+              style={[
+                gs.flexRow,
+                {
+                  justifyContent: 'space-between',
+                  borderRadius: 12,
+                  flexWrap: 'wrap',
+                },
+              ]}
+            >
+              <IfgText style={gs.fontCaption}>Опубликовано:</IfgText>
+              <IfgText style={[gs.fontCaption, gs.bold]}>
+                {formatDateWithParamsMoment(
+                  articlesStore.currentArticle.datetime_publish,
+                  '+03:00',
+                  'D.MM.YYYY'
+                )}
+              </IfgText>
+            </CardContainer>
+          </View>
 
-          {articlesStore.currentArticle.type !== 'none' && <CardContainer style={{
-             width: 52, maxHeight: 52,borderRadius: 16, alignItems: 'center', justifyContent: 'center',
-            backgroundColor: articlesStore.currentArticle.type === 'verified_science' ? colors.PINK_COLOR :
-            articlesStore.currentArticle.type === 'verified_researcher' ? '#FFAE21' : '#54B676'}} >
-              <View style={{position: 'absolute',alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', width: 32, height: 32, borderRadius: 16}}>
-
+          {articlesStore.currentArticle.type !== 'none' && (
+            <TouchableOpacity
+            onPress={()=>setInfoModalOpen(true)}
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: 16,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor:
+                  articlesStore.currentArticle.type === 'verified_science'
+                    ? colors.PINK_COLOR
+                    : articlesStore.currentArticle.type === 'verified_researcher'
+                    ? '#FFAE21'
+                    : '#54B676',
+              }}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'white',
+                  width: 32,
+                  height: 32,
+                  borderRadius: 16,
+                }}
+              >
                 {articlesStore.currentArticle.type === 'verified_science' && <VerifiedScience />}
                 {articlesStore.currentArticle.type === 'verified_researcher' && <VerifiedResearcher />}
                 {articlesStore.currentArticle.type === 'verified_expert' && <VerifiedExpert />}
               </View>
-            </CardContainer>}
+            </TouchableOpacity>
+          )}
         </View>
         <View style={gs.mt12} />
 
@@ -276,6 +326,12 @@ export const ArticleView = observer(({route}) => {
     <Button onPress={onBack} style={[s.roundButton, {marginTop: insets.top + 8}]}>
       <ArrowBack />
         </Button>
+        <InfoModal
+          infoModalOpen={infoModalOpen}
+          setInfoModal={setInfoModalOpen}
+          materialType={articlesStore.currentArticle.type}
+          onButton={()=>{setInfoModalOpen(false); navigation.navigate('LifehackPrincipsPage');}}
+        />
     </>;
     });
 const customStylesHtml = {

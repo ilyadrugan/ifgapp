@@ -2,6 +2,7 @@ import {FoodMealModel, FoodModel, GoalModel, MyCurrentGoalModel} from './models/
 import {createFoodGoalApi, createMealApi, deleteMyMealByIdApi, getFoodGoalApi, getFoodListApi, getMyMealByIdApi, getMyMealsApi, updateMyMealByIdApi} from './foodStore.api';
 import { deepEqual } from '../../../app/core/utils/deepEqual';
 import { makeAutoObservable } from 'mobx';
+import { formatDateToYYYYMMDD } from '../../../app/core/utils/formatDateTime';
 
 const defaultGoal: MyCurrentGoalModel = {
   calories: {
@@ -46,7 +47,7 @@ class FoodStore {
   isLoading = false; // Состояние загрузки
   haveGoal = false;
   products: FoodModel[] = [];
-  myCurrentGoal: MyCurrentGoalModel;
+  myCurrentGoal: MyCurrentGoalModel = emptyGoal;
   myMeals: FoodMealModel[] = [];
   currentMeal: FoodMealModel;
   errorMessage = '';
@@ -93,11 +94,28 @@ class FoodStore {
         .finally(()=>{this.isLoading = false;});
   }
   async createMyFoodGoal(model: GoalModel) {
-      this.isLoading = true;
+      // this.isLoading = true;
       await createFoodGoalApi(model)
         .then((result)=>{
           console.log('createMyFoodGoal result',result.data);
-          // this.myCurrentGoal = result.data;
+          this.myCurrentGoal = {
+            calories: {
+              goal: result.data.calories,
+              current: this.myCurrentGoal.calories.current,
+            },
+            carbohydrates: {
+              goal: result.data.carbohydrates,
+              current: this.myCurrentGoal.carbohydrates.current,
+            },
+            fats: {
+              goal: result.data.fats,
+              current: this.myCurrentGoal.fats.current,
+            },
+            proteins: {
+              goal: result.data.proteins,
+              current: this.myCurrentGoal.proteins.current,
+            },
+          };
           this.haveGoal = true;
         }
         )
@@ -105,8 +123,8 @@ class FoodStore {
           console.log('ERROR',  err.message);
           this.errorMessage = err.message;
 
-        })
-        .finally(()=>{this.isLoading = false;});
+        });
+        // .finally(()=>{this.isLoading = false;});
   }
   async getMyMeals(date: string) {
       this.isLoading = true;
@@ -141,8 +159,9 @@ class FoodStore {
   async createMyMeal(model: FoodMealModel) {
       this.isLoading = true;
       await createMealApi(model)
-        .then((result)=>{
+        .then(async (result)=>{
           console.log(result.data);
+
         }
         )
         .catch((err)=>{
@@ -155,7 +174,7 @@ class FoodStore {
   async updateMyMeal(id:number, model: FoodMealModel) {
       this.isLoading = true;
       await updateMyMealByIdApi(id, model)
-        .then((result)=>{
+        .then(async (result)=>{
           console.log(result.data);
         }
         )
@@ -167,10 +186,12 @@ class FoodStore {
         .finally(()=>{this.isLoading = false;});
   }
   async deleteMyMeal(id:number) {
+    console.log('delete', id);
       this.isLoading = true;
       await deleteMyMealByIdApi(id)
-        .then((result)=>{
+        .then(async (result)=>{
           console.log(result.data);
+
         }
         )
         .catch((err)=>{

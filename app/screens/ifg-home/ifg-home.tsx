@@ -120,14 +120,18 @@ export const IFGHome = observer(() => {
                                     activeOpacity={0.8}
                                     onPress={()=>{
                                       console.log(story.buttonContent?.buttonUrl);
-                                     if (story.buttonContent?.is_article && story.article) {
-                                      ref.current?.hide();
-                                      navigation.navigate('ArticleView', {articleId: story.article.id});
-                                    }
-                                     else {
-                                      const formattedUrl = story.buttonContent?.buttonUrl.startsWith('https') ? story.buttonContent?.buttonUrl : `https://${story.buttonContent?.buttonUrl}`;
-                                      Linking.openURL(formattedUrl);
-                                    }
+                                      if (story.buttonContent?.buttonUrl.includes('ifeelgood.life/articles/info')) {
+                                          ref.current?.hide();
+                                          navigation.navigate('LifehackPrincipsPage');
+                                      }
+                                      else if (story.buttonContent?.is_article && story.article) {
+                                        ref.current?.hide();
+                                        navigation.navigate('ArticleView', {articleId: story.article.id});
+                                      }
+                                      else {
+                                        const formattedUrl = story.buttonContent?.buttonUrl.startsWith('https') ? story.buttonContent?.buttonUrl : `https://${story.buttonContent?.buttonUrl}`;
+                                        Linking.openURL(formattedUrl);
+                                      }
 
                                      }} style={{width: ScreenWidth - 32 }} title={story.buttonContent?.button_text || ''}
                                      />
@@ -311,7 +315,7 @@ return userStore.userInfo !== null && <>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
         <View style={gs.mt16}/>
-        {Platform.OS!=='ios' && foodStore.myCurrentGoal ? <FoodTrackerWidget /> : Platform.OS!=='ios' && <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
+        {Platform.OS !== 'ios' && foodStore.myCurrentGoal ? <FoodTrackerWidget /> : Platform.OS !== 'ios' && <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
         {(watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 

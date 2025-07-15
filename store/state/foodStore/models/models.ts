@@ -9,6 +9,7 @@ export type FoodModel = {
 };
 
 export type FoodMealModel = {
+    id: number;
     food_id: number;
     calories: number;
     proteins: number;

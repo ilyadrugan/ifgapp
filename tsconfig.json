@@ -1,6 +1,6 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
-  "include": ["src/components", "src/custom.d.ts"],
+  "include": ["./src", "./custom.d.ts"],
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
