@@ -11,9 +11,11 @@ const gs = StyleSheet.create({
   },
   bold: {
     fontFamily: 'tilda-sans_extra-bold',
+    fontWeight: '600'
   },
   semiBold: {
     fontFamily: 'tilda-sans_semibold',
+    fontWeight: '400'
   },
   medium: {
     fontFamily: 'tilda-sans_medium',

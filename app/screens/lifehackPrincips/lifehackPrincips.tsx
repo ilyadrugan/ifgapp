@@ -8,18 +8,7 @@ import gs from '../../core/styles/global';
 import { Button } from '../../core/components/button/button';
 import ArrowBack from '../../../assets/icons/arrow-back.svg';
 import { CardContainer } from '../../core/components/card/cardContainer';
-import VideoBackground from '../../core/components/video-background/video-background';
-import { ScreenWidth } from '../../hooks/useDimensions';
-import ProfileHolderBig from '../../../assets/icons/profileHolderBig.svg';
 import { observer } from 'mobx-react';
-import { ArticleModel, MaterialsStart, NavigationCards } from './const';
-import { NavigatorCard, NavigatorCardType } from './components/navigator-card';
-import ArrowRiht from './components/icons/arrow-riht.svg';
-import { MaterialCard } from './components/material-start';
-import Quotes from '../../../assets/icons/quotes66.svg';
-import { PROD_URL } from '../../core/hosts';
-import {getGreeting} from '../../core/utils/getGreetings';
-import userStore from '../../../store/state/userStore/userStore';
 import { princips, qualities } from './consts';
 import CheckIcon from './icons/check-dashed.svg';
 import LupaIcon from './icons/lupa.svg';
@@ -44,8 +33,8 @@ export const LifehackPrincipsPage = observer(({route}) => {
         </Button>
         <View style={gs.mt16} />
         <CardContainer>
-            <IfgText style={[gs.h2Intro, gs.mb12]}>О принципах подбора лайфхаков</IfgText>
-            <IfgText style={gs.fontBody1}>Каждый материал на нашем портале отмечен специальным знаком научного качества.</IfgText>
+            <IfgText style={[gs.h2,gs.bold, ]}>О принципах подбора лайфхаков</IfgText>
+            <IfgText style={gs.fontCaption}>Каждый материал на нашем портале отмечен специальным знаком научного качества.</IfgText>
         </CardContainer>
         {qualities.map((item)=>
         <CardContainer style={{alignItems: 'center', backgroundColor: item.bgColor, marginTop: 16}}>

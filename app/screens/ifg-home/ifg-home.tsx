@@ -415,7 +415,7 @@ return userStore.userInfo !== null && <>
           <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3, {textAlign: 'center'}]}>
             {'Все рекомендации в этом приложении\nоснованы на научных доказательствах.\n'}
           </IfgText>
-          <IfgText onPress={()=>Linking.openURL('https://ifeelgood.life/articles/info')} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3,gs.underline, {textAlign: 'center',bottom:12}]}>Узнайте больше здесь</IfgText>
+          <IfgText onPress={()=>navigation.navigate('LifehackPrincipsPage')} color={colors.PLACEHOLDER_COLOR} style={[gs.fontCaption3,gs.underline, {textAlign: 'center',bottom:12}]}>Узнайте больше здесь</IfgText>
 
         </View>
         <View style={{height: 60}}/>
