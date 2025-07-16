@@ -42,12 +42,23 @@ const emptyGoal: MyCurrentGoalModel = {
     },
 };
 
+const isToday = (date: string): boolean => {
+  const inputDate = new Date(date);
+  const today = new Date();
+
+  return (
+    inputDate.getFullYear() === today.getFullYear() &&
+    inputDate.getMonth() === today.getMonth() &&
+    inputDate.getDate() === today.getDate()
+  );
+};
 
 class FoodStore {
   isLoading = false; // Состояние загрузки
   haveGoal = false;
   products: FoodModel[] = [];
   myCurrentGoal: MyCurrentGoalModel = emptyGoal;
+  myTodayGoal: MyCurrentGoalModel = emptyGoal;
   myMeals: FoodMealModel[] = [];
   currentMeal: FoodMealModel;
   errorMessage = '';
@@ -74,7 +85,7 @@ class FoodStore {
   async getMyFoodGoal(date: string) {
       this.isLoading = true;
       await getFoodGoalApi(date)
-        .then((result)=>{
+        .then(async (result)=>{
           console.log(result.data);
           if (deepEqual(result.data, emptyGoal)) {
             console.log('goalllllll');
@@ -84,6 +95,32 @@ class FoodStore {
             this.haveGoal = true;
           }
           this.myCurrentGoal = result.data;
+          if (isToday(date)) {
+            console.log('');
+            await this.getMyFoodGoalToday();
+          }
+        }
+        )
+        .catch((err)=>{
+          console.log('ERROR',  err.message);
+          this.errorMessage = err.message;
+
+        })
+        .finally(()=>{this.isLoading = false;});
+  }
+  async getMyFoodGoalToday() {
+      this.isLoading = true;
+      await getFoodGoalApi(formatDateToYYYYMMDD(new Date()))
+        .then((result)=>{
+          console.log(result.data);
+          if (deepEqual(result.data, emptyGoal)) {
+            console.log('goalllllll');
+            this.haveGoal = false;
+          }
+          else {
+            this.haveGoal = true;
+          }
+          this.myTodayGoal = result.data;
         }
         )
         .catch((err)=>{

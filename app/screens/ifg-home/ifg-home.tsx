@@ -155,7 +155,7 @@ export const IFGHome = observer(() => {
       // console.log('articlesStore.currentArticle.id', articlesStore.currentArticle.id);
       dailyActivityStore.getDailyTodayActivity();
       await dailyActivityStore.getDailyActivitySettings();
-      await foodStore.getMyFoodGoal(formatDateToYYYYMMDD(new Date()));
+      await foodStore.getMyFoodGoalToday();
       // if (dailyActivityStore.dailyTodayActivityData?.watter === undefined) {
       //   await dailyActivityStore.addDailyActivity('watter', 0);
       // }
@@ -315,7 +315,7 @@ return userStore.userInfo !== null && <>
         </View>
         {dailyActivityStore.dailyTodayActivityData ? <RecommendationBlock /> : null}
         <View style={gs.mt16}/>
-        {Platform.OS !== 'ios' && foodStore.myCurrentGoal ? <FoodTrackerWidget /> : Platform.OS !== 'ios' && <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
+        {foodStore.myTodayGoal ? <FoodTrackerWidget /> : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
         {(watterStore.cupsData) ? <TimeToDrinkNewBlock/>
         : <ShimmerPlaceholder style={{borderRadius: 22, marginTop: 16}} height={450} width={ScreenWidth - 32} />}
 

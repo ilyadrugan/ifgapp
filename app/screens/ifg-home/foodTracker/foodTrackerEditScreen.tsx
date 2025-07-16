@@ -27,6 +27,7 @@ import { createMealApi } from '../../../../store/state/foodStore/foodStore.api';
 import { FoodMealModel, FoodModel } from '../../../../store/state/foodStore/models/models';
 import { errorToast, successToast } from '../../../core/components/toast/toast';
 import { formatDateToYYYYMMDD, formatTimeWithMoment } from '../../../core/utils/formatDateTime';
+import { convertMealTypeToENG, convertMealTypeToRu } from './utils/utils';
 
 interface MealType {
     food: string;
@@ -35,9 +36,10 @@ interface MealType {
     carbohydrates: string;
     amount: string;
     fats: string;
-    type: string;
+    type: 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'Завтрак' | 'Обед' | 'Ужин' | 'Перекус';
     eat_at: string;
 }
+
 
 export const FoodTrackerAddEditScreen: FC = observer(() => {
     const [showResults, setShowResults] = useState(false);
@@ -92,7 +94,7 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
         if (!food) {return;}
         setChoosedFood(foodStore.products.find((product)=>product.id === meal.food_id));
         setValue('food', food?.name || '');
-        setValue('type', meal.type);
+        setValue('type', convertMealTypeToRu(meal.type));
         setValue('eat_at', formatTimeWithMoment(meal.eat_at, '+00:00'));
         setValue('amount', meal.amount.toString());
         updateNutrientsByAmount(meal.amount.toString(), food, setValue);
@@ -138,7 +140,7 @@ export const FoodTrackerAddEditScreen: FC = observer(() => {
                 proteins: parseNumber(data.proteins),
                 fats: parseNumber(data.fats),
                 carbohydrates: parseNumber(data.carbohydrates),
-                type: data.type,
+                type: convertMealTypeToENG(data.type),
                 eat_at: eatAtISO,
             };
 

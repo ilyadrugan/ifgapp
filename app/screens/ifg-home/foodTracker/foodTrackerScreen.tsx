@@ -22,6 +22,7 @@ import foodStore from '../../../../store/state/foodStore/foodStore';
 import { observer } from 'mobx-react';
 import { FoodMealModel } from '../../../../store/state/foodStore/models/models';
 import { formatDateToYYYYMMDD, formatTimeWithMoment } from '../../../core/utils/formatDateTime';
+import { convertMealTypeToRu } from './utils/utils';
 
 interface MealType {
     food: string;
@@ -112,7 +113,7 @@ export const FoodTrackerScreen: FC = observer(() => {
 
     const renderHiddenItem:FC<{item: FoodMealModel, index: number}> = ({ item, index }) => (
         <View style={s.hiddenButtons}>
-            <TouchableOpacity onPress={()=>navigation.navigate('FoodTrackerAddEditScreen', {meal: item})} style={[s.hiddenBtn, { flex:1,backgroundColor: '#FFA726', alignItems: 'flex-end', paddingRight: 16 }]}>
+            <TouchableOpacity onPress={()=>navigation.navigate('FoodTrackerAddEditScreen', {meal: item, selectedDate: selectedDate})} style={[s.hiddenBtn, { flex:1,backgroundColor: '#FFA726', alignItems: 'flex-end', paddingRight: 16 }]}>
             <EditIcon />
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>deleteItem(item.id)} style={[s.hiddenBtn, { backgroundColor: '#EF5350' }]}>
@@ -123,7 +124,7 @@ export const FoodTrackerScreen: FC = observer(() => {
     const renderMeal:FC<{item: FoodMealModel, index: number}> = ({item, index}) => {
         return <CardContainer key={index.toString()} style={s.mealContainer}>
             <IfgText style={gs.bold}>{foodStore.products.find((product)=>product.id === item.food_id)?.name}</IfgText>
-            <IfgText color="#747474" style={[gs.fontCaptionSmallMedium, gs.regular]}>{item.type}, {item.amount} г, {formatTimeWithMoment(item.eat_at, '+00:00')}</IfgText>
+            <IfgText color="#747474" style={[gs.fontCaptionSmallMedium, gs.regular]}>{convertMealTypeToRu(item.type)}, {item.amount} г, {formatTimeWithMoment(item.eat_at, '+00:00')}</IfgText>
             <View style={[gs.flexRow, gs.mt4]}>
                 <View style={[gs.flexRow, {minWidth: 60}]}>
                     <View style={[s.squareNutrient, {backgroundColor: '#54B6764D'}]}>
