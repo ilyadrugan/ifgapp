@@ -157,6 +157,7 @@ export const ArticleView = observer(({route}) => {
         {articlesStore.currentArticle.body_json && articlesStore.currentArticle.body_json.map((json)=>{
           if (json.type === 'html'){
             return <CardContainer style={[gs.mt16,{gap:0}]}>
+              {json.name && <IfgText style={[gs.h2, gs.regular]}>{json.name}</IfgText>}
               <RenderHTMLView html={json.data}/>
             </CardContainer>;
           }
