@@ -57,7 +57,7 @@ export const ContestsScreen = observer(() => {
                 <View style={gs.mt16} />
                 {presentsStore.presentsList.isLoading && <ActivityIndicator animating size={'large'} />}
                 <View style={{height: 100, alignSelf: 'center', width: '70%' }} >
-                <IfgText style={[gs.fontCaption3, {textAlign: 'center'}]}>Apple is not a sponsor or involved in the contest in any way.</IfgText>
+                {Platform.OS === 'ios' && <IfgText style={[gs.fontCaption3, {textAlign: 'center'}]}>Apple is not a sponsor or involved in the contest in any way.</IfgText>}
                 </View></>}
             ListHeaderComponent={<>
             {/* <View style={gs.mt16} /> */}
