@@ -236,7 +236,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                     <View />
                 </View>
             </AnimatedGradientButton>
-            <AnimatedGradientButton style={s.button}
+            {Platform.OS !=='ios' && <AnimatedGradientButton style={s.button}
                     disabled={userStore.isLoading}
                     onPress={shareLogFile}
                     >
@@ -248,7 +248,7 @@ export const Settings: FC<{onRefresh: ()=>void}> = observer(({onRefresh}) =>{
                     </View>
                     <View />
                 </View>
-            </AnimatedGradientButton>
+            </AnimatedGradientButton>}
     </CardContainer>
     <CardContainer style={gs.mt16}>
         <IfgText color={colors.PLACEHOLDER_COLOR} style={[gs.fontBodyMedium, gs.bold]}>Удаление профиля</IfgText>

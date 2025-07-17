@@ -117,7 +117,7 @@ export const VideoPlayer: FC<{
     text: {
       fontSize: 16,
       lineHeight: 24,
-      fontFamily: 'tilda-sans_medium',
+      ...gs.medium,
     },
     videoContainer: {
         flex: 1,

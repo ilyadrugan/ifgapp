@@ -28,7 +28,7 @@ const toast = (props: ToastShowParams, type: string) => {
           } */}
 
           <View style={s.text}>
-            <IfgText color={type === 'error' ? colors.PLACEHOLDER_COLOR : colors.WHITE_COLOR} style={[s.text1, gs.h3, gs.center, {fontFamily: 'tilda-sans_regular'}]}>{props.text1}</IfgText>
+            <IfgText color={type === 'error' ? colors.PLACEHOLDER_COLOR : colors.WHITE_COLOR} style={[s.text1, gs.h3, gs.center, gs.regular]}>{props.text1}</IfgText>
             {props.text2 &&
               <IfgText color={colors.WHITE_COLOR} style={[s.text2, gs.fontBody2, gs.center]}>{props.text2}</IfgText>
             }

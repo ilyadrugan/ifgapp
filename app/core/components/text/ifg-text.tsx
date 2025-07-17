@@ -2,6 +2,7 @@ import { FC, ReactNode } from 'react';
 import { GestureResponderEvent, Linking, StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
 import colors from '../../colors/colors';
 import React from 'react';
+import gs from '../../styles/global';
 
 export const IfgText: FC<{
   children: ReactNode,
@@ -59,7 +60,7 @@ const s = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 24,
-    fontFamily: 'tilda-sans_medium',
+    ...gs.medium
   },
   wrap: {
     flex: 1,

@@ -118,7 +118,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
           return monthly ? (((index + 1) % 3) === 0 ? t.split('.')[0] : '') : dataWeekNames[shiftedIndex];}} // Показать каждую пятую метку
           style={{
             axis: { stroke: 'transparent' },
-            tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'tilda-sans_medium' },
+            tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'TildaSans-Medium' },
             // tickLabels: [gs.fontCaptionSmall, gs.medium,{ fill: '#B8B8B8' }],
           }}
         />
@@ -130,7 +130,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
           style={{
             axis: { stroke: 'transparent' },
             grid: { stroke: '#F2EDEE' },
-            tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'tilda-sans_medium' },
+            tickLabels: {fill: '#B8B8B8', fontSize: 14, fontFamily: 'TildaSans-Medium' },
           }}
         />
 
@@ -190,7 +190,7 @@ const VictoryGraph: FC<{monthly?: boolean, graphData:GraphDataType[]}> = observe
             // dx={(datum, index) => (index>14 ? -10 : 10)}
             active
             orientation={'left'}
-            style={{ fill: '#ffffff', fontSize: 14, fontFamily: 'tilda-sans_medium' }}
+            style={{ fill: '#ffffff', fontSize: 14, fontFamily: 'TildaSans-Medium' }}
             pointerLength={3}
           />
           }

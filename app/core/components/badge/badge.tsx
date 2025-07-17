@@ -54,7 +54,7 @@ const s = StyleSheet.create({
     },
     text: {
       color: 'white',
-      fontFamily: 'Gilroy-SemiBold',
+      fontFamily: 'TildaSans-Semibold',
       fontSize: 16,
       textAlign: 'center',
     },

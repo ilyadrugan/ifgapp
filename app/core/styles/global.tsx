@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const gs = StyleSheet.create({
   h1: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 48,
     lineHeight: 48,
   },
@@ -10,21 +10,19 @@ const gs = StyleSheet.create({
     fontStyle: 'italic',
   },
   bold: {
-    fontFamily: 'tilda-sans_extra-bold',
-    fontWeight: '600'
+    fontFamily: 'TildaSans-ExtraBold',
   },
-  semiBold: {
-    fontFamily: 'tilda-sans_semibold',
-    fontWeight: '400'
+  Semibold: {
+    fontFamily: 'TildaSans-Semibold',
   },
   medium: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
   },
   regular: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
   },
   light: {
-    fontFamily: 'tilda-sans_light',
+    fontFamily: 'TildaSans-Light',
   },
   underline: {
     textDecorationLine: 'underline',
@@ -41,102 +39,101 @@ const gs = StyleSheet.create({
   },
   h1Big: {
     fontFamily: 'Inter-Black',
-    // fontWeight: 'bold',
     fontSize: 48,
     lineHeight: 50,
   },
   h1Intro: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 44,
     lineHeight: 48,
   },
   h2: {
-    fontFamily: 'tilda-sans_semibold',
+    fontFamily: 'TildaSans-Semibold',
     fontSize: 24,
     lineHeight: 30,
   },
   h2Intro: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 32,
     lineHeight: 32,
   },
   fontBody2: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 14,
     lineHeight: 18,
   },
   fontBody1: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 24,
     lineHeight: 24,
   },
   fontBodyMedium: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 21,
     lineHeight: 21,
   },
   fontCaption: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 18,
     lineHeight: 21,
   },
   fontCaptionMedium: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 21,
     lineHeight: 21,
   },
   fontCaption2: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 16,
     lineHeight: 18,
   },
   fontCaption3: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 14,
     lineHeight: 18,
   },
   fontCaptionSmall: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 14,
     lineHeight: 16,
   },
   fontCaptionSmallMedium: {
-    fontFamily: 'tilda-sans_medium',
+    fontFamily: 'TildaSans-Medium',
     fontSize: 13,
     lineHeight: 14,
   },
   fontCaptionSmallSmall: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 12,
     lineHeight: 18,
   },
   fontTiny: {
-    fontFamily: 'tilda-sans_regular',
+    fontFamily: 'TildaSans-Regular',
     fontSize: 8,
     lineHeight: 8,
   },
   fontLight: {
-    fontFamily: 'tilda-sans_light',
+    fontFamily: 'TildaSans-Light',
     fontSize: 24,
     lineHeight: 24,
   },
   fontLightSmall: {
-    fontFamily: 'tilda-sans_light',
+    fontFamily: 'TildaSans-Light',
     fontSize: 14,
     lineHeight: 14,
   },
   h3: {
-    fontFamily: 'tilda-sans_semibold',
+    fontFamily: 'TildaSans-Semibold',
     fontSize: 21,
     lineHeight: 21,
   },
   h4: {
-    fontFamily: 'tilda-sans_semibold',
+    fontFamily: 'TildaSans-Semibold',
     fontSize: 16,
     lineHeight: 24,
   },
   h5: {
-    fontFamily: 'tilda-sans_semibold',
+    fontFamily: 'TildaSans-Semibold',
     fontSize: 14,
     lineHeight: 18,
   },
